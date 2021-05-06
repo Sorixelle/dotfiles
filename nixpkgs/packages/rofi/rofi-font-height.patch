@@ -1,0 +1,25 @@
+From af6752c35dd7d4a4b74c2dd2196be26ab11d5fa4 Mon Sep 17 00:00:00 2001
+From: Dave Davenport <qball@gmpclient.org>
+Date: Sun, 27 Dec 2020 21:25:06 +0100
+Subject: [PATCH] [Textbox] When estimating height, set correct font first.
+
+fixes: #1247
+---
+ source/widgets/textbox.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/source/widgets/textbox.c b/source/widgets/textbox.c
+index 8e52b327..5134e6aa 100644
+--- a/source/widgets/textbox.c
++++ b/source/widgets/textbox.c
+@@ -136,6 +136,7 @@ static void textbox_initialize_font ( textbox *tb )
+                 tbfc->metrics = pango_context_get_metrics ( p_context, tbfc->pfd, NULL );
+ 
+                 PangoLayout    *layout = pango_layout_new ( p_context );
++                pango_layout_set_font_description ( layout, tbfc->pfd );
+                 pango_layout_set_text ( layout, "aAjb", -1 );
+                 PangoRectangle rect;
+                 pango_layout_get_pixel_extents ( layout, NULL, &rect );
+-- 
+2.30.1
+

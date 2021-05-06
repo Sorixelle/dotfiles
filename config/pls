@@ -1,0 +1,34 @@
+#!/usr/bin/env fish
+
+function show_help
+  echo "pls - A simple NixOS system management helper"
+  echo ""
+  echo "Usage: pls [COMMAND]"
+  echo "Commands:"
+  echo "  help: Show this output"
+  echo "  build: Rebuild NixOS and switch"
+  echo "  test: Rebuild NixOS, but don't switch"
+  echo "  clean: Run the Nix garbage collector and optimize the store"
+  echo "  search: Search Nixpkgs for a package"
+  echo "  update: Update Nixpkgs and other flake dependencies"
+  echo "  upgrade: Equivalent to `pls build && pls clean`"
+  exit 1
+end
+
+switch $argv[1]
+  case build
+    sudo nixos-rebuild -L --show-trace --flake ~/etc switch
+  case test
+    sudo nixos-rebuild -L --show-trace --flake ~/etc test
+  case clean
+    sudo nix-collect-garbage -d
+    nix store optimise
+  case search
+    nix search nixpkgs $argv[2..]
+  case update
+    nix flake update ~/etc
+  case upgrade
+    pls build && pls clean
+  case '*'
+    show_help
+end

@@ -1,0 +1,8 @@
+# Symlinks produced by nix commands
+result
+
+# Disk images produced while testing with nixos-rebuild build-vm
+*.qcow2
+
+# Direnv
+.direnv/
