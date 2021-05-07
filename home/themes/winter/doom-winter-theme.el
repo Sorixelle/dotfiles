@@ -81,10 +81,7 @@ determine the exact padding."
    (strings green)
    (variables violet)
    (numbers magenta)
-   (region (pcase doom-winter-region-highlight
-             ((\` frost) (doom-lighten teal 0.5))
-             ((\` snowstorm) base0)
-             (_ base4)))
+   (region cyan)
    (error red)
    (warning yellow)
    (success green)
@@ -160,6 +157,7 @@ determine the exact padding."
 
    (magit-diff-hunk-heading-highlight :foreground bg :background blue :weight 'bold)
    (magit-diff-hunk-heading :foreground bg :background (doom-blend blue bg 0.3))
+   (magit-diff-removed-highlight :foreground red :background yellow :weight 'bold)
    (ivy-posframe :background (doom-blend blue bg 0.2))
    (ivy-virtual :foreground (doom-blend blue bg 0.8))
    (ivy-minibuffer-match-face-1 :background nil :foreground (doom-blend fg bg 0.5) :weight 'light)
