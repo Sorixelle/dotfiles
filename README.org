@@ -20,26 +20,21 @@ of my systems that run NixOS (so, basically all of them).
   6. Reboot, and enjoy your newly, freshly, declaratively installed system!
 
 * Structure
-  | Folder             | Description                                            |
-  |--------------------+--------------------------------------------------------|
-  | =config=           | Configuration for applications that are common to most |
-  |                    | setups, and not specific to any theme.                 |
-  | =home=             | [[https://github.com/nix-community/home-manager][home-manager]] specific configuration. Contains all the  |
-  |                    | user-specific configuration.                           |
-  | =home/modules=     | home-manager modules.                                  |
-  | =home/themes=      | A set of avaliable system-wide themes. A "theme"       |
-  |                    | consists of a few things, namely a window manager,     |
-  |                    | colour scheme, and other packages that define the look |
-  |                    | and feel of the system.                                |
-  | =nixpkgs=          | Configuration relating to Nixpkgs.                     |
-  | =nixpkgs/packages= | Derivations for packages that aren't in Nixpkgs.       |
-  | =system=           | Main machine-specific NixOS configurations. Typically, |
-  |                    | each file in this folder maps to an attribute in the   |
-  |                    | flake's =nixosConfigurations=.                         |
-  | =system/hardware=  | Hardware-specific configuration options for each       |
-  |                    | machine. These are accurate for my hardware, but if    |
-  |                    | you're not me, you'll probably want to modify these if |
-  |                    | you intend to use my configurations.                   |
+  - =config=: Configuration for applications that are common to most setups, and
+    not specific to any theme.
+  - =home=: [[https://github.com/nix-community/home-manager][home-manager]] specific configuration. Contains all the user-specific
+    configuration.
+  - =home/modules=: home-manager modules.
+  - =home/themes=: A set of avaliable system-wide themes. A "theme" consists of
+    a few things, namely a window manager, colour scheme, and other packages
+    that define the look and feel of the system.
+  - =nixpkgs=: Configuration relating to Nixpkgs.
+  - =nixpkgs/packages=: Derivations for packages that aren't in Nixpkgs.
+  - =system=: Main machine-specific NixOS configurations. Typically, each file
+    in this folder maps to an attribute in the flake's =nixosConfigurations=.
+  - =system/hardware=: Hardware-specific configuration options for each machine.
+    These are accurate for my hardware, but if you're not me, you'll probably
+    want to modify these if you intend to use my configurations.
 
 * Useful info
   Looking for some information on how to use NixOS and flakes? Here's some handy
