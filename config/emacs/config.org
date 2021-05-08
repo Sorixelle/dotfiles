@@ -413,14 +413,20 @@ they're looking for. :)
 ** [[https://github.com/jming422/fira-code-mode][fira-code-mode]]
    Add pretty looking ligatures to my code, because they make me happy :)
 
-   - Disable the ligatures for "[]" and the standalone "x", because I think they
-     look pretty ugly.
+   - Disable the following ligatures, because they either don't look very good,
+     or they cause issues with other icons:
+     - =[]=
+     - =x=
+     - =: =
+     - =<~~=
 
    #+begin_src emacs-lisp
      (use-package fira-code-mode
        :hook prog-mode
        :custom
-       (fira-code-mode-disabled-ligatures '("[]" "x")))
+       (fira-code-mode-disabled-ligatures '("[]" "x" ": " "<~~"))
+       :config
+       (fira-code-mode--setup))
    #+end_src
 
 ** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
