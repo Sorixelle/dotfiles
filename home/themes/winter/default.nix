@@ -59,7 +59,7 @@ in {
 
     srxl = {
       emacs = {
-        theme = "doom-winter";
+        theme = "doom-nord-light";
       };
 
       fonts = {
@@ -106,10 +106,6 @@ in {
       ".background-image" = {
         source = ./winter.png;
         target = ".background-image";
-      };
-      "doom-emacs-theme.el" = {
-        source = ./doom-winter-theme.el;
-        target = ".emacs.d/doom-winter-theme.el";
       };
     };
   };
