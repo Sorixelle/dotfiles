@@ -73,7 +73,6 @@ in {
         };
         extraFonts = with pkgs; [
           emacs-all-the-icons-fonts
-          fira-code-symbols
           noto-fonts-cjk
         ];
       };
