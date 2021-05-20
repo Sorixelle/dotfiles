@@ -4,8 +4,8 @@ let
   gcc-cortex-a-9 = target: super.callPackage ./gcc-cortex-a.nix { inherit target; };
 
   daedalusPkgs = import ("${fetchTarball {
-    url = "https://github.com/input-output-hk/daedalus/archive/4.0.4.zip";
-    sha256 = "0z3psns1jpnsqhry7z9rxvqzf2jlh19wz5iw14g108rx4s947zxq";
+    url = "https://github.com/input-output-hk/daedalus/archive/4.0.5.zip";
+    sha256 = "1zrg8l08ckylnlrmwr2dnrvph82ry7l4kg3qx80mvwp1ixyg6jfa";
   }}/release.nix") { };
 in {
   frankerfacez = super.callPackage ./ff-exts/frankerfacez.nix { };
