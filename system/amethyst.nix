@@ -52,6 +52,8 @@ in {
   environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
   environment.etc."pipewire/media-session.d/with-pulseaudio" = { text = ""; };
 
+  location.provider = "geoclue2";
+
   networking = {
     networkmanager.enable = true;
 
@@ -83,6 +85,8 @@ in {
     blueman.enable = true;
 
     dbus.packages = [ pkgs.gnome3.dconf ];
+
+    geoclue2.enable = true;
 
     gvfs.enable = true;
 
@@ -118,6 +122,14 @@ in {
     printing = {
       enable = true;
       drivers = [ pkgs.epson-escpr ];
+    };
+
+    redshift = {
+      enable = true;
+      temperature = {
+        day = 6500;
+        night = 4000;
+      };
     };
 
     trezord.enable = true;
