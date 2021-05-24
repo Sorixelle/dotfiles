@@ -81,6 +81,7 @@
           # https://bugzilla.mozilla.org/show_bug.cgi?id=1679671
           # WebGL seems to be broken without this setting
           "gfx.webrender.all" = true;
+          "network.dns.blockDotOnion" = false;
         };
       };
     };
