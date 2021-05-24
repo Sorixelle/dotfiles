@@ -60,6 +60,7 @@
       extensions = with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs; [
           decentraleyes
+          firefox-color
           frankerfacez
           https-everywhere
           metamask
