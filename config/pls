@@ -18,8 +18,10 @@ end
 switch $argv[1]
   case build
     sudo nixos-rebuild -L --show-trace --flake ~/etc switch
+    rm result > /dev/null 2>&1
   case test
     sudo nixos-rebuild -L --show-trace --flake ~/etc test
+    rm result > /dev/null 2>&1
   case clean
     sudo nix-collect-garbage -d
     nix store optimise
