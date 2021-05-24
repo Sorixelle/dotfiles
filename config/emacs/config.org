@@ -766,11 +766,11 @@ they're looking for. :)
    well, at least tolerable to look at.
 
    #+begin_src emacs-lisp
-     ;; (use-package apheleia
-     ;;   :straight (apheleia :host github
-     ;;                       :repo "raxod502/apheleia")
-     ;;   :config
-     ;;   (apheleia-global-mode t))
+     (use-package apheleia
+       :straight (apheleia :host github
+                           :repo "raxod502/apheleia")
+       :config
+       (apheleia-global-mode t))
    #+end_src
 
 ** [[https://github.com/wbolster/emacs-direnv][direnv-mode]]
