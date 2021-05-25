@@ -75,6 +75,10 @@
     useGlobalPkgs = true;
   };
 
+  # nix machine broke
+  # https://github.com/NixOS/nixpkgs/issues/124215
+  nix.sandboxPaths = [ "/bin/sh=${pkgs.bash}/bin/sh" ];
+
   # Set flake revision
   system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
 }
