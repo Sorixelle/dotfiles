@@ -30,7 +30,7 @@ switch $argv[1]
   case update
     nix flake update ~/etc
   case upgrade
-    pls build && pls clean
+    pls update && pls build
   case '*'
     show_help
 end
