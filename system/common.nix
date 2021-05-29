@@ -52,6 +52,7 @@
 
   # Common packages
   environment.systemPackages = with pkgs; [
+    bat
     dnsutils
     exfat
     file
