@@ -86,7 +86,22 @@
       };
     };
 
-    fish.enable = true;
+    fish = {
+      enable = true;
+      functions = {
+        npx = {
+          description = "Run command from Node package";
+          body = ''
+            set -l npx_command (which npx 2> /dev/null)
+            if [ -n "$npx_command" ]
+              $npx_command $argv
+            else
+              nix-shell -p nodejs --run "npx $argv"
+            end
+          '';
+        };
+      };
+    };
 
     git = {
       enable = true;
