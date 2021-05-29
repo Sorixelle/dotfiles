@@ -14,17 +14,6 @@ in {
 
   daedalus-mainnet = daedalusPkgs.mainnet.daedalus.x86_64-linux;
 
-  discord = super.discord.overrideAttrs (_: rec {
-    # had this build generate a broken output earlier, and can't get the bad
-    # derivation out of the store. this will do the trick for now.
-    pname = "discordd";
-    version = "0.0.15";
-    src = super.fetchurl {
-      url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-      sha256 = "0pn2qczim79hqk2limgh88fsn93sa8wvana74mpdk5n6x5afkvdd";
-    };
-  });
-
   gcc-cortex-a-arm = gcc-cortex-a-9 "arm";
   gcc-cortex-a-armhf = gcc-cortex-a-9 "armhf";
   gcc-cortex-a-aarch64 = gcc-cortex-a-9 "aarch64";
