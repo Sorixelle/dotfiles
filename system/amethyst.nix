@@ -138,6 +138,8 @@ in {
       SUBSYSTEM=="usb", ATTR{idVendor}=="1038", ATTR{idProduct}=="1700", GROUP="wheel", MODE="0660"
     '';
 
+    usbmuxd.enable = true;
+
     xserver = {
       enable = true;
 
