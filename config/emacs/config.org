@@ -673,7 +673,11 @@ they're looking for. :)
 
      ;; A nicer looking autocomplete modal
      (use-package company-box
-       :hook (company-mode . company-box-mode))
+       :hook (company-mode . company-box-mode)
+       :custom
+       ;; Don't show documentation for autocomplete options
+       ;; (this seems to be really slow, so we'll disable it)
+       (company-box-doc-enable nil))
    #+end_src
 
 ** [[https://github.com/akermu/emacs-libvterm][Libvterm]]
