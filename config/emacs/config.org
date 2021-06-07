@@ -983,7 +983,7 @@ they're looking for. :)
    #+begin_src emacs-lisp
      (use-package js-mode
        :straight nil
-       :mode "\\.m?jsx?\\'"
+       :mode "\\.m?js\\'"
        :hook (js-mode . lsp)
        :init
        (setq js-indent-level 2))
@@ -1021,6 +1021,15 @@ they're looking for. :)
                                    (setq-local lsp-enabled-clients '(svelte-ls eslint))))
      (with-eval-after-load 'lsp-mode
        (add-to-list 'lsp-language-id-configuration '(svelte-mode . "svelte")))
+   #+end_src
+
+   And for JSX files too, because web-mode is nicer to use IMO.
+
+   #+begin_src emacs-lisp
+     (define-derived-mode jsx2-mode web-mode "JavaScript (JSX)")
+     (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx2-mode))
+     (add-hook 'jsx2-mode (lambda ()
+                            (setq-local lsp-enabled-clients '(ts-ls eslint))))
    #+end_src
 
    Because ESLint and Typescript need some patching to work properly in a Yarn 2
