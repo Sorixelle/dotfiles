@@ -17,6 +17,7 @@
     gnome3.file-roller
     gnome3.gedit
     gnome3.nautilus
+    insomnia
     ipmitool
     libreoffice-fresh
     magic-wormhole
