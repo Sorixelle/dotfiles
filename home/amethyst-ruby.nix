@@ -32,6 +32,7 @@
     shutter
     sshfs
     steam
+    steam-run
     transmission-gtk
     trezor_agent
     trezorctl
