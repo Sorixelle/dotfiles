@@ -350,6 +350,8 @@ they're looking for. :)
    #+begin_src emacs-lisp
      (use-package evil
        :init
+       (setq evil-want-keybinding nil)
+       :config
        (evil-mode t)
        :hydra
        (hydra-windows (:color red :hint nil)
@@ -376,6 +378,15 @@ they're looking for. :)
        (general-unbind 'motion "SPC")
        (srxl/leader-key-def
          "w" '(hydra-windows/body :wk "Windows")))
+   #+end_src
+
+   Bring in [[https://github.com/emacs-evil/evil-collection][evil-collection]] so I can be evil everywhere.
+
+   #+begin_src emacs-lisp
+     (use-package evil-collection
+       :after evil
+       :config
+       (evil-collection-init))
    #+end_src
 
 ** General Keybindings
@@ -725,12 +736,6 @@ they're looking for. :)
        :general
        (srxl/leader-key-def
 	 "v" '(magit-status :wk "Version control")))
-   #+end_src
-
-   Evil compatibility. TODO: replace with evil-collection
-
-   #+begin_src emacs-lisp
-     (use-package evil-magit)
    #+end_src
 
 ** [[https://www.flycheck.org][Flycheck]]
