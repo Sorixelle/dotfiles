@@ -132,6 +132,8 @@ in {
       };
     };
 
+    srxl.joycond.enable = true;
+
     trezord.enable = true;
 
     udev.extraRules = ''

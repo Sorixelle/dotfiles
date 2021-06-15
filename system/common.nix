@@ -2,6 +2,10 @@
 { pkgs, lib, inputs, ... }:
 
 {
+  imports = [
+    ./modules/joycond.nix
+  ];
+
   # Set the hostname
   networking.hostName = name;
 
