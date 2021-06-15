@@ -87,6 +87,13 @@ they're looking for. :)
      (setq gc-cons-threshold 20000000)
    #+end_src
 
+   Don't open the Warnings buffer whenever there's a native comp warning. It's
+   annoying and gets in my face.
+
+   #+begin_src emacs-lisp
+     (setq native-comp-async-report-warnings-errors 'silent)
+   #+end_src
+
    And, last but not least... STOP MAKING NOISES
 
    #+begin_src emacs-lisp
