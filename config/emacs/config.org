@@ -428,6 +428,17 @@ they're looking for. :)
       "h v" '(describe-variable :wk "Describe variable"))
    #+end_src
 
+** [[https://github.com/joaotavora/yasnippet][YASnippet]]
+   Provides template/snippet functionality for Emacs. I don't use any particular
+   snippets myself, but a few other packages use it for some things, like
+   [[*\[\[https://github.com/emacs-evil/evil\]\[Evil\]\]][evil-collection]] and [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]].
+
+   #+begin_src emacs-lisp
+     (use-package yasnippet
+       :config
+       (yas-global-mode))
+   #+end_src
+
 ** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
    A modeline that's not only pretty, but also actually useful.
 
