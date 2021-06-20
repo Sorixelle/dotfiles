@@ -61,6 +61,7 @@
     exfat
     file
     htop
+    ncdu
     psmisc
     ripgrep
     vim
