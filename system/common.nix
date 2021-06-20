@@ -74,6 +74,13 @@
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
 
+  boot = {
+    # Clean /tmp on startup
+    cleanTmpDir = true;
+    # Mount /tmp as tmpfs
+    tmpOnTmpfs = true;
+  };
+
   home-manager = {
     # Install home-manager packages to /etc/profiles
     useUserPackages = true;
