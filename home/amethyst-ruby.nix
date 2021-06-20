@@ -52,8 +52,11 @@
   programs = {
     direnv = {
       enable = true;
-      enableNixDirenvIntegration = true;
       enableFishIntegration = true;
+      nix-direnv = {
+        enable = true;
+        enableFlakes = true;
+      };
     };
 
     firefox = {
