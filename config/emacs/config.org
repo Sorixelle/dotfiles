@@ -885,6 +885,18 @@ they're looking for. :)
        :hook (smartparens-enable . evil-smartparens-mode))
    #+end_src
 
+** [[https://polymode.github.io/][Polymode]]
+   Yo dawg, I heard you like modes
+
+   So we put a mode in your mode so you can mode while you mode
+
+   We'll just install the package here, but we'll use it in a few other places
+   to create some combination modes.
+
+   #+begin_src emacs-lisp
+     (use-package polymode)
+   #+end_src
+
 * Languages
   This section contains all configuration for specific programming languages.
 
