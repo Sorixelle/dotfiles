@@ -57,7 +57,9 @@ in with lib; {
           text = ''
             (setq
              srxl/font-family-monospace "${config.srxl.fonts.monospace.name}"
+             srxl/font-size-monospace "${toString config.srxl.fonts.monospace.size}"
              srxl/font-family-ui "${config.srxl.fonts.ui.name}"
+             srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
              srxl/theme-name '${conf.theme}
              srxl/project-dir "~/usr/devel")
 

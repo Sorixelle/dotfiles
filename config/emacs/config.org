@@ -113,8 +113,8 @@ they're looking for. :)
    =srxl.fonts=.
 
    #+begin_src emacs-lisp
-     (add-to-list 'default-frame-alist `(font . ,(concat srxl/font-family-monospace " 10")))
-     (set-face-attribute 'variable-pitch nil :family srxl/font-family-ui :height 100)
+     (add-to-list 'default-frame-alist `(font . ,(concat srxl/font-family-monospace " " srxl/font-size-monospace)))
+     (set-face-attribute 'variable-pitch nil :family srxl/font-family-ui :height srxl/font-size-ui)
    #+end_src
 
 ** Files
