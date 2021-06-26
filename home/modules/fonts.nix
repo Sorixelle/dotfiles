@@ -14,6 +14,11 @@ let
           type = types.nullOr types.package;
           description = "Package providing the specified font.";
         };
+        size = mkOption {
+          type = types.ints.positive;
+          description = "Size of the font.";
+          default = 10;
+        };
       };
     };
 in with lib; {
