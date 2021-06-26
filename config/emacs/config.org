@@ -94,6 +94,14 @@ they're looking for. :)
      (setq native-comp-async-report-warnings-errors 'silent)
    #+end_src
 
+   Write customizations to it's own, dedicated file. Writing to =init.el= isn't
+   going to fly under NixOS, since it manages that file with a symlink.
+
+   #+begin_src emacs-lisp
+     (setq custom-file (concat user-emacs-directory "customizations.el"))
+     (load-file custom-file)
+   #+end_src
+
    And, last but not least... STOP MAKING NOISES
 
    #+begin_src emacs-lisp
