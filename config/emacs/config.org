@@ -1083,9 +1083,11 @@ they're looking for. :)
                             (setq-local lsp-enabled-clients '(ts-ls eslint))))
    #+end_src
 
-   Because ESLint and Typescript need some patching to work properly in a Yarn 2
-   project using PnP, we'll do some trickery to point lsp-mode at the right
-   executables for the job.
+   Because ESLint, Typescript and Svelte need some patching to work properly in
+   a Yarn 2 project using PnP, we'll define some functions to help locate the
+   binaries in dir-locals. To setup a project using PnP, there's a helpful
+   little =yarn-pnp= snippet for use in =.dir-locals.el= that sets up the
+   project for Typescript, ESLint and/or Svelte.
 
    #+begin_src emacs-lisp
      (defun srxl/get-project-yarn-sdk-dir (&optional path)
@@ -1102,33 +1104,6 @@ they're looking for. :)
             (if (file-exists-p server-path)
                 (expand-file-name server-path)
               ,default))))
-
-     (with-eval-after-load 'lsp-javascript
-       (lsp-dependency 'typescript
-                       `(:system ,(srxl/find-pnp-dependency
-                                   "typescript/bin/tsserver"
-                                   "tsserver"))
-                       '(:npm :package "typescript"
-                              :path "tsserver"))
-       (lsp-dependency 'typescript-language-server
-                       `(:system ,(srxl/find-pnp-dependency
-                                   "typescript-language-server/lib/cli.js"
-                                   "typescript-language-server"))
-                       '(:npm :package "typescript-language-server"
-                              :path "typescript-language-server")))
-
-     (with-eval-after-load 'lsp-svelte
-       (lsp-dependency 'svelte-language-server
-                       `(:system ,(srxl/find-pnp-dependency
-                                   "svelte-language-server/bin/server.js"
-                                   "svelteserver"))
-                       '(:npm :package "svelte-language-server"
-                              :path "svelteserver")))
-
-     (with-eval-after-load 'lsp-eslint
-       (let ((yarn-sdk-dir (expand-file-name (srxl/get-project-yarn-sdk-dir))))
-         (when (file-directory-p (concat yarn-sdk-dir "eslint/"))
-           (setq-local lsp-eslint-node-path yarn-sdk-dir))))
    #+end_src
 ** Scala
    Finally, a JVM language that's actually nice to use!
