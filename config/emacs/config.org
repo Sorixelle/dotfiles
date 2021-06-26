@@ -592,6 +592,14 @@ they're looking for. :)
          "5 D"))
    #+end_src
 
+   Projectile ripgrep integration.
+
+   #+begin_src emacs-lisp
+     (use-package projectile-ripgrep)
+   #+end_src
+
+   Counsel integration, for some advanced minibuffer searching commands.
+
    #+begin_src emacs-lisp
      (use-package counsel-projectile
        :config
