@@ -13,6 +13,13 @@
                           '(:npm :package \"typescript-language-server\"
                                  :path \"typescript-language-server\"))" ""))`
 `(let ((answer (ivy-read "Add ESLint support?" '("Yes" "No")))) (if (equal answer "Yes")
-"                   (let ((yarn-sdk-dir (expand-file-name (srxl/get-project-yarn-sdk-dir))))
-                     (when (file-directory-p (concat yarn-sdk-dir \"eslint/\"))
-                       (setq-local lsp-eslint-node-path yarn-sdk-dir)))" ""))`))
+"         (let ((yarn-sdk-dir (expand-file-name (srxl/get-project-yarn-sdk-dir))))
+           (when (file-directory-p (concat yarn-sdk-dir \"eslint/\"))
+             (setq-local lsp-eslint-node-path yarn-sdk-dir)))" ""))`
+`(let ((answer (ivy-read "Add Svelte support?" '("Yes" "No")))) (if (equal answer "Yes")
+"         (lsp-dependency 'svelte-language-server
+                          \`(:system ,(srxl/find-pnp-dependency
+                                   \"svelte-language-server/bin/server.js\"
+                                   \"svelteserver\"))
+                          '(:npm :package \"svelte-language-server\"
+                                :path \"svelteserver\"))" ""))`))
