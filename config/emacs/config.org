@@ -527,6 +527,19 @@ they're looking for. :)
        (projectile-enable-caching t)
        :config
        (projectile-mode t)
+       ;; Make BlaBlaTest.scala a test file of BlaBla.scala
+       (projectile-update-project-type
+        'sbt
+        :related-files-fn
+        (list
+         (projectile-related-files-fn-test-with-suffix "scala" "Spec")
+         (projectile-related-files-fn-test-with-suffix "scala" "Test")))
+       (projectile-update-project-type
+        'bloop
+        :related-files-fn
+        (list
+         (projectile-related-files-fn-test-with-suffix "scala" "Spec")
+         (projectile-related-files-fn-test-with-suffix "scala" "Test")))
        :general
        (srxl/leader-key-def
          "ESC" '(projectile-project-buffers-other-buffer :wk "Switch to last buffer")
