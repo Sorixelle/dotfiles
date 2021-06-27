@@ -496,100 +496,59 @@ they're looking for. :)
    All the project editing, searching and manipulating you could ever want.
 
    *Key Bindings*
-   | Key       | Function                     |
-   |-----------+------------------------------|
-   | =SPC p=   | Projectile prefix            |
-   | =SPC b b= | Switch buffer (from project) |
-   | =SPC b B= | Switch buffer (all buffers)  |
-   | =SPC b k= | Kill buffer                  |
+   | Key         | Function                                       |
+   |-------------+------------------------------------------------|
+   | =SPC p a=   | Find other file                                |
+   | =SPC p e=   | Edit =.dir-locals.el=                          |
+   | =SPC p f=   | Find file in project                           |
+   | =SPC p F=   | Find file at point                             |
+   | =SPC p p=   | Switch project                                 |
+   | =SPC p R=   | Find and replace string in project             |
+   | =SPC p s=   | Grep project (with =ripgrep=)                  |
+   | =SPC p S=   | Save all open buffers in project               |
+   | =SPC p t=   | Switch between implementation and test file    |
+   | =SPC p r b= | Run project build command                      |
+   | =SPC p r c= | Run project configure command                  |
+   | =SPC p r r= | Run project run command                        |
+   | =SPC p r t= | Run project test command                       |
+   | =SPC p r T= | Open terminal in project root                  |
+   | =SPC p w a= | Open related file in new window                |
+   | =SPC p w f= | Open file at point in new window               |
+   | =SPC p w t= | Open implementation or test file in new window |
+   | =SPC b b=   | Switch buffer (from project)                   |
+   | =SPC b B=   | Switch buffer (all buffers)                    |
+   | =SPC b k=   | Kill buffer                                    |
 
    #+begin_src emacs-lisp
      (use-package projectile
        :custom
        ;; Search specified directory for projects
        (projectile-project-search-path `(,srxl/project-dir))
+       (projectile-enable-caching t)
        :config
-       ;; Add which-key information to the keymap
-       (which-key-add-keymap-based-replacements projectile-command-map
-         "ESC"     "Switch to last buffer"
-         "SPC"     "Explore projects"
-         "!"       "Run command in root"
-         "&"       "Run async command in root"
-         "C"       "Configure project"
-         "E"       "Edit dir-locals"
-         "F"       "Open file in all projects"
-         "I"       "List buffers in project"
-         "P"       "Run tests"
-         "R"       "Regen TAGS"
-         "S"       "Save project buffers"
-         "T"       "Open test in project"
-         "V"       "Browse dirty projects"
-         "a"       "Open other file"
-         "b"       "Switch buffer"
-         "c"       "Compile project"
-         "d"       "Open directory"
-         "e"       "Show recent files"
-         "f"       "Open file"
-         "g"       "Open file at point"
-         "i"       "Invalidate cache"
-         "j"       "Find tag"
-         "k"       "Kill buffer"
-         "l"       "Open file in directory"
-         "m"       "Commander"
-         "o"       "Find in buffers"
-         "p"       "Switch project"
-         "q"       "Switch to open project"
-         "r"       "Replace string in project"
-         "t"       "Toggle impl. and test"
-         "u"       "Run project"
-         "v"       "Show VC status"
-         "z"       "Cache file"
-         "<left>"  "Previous project"
-         "<right>" "Next project"
-
-         "4"     "Open in new window"
-         "4 a"   "Other file"
-         "4 b"   "Buffer"
-         "4 d"   "Directory"
-         "4 f"   "File"
-         "4 g"   "File at point"
-         "4 t"   "Impl. or test"
-         "4 C-o" "Buffer without focus"
-
-         "5"   "Open in new frame"
-         "5 a" "Other file"
-         "5 b" "Buffer"
-         "5 d" "Directory"
-         "5 f" "File"
-         "5 g" "File at point"
-         "5 t" "Impl. or test"
-
-         "O"   "Org-mode"
-         "O a" "Open agenda"
-         "O c" "Capture into project"
-
-         "s"   "Search"
-         "s g" "grep"
-         "s i" "git grep"
-         "s r" "ripgrep"
-         "s s" "ag"
-
-         "x"   "Run"
-         "x e" "Eshell"
-         "x g" "GDB"
-         "x i" "IELM"
-         "x s" "Shell"
-         "x t" "Term"
-         "x v" "Vterm")
        (projectile-mode t)
        :general
        (srxl/leader-key-def
-         "p" '(:keymap projectile-command-map :wk "Project"))
-       ;; Disable dired-related bindings, since we won't be using them
-       (general-unbind projectile-command-map
-         "D"
-         "4 D"
-         "5 D"))
+         "ESC" '(projectile-project-buffers-other-buffer :wk "Switch to last buffer")
+
+         "p"   '(:ignore t :wk "Project")
+         "p a" '(projectile-find-other-file                        :wk "Switch to related file")
+         "p e" '(projectile-edit-dir-locals                        :wk "Edit .dir-locals.el")
+         "p R" '(projectile-replace-regexp                         :wk "Replace in project")
+         "p S" '(projectile-save-project-buffers                   :wk "Save all files")
+         "p t" '(projectile-toggle-between-implementation-and-test :wk "Switch to impl/test file")
+
+         "p r"   '(:ignore t :wk "Run...")
+         "p r b" '(projectile-compile-project   :wk "Build")
+         "p r c" '(projectile-configure-project :wk "Configure")
+         "p r r" '(projectile-run-project       :wk "Run")
+         "p r t" '(projectile-test-project      :wk "Test")
+         "p r T" '(projectile-run-vterm         :wk "Terminal")
+
+         "p w"   '(:ignore t :wk "Open in new window...")
+         "p w a" '(projectile-find-other-file-other-window             :wk "Related file")
+         "p w f" '(projectile-find-file-dwim-other-window              :wk "File at point")
+         "p w t" '(projectile-find-implementation-or-test-other-window :wk "Impl/test")))
    #+end_src
 
    Projectile ripgrep integration.
@@ -606,6 +565,12 @@ they're looking for. :)
        (counsel-projectile-mode t)
        :general
        (srxl/leader-key-def
+         "p SPC" '(counsel-projectile                :wk "Jump to file/buffer")
+         "p f"   '(counsel-projectile-find-file      :wk "Find file")
+         "p F"   '(counsel-projectile-find-file-dwim :wk "Find file at point")
+         "p p"   '(counsel-projectile-switch-project :wk "Switch project")
+         "p s"   '(counsel-projectile-rg             :wk "Grep project")
+
          "b"   '(:ignore t                           :wk "Buffers")
          "b b" '(counsel-projectile-switch-to-buffer :wk "Switch buffer (project)")
          "b B" '(counsel-switch-buffer               :wk "Switch buffer (all)")))
