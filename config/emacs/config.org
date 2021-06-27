@@ -804,63 +804,114 @@ they're looking for. :)
    Language Server Protocol support to allow us to become the laziest devs to
    ever exist.
 
+   *Key Bindings*
+   | Key         | Function                                     |
+   |-------------+----------------------------------------------|
+   | =SPC l a=   | Run code action at point                     |
+   | =SPC l c=   | Show function call hierachy                  |
+   | =SPC l d=   | Show file definitions                        |
+   | =SPC l e=   | Show project errors                          |
+   | =SPC l f=   | Format buffer                                |
+   | =SPC l F=   | Format region                                |
+   | =SPC l h=   | Show documentation popup for symbol at point |
+   | =SPC l l=   | Run lens action                              |
+   | =SPC l o=   | Sort imports in file                         |
+   | =SPC l r=   | Rename symbol at point                       |
+   | =SPC l t=   | Show type hierachy                           |
+   | =SPC l g g= | Show symbol definitions                      |
+   | =SPC l g i= | Show symbol implementations                  |
+   | =SPC l g r= | Show symbol references                       |
+   | =SPC l g s= | Search for symbol in project                 |
+   | =SPC l g t= | Go to type definition                        |
+   | =SPC l w d= | Disconnect from LSP server                   |
+   | =SPC l w i= | Show LSP session info                        |
+   | =SPC l w q= | Shutdown LSP server                          |
+   | =SPC l w r= | Restart LSP server                           |
+   | =SPC l w s= | Start LSP server                             |
+
    #+begin_src emacs-lisp
      (use-package lsp-mode
        :hook
        (lsp-mode . lsp-enable-which-key-integration)
        :commands lsp
+       :custom
+       (lsp-lens-enable t)
+       (lsp-modeline-code-actions-enable nil)
        :config
        ;; lsp-mode likes this value to be higher, see M-x lsp-diagnose
-       (setq read-process-output-max (* 1024 1024)
-             ;; Set this variable so lsp-enable-which-key-integration knows where to
-             ;; add which-key hints. Can't use :custom for this one, because if we
-             ;; do, it'll actually put the bindings there, and we don't want that.
-             lsp-keymap-prefix "SPC x")
+       (setq read-process-output-max (* 1024 1024))
        ;; Run hack-local-variables, then direnv-update-environment before starting
-       ;; lsp, so that all project-specific configuration is ready to do.
+       ;; lsp, so that all project-specific configuration is ready to go.
        (advice-add 'lsp :before 'hack-local-variables '((depth . -1)))
        (advice-add 'lsp :before 'direnv-update-environment)
-
-       ;; Mark some variables as safe to use in dir-locals
-       (put 'lsp-enabled-clients 'safe-local-variable 'listp)
-       (add-to-list 'safe-local-variable-values '(lsp-eslint-node-path . ".yarn/sdks"))
        :general
        (srxl/leader-key-def
-         "x" '(:keymap lsp-command-map :wk "LSP")))
+         "l"   '(:ignore t :wk "LSP")
+         "l a" '(lsp-execute-code-action :wk "Run code action")
+         "l f" '(lsp-format-buffer       :wk "Format buffer")
+         "l F" '(lsp-format-region       :wk "Format selected region")
+         "l l" '(lsp-avy-lens            :wk "Run lens action")
+         "l o" '(lsp-organize-imports    :wk "Organize imports")
+         "l r" '(lsp-rename              :wk "Rename symbol")
 
-     ;; Optional dependency for some lsp-ui stuff
-     (use-package posframe
-       :custom
-       ;; Don't move the mouse to the top-left corner of the screen when posframe
-       ;; makes a new window. That's really annoying. Stop it.
-       (posframe-mouse-banish nil))
+         "l g"   '(:ignore t :wk "Goto...")
+         "l g t" '(lsp-find-type-definition :wk "Type definiton")
 
-     ;; UI elements that integrate with LSP servers
-     (use-package lsp-ui
-       :commands lsp-ui-mode
-       :custom
-       (lsp-ui-doc-position 'bottom)
-       (lsp-ui-doc-delay 1)
-       (lsp-ui-doc-border nil)
-       :general
-       ;; Add a keybinding to (un)focus the documentation frame
-       (general-def 'lsp-command-map
-         "f" (general-predicate-dispatch 'lsp-ui-doc-focus-frame
-               lsp-ui-doc-frame-mode 'lsp-ui-doc-unfocus-frame)))
+         "l w"   '(:ignore t :wk "Workspaces")
+         "l w d" '(lsp-disconnect         :wk "Disconnect from server")
+         "l w i" '(lsp-describe-session   :wk "Show session info")
+         "l w q" '(lsp-workspace-shutdown :wk "Shutdown server")
+         "l w r" '(lsp-workspace-restart  :wk "Restart server")
+         "l w s" '(lsp                    :wk "Start server")))
 
-     ;; Ivy integration
-     (use-package lsp-ivy
-       :commands lsp-ivy-workspace-symbol)
-
-     ;; Treemacs integration
-     (use-package lsp-treemacs
-       :commands lsp-treemacs-errors-list
-       :config
-       (treemacs-resize-icons 16))
+     ;; Required for `lsp-avy-lens'
+     (use-package avy)
 
      ;; Debug Adapter Protocol support
      (use-package dap-mode
        :defer t)
+   #+end_src
+
+   [[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] provides some cool UI elements, like code peeking, sideline code
+   actions, and documentation popups.
+
+   #+begin_src emacs-lisp
+     (use-package lsp-ui
+       :custom
+       (lsp-ui-doc-enable nil)
+       (lsp-ui-peek-show-directory nil)
+       :general
+       (srxl/leader-key-def
+         "l h" '(lsp-ui-doc-glance :wk "Show hover info")
+
+         "l g g" '(lsp-ui-peek-find-definitions    :wk "Definition")
+         "l g i" '(lsp-ui-peek-find-implementation :wk "Implementations")
+         "l g r" '(lsp-ui-peek-find-references     :wk "References")))
+   #+end_src
+
+   [[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] gives us even more UI stuff, like function call hierachies and
+   project error displays.
+
+   #+begin_src emacs-lisp
+     (use-package lsp-treemacs
+       :config
+       (treemacs-resize-icons 16)
+       :general
+       (srxl/leader-key-def
+         "l c" '(lsp-treemacs-call-hierarchy :wk "Show call hierachy")
+         "l d" '(lsp-treemacs-symbols        :wk "Show definitions")
+         "l e" '(lsp-treemacs-errors-list    :wk "Show errors")
+         "l t" '(lsp-treemacs-type-hierarchy :wk "Show type hierachy")))
+   #+end_src
+
+   [[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] adds Ivy integration for a few commands.
+
+   #+begin_src emacs-lisp
+     (use-package lsp-ivy
+       :commands lsp-ivy-workspace-symbol
+       :general
+       (srxl/leader-key-def
+         "l g s" '(lsp-ivy-workspace-symbol :wk "Symbol")))
    #+end_src
 
 ** [[https://github.com/Fuco1/smartparens][smartparens]]
