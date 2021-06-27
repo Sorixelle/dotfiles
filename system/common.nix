@@ -59,6 +59,7 @@
     bat
     dnsutils
     exfat
+    fd
     file
     htop
     ncdu
