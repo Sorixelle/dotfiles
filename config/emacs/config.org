@@ -12,7 +12,15 @@ they're looking for. :)
   distribution.
 
 ** General
-   First things first: Let's load our NixOS config-defined variables.
+   Before we start any code: enable =lexical-binding= for an ever so slight
+   performace boost, and ease of mind that we're writing good practice Elisp.
+
+   #+begin_src emacs-lisp
+     ;;; config.el -*- lexical-binding: t; -*-
+   #+end_src
+
+   We'll also bring in our NixOS config-defined variables so they're immediately
+   ready for use.
 
    #+begin_src emacs-lisp
      (load-file (concat user-emacs-directory "config-vars.el"))
