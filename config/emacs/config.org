@@ -841,7 +841,7 @@ they're looking for. :)
      (use-package lsp-mode
        :hook
        (lsp-mode . lsp-enable-which-key-integration)
-       :commands lsp
+       :commands (lsp lsp-dependency)
        :custom
        (lsp-lens-enable t)
        (lsp-modeline-code-actions-enable nil)
@@ -1130,7 +1130,7 @@ they're looking for. :)
      (defun srxl/get-project-yarn-sdk-dir (&optional path)
        "Gets the current Yarn SDK tool directory for PATH is supplied, or otherwise
      from the current buffer's path."
-       (when-let ((yarn-dir (locate-dominating-file (or path (buffer-file-name)) ".yarn")))
+       (when-let ((yarn-dir (locate-dominating-file (or path (buffer-file-name) "") ".yarn")))
          (concat yarn-dir ".yarn/sdks/")))
 
      (defmacro srxl/find-pnp-dependency (path default)
@@ -1179,7 +1179,7 @@ they're looking for. :)
         :mode ("\\.exs?\\'")
         :hook (elixir-mode . lsp)
         :custom
-        (lsp-clients-elixir-server-executable "elixir-ls"))
+        (lsp-elixir-server-command '("elixir-ls")))
 
       (use-package mix
         :hook (elixir-mode . mix-minor-mode))
