@@ -73,8 +73,8 @@
           react-devtools
           reddit-enhancement-suite
           sidebery
+          tridactyl
           ublock-origin
-          vimium
           violentmonkey
         ];
       profiles.Default = {
