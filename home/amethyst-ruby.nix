@@ -94,14 +94,14 @@
     fish = {
       enable = true;
       functions = {
-        npx = {
+        pnpx = {
           description = "Run command from Node package";
           body = ''
-            set -l npx_command (which npx 2> /dev/null)
-            if [ -n "$npx_command" ]
-              $npx_command $argv
+            set -l pnpx_command (which pnpx 2> /dev/null)
+            if [ -n "$pnpx_command" ]
+              $pnpx_command $argv
             else
-              nix-shell -p nodejs --run "npx $argv"
+              nix-shell -p nodePackages.pnpm --run "pnpx $argv"
             end
           '';
         };
