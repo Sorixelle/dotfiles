@@ -1071,7 +1071,7 @@ they're looking for. :)
    #+begin_src emacs-lisp
      (use-package js-mode
        :straight nil
-       :mode "\\.m?js\\'"
+       :mode "\\.[mc]?js\\'"
        :hook (js-mode . lsp)
        :init
        (setq js-indent-level 2))
