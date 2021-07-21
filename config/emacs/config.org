@@ -1054,7 +1054,7 @@ they're looking for. :)
         (web-mode-script-padding 2)
         (web-mode-auto-close-style 2)
         :general
-        (general-def 'normal
+        (general-def 'normal 'web-mode-map
           "z a" 'web-mode-fold-or-unfold
           "] a" 'web-mode-attribute-next
           "] e" 'web-mode-element-child
