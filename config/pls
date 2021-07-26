@@ -15,12 +15,19 @@ function show_help
   exit 1
 end
 
+set -l rebuild (switch (uname -s)
+  case "Linux"
+    echo "sudo nixos-rebuild"
+  case "Darwin"
+    echo "darwin-rebuild"
+end)
+
 switch $argv[1]
   case build
-    sudo nixos-rebuild -L --show-trace --flake ~/etc switch
+    eval $rebuild -L --show-trace --flake ~/etc switch
     rm result > /dev/null 2>&1
   case test
-    sudo nixos-rebuild -L --show-trace --flake ~/etc test
+    eval $rebuild -L --show-trace --flake ~/etc test
     rm result > /dev/null 2>&1
   case clean
     sudo nix-collect-garbage -d

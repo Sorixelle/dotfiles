@@ -45,7 +45,7 @@
     xorg.xkill
   ];
 
-  imports = [ ./modules/common.nix ];
+  imports = [ ./modules/common-linux.nix ];
 
   manual.manpages.enable = false;
 

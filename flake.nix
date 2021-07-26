@@ -14,19 +14,27 @@
     };
 
     nur.url = "github:nix-community/NUR";
+
+    darwin = {
+      url = "github:LnL7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, flake-utils, nixpkgs, ... }@inputs:
+  outputs = { self, flake-utils, nixpkgs, darwin, ... }@inputs:
     with nixpkgs.lib;
     let
       genSystems = genAttrs flake-utils.lib.defaultSystems;
 
+      genNixpkgsConfig = system: {
+        inherit system;
+        config = import ./nixpkgs/config.nix;
+        overlays = self.priv.overlays."${system}";
+      };
+
       pkgsBySystem = genSystems (system:
-        import nixpkgs {
-          inherit system;
-          config = import ./nixpkgs/config.nix;
-          overlays = self.priv.overlays."${system}";
-        });
+        import nixpkgs (genNixpkgsConfig system)
+      );
 
       # Generate a boilerplate system with a machine specific config.
       defineSystem = name:
@@ -48,6 +56,22 @@
 
           specialArgs = { inherit inputs; };
         });
+
+      # Like defineSystem above, but for nix-darwin (macOS) configurations
+      defineDarwin = name:
+        { system, config }:
+        nameValuePair name (darwin.lib.darwinSystem {
+          modules = [
+            inputs.home-manager.darwinModule
+
+            (import ./system-darwin/common.nix {
+              inherit name inputs;
+              nixpkgsConf = genNixpkgsConfig system;
+            })
+
+            (import config)
+          ];
+        });
     in {
       priv = {
         overlays = genSystems
@@ -58,6 +82,13 @@
         amethyst = {
           system = "x86_64-linux";
           config = ./system/amethyst.nix;
+        };
+      };
+
+      darwinConfigurations = mapAttrs' defineDarwin {
+        amethyst = {
+          system = "x86_64-darwin";
+          config = ./system-darwin/amethyst.nix;
         };
       };
 

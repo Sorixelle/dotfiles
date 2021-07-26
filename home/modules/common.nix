@@ -4,7 +4,6 @@
   imports = [
     ./emacs.nix
     ./fonts.nix
-    ../themes/winter
   ];
 
   config = {
