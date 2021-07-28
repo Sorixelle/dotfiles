@@ -238,5 +238,5 @@ in {
 
   home-manager.users.ruby = import ../home/amethyst-ruby.nix;
 
-  system.stateVersion = "21.03";
+  system.stateVersion = "21.05";
 }
