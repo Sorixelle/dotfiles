@@ -69,6 +69,7 @@
           frankerfacez
           https-everywhere
           metamask
+          multi-account-containers
           privacy-badger
           react-devtools
           reddit-enhancement-suite
