@@ -41,7 +41,7 @@ in {
   users = {
     users.ruby = {
       description = "Ruby";
-      extraGroups = [ "adbusers" "docker" "wheel" ];
+      extraGroups = [ "adbusers" "camera" "docker" "wheel" ];
       isNormalUser = true;
       uid = 1000;
     };
@@ -79,6 +79,8 @@ in {
       enable = true;
       pinentryFlavor = "gtk2";
     };
+
+    gphoto2.enable = true;
   };
 
   services = {
