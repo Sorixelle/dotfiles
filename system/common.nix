@@ -4,6 +4,7 @@
 {
   imports = [
     ./modules/joycond.nix
+    ./modules/qmk.nix
   ];
 
   # Set the hostname
