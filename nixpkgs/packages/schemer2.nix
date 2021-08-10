@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "schemer2";

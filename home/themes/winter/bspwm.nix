@@ -1,7 +1,5 @@
-lib: conf:
-
 let colors = import ./colors.nix;
-in {
+in lib: conf: {
   enable = true;
   monitors = lib.genAttrs conf.monitors
     (_: [ "web" "chat" "code" "terminals" "games" "files" "gimp" "8" "9" "0" ]);

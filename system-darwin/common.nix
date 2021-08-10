@@ -1,5 +1,5 @@
 { name, nixpkgsConf, inputs }:
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   # Set the hostname

@@ -1,8 +1,8 @@
-self: super:
+final: prev:
 
 let
   gcc-cortex-a-9 = target:
-    super.callPackage ./gcc-cortex-a.nix { inherit target; };
+    prev.callPackage ./gcc-cortex-a.nix { inherit target; };
 
   daedalusPkgs = import ("${
       fetchTarball {
@@ -11,9 +11,9 @@ let
       }
     }/release.nix") { };
 in {
-  frankerfacez = super.callPackage ./ff-exts/frankerfacez.nix { };
+  frankerfacez = prev.callPackage ./ff-exts/frankerfacez.nix { };
 
-  acousticbrainz-gui = super.callPackage ./acousticbrainz-gui.nix { };
+  acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
 
   daedalus-mainnet = daedalusPkgs.mainnet.daedalus.x86_64-linux;
 
@@ -23,18 +23,18 @@ in {
   gcc-cortex-a-aarch64-gnu = gcc-cortex-a-9 "aarch64-gnu";
   gcc-cortex-a-aarch64be-gnu = gcc-cortex-a-9 "aarch64be-gnu";
 
-  mopidy-subidy = super.callPackage ./mopidy-subidy.nix { };
+  mopidy-subidy = prev.callPackage ./mopidy-subidy.nix { };
 
-  moserial = super.callPackage ./moserial.nix { };
+  moserial = prev.callPackage ./moserial.nix { };
 
-  pmbootstrap = super.callPackage ./pmbootstrap.nix { };
+  pmbootstrap = prev.callPackage ./pmbootstrap.nix { };
 
-  pywal = super.callPackage ./pywal { };
+  pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
 
   # Fix rofi bug with height calculation
   # https://github.com/davatorium/rofi/issues/1247
-  rofi-unwrapped = super.rofi-unwrapped.overrideAttrs
+  rofi-unwrapped = prev.rofi-unwrapped.overrideAttrs
     (_: { patches = [ ./rofi/rofi-font-height.patch ]; });
 
-  schemer2 = super.callPackage ./schemer2.nix { };
+  schemer2 = prev.callPackage ./schemer2.nix { };
 }

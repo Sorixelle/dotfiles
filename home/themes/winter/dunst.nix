@@ -1,7 +1,5 @@
-config: pkgs:
-
 let colors = import ./colors.nix;
-in {
+in config: pkgs: {
   enable = true;
   iconTheme = {
     inherit (config.gtk.iconTheme) name package;

@@ -1,7 +1,5 @@
-config: pkgs:
-
 let colors = import ./colors.nix;
-in {
+in config: pkgs: {
   enable = true;
   package = pkgs.polybar.override {
     mpdSupport = true;

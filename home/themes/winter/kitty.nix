@@ -1,7 +1,5 @@
-config:
-
 let colors = import ./colors.nix;
-in {
+in config: {
   enable = true;
   font.name = config.srxl.fonts.monospace.name;
   settings = {

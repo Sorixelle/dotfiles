@@ -4,24 +4,30 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    flake-utils.url = "github:numtide/flake-utils";
-
     emacs.url = "github:nix-community/emacs-overlay";
+    nur.url = "github:nix-community/NUR";
+
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
+    flake-utils.url = "github:numtide/flake-utils";
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nur.url = "github:nix-community/NUR";
-
     darwin = {
       url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, flake-utils, nixpkgs, darwin, ... }@inputs:
+  outputs =
+    { self, flake-utils, nixpkgs, darwin, pre-commit-hooks, ... }@inputs:
     with nixpkgs.lib;
     let
       genSystems = genAttrs flake-utils.lib.defaultSystems;
@@ -29,7 +35,7 @@
       genNixpkgsConfig = system: {
         inherit system;
         config = import ./nixpkgs/config.nix;
-        overlays = self.priv.overlays."${system}";
+        overlays = [ inputs.nur.overlay self.overlay inputs.emacs.overlay ];
       };
 
       pkgsBySystem =
@@ -72,11 +78,6 @@
           ];
         });
     in {
-      priv = {
-        overlays = genSystems
-          (s: [ inputs.nur.overlay self.overlay."${s}" inputs.emacs.overlay ]);
-      };
-
       nixosConfigurations = mapAttrs' defineSystem {
         amethyst = {
           system = "x86_64-linux";
@@ -91,13 +92,30 @@
         };
       };
 
-      overlay = genSystems (_: import ./nixpkgs/packages);
+      overlay = import ./nixpkgs/packages;
 
       devShell = genSystems (s:
         with pkgsBySystem."${s}";
         mkShell {
           name = "srxl-dotfiles";
-          buildInputs = [ nixfmt nixos-generators ];
+          buildInputs = [ nix-linter nixfmt nixos-generators rnix-lsp ];
+
+          shellHook = ''
+            ${self.checks.${s}.pre-commit-check.shellHook}
+          '';
         });
+
+      checks = genSystems (s: {
+        pre-commit-check = pre-commit-hooks.lib.${s}.run {
+          src = builtins.path {
+            path = ./.;
+            name = "dotfiles";
+          };
+          hooks = {
+            nixfmt.enable = true;
+            nix-linter.enable = true;
+          };
+        };
+      });
     };
 }

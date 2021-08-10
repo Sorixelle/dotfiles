@@ -6,3 +6,6 @@ result
 
 # Direnv
 .direnv/
+
+# pre-commit configuration
+.pre-commit-config.yaml

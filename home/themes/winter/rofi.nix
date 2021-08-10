@@ -1,7 +1,5 @@
-config:
-
 let colors = import ./colors.nix;
-in {
+in config: {
   enable = true;
 
   theme = let
