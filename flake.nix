@@ -98,7 +98,7 @@
         with pkgsBySystem."${s}";
         mkShell {
           name = "srxl-dotfiles";
-          buildInputs = [ nixfmt ];
+          buildInputs = [ nixfmt nixos-generators ];
         });
     };
 }
