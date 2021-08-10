@@ -98,7 +98,12 @@
         with pkgsBySystem."${s}";
         mkShell {
           name = "srxl-dotfiles";
-          buildInputs = [ nix-linter nixfmt nixos-generators rnix-lsp ];
+          buildInputs = [
+            nix-linter
+            nixfmt
+            (nixos-generators.override { nix = nixUnstable; })
+            rnix-lsp
+          ];
 
           shellHook = ''
             ${self.checks.${s}.pre-commit-check.shellHook}
