@@ -1,13 +1,9 @@
 { pkgs, ... }:
 
 {
-  imports = [
-    ./modules/common-darwin.nix
-  ];
+  imports = [ ./modules/common-darwin.nix ];
 
-  home.packages = with pkgs; [
-    gnupg
-  ];
+  home.packages = with pkgs; [ gnupg ];
 
   programs = {
     fish.enable = true;
@@ -34,7 +30,7 @@
     fonts = {
       monospace = {
         name = "BlexMono Nerd Font";
-        package = pkgs.nerdfonts.override { fonts = ["IBMPlexMono"]; };
+        package = pkgs.nerdfonts.override { fonts = [ "IBMPlexMono" ]; };
         size = 12;
       };
       ui = {
@@ -42,9 +38,7 @@
         package = pkgs.inter;
         size = 12;
       };
-      extraFonts = with pkgs; [
-        emacs-all-the-icons-fonts
-      ];
+      extraFonts = with pkgs; [ emacs-all-the-icons-fonts ];
     };
   };
 

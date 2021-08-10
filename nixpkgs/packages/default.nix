@@ -1,12 +1,15 @@
 self: super:
 
 let
-  gcc-cortex-a-9 = target: super.callPackage ./gcc-cortex-a.nix { inherit target; };
+  gcc-cortex-a-9 = target:
+    super.callPackage ./gcc-cortex-a.nix { inherit target; };
 
-  daedalusPkgs = import ("${fetchTarball {
-    url = "https://github.com/input-output-hk/daedalus/archive/4.0.5.zip";
-    sha256 = "1zrg8l08ckylnlrmwr2dnrvph82ry7l4kg3qx80mvwp1ixyg6jfa";
-  }}/release.nix") { };
+  daedalusPkgs = import ("${
+      fetchTarball {
+        url = "https://github.com/input-output-hk/daedalus/archive/4.0.5.zip";
+        sha256 = "1zrg8l08ckylnlrmwr2dnrvph82ry7l4kg3qx80mvwp1ixyg6jfa";
+      }
+    }/release.nix") { };
 in {
   frankerfacez = super.callPackage ./ff-exts/frankerfacez.nix { };
 
@@ -30,9 +33,8 @@ in {
 
   # Fix rofi bug with height calculation
   # https://github.com/davatorium/rofi/issues/1247
-  rofi-unwrapped = super.rofi-unwrapped.overrideAttrs (_: {
-    patches = [ ./rofi/rofi-font-height.patch ];
-  });
+  rofi-unwrapped = super.rofi-unwrapped.overrideAttrs
+    (_: { patches = [ ./rofi/rofi-font-height.patch ]; });
 
   schemer2 = super.callPackage ./schemer2.nix { };
 }

@@ -43,10 +43,7 @@
     };
 
     # Additional binary caches
-    binaryCaches = [
-      "https://cache.nixos.org"
-      "https://hydra.iohk.io"
-    ];
+    binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
     binaryCachePublicKeys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
@@ -79,9 +76,7 @@
     # Uninstall any packages not defined in Nix
     cleanup = "uninstall";
 
-    taps = [
-      "homebrew/cask"
-    ];
+    taps = [ "homebrew/cask" ];
   };
 
   # Configure ZSH to use nix-darwin env

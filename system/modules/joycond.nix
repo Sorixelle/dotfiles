@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib; let
-  conf = config.services.srxl.joycond;
+with lib;
+let conf = config.services.srxl.joycond;
 in {
   options.services.srxl.joycond = {
     enable = mkEnableOption "joycond Nintendo Switch controller daemon.";
@@ -9,13 +9,8 @@ in {
 
   config = mkIf conf.enable {
     boot = {
-      extraModulePackages = with config.boot.kernelPackages; [
-        hid-nintendo
-      ];
-      kernelModules = [
-        "hid-nintendo"
-        "ledtrig-timer"
-      ];
+      extraModulePackages = with config.boot.kernelPackages; [ hid-nintendo ];
+      kernelModules = [ "hid-nintendo" "ledtrig-timer" ];
     };
 
     environment.systemPackages = [ pkgs.joycond ];

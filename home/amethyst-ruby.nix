@@ -135,7 +135,8 @@
 
         song_list_format = "$5{$/b%a - }$b{%t}|{%f}$R{$7(%l)}";
         song_status_format = "{%a - }{%t}|{%f} - {%b}";
-        alternative_header_second_line_format = "{{$b$5%a $8- $/b}{$6%b}$8{ ($5%N$8)}}|{$5%D}";
+        alternative_header_second_line_format =
+          "{{$b$5%a $8- $/b}{$6%b}$8{ ($5%N$8)}}|{$5%D}";
         current_item_prefix = "$5$r";
         current_item_suffix = "$/r$9";
         selected_item_prefix = "$3";
@@ -159,7 +160,7 @@
 
     theme.winter = {
       enable = true;
-      monitors = ["HDMI-A-0"];
+      monitors = [ "HDMI-A-0" ];
     };
   };
 

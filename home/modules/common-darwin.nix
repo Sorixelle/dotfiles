@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./common.nix
-  ];
+  imports = [ ./common.nix ];
 
   home.activation.linkApps = let
     apps = pkgs.buildEnv {

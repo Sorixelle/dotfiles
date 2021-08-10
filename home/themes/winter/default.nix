@@ -7,11 +7,12 @@ in {
   options.srxl.theme.winter = with lib; {
     enable = mkEnableOption "the winter system theme for this user";
 
-    monitors = with types; mkOption {
-      type = listOf string;
-      default = [];
-      description = "List of monitor names.";
-    };
+    monitors = with types;
+      mkOption {
+        type = listOf string;
+        default = [ ];
+        description = "List of monitor names.";
+      };
   };
 
   config = lib.mkIf conf.enable {
@@ -36,12 +37,10 @@ in {
           sha256 = "00by33xa9rpxn1rxa10pvk0n7c8ylmlib550ygqkcxrzh05m72bw";
         };
       in {
-        plugins = [
-          {
-            name = "bobthefish";
-            src = bobthefish;
-          }
-        ];
+        plugins = [{
+          name = "bobthefish";
+          src = bobthefish;
+        }];
         interactiveShellInit = ''
           set -g theme_nerd_fonts yes
           set -g theme_color_scheme terminal-light
@@ -58,23 +57,18 @@ in {
     };
 
     srxl = {
-      emacs = {
-        theme = "doom-nord-light";
-      };
+      emacs = { theme = "doom-nord-light"; };
 
       fonts = {
         monospace = {
           name = "Blex Mono NerdFont";
-          package = pkgs.nerdfonts.override { fonts = ["IBMPlexMono"]; };
+          package = pkgs.nerdfonts.override { fonts = [ "IBMPlexMono" ]; };
         };
         ui = {
           name = "Inter";
           package = pkgs.inter;
         };
-        extraFonts = with pkgs; [
-          emacs-all-the-icons-fonts
-          noto-fonts-cjk
-        ];
+        extraFonts = with pkgs; [ emacs-all-the-icons-fonts noto-fonts-cjk ];
       };
     };
 

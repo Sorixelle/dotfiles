@@ -32,9 +32,8 @@
         overlays = self.priv.overlays."${system}";
       };
 
-      pkgsBySystem = genSystems (system:
-        import nixpkgs (genNixpkgsConfig system)
-      );
+      pkgsBySystem =
+        genSystems (system: import nixpkgs (genNixpkgsConfig system));
 
       # Generate a boilerplate system with a machine specific config.
       defineSystem = name:

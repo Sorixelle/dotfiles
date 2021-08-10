@@ -94,10 +94,7 @@ in {
 
     mopidy = {
       enable = true;
-      extensionPackages = with pkgs; [
-        mopidy-mpd
-        mopidy-subidy
-      ];
+      extensionPackages = with pkgs; [ mopidy-mpd mopidy-subidy ];
 
       configuration = ''
         [audio]

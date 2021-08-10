@@ -11,8 +11,5 @@ python3Packages.buildPythonApplication {
     sha256 = "08k4vfl4n58pxf09x1yi2nrr6i67khymkx110p8r58jj5vv6yqkd";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    mopidy
-    py-sonic
-  ];
+  propagatedBuildInputs = with python3Packages; [ mopidy py-sonic ];
 }

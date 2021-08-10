@@ -1,7 +1,6 @@
 config: pkgs:
 
-let
-  colors = import ./colors.nix;
+let colors = import ./colors.nix;
 in {
   enable = true;
   iconTheme = {

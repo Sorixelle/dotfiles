@@ -1,7 +1,6 @@
 config:
 
-let
-  colors = import ./colors.nix;
+let colors = import ./colors.nix;
 in {
   enable = true;
 
@@ -25,9 +24,7 @@ in {
       y-offset = 200;
     };
 
-    mainbox = {
-      background-color = background;
-    };
+    mainbox = { background-color = background; };
 
     inputbar = {
       background-color = grey;
@@ -58,9 +55,7 @@ in {
       background-color = background;
     };
 
-    "element selected" = {
-      background-color = grey;
-    };
+    "element selected" = { background-color = grey; };
 
     element-text = {
       text-color = foreground;

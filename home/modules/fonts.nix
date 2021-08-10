@@ -33,11 +33,12 @@ in with lib; {
       description = "The UI font to use in the system. Usually variable-width.";
     };
 
-    extraFonts = with types; mkOption {
-      type = listOf package;
-      default = [];
-      description = "Any extra fonts to install.";
-    };
+    extraFonts = with types;
+      mkOption {
+        type = listOf package;
+        default = [ ];
+        description = "Any extra fonts to install.";
+      };
   };
 
   config = {
@@ -45,9 +46,7 @@ in with lib; {
 
     gtk.font.name = conf.ui.name;
 
-    home.packages = [
-      conf.monospace.package
-      conf.ui.package
-    ] ++ conf.extraFonts;
+    home.packages = [ conf.monospace.package conf.ui.package ]
+      ++ conf.extraFonts;
   };
 }

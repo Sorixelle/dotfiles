@@ -1,7 +1,6 @@
 config: pkgs:
 
-let
-  colors = import ./colors.nix;
+let colors = import ./colors.nix;
 in {
   enable = true;
   package = pkgs.polybar.override {
@@ -161,9 +160,7 @@ in {
 
       height = 90;
       width = 1856;
-      offset = {
-        y = 942;
-      };
+      offset = { y = 942; };
 
       modules.right = "date";
 

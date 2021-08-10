@@ -29,9 +29,9 @@ in with lib; {
   config = mkIf conf.enable {
     programs.emacs = {
       enable = true;
-      package = with pkgs; (emacsPackagesNgGen conf.package).emacsWithPackages (epkgs: [
-        epkgs.vterm
-      ]);
+      package = with pkgs;
+        (emacsPackagesNgGen conf.package).emacsWithPackages
+        (epkgs: [ epkgs.vterm ]);
     };
 
     home = {
@@ -57,7 +57,9 @@ in with lib; {
           text = ''
             (setq
              srxl/font-family-monospace "${config.srxl.fonts.monospace.name}"
-             srxl/font-size-monospace "${toString config.srxl.fonts.monospace.size}"
+             srxl/font-size-monospace "${
+               toString config.srxl.fonts.monospace.size
+             }"
              srxl/font-family-ui "${config.srxl.fonts.ui.name}"
              srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
              srxl/theme-name '${conf.theme}

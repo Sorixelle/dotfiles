@@ -44,10 +44,7 @@ in python39Packages.buildPythonPackage rec {
     HOME=$PWD/tmp
   '';
 
-  patches = [
-    ./convert.patch
-    ./feh.patch
-  ];
+  patches = [ ./convert.patch ./feh.patch ];
 
   postPatch = ''
     substituteInPlace pywal/backends/wal.py --subst-var-by convert "${imagemagick}/bin/convert"
@@ -55,7 +52,8 @@ in python39Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Generate and change colorschemes on the fly. A 'wal' rewrite in Python 3";
+    description =
+      "Generate and change colorschemes on the fly. A 'wal' rewrite in Python 3";
     homepage = "https://github.com/dylanaraps/pywal";
     license = licenses.mit;
     maintainers = with maintainers; [ Fresheyeball ];

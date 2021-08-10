@@ -1,18 +1,12 @@
 lib: conf:
 
-let
-  colors = import ./colors.nix;
+let colors = import ./colors.nix;
 in {
   enable = true;
-  monitors = lib.genAttrs conf.monitors (_:
-    ["web" "chat" "code" "terminals" "games" "files" "gimp" "8" "9" "0"]
-  );
+  monitors = lib.genAttrs conf.monitors
+    (_: [ "web" "chat" "code" "terminals" "games" "files" "gimp" "8" "9" "0" ]);
 
-  rules = {
-    "Emacs" = {
-      state = "tiled";
-    };
-  };
+  rules = { "Emacs" = { state = "tiled"; }; };
 
   extraConfig = ''
     bspc config normal_border_color "${colors.bg}"

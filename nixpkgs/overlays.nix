@@ -1,3 +1,1 @@
-[
-  (import ./packages)
-]
+[ (import ./packages) ]
