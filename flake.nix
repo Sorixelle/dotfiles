@@ -42,25 +42,26 @@
         genSystems (system: import nixpkgs (genNixpkgsConfig system));
 
       # Generate a boilerplate system with a machine specific config.
-      defineSystem = name:
-        { system, config }:
-        nameValuePair name (nixosSystem {
-          inherit system;
+      defineSystem = let mkSystem = makeOverridable nixosSystem;
+      in name:
+      { system, config }:
+      nameValuePair name (mkSystem {
+        inherit system;
 
-          modules = [
-            nixpkgs.nixosModules.notDetected
-            inputs.home-manager.nixosModules.home-manager
+        modules = [
+          nixpkgs.nixosModules.notDetected
+          inputs.home-manager.nixosModules.home-manager
 
-            (import ./system/common.nix {
-              inherit name;
-              flakePkgs = pkgsBySystem."${system}";
-            })
+          (import ./system/common.nix {
+            inherit name;
+            flakePkgs = pkgsBySystem."${system}";
+          })
 
-            (import config)
-          ];
+          (import config)
+        ];
 
-          specialArgs = { inherit inputs; };
-        });
+        specialArgs = { inherit inputs; };
+      });
 
       # Like defineSystem above, but for nix-darwin (macOS) configurations
       defineDarwin = name:
