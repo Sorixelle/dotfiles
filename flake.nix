@@ -93,6 +93,11 @@
         };
       };
 
+      nixopsConfigurations.default = import ./homelab {
+        inherit nixpkgs;
+        flakePkgs = pkgsBySystem.x86_64-linux;
+      };
+
       overlay = import ./nixpkgs/packages;
 
       devShell = genSystems (s:
@@ -102,6 +107,7 @@
           buildInputs = [
             nix-linter
             nixfmt
+            nixopsUnstable
             (nixos-generators.override { nix = nixUnstable; })
             rnix-lsp
           ];
