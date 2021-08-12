@@ -26,6 +26,7 @@
       bat
       file
       htop
+      kitty.terminfo
       ncdu
       psmisc
       ripgrep
