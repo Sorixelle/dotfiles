@@ -1,7 +1,7 @@
-{ flakePkgs, nixpkgs }:
+{ flakePkgs, flakeInputs }:
 
 {
-  inherit nixpkgs;
+  inherit (flakeInputs) nixpkgs;
 
   network = {
     description = "My personal homelab + VPN gateway";
@@ -9,6 +9,8 @@
   };
 
   defaults = { pkgs, ... }: {
+    imports = [ flakeInputs.sops-nix.nixosModule ];
+
     deployment.owners = [ "ruby@srxl.me" ];
 
     nixpkgs.pkgs = flakePkgs;

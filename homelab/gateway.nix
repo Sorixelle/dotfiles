@@ -4,6 +4,14 @@ in { ... }: {
 
   deployment.targetHost = publicIP;
 
+  sops = {
+    defaultSopsFile = ../secrets/gateway.yaml;
+    secrets = {
+      wg_server_privkey = { };
+      wg_client_pubkey = { };
+    };
+  };
+
   boot.loader.grub = {
     enable = true;
     device = "/dev/vda";

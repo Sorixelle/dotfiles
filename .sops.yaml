@@ -1,0 +1,9 @@
+keys:
+  - &me 1d62493ab34a45e22d728ebcefd1b0c8c5b76dda
+  - &gateway 51ef34681bcddc37351da26e02faf6f5e6407234
+creation_rules:
+  - path_regex: secrets/gateway\.yaml$
+    key_groups:
+    - pgp:
+      - *me
+      - *gateway

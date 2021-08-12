@@ -6,6 +6,10 @@
 
     emacs.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -94,7 +98,7 @@
       };
 
       nixopsConfigurations.default = import ./homelab {
-        inherit nixpkgs;
+        flakeInputs = inputs;
         flakePkgs = pkgsBySystem.x86_64-linux;
       };
 
@@ -104,7 +108,11 @@
         with pkgsBySystem."${s}";
         mkShell {
           name = "srxl-dotfiles";
+
+          sopsPGPKeyDirs = [ "./secrets/keys" ];
+
           nativeBuildInputs = [
+            (pkgs.callPackage inputs.sops-nix { }).sops-import-keys-hook
             nix-linter
             nixfmt
             nixopsUnstable
