@@ -104,7 +104,7 @@
         with pkgsBySystem."${s}";
         mkShell {
           name = "srxl-dotfiles";
-          buildInputs = [
+          nativeBuildInputs = [
             nix-linter
             nixfmt
             nixopsUnstable
