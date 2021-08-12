@@ -6,10 +6,7 @@ in { ... }: {
 
   sops = {
     defaultSopsFile = ../secrets/gateway.yaml;
-    secrets = {
-      wg_server_privkey = { };
-      wg_client_pubkey = { };
-    };
+    secrets.wg_server_privkey = { };
   };
 
   boot.loader.grub = {
