@@ -18,6 +18,16 @@ in { ... }: {
     hostName = "gemstonelabs-gateway";
 
     interfaces.ens3.useDHCP = true;
+
+    wg-quick.interfaces.wg0 = {
+      address = [ "192.168.50.1/24" ];
+      privateKeyFile = "/run/secrets/wg_server_privkey";
+      listenPort = 51820;
+      peers = [{
+        publicKey = "vDEUGgshzIOQeBEThkyrBbAZlLMeTl9x6PL1FKmv6DA=";
+        allowedIPs = [ "192.168.50.2/32" ];
+      }];
+    };
   };
 
   services.sshd.enable = true;
