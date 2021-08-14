@@ -51,4 +51,6 @@
 
   # gateway - VPN gateway for accessing homelab from the *spooky outside world oooooo*
   gateway = import ./gateway.nix;
+  # opal-entrypoint - Wireguard client + reverse proxy entry to the homeland
+  opal-entrypoint = import ./opal-entrypoint.nix;
 }
