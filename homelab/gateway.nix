@@ -1,5 +1,5 @@
 let publicIP = "170.75.170.152";
-in { config, ... }: {
+in { config, lib, ... }: {
   imports = [ ./hardware/gateway.nix ];
 
   # Set deployment IP
@@ -16,6 +16,9 @@ in { config, ... }: {
     enable = true;
     device = "/dev/vda";
   };
+
+  # Enable IP forwarding
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
 
   networking = {
     # Set hostname
@@ -45,14 +48,31 @@ in { config, ... }: {
       allowedUDPPorts =
         [ config.networking.wg-quick.interfaces.wg0.listenPort ];
     };
+
+    # Use NAT to forward incoming traffic over Wireguard
+    nat = let
+      ports = [ 80 443 ];
+      # Create destination NAT rules
+      forwardPorts = map (sourcePort: {
+        inherit sourcePort;
+        destination = "192.168.50.2";
+      }) ports;
+      # Create masquerade rules
+      extraCommands = lib.concatMapStrings (p: ''
+        iptables -t nat -A nixos-nat-post -p tcp --dport ${
+          toString p
+        } -j MASQUERADE
+      '') ports;
+    in {
+      enable = true;
+      # Traffic comes in on ens3
+      externalInterface = "ens3";
+      inherit forwardPorts extraCommands;
+    };
   };
 
   # Enable SSH
   services.sshd.enable = true;
-
-  # TODO: remove and configure HAProxy or Traefik instead - this is for testing
-  services.nginx.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 ];
 
   system.stateVersion = "21.05";
 }
