@@ -1,5 +1,5 @@
 let publicIP = "170.75.170.152";
-in { ... }: {
+in { config, ... }: {
   imports = [ ./hardware/gateway.nix ];
 
   # Set deployment IP
@@ -27,7 +27,7 @@ in { ... }: {
     # Setup a Wireguard interface
     wg-quick.interfaces.wg0 = {
       # Address of wg0 on server
-      address = [ "192.168.50.1/24" ];
+      address = [ "192.168.50.1" ];
       # Private key - file created by sops-nix
       privateKeyFile = "/run/secrets/wg_server_privkey";
       # Port for Wireguard to listen on
@@ -38,6 +38,12 @@ in { ... }: {
         # IP of Wireguard client interface
         allowedIPs = [ "192.168.50.2/32" ];
       }];
+    };
+
+    firewall = {
+      # Open Wireguard port
+      allowedUDPPorts =
+        [ config.networking.wg-quick.interfaces.wg0.listenPort ];
     };
   };
 
