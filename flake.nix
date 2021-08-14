@@ -118,8 +118,11 @@
             nixopsUnstable
             (nixos-generators.override { nix = nixUnstable; })
             rnix-lsp
+            ssh-to-pgp
+            vim
           ];
 
+          EDITOR = "vim";
           shellHook = ''
             ${self.checks.${s}.pre-commit-check.shellHook}
           '';
