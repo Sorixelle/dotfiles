@@ -17,6 +17,9 @@ in { nodes, ... }: {
     device = "/dev/sda";
   };
 
+  # Enable QEMU guest agent
+  services.qemuGuest.enable = true;
+
   networking = {
     # Set hostname
     hostName = "opal-entrypoint";
