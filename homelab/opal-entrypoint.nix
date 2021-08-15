@@ -9,7 +9,7 @@ in { nodes, ... }: {
   sops = {
     defaultSopsFile = ../secrets/opal-entrypoint.yaml;
     secrets.wg_client_privkey = { };
-    secrets.nginx_dh_params = { };
+    secrets.nginx_dh_params = { owner = "nginx"; };
   };
 
   # Configure GRUB for booting
