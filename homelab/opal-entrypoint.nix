@@ -1,6 +1,6 @@
 let publicIP = "192.168.1.2";
 in { nodes, ... }: {
-  imports = [ ./hardware/opal-entrypoint.nix ];
+  imports = [ ./hardware/opal-entrypoint.nix ./modules/services.nix ];
 
   # Set deployment IP
   deployment.targetHost = publicIP;
@@ -9,6 +9,7 @@ in { nodes, ... }: {
   sops = {
     defaultSopsFile = ../secrets/opal-entrypoint.yaml;
     secrets.wg_client_privkey = { };
+    secrets.nginx_dh_params = { };
   };
 
   # Configure GRUB for booting
@@ -53,9 +54,27 @@ in { nodes, ... }: {
   # Enable SSH
   services.sshd.enable = true;
 
-  # TODO: remove and configure HAProxy or Traefik instead - this is for testing
-  services.nginx.enable = true;
-  networking.firewall.allowedTCPPorts = [ 80 ];
+  # Sets up Nginx and creates servers for each entry
+  # See ./modules/services.nix for more details on how this is done
+  srxl.services = {
+    media = {
+      port = 80;
+      locations = {
+        "= /" = { return = "302 http://$host/web/"; };
+        "/" = {
+          proxyPass = "http://192.168.1.10:8096";
+          extraConfig = "proxy_buffering off;";
+        };
+        "= /web/" = { proxyPass = "http://192.168.1.10:8096/web/index.html"; };
+        "/socket" = {
+          proxyPass = "http://192.168.1.10:8096";
+          proxyWebsockets = true;
+        };
+      };
+    };
+  };
+  # Set Nginx Diffie-Hellman parameters from sops secrets
+  services.nginx.sslDhparam = "/run/secrets/nginx_dh_params";
 
   system.stateVersion = "21.05";
 }

@@ -1,5 +1,5 @@
 let publicIP = "170.75.170.152";
-in { config, lib, ... }: {
+in { config, lib, nodes, ... }: {
   imports = [ ./hardware/gateway.nix ];
 
   # Set deployment IP
@@ -47,28 +47,37 @@ in { config, lib, ... }: {
       # Open Wireguard port
       allowedUDPPorts =
         [ config.networking.wg-quick.interfaces.wg0.listenPort ];
+      # Open ports for all services opal-entrypoint defines
+      allowedTCPPorts = lib.mapAttrsToList (_: s: s.port)
+        nodes.opal-entrypoint.config.srxl.services;
     };
+  };
 
-    # Use NAT to forward incoming traffic over Wireguard
-    nat = let
-      ports = [ 80 443 ];
-      # Create destination NAT rules
-      forwardPorts = map (sourcePort: {
-        inherit sourcePort;
-        destination = "192.168.50.2";
-      }) ports;
-      # Create masquerade rules
-      extraCommands = lib.concatMapStrings (p: ''
-        iptables -t nat -A nixos-nat-post -p tcp --dport ${
-          toString p
-        } -j MASQUERADE
-      '') ports;
-    in {
-      enable = true;
-      # Traffic comes in on ens3
-      externalInterface = "ens3";
-      inherit forwardPorts extraCommands;
-    };
+  # Configure HAProxy to forward incoming traffic over Wireguard with PROXY protocol
+  services.haproxy = let
+    inherit (builtins) any concatStringsSep foldl' head;
+    inherit (lib) concatMapStringsSep mapAttrsToList;
+    wgIP = head
+      nodes.opal-entrypoint.config.networking.wg-quick.interfaces.wg0.address;
+    # Names and ports of all services, with duplicate ports filtered
+    uniquePorts = foldl' (acc: curr:
+      if any (e: curr.port == e.port) acc then acc else acc ++ [ curr ]) [ ]
+      (mapAttrsToList (name: s: {
+        inherit name;
+        inherit (s) port;
+      }) nodes.opal-entrypoint.config.srxl.services);
+  in {
+    enable = true;
+    config = concatMapStringsSep "\n" ({ name, port }: ''
+      listen ${name}
+        bind *:${toString port}
+        mode tcp
+        timeout client 30s
+        timeout connect 5s
+        timeout server 30s
+        timeout tunnel 1h
+        server default ${wgIP}:${toString (port * 10)} send-proxy
+    '') uniquePorts;
   };
 
   # Enable SSH

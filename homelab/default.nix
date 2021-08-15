@@ -14,6 +14,9 @@
     # Add sops-nix module
     imports = [ flakeInputs.sops-nix.nixosModule ];
 
+    # Pass nixpkgs flake as argument to modules
+    _module.args.nixpkgs = flakeInputs.nixpkgs;
+
     # I'm the owner :)
     deployment.owners = [ "ruby@srxl.me" ];
 
