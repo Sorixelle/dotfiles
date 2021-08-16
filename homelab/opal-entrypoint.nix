@@ -56,9 +56,8 @@ in { nodes, ... }: {
 
   # Sets up Nginx and creates servers for each entry
   # See ./modules/services.nix for more details on how this is done
-  srxl.services = {
+  srxl.services.http = {
     media = {
-      port = 443;
       locations = {
         "= /" = { return = "302 https://$host/web/"; };
         "/" = {

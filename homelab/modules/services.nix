@@ -3,19 +3,8 @@
 let
   inherit (lib) types mkOption literalExample;
   conf = config.srxl.services;
-  service = types.submodule {
+  httpService = types.submodule {
     options = {
-      port = mkOption {
-        type = types.port;
-        description = "The port the service listens on.";
-        example = 443;
-      };
-      isHttp = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Whether the service is a HTTP(S) server.";
-        example = false;
-      };
       locations = mkOption {
         type = types.attrsOf (types.submodule (import
           "${nixpkgs}/nixos/modules/services/web-servers/nginx/location-options.nix" {
@@ -24,31 +13,29 @@ let
         default = { };
         description = ''
           Location blocks to add to Nginx config for the service.
-          Identical to <literal>services.nginx.virtualHosts.<name>.locations</literal>.
+          Identical to `services.nginx.virtualHosts.<name>.locations`.
         '';
       };
     };
   };
 in {
   options = {
-    srxl.services = mkOption {
-      type = types.attrsOf service;
-      description = ''
-        A list of services that will be mapped from gateway to opal-entrypoint.
-        Each service will have 2 mappings on opal-entrypoint - one regular one
-        for access from the local network, and another PROXY protocol enabled
-        one for access from gateway while preserving source IP addresses. The
-        attribute name will become the server name subdomain in the Nginx config,
-        if <literal>isHttp</literal> is set to <literal>true</literal>.
-      '';
-      example = literalExample ''
-        {
-          service = {
-            port = 443;
-            destination = "192.168.1.123";
-          };
-        }
-      '';
+    srxl.services = {
+      http = mkOption {
+        type = types.attrsOf httpService;
+        default = { };
+        description = ''
+          An attribute set containing definitions for HTTP(S) services.
+
+          For each entry in the set, entries in the Nginx config on
+          opal-entrypoint will be created to accept HTTPS traffic from both the
+          local network and the gateway VPN, as well as redirect HTTP traffic to
+          HTTPS. SSL certificates are automatically generated from Let's
+          Encrypt. Each service's attribute name will be used to determine the
+          server_name for the Nginx config entries (eg. key "foobar" will become
+          "foobar.gemstonelabs.cloud").
+        '';
+      };
     };
   };
 
@@ -81,8 +68,7 @@ in {
       # All services use PROXY protocol, so they can read the correct source IP
       # address into X-Forwarded-For, etc. The gateway machine will proxy
       # requests directly to these servers.
-      virtualHosts = let httpServices = (lib.filterAttrs (_: s: s.isHttp) conf);
-      in builtins.mapAttrs (name: service: {
+      virtualHosts = builtins.mapAttrs (name: service: {
         inherit (service) locations;
         serverName = "${name}.gemstonelabs.cloud";
         listen = [
@@ -100,7 +86,7 @@ in {
         ];
         forceSSL = true;
         enableACME = true;
-      }) httpServices;
+      }) conf.http;
 
       # Define plain TCP stream servers
       # Used to accept regular HTTP(S) traffic from the local network, and wrap
