@@ -58,9 +58,9 @@ in { nodes, ... }: {
   # See ./modules/services.nix for more details on how this is done
   srxl.services = {
     media = {
-      port = 80;
+      port = 443;
       locations = {
-        "= /" = { return = "302 http://$host/web/"; };
+        "= /" = { return = "302 https://$host/web/"; };
         "/" = {
           proxyPass = "http://192.168.1.10:8096";
           extraConfig = "proxy_buffering off;";

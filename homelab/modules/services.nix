@@ -55,7 +55,10 @@ in {
   config = {
     # Configures Nginx services
     # TODO: handle services where isHttp == false (plain tcp streams)
-    services.nginx = {
+    services.nginx = let
+      wireguardIP =
+        builtins.head config.networking.wg-quick.interfaces.wg0.address;
+    in {
       enable = true;
       recommendedOptimisation = true;
       recommendedTlsSettings = true;
@@ -63,63 +66,62 @@ in {
       recommendedProxySettings = true;
       enableReload = true;
 
-      # Allow real IP replacement addresses to come from Wireguard
-      commonHttpConfig = ''
-        set_real_ip_from ${
-          builtins.head
-          nodes.gateway.config.networking.wg-quick.interfaces.wg0.address
-        };
+      # Allow reading real source addresses from both Wireguard IP addresses,
+      # and read the real IP from PROXY protocol
+      commonHttpConfig = let
+        gatewayWireguardIP = builtins.head
+          nodes.gateway.config.networking.wg-quick.interfaces.wg0.address;
+      in ''
+        set_real_ip_from ${wireguardIP};
+        set_real_ip_from ${gatewayWireguardIP};
+        real_ip_header proxy_protocol;
       '';
 
-      virtualHosts = let
-        inherit (builtins) head mapAttrs;
-        inherit (lib) mapAttrs' nameValuePair;
-        httpServices = (lib.filterAttrs (_: s: s.isHttp) conf);
+      # Define HTTP(S) servers
+      # All services use PROXY protocol, so they can read the correct source IP
+      # address into X-Forwarded-For, etc. The gateway machine will proxy
+      # requests directly to these servers.
+      virtualHosts = let httpServices = (lib.filterAttrs (_: s: s.isHttp) conf);
+      in builtins.mapAttrs (name: service: {
+        inherit (service) locations;
+        serverName = "${name}.gemstonelabs.cloud";
+        listen = [
+          {
+            addr = wireguardIP;
+            port = 800;
+            extraParameters = [ "proxy_protocol" ];
+          }
+          {
+            addr = wireguardIP;
+            port = 4430;
+            ssl = true;
+            extraParameters = [ "proxy_protocol" ];
+          }
+        ];
+        forceSSL = true;
+        enableACME = true;
+      }) httpServices;
 
-        # Create server definitions that do all the actual routing to services
-        # Local connections will hit these, as well as the PROXY protocol
-        # definitions doing their proxy_pass
-        regularServers = mapAttrs (subdomain: service: {
-          inherit (service) locations;
-          serverName = "${subdomain}.gemstonelabs.cloud";
-          listen = [{
-            inherit (service) port;
-            addr = config.deployment.targetHost;
-          }];
-        }) httpServices;
-
-        # Create server definitions that accept PROXY protocol, read the real IP
-        # from requests, then proxy_pass over to the regular definitions above
-        proxyProtocolServers = mapAttrs' (subdomain: service:
-          nameValuePair "${subdomain}-pp" {
-            serverName = "${subdomain}.gemstonelabs.cloud";
-            listen = [{
-              port = service.port * 10;
-              addr = head config.networking.wg-quick.interfaces.wg0.address;
-              extraParameters = [ "proxy_protocol" ];
-            }];
-            extraConfig = ''
-              real_ip_header proxy_protocol;
-
-              location / {
-                proxy_pass http://${config.deployment.targetHost}:${
-                  toString service.port
-                };
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $proxy_protocol_addr;
-                proxy_set_header X-Forwarded-For $proxy_protocol_addr;
-                proxy_set_header X-Forwarded-Proto $scheme;
-                proxy_set_header X-Forwarded-Host $host;
-                proxy_set_header X-Forwarded-Server $host;
-              }
-            '';
-          }) httpServices;
-      in regularServers // proxyProtocolServers;
+      # Define plain TCP stream servers
+      # Used to accept regular HTTP(S) traffic from the local network, and wrap
+      # it in PROXY protocol so they can be sent to the actual servers defined
+      # above.
+      streamConfig = let localIP = config.deployment.targetHost;
+      in ''
+        server {
+          listen ${localIP}:80;
+          proxy_protocol on;
+          proxy_pass ${wireguardIP}:800;
+        }
+        server {
+          listen ${localIP}:443;
+          proxy_protocol on;
+          proxy_pass ${wireguardIP}:4430;
+        }
+      '';
     };
 
     # Allow incoming traffic to both regular and PROXY protocol routes
-    networking.firewall.allowedTCPPorts = lib.unique
-      (builtins.concatMap (p: [ p (p * 10) ])
-        (lib.mapAttrsToList (_: s: s.port) config.srxl.services));
+    networking.firewall.allowedTCPPorts = [ 80 443 800 4430 ];
   };
 }

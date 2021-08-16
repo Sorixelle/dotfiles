@@ -1,5 +1,5 @@
 let publicIP = "170.75.170.152";
-in { config, lib, nodes, ... }: {
+in { config, nodes, ... }: {
   imports = [ ./hardware/gateway.nix ];
 
   # Set deployment IP
@@ -47,37 +47,32 @@ in { config, lib, nodes, ... }: {
       # Open Wireguard port
       allowedUDPPorts =
         [ config.networking.wg-quick.interfaces.wg0.listenPort ];
-      # Open ports for all services opal-entrypoint defines
-      allowedTCPPorts = lib.mapAttrsToList (_: s: s.port)
-        nodes.opal-entrypoint.config.srxl.services;
+      # Open ports for all HTTP(S) traffic
+      allowedTCPPorts = [ 80 443 ];
     };
   };
 
-  # Configure HAProxy to forward incoming traffic over Wireguard with PROXY protocol
-  services.haproxy = let
-    inherit (builtins) any concatStringsSep foldl' head;
-    inherit (lib) concatMapStringsSep mapAttrsToList;
-    wgIP = head
+  # Configure Nginx to forward incoming traffic over Wireguard with PROXY protocol
+  services.nginx = let
+    wireguardIP = builtins.head
       nodes.opal-entrypoint.config.networking.wg-quick.interfaces.wg0.address;
-    # Names and ports of all services, with duplicate ports filtered
-    uniquePorts = foldl' (acc: curr:
-      if any (e: curr.port == e.port) acc then acc else acc ++ [ curr ]) [ ]
-      (mapAttrsToList (name: s: {
-        inherit name;
-        inherit (s) port;
-      }) nodes.opal-entrypoint.config.srxl.services);
   in {
     enable = true;
-    config = concatMapStringsSep "\n" ({ name, port }: ''
-      listen ${name}
-        bind *:${toString port}
-        mode tcp
-        timeout client 30s
-        timeout connect 5s
-        timeout server 30s
-        timeout tunnel 1h
-        server default ${wgIP}:${toString (port * 10)} send-proxy
-    '') uniquePorts;
+    enableReload = true;
+    virtualHosts = { };
+
+    streamConfig = ''
+      server {
+        listen *:80;
+        proxy_protocol on;
+        proxy_pass ${wireguardIP}:800;
+      }
+      server {
+        listen *:443;
+        proxy_protocol on;
+        proxy_pass ${wireguardIP}:4430;
+      }
+    '';
   };
 
   # Enable SSH

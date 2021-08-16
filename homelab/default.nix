@@ -10,7 +10,7 @@
     enableRollback = true;
   };
 
-  defaults = { pkgs, ... }: {
+  defaults = { config, pkgs, ... }: {
     # Add sops-nix module
     imports = [ flakeInputs.sops-nix.nixosModule ];
 
@@ -50,6 +50,12 @@
 
     # Clean /tmp on boot
     boot.cleanTmpDir = true;
+
+    # Accept Let's Encrypt ToS and set email
+    security.acme = {
+      acceptTerms = true;
+      email = builtins.head config.deployment.owners;
+    };
   };
 
   # gateway - VPN gateway for accessing homelab from the *spooky outside world oooooo*
