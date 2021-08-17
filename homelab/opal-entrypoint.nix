@@ -51,9 +51,6 @@ in { nodes, ... }: {
     };
   };
 
-  # Enable SSH
-  services.sshd.enable = true;
-
   # Sets up Nginx and creates servers for each entry
   # See ./modules/services.nix for more details on how this is done
   srxl.services.http = {

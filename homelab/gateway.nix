@@ -75,8 +75,5 @@ in { config, nodes, ... }: {
     '';
   };
 
-  # Enable SSH
-  services.sshd.enable = true;
-
   system.stateVersion = "21.05";
 }

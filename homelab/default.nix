@@ -51,6 +51,9 @@
     # Clean /tmp on boot
     boot.cleanTmpDir = true;
 
+    # Enable SSH
+    services.sshd.enable = true;
+
     # Accept Let's Encrypt ToS and set email
     security.acme = {
       acceptTerms = true;
