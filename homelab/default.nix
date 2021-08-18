@@ -65,4 +65,6 @@
   gateway = import ./gateway.nix;
   # opal-entrypoint - Wireguard client + reverse proxy entry to the homeland
   opal-entrypoint = import ./opal-entrypoint.nix;
+  # opal-media-server - Media server running Jellyfin
+  opal-media-server = import ./opal-media-server.nix;
 }
