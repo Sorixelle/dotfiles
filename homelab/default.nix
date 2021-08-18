@@ -12,7 +12,7 @@
 
   defaults = { config, pkgs, ... }: {
     # Add sops-nix module
-    imports = [ flakeInputs.sops-nix.nixosModule ];
+    imports = [ flakeInputs.sops-nix.nixosModule ./modules/services.nix ];
 
     # Pass nixpkgs flake as argument to modules
     _module.args.nixpkgs = flakeInputs.nixpkgs;

@@ -1,6 +1,6 @@
 let publicIP = "192.168.1.2";
-in { nodes, ... }: {
-  imports = [ ./hardware/opal-entrypoint.nix ./modules/services.nix ];
+in { config, lib, nodes, ... }: {
+  imports = [ ./hardware/opal-entrypoint.nix ];
 
   # Set deployment IP
   deployment.targetHost = publicIP;
@@ -49,28 +49,84 @@ in { nodes, ... }: {
         persistentKeepalive = 25;
       }];
     };
+
+    # Allow incoming traffic to both regular and PROXY protocol routes
+    firewall.allowedTCPPorts = [ 80 443 800 4430 ];
   };
 
-  # Sets up Nginx and creates servers for each entry
-  # See ./modules/services.nix for more details on how this is done
-  srxl.services.http = {
-    media = {
-      locations = {
-        "= /" = { return = "302 https://$host/web/"; };
-        "/" = {
-          proxyPass = "http://192.168.1.10:8096";
-          extraConfig = "proxy_buffering off;";
-        };
-        "= /web/" = { proxyPass = "http://192.168.1.10:8096/web/index.html"; };
-        "/socket" = {
-          proxyPass = "http://192.168.1.10:8096";
-          proxyWebsockets = true;
-        };
-      };
-    };
+  # Configures Nginx services
+  # TODO: handle services where isHttp == false (plain tcp streams)
+  services.nginx = let
+    services = lib.mapAttrsToList (_: node: node.config.srxl.services) nodes;
+
+    wireguardIP =
+      builtins.head config.networking.wg-quick.interfaces.wg0.address;
+  in {
+    enable = true;
+    enableReload = true;
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+
+    # Set Nginx Diffie-Hellman parameters from sops secrets
+    sslDhparam = "/run/secrets/nginx_dh_params";
+
+    # Allow reading real source addresses from both Wireguard IP addresses,
+    # and read the real IP from PROXY protocol
+    commonHttpConfig = let
+      gatewayWireguardIP = builtins.head
+        nodes.gateway.config.networking.wg-quick.interfaces.wg0.address;
+    in ''
+      set_real_ip_from ${wireguardIP};
+      set_real_ip_from ${gatewayWireguardIP};
+      real_ip_header proxy_protocol;
+    '';
+
+    # Define HTTP(S) servers
+    # All services use PROXY protocol, so they can read the correct source IP
+    # address into X-Forwarded-For, etc. The gateway machine will proxy
+    # requests directly to these servers.
+    virtualHosts = let
+      httpServices = builtins.foldl' (acc: curr: acc // curr.http) { } services;
+    in builtins.mapAttrs (name: service: {
+      inherit (service) locations;
+      serverName = "${name}.gemstonelabs.cloud";
+      listen = [
+        {
+          addr = wireguardIP;
+          port = 800;
+          extraParameters = [ "proxy_protocol" ];
+        }
+        {
+          addr = wireguardIP;
+          port = 4430;
+          ssl = true;
+          extraParameters = [ "proxy_protocol" ];
+        }
+      ];
+      forceSSL = true;
+      enableACME = true;
+    }) httpServices;
+
+    # Define plain TCP stream servers
+    # Used to accept regular HTTP(S) traffic from the local network, and wrap
+    # it in PROXY protocol so they can be sent to the actual servers defined
+    # above.
+    streamConfig = let localIP = config.deployment.targetHost;
+    in ''
+      server {
+        listen ${localIP}:80;
+        proxy_protocol on;
+        proxy_pass ${wireguardIP}:800;
+      }
+      server {
+        listen ${localIP}:443;
+        proxy_protocol on;
+        proxy_pass ${wireguardIP}:4430;
+      }
+    '';
   };
-  # Set Nginx Diffie-Hellman parameters from sops secrets
-  services.nginx.sslDhparam = "/run/secrets/nginx_dh_params";
 
   system.stateVersion = "21.05";
 }

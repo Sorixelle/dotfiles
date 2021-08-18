@@ -25,4 +25,22 @@
     enable = true;
     openFirewall = true;
   };
+
+  # Sets up Nginx entries on opal-gateway to proxy to Jellyfin
+  srxl.services.http = {
+    media = {
+      locations = {
+        "= /" = { return = "302 https://$host/web/"; };
+        "/" = {
+          proxyPass = "http://192.168.1.10:8096";
+          extraConfig = "proxy_buffering off;";
+        };
+        "= /web/" = { proxyPass = "http://192.168.1.10:8096/web/index.html"; };
+        "/socket" = {
+          proxyPass = "http://192.168.1.10:8096";
+          proxyWebsockets = true;
+        };
+      };
+    };
+  };
 }
