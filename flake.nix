@@ -1,15 +1,11 @@
 {
-  description = "My NixOS cnfiguratin for all of my systems.";
+  description = "My NixOS configuration for all of my systems.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     emacs.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -97,11 +93,6 @@
         };
       };
 
-      nixopsConfigurations.default = import ./homelab {
-        flakeInputs = inputs;
-        flakePkgs = pkgsBySystem.x86_64-linux;
-      };
-
       overlay = import ./nixpkgs/packages;
 
       devShell = genSystems (s:
@@ -109,20 +100,13 @@
         mkShell {
           name = "srxl-dotfiles";
 
-          sopsPGPKeyDirs = [ "./secrets/keys" ];
-
           nativeBuildInputs = [
-            (pkgs.callPackage inputs.sops-nix { }).sops-import-keys-hook
             nix-linter
             nixfmt
-            nixopsUnstable
             (nixos-generators.override { nix = nixUnstable; })
             rnix-lsp
-            ssh-to-pgp
-            vim
           ];
 
-          EDITOR = "vim";
           shellHook = ''
             ${self.checks.${s}.pre-commit-check.shellHook}
           '';
