@@ -52,6 +52,8 @@ in {
           set -g fish_color_quote yellow
           set -g fish_color_error red
 
+          set -g VIRTUAL_ENV_DISABLE_PROMPT 1
+
           for f in ${bobthefish}/*.fish
             source $f
           end
