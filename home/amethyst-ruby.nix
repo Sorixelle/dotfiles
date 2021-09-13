@@ -16,7 +16,6 @@
     gnome3.eog
     gnome3.file-roller
     gnome3.gedit
-    gnome3.nautilus
     insomnia
     ipmitool
     libreoffice-fresh
@@ -43,6 +42,8 @@
     wineWowPackages.staging
     winetricks
     xorg.xkill
+    xfce.thunar
+    xfce.xfconf
   ];
 
   imports = [ ./modules/common-linux.nix ];

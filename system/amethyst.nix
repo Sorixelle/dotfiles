@@ -136,6 +136,8 @@ in {
 
     trezord.enable = true;
 
+    tumbler.enable = true;
+
     xserver = {
       enable = true;
 
