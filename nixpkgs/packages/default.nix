@@ -31,10 +31,5 @@ in {
 
   pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
 
-  # Fix rofi bug with height calculation
-  # https://github.com/davatorium/rofi/issues/1247
-  rofi-unwrapped = prev.rofi-unwrapped.overrideAttrs
-    (_: { patches = [ ./rofi/rofi-font-height.patch ]; });
-
   schemer2 = prev.callPackage ./schemer2.nix { };
 }
