@@ -30,6 +30,8 @@ in {
 
     enableRedistributableFirmware = true;
 
+    firmware = [ pkgs.broadcom-bt-firmware ];
+
     opengl = {
       enable = true;
       driSupport32Bit = true;
