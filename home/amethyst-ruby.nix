@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -47,6 +47,11 @@
   ];
 
   imports = [ ./modules/common-linux.nix ];
+
+  home.sessionVariables = {
+    BROWSER = "${config.programs.firefox.package}/bin/firefox";
+    EDITOR = "${pkgs.vim}/bin/vim";
+  };
 
   manual.html.enable = true;
 
