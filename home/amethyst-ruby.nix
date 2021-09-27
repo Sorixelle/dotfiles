@@ -48,7 +48,7 @@
 
   imports = [ ./modules/common-linux.nix ];
 
-  manual.manpages.enable = false;
+  manual.html.enable = true;
 
   programs = {
     direnv = {
