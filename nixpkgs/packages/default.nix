@@ -3,19 +3,10 @@ final: prev:
 let
   gcc-cortex-a-9 = target:
     prev.callPackage ./gcc-cortex-a.nix { inherit target; };
-
-  daedalusPkgs = import ("${
-      fetchTarball {
-        url = "https://github.com/input-output-hk/daedalus/archive/4.0.5.zip";
-        sha256 = "1zrg8l08ckylnlrmwr2dnrvph82ry7l4kg3qx80mvwp1ixyg6jfa";
-      }
-    }/release.nix") { };
 in {
   frankerfacez = prev.callPackage ./ff-exts/frankerfacez.nix { };
 
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
-
-  daedalus-mainnet = daedalusPkgs.mainnet.daedalus.x86_64-linux;
 
   gcc-cortex-a-arm = gcc-cortex-a-9 "arm";
   gcc-cortex-a-armhf = gcc-cortex-a-9 "armhf";
