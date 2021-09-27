@@ -19,6 +19,7 @@
     insomnia
     ipmitool
     libreoffice-fresh
+    keepassxc
     magic-wormhole
     moserial
     multimc
@@ -74,6 +75,7 @@
           firefox-color
           frankerfacez
           https-everywhere
+          keepassxc-browser
           metamask
           multi-account-containers
           privacy-badger
