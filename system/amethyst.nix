@@ -71,11 +71,16 @@ in {
   };
 
   # Allow setuid for libvirtd USB passthrough helper
-  security.wrappers.spice-client-glib-usb-acl-helper.source =
-    "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+  security.wrappers.spice-client-glib-usb-acl-helper = {
+    owner = "root";
+    group = "root";
+    source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+  };
 
   programs = {
     adb.enable = true;
+
+    dconf.enable = true;
 
     gnupg.agent = {
       enable = true;
@@ -87,8 +92,6 @@ in {
 
   services = {
     blueman.enable = true;
-
-    dbus.packages = [ pkgs.gnome3.dconf ];
 
     geoclue2.enable = true;
 
