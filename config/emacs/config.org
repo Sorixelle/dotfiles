@@ -832,12 +832,14 @@ Bind a couple keys to be used in EXWM windows:
 - =s-r= :: Go back to line-mode
 - =s-SPC= :: Open an app launcher
 - =s-q= :: Quit an app
+- =s-RET= :: Open a terminal using vterm
 
 #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
   (setq exwm-input-global-keys
         `((,(kbd "s-r") . exwm-reset)
           (,(kbd "s-SPC") . counsel-linux-app)
-          (,(kbd "s-q") . kill-this-buffer)))
+          (,(kbd "s-q") . kill-this-buffer)
+          (,(kbd "s-<return>") . vterm)))
 #+end_src
 
 We'll also generate a few keybindings for =s-<number>= to switch to that workspace.
