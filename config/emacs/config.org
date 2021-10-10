@@ -194,29 +194,29 @@ There are much smarter people out there, who can write way better and much coole
 - Loads packages declaratively - don't load anything I don't tell it to
 - Lets me hack on packages if I need to, and I often find myself needing to
 
-  Let's set it up. I'll pinch that little block from their repo's README.
+Let's set it up. I'll pinch that little block from their repo's README.
 
-  #+begin_src emacs-lisp
-    (defvar bootstrap-version)
-    (let ((bootstrap-file
-           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-          (bootstrap-version 5))
-      (unless (file-exists-p bootstrap-file)
-        (with-current-buffer
-            (url-retrieve-synchronously
-             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-             'silent 'inhibit-cookies)
-          (goto-char (point-max))
-          (eval-print-last-sexp)))
-      (load bootstrap-file nil 'nomessage))
-  #+end_src
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
 
-  While we're here, let's bring in another cool tool for managing packages: [[https://github.com/jwiegley/use-package][use-package]]. This little macro is wonderful for organizing package configuration in once central place. It's even got integration with straight.el, so it can install the packages too.
+While we're here, let's bring in another cool tool for managing packages: [[https://github.com/jwiegley/use-package][use-package]]. This little macro is wonderful for organizing package configuration in once central place. It's even got integration with straight.el, so it can install the packages too.
 
-  #+begin_src emacs-lisp
-    (straight-use-package 'use-package)
-    (setq straight-use-package-by-default t)
-  #+end_src
+#+begin_src emacs-lisp
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t)
+#+end_src
 
 * Moving around and doing things
 ** A heretical interface
@@ -446,33 +446,33 @@ And now for the segments. For the left side, we'll have the following:
 - The current Evil status (normal, insert, visual, etc.)
 - The buffer information (name, unsaved indicator)
 
-  #+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-    (setq telephone-line-lhs
-          '((evil . (telephone-line-evil-tag-segment))
-            (nil . (telephone-line-buffer-segment))))
-  #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+  (setq telephone-line-lhs
+        '((evil . (telephone-line-evil-tag-segment))
+          (nil . (telephone-line-buffer-segment))))
+#+end_src
 
-  And on the right side:
-  - The major mode name
-  - Any "extra info" (we'll get to that in a bit)
+And on the right side:
+- The major mode name
+- Any "extra info" (we'll get to that in a bit)
 
-    #+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-      (setq telephone-line-rhs
-            '((nil . (telephone-line-misc-info-segment))
-              (accent . (telephone-line-major-mode-segment))))
-    #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+  (setq telephone-line-rhs
+        '((nil . (telephone-line-misc-info-segment))
+          (accent . (telephone-line-major-mode-segment))))
+#+end_src
 
-    One more thing - I need a clock, so I know what the time is. Because, yknow. That's like, important. Gotta have that. This'll put it in that extra info segment.
+One more thing - I need a clock, so I know what the time is. Because, yknow. That's like, important. Gotta have that. This'll put it in that extra info segment.
 
-    #+begin_src emacs-lisp
-      (display-time-mode 1)
-    #+end_src
+#+begin_src emacs-lisp
+  (display-time-mode 1)
+#+end_src
 
-    And activate.
+And activate.
 
-    #+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-      (telephone-line-mode 1)
-    #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+  (telephone-line-mode 1)
+#+end_src
 * Emacs, my favourite word processor
 [[https://orgmode.org/][org-mode]] might just be one of the most amazing programs ever made. Like, seriously. This thing is amazing. It's a markup language, a todo list, a calendar, a spreadsheet, Jupyter Notebook on sterioids... I could keep going on here, but that's probably not what you're here for. You're here to see me configure this delightful thing. And I'm not about to waste anymore time.
 
@@ -833,47 +833,47 @@ Bind a couple keys to be used in EXWM windows:
 - =s-SPC= :: Open an app launcher
 - =s-q= :: Quit an app
 
-  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
-    (setq exwm-input-global-keys
-          `((,(kbd "s-r") . exwm-reset)
-            (,(kbd "s-SPC") . counsel-linux-app)
-            (,(kbd "s-q") . kill-this-buffer)))
-  #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+  (setq exwm-input-global-keys
+        `((,(kbd "s-r") . exwm-reset)
+          (,(kbd "s-SPC") . counsel-linux-app)
+          (,(kbd "s-q") . kill-this-buffer)))
+#+end_src
 
-  We'll also generate a few keybindings for =s-<number>= to switch to that workspace.
+We'll also generate a few keybindings for =s-<number>= to switch to that workspace.
 
-  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
-    (nconc exwm-input-global-keys
-           (mapcar (lambda (i)
-                     `(,(kbd (format "s-%d" i)) .
-                       (lambda ()
-                         (interactive)
-                         (exwm-workspace-switch-create ,i))))
-                   (number-sequence 0 9)))
-  #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+  (nconc exwm-input-global-keys
+         (mapcar (lambda (i)
+                   `(,(kbd (format "s-%d" i)) .
+                     (lambda ()
+                       (interactive)
+                       (exwm-workspace-switch-create ,i))))
+                 (number-sequence 0 9)))
+#+end_src
 
-  And for =s-S-<number>=, to move a buffer to that workspace.
+And for =s-S-<number>=, to move a buffer to that workspace.
 
-  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
-    (nconc exwm-input-global-keys
-           (cl-mapcar (lambda (k i)
-                        `(,(kbd (format "s-%s" k)) .
-                          (lambda ()
-                            (interactive)
-                            (exwm-workspace-move-window ,i))))
-                      '(")" "!" "@" "#" "$" "%" "^" "&" "*" "(")
-                      (number-sequence 0 9)))
-  #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+  (nconc exwm-input-global-keys
+         (cl-mapcar (lambda (k i)
+                      `(,(kbd (format "s-%s" k)) .
+                        (lambda ()
+                          (interactive)
+                          (exwm-workspace-move-window ,i))))
+                    '(")" "!" "@" "#" "$" "%" "^" "&" "*" "(")
+                    (number-sequence 0 9)))
+#+end_src
 
-  We'll enable EXWM's system tray support, so we can use those little icon thingies.
+We'll enable EXWM's system tray support, so we can use those little icon thingies.
 
-  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
-    (require 'exwm-systemtray)
-    (exwm-systemtray-enable)
-  #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+  (require 'exwm-systemtray)
+  (exwm-systemtray-enable)
+#+end_src
 
-  Finally, enable this Frankenstein's monster of a window manager.
+Finally, enable this Frankenstein's monster of a window manager.
 
-  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
-    (exwm-enable)
-  #+end_src
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+  (exwm-enable)
+#+end_src
