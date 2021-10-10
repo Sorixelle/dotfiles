@@ -93,7 +93,7 @@ Make sure all code files have their syntax highlighting enabled.
   (global-font-lock-mode 1)
 #+end_src
 
-Crank up Emacs' garbage collection limit to 20MB, so it doesn't run as often. Mainly for [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]], since it's constantly dealing with huge JSON objects.
+Crank up Emacs' garbage collection limit to 20MB, so it doesn't run as often.
 
 #+begin_src emacs-lisp
   (setq gc-cons-threshold 20000000)
