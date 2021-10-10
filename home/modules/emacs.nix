@@ -9,7 +9,7 @@ in with lib; {
 
     package = mkOption {
       type = package;
-      default = pkgs.emacsPgtkGcc;
+      default = pkgs.emacsGcc;
       description = "The Emacs package to install.";
     };
 
@@ -19,6 +19,12 @@ in with lib; {
       description = "The name of the Emacs theme to use.";
     };
 
+    useEXWM = mkOption {
+      type = bool;
+      default = false;
+      description = "Whether to use the EXWM window manager.";
+    };
+
     extraConfig = mkOption {
       type = lines;
       default = "";
@@ -26,13 +32,18 @@ in with lib; {
     };
   };
 
-  config = mkIf conf.enable {
+  config = let
+    emacsPackage =
+      (pkgs.emacsPackagesNgGen conf.package).emacsWithPackages (e: [ e.vterm ]);
+  in mkIf conf.enable {
     programs.emacs = {
       enable = true;
-      package = with pkgs;
-        (emacsPackagesNgGen conf.package).emacsWithPackages
-        (epkgs: [ epkgs.vterm ]);
+      package = emacsPackage;
     };
+
+    xsession.windowManager.command = mkIf conf.useEXWM ''
+      ${emacsPackage}/bin/emacs -mm --debug-init
+    '';
 
     home = {
       # Emacs doesn't regenerate the tangled config on changes because of the
@@ -45,6 +56,9 @@ in with lib; {
         fi
       '';
 
+      packages = lib.optional conf.useEXWM
+        pkgs.gtk3; # For gtk-launch, used by counsel-linux-app
+
       file = {
         ".emacs.d" = {
           source = ../../config/emacs;
@@ -54,7 +68,8 @@ in with lib; {
 
         "config-vars.el" = {
           target = ".emacs.d/config-vars.el";
-          text = ''
+          text = let toBool = b: if b then "t" else "nil";
+          in ''
             (setq
              srxl/font-family-monospace "${config.srxl.fonts.monospace.name}"
              srxl/font-size-monospace "${
@@ -67,7 +82,8 @@ in with lib; {
                toString (config.srxl.fonts.serif.size * 10)
              }
              srxl/theme-name '${conf.theme}
-             srxl/project-dir "~/usr/devel")
+             srxl/project-dir "~/usr/devel"
+             srxl/use-exwm ${toBool conf.useEXWM})
 
              ${conf.extraConfig}
           '';
