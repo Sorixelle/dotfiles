@@ -29,6 +29,7 @@
     protonvpn-cli
     protonvpn-gui
     python3
+    rnix-lsp
     shutter
     sshfs
     steam
