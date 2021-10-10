@@ -240,12 +240,18 @@ We'll also add [[https://github.com/emacs-evil/evil-collection][evil-collection]
 #+begin_src emacs-lisp
   (use-package evil-collection
     :config
-    (evil-collection-init))
+    (evil-collection-init)
+    <<EVILCOLLECTION-CONFIG>>)
 #+end_src
 
 But first - evil-collection requires =evil-want-keybinding= to be set to =nil= before Evil is loaded.
 #+begin_src emacs-lisp :tangle no :noweb-ref EVIL-INIT
   (setq evil-want-keybinding nil)
+#+end_src
+
+Tell evil-collection NOT to eat my =TAB= binding in Outline mode (and Org mode by extension).
+#+begin_src emacs-lisp :tangle no :noweb-ref EVILCOLLECTION-CONFIG
+  (setq evil-collection-outline-bind-tab-p t)
 #+end_src
 
 ** Managing the keyboard buttons
