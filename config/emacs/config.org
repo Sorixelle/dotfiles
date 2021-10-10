@@ -549,6 +549,12 @@ Keeping things like quotation marks for strings, and parentheses balanced is rea
     (smartparens-global-strict-mode 1))
 #+end_src
 
+And [[https://github.com/expez/evil-smartparens][evil-smartparens]] so that Evil commands keep parentheses balanced.
+#+begin_src emacs-lisp
+  (use-package evil-smartparens
+    :hook (smartparens-enabled . evil-smartparens-mode))
+#+end_src
+
 We'll also define a little helper function, that can be used to get newline indenting for certain pairs on certain modes.
 #+begin_src emacs-lisp
   (defun srxl/newline-indent (&rest _)
@@ -557,6 +563,45 @@ We'll also define a little helper function, that can be used to get newline inde
     (indent-according-to-mode)
     (forward-line -1)
     (indent-according-to-mode))
+#+end_src
+
+** Autocomplete
+First off, let's get some autocomplete capability in here. We gotta have that - what's an IDE without autocomplete? Although, this doesn't provide language-specific completions, just the UI for autocompletion. We'll get to that in a bit.
+
+Over in Emacs land, [[https://company-mode.github.io/][company-mode]] is the de facto way to get that going. Let's set it up.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package company
+    :custom
+    <<COMPANY-CUSTOM>>
+    :config
+    <<COMPANY-CONFIG>>)
+#+end_src
+
+Like most editors, we want the autocomplete options to appear right after we've finished typing, without a delay.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CUSTOM
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0)
+#+end_src
+
+The backend for =dabbrev= is enabled by default, but I'm not a fan of that. I want autocomplete for my code, not for just typing words. Not as useful, and tends to clutter up the completion list.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+  (delete 'company-dabbrev company-backends)
+#+end_src
+
+Use fuzzy searching in completions.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+  (add-to-list 'completion-styles 'flex)
+#+end_src
+
+[[https://github.com/sebastiencs/company-box][company-box]] is a frontend for company-mode that makes the UI a little nicer - icons next to completions, showing documentation, and has fewer visual issues.
+#+begin_src emacs-lisp
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+#+end_src
+
+Aaaaaaaaand enable.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+  (global-company-mode 1)
 #+end_src
 
 ** Project management
@@ -642,45 +687,26 @@ Treemacs has some integration with Magit, to get the Git status highlighting of 
   (use-package treemacs-magit
     :after (treemacs magit))
 #+end_src
-** Autocomplete
-First off, let's get some autocomplete capability in here. We gotta have that - what's an IDE without autocomplete? Although, this doesn't provide language-specific completions, just the UI for autocompletion. We'll get to that in a bit.
+** Integrated terminal
+[[https://github.com/akermu/emacs-libvterm][emacs-libvterm]] is probably the most fully-featured terminal emulator out there. It provides a really nice integration experience with Emacs.
 
-Over in Emacs land, [[https://company-mode.github.io/][company-mode]] is the de facto way to get that going. Let's set it up.
 #+begin_src emacs-lisp :noweb no-export
-  (use-package company
-    :custom
-    <<COMPANY-CUSTOM>>
+  (use-package vterm
     :config
-    <<COMPANY-CONFIG>>)
+    <<VTERM-CONFIG>>)
 #+end_src
 
-Like most editors, we want the autocomplete options to appear right after we've finished typing, without a delay.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CUSTOM
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0)
+Use the shell-provided title in the buffer name.
+#+begin_src emacs-lisp :tangle no :noweb-ref VTERM-CONFIG
+  (setq vterm-buffer-name-string "vterm (%s)")
 #+end_src
 
-The backend for =dabbrev= is enabled by default, but I'm not a fan of that. I want autocomplete for my code, not for just typing words. Not as useful, and tends to clutter up the completion list.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
-  (delete 'company-dabbrev company-backends)
+Use =SPC t= to open a terminal in a new window, and =SPC T= to open one in the existing window.
+#+begin_src emacs-lisp :tangle no :noweb-ref VTERM-CONFIG
+  (srxl/def-project-key
+    "t" '(vterm-other-window :wk "Open terminal")
+    "T" '(vterm :wk "Open terminal in current window"))
 #+end_src
-
-Use fuzzy searching in completions.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
-  (add-to-list 'completion-styles 'flex)
-#+end_src
-
-[[https://github.com/sebastiencs/company-box][company-box]] is a frontend for company-mode that makes the UI a little nicer - icons next to completions, showing documentation, and has fewer visual issues.
-#+begin_src emacs-lisp
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
-#+end_src
-
-Aaaaaaaaand enable.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
-  (global-company-mode 1)
-#+end_src
-
 ** Language Server Protocol
 And now we get to the special sauce - LSP support. [[https://github.com/joaotavora/eglot][Eglot]] is a really cool, language-agnostic package that soups up the facilities Emacs already has for things like autocomplete (=completion-at-point=), jump to definition (=xref-find-definitions=) and diagnostics (=flymake-mode=).
 
@@ -742,7 +768,7 @@ For Javascript: [[https://github.com/mooz/js2-mode][js2-mode]]. It's a bit more 
 #+begin_src emacs-lisp :noweb no-export
   (use-package js2-mode
     :mode "\\.js\\'"
-    :hook (js2-mode-hook . eglot-ensure)
+    :hook (js2-mode . eglot-ensure)
     :config
     <<JS2-CONFIG>>)
 #+end_src
@@ -769,7 +795,7 @@ JSX is an extension of Javascript that supports inline HTML, typically used with
 #+begin_src emacs-lisp :noweb no-export
   (use-package rjsx-mode
     :mode "\\.jsx\\'"
-    :hook (rjsx-mode-hook . eglot-ensure)
+    :hook (rjsx-mode . eglot-ensure)
     :config
     <<RJSX-CONFIG>>)
 #+end_src
@@ -784,7 +810,7 @@ Use the Typescript Language Server for JSX files.
 #+begin_src emacs-lisp :noweb no-export
   (use-package typescript-mode
     :mode "\\.ts\\'"
-    :hook (typescript-mode-hook . eglot-ensure)
+    :hook (typescript-mode . eglot-ensure)
     :config
     <<TS-CONFIG>>)
 #+end_src
@@ -805,6 +831,25 @@ Setup LSP support for this new mode, as well.
 #+begin_src emacs-lisp
   (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
   (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
+#+end_src
+*** Markdown
+A lot of people write Markdown. I don't know why they would do that when org-mode exists, but hey. Guess some people just haven't seen the light yet. Oh well.
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :mode ("\\.md\\'" . gfm-mode))
+#+end_src
+*** Data
+JSON.
+#+begin_src emacs-lisp
+  (use-package json-mode
+    :mode "\\.json\\'")
+#+end_src
+
+YAML.
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :mode "\\.ya?ml\\'")
 #+end_src
 * Emacs, my favourite window manager
 TODO: write some shit here
