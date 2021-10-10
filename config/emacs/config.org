@@ -132,60 +132,60 @@ Backups and auto-save files are an absolute godsend. They've saved my ass /so/ m
 - Autosave files go to =~/.emacs.d/auto-saves=
 - Some extra options are tweaked (see comments)
 
-  #+begin_src emacs-lisp
-    (setq backup-by-copying t    ; Keep symlinks intact
-          version-control t      ; Make sure backups are numbered
-          delete-old-versions t  ; Always delete old backips
-          kept-new-versions 10   ; Keep the last 10 backups
-          kept-old-versions 0    ; Don't worry about keeping initial ones
-          auto-save-interval 50) ; Autosave every 50 characters typed
+#+begin_src emacs-lisp
+  (setq backup-by-copying t    ; Keep symlinks intact
+        version-control t      ; Make sure backups are numbered
+        delete-old-versions t  ; Always delete old backips
+        kept-new-versions 10   ; Keep the last 10 backups
+        kept-old-versions 0    ; Don't worry about keeping initial ones
+        auto-save-interval 50) ; Autosave every 50 characters typed
 
-    (let ((backup-dir (concat user-emacs-directory "backups/"))
-          (auto-save-dir (concat user-emacs-directory "auto-saves/"))
-          (max-file-size (* 5 1024 1024))) ; 2 MB
-      (if (not (file-exists-p backup-dir))
-          (make-directory backup-dir))
-      (if (not (file-exists-p auto-save-dir))
-          (make-directory auto-save-dir))
-      (setq backup-directory-alist `(("" . ,backup-dir))
-            auto-save-file-name-transforms `((".*" ,auto-save-dir t))))
-  #+end_src
+  (let ((backup-dir (concat user-emacs-directory "backups/"))
+        (auto-save-dir (concat user-emacs-directory "auto-saves/"))
+        (max-file-size (* 5 1024 1024))) ; 2 MB
+    (if (not (file-exists-p backup-dir))
+        (make-directory backup-dir))
+    (if (not (file-exists-p auto-save-dir))
+        (make-directory auto-save-dir))
+    (setq backup-directory-alist `(("" . ,backup-dir))
+          auto-save-file-name-transforms `((".*" ,auto-save-dir t))))
+#+end_src
 
-  Lockfiles though - those suck. I don't need those. Go away. You smell.
+Lockfiles though - those suck. I don't need those. Go away. You smell.
 
-  #+begin_src emacs-lisp
-    (setq create-lockfiles nil)
-  #+end_src
+#+begin_src emacs-lisp
+  (setq create-lockfiles nil)
+#+end_src
 
-  Typing over text doesn't really work the way you'd expect it to in Emacs by default, but luckily there's a minor mode to fix that.
+Typing over text doesn't really work the way you'd expect it to in Emacs by default, but luckily there's a minor mode to fix that.
 
-  #+begin_src emacs-lisp
-    (delete-selection-mode 1)
-  #+end_src
+#+begin_src emacs-lisp
+  (delete-selection-mode 1)
+#+end_src
 
-  Single space after full stops. Come on. Why isn't this the default?
+Single space after full stops. Come on. Why isn't this the default?
 
-  #+begin_src emacs-lisp
-    (setq sentence-end-double-space nil)
-  #+end_src
+#+begin_src emacs-lisp
+  (setq sentence-end-double-space nil)
+#+end_src
 
-  Indent with spaces, not tabs. Come on. Why isn't this the default?
+Indent with spaces, not tabs. Come on. Why isn't this the default?
 
-  #+begin_src emacs-lisp
-    (setq-default indent-tabs-mode nil)
-  #+end_src
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+end_src
 
-  2 space indents. Come on. Why isn't thi
+2 space indents. Come on. Why isn't thi
 
-  #+begin_src emacs-lisp
-    (setq-default tab-width 2)
-  #+end_src
+#+begin_src emacs-lisp
+  (setq-default tab-width 2)
+#+end_src
 
-  Default line length is 80 characters. Wrap lines to that length.
+Default line length is 80 characters. Wrap lines to that length.
 
-  #+begin_src emacs-lisp
-    (setq-default fill-column 80)
-  #+end_src
+#+begin_src emacs-lisp
+  (setq-default fill-column 80)
+#+end_src
 
 ** Package preparation
 There are much smarter people out there, who can write way better and much cooler stuff with Emacs than I can. We can ~steal~ leverage their work through the help of a package manager. My package manager of choice is [[https://github.com/raxod502/straight.el][straight.el]]. I like it for a few reasons:
