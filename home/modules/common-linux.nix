@@ -1,1 +1,1 @@
-{ imports = [ ./common.nix ../themes/winter ]; }
+{ imports = [ ./common.nix ../themes/winter ../themes/onedark ]; }

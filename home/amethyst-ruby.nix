@@ -169,14 +169,7 @@
 
   services = { udiskie.enable = true; };
 
-  srxl = {
-    emacs.enable = true;
-
-    theme.winter = {
-      enable = true;
-      monitors = [ "HDMI-A-0" ];
-    };
-  };
+  srxl.theme.onedark.enable = true;
 
   systemd.user = {
     services = {
