@@ -77,6 +77,10 @@ in {
           name = "Inter";
           package = pkgs.inter;
         };
+        serif = {
+          name = "IBM Plex Serif";
+          package = pkgs.ibm-plex;
+        };
         extraFonts = with pkgs; [ emacs-all-the-icons-fonts noto-fonts-cjk ];
       };
     };

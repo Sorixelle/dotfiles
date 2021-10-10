@@ -62,6 +62,10 @@ in with lib; {
              }"
              srxl/font-family-ui "${config.srxl.fonts.ui.name}"
              srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
+             srxl/font-family-serif "${config.srxl.fonts.serif.name}"
+             srxl/font-size-serif ${
+               toString (config.srxl.fonts.serif.size * 10)
+             }
              srxl/theme-name '${conf.theme}
              srxl/project-dir "~/usr/devel")
 

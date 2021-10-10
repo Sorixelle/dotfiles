@@ -33,6 +33,11 @@ in with lib; {
       description = "The UI font to use in the system. Usually variable-width.";
     };
 
+    serif = mkOption {
+      type = fontSpecType;
+      description = "The serif font to use in the system.";
+    };
+
     extraFonts = with types;
       mkOption {
         type = listOf package;
@@ -46,7 +51,8 @@ in with lib; {
 
     gtk.font.name = conf.ui.name;
 
-    home.packages = [ conf.monospace.package conf.ui.package ]
+    home.packages =
+      [ conf.monospace.package conf.ui.package conf.serif.package ]
       ++ conf.extraFonts;
   };
 }
