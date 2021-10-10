@@ -33,12 +33,25 @@ in with lib; {
   };
 
   config = let
-    emacsPackage =
-      (pkgs.emacsPackagesNgGen conf.package).emacsWithPackages (e: [ e.vterm ]);
+    emacsPkgs = pkgs.emacsPackagesNgGen conf.package;
+    emacsPackage = emacsPkgs.emacsWithPackages (e: [ e.vterm ]);
   in mkIf conf.enable {
     programs.emacs = {
       enable = true;
       package = emacsPackage;
+    };
+
+    # Vterm shell hooks
+    programs = {
+      fish.interactiveShellInit = ''
+        source ${emacsPkgs.vterm.src}/etc/emacs-vterm.fish
+      '';
+      bash.initExtra = ''
+        source ${emacsPkgs.vterm.src}/etc/emacs-vterm-bash.sh
+      '';
+      zsh.initExtra = ''
+        source ${emacsPkgs.vterm.src}/etc/emacs-vterm-zsh.sh
+      '';
     };
 
     xsession.windowManager.command = mkIf conf.useEXWM ''
