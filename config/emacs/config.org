@@ -1,1247 +1,879 @@
-#+TITLE: srxl's Emacs Configuration
-#+PROPERTY: header-args:emacs-lisp :tangle yes
-#+STARTUP: overview
+#+title: srxl's Emacs Configuration
+#+author: Ruby Iris Juric
+#+email: ruby@srxl.me
+#+description: My personal Emacs configuration, as a Literate Org-Mode document
+#+startup: overview indent
 
-This is my literate Emacs configuration. It's mine. It does what I want. Maybe
-it does what you want too. That's why I structured this as a literate config, so
-it's easier for the reader (including myself) to understand, and pick the parts
-they're looking for. :)
+Hello, reader.
 
-* Emacs
-  This section contains all the configuration for the standard Emacs
-  distribution.
+Welcome to my Emacs configuration.
+
+You're probably here because you wish to glean knowledge of the arcane and eldritch arts of the almighty Emacs Text Editing, List Processing, Electronic-Mail Reading, Tetris Playing Realm... or something like that.
+
+Or you're me. Could be that too.
+
+Either way, no matter what brings you here, I hope you find whatever it was that your soul was searching for.
+
+Maybe you find something you didn't even know you wanted. If so, awesome!
+
+Maybe this is useless to you. That's cool too. First step to knowing what you need, is knowing what you don't need.
+
+Pretty sure some old wise guy said that at some point.
+
+Or maybe I'm making this up. I don't know.
+
+Maybe I should get on with the actual config. Yeah, good idea. Let's do that.
+
+* The basics
+** In the beginning...
+Alright, let's start by getting the very basics down. We'll start by enabling [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html][lexical binding]] for this file, so that we avoid any Certified Weirdness that comes with dynamic binding.
+
+#+begin_src emacs-lisp
+  ;;; config.el -*- lexical-binding: t -*-
+#+end_src
+
+Cool. Now, in case you didn't know, I use [[https://nixos.org/][NixOS]] as my operating system, and I have a [[https://github.com/Sorixelle/dotfiles/][hella fancy setup]] for managing every single little piece of my machines. Including Emacs. I've written a [[https://github.com/Sorixelle/dotfiles/blob/master/home/modules/emacs.nix][cool little module]] to expose some parts of that configuration to Emacs in the form of an additional variables file. Let's load that in now.
+
+#+begin_src emacs-lisp
+  (load-file (concat user-emacs-directory "config-vars.el"))
+#+end_src
+
+** Setting expectations
+Ok, let's start actually setting some Emacs options. First thing we'll do is disable the startup splash and clear the scratch buffer. We want a clean slate when we start up.
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-screen t
+        initial-scratch-message nil)
+#+end_src
+
+Next, let's change every "yes or no" prompt to be "y or n". Less typing for me. Oh, and don't make graphical popups for those. I'd rather not use my mouse, thanks.
+
+#+begin_src emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (setq use-dialog-box nil)
+#+end_src
+
+Now that we have that, we'll ask one of those questions whenever we go to close Emacs. Can never be too safe.
+
+#+begin_src emacs-lisp
+  (setq confirm-kill-emacs 'y-or-n-p)
+#+end_src
+
+Let's get rid of those gaudy UI elements. Who needs a toolbar or a scrollbar when you have a keyboard and every keybinding you could ever want?
+
+#+begin_src emacs-lisp
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (fringe-mode 1)
+#+end_src
+
+We'll start up all Emacs windows fullscreen, so that we have as much space as possible to wreak havoc on the world. Or at least write some words in a file.
+
+#+begin_src emacs-lisp
+  (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+#+end_src
+
+While we're doing windows - opening a file in macOS from the Finder seems to always create a new frame, which is really annoying. Stop doing that.
+
+#+begin_src emacs-lisp
+  (when (eq window-system 'ns)
+    (setq ns-pop-up-frames nil))
+#+end_src
+
+Automatically reload buffers when their underlying files change on the disk, when other rude tools start yanking the carpet from under me.
+
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+#+end_src
+
+Make sure all code files have their syntax highlighting enabled.
+
+#+begin_src emacs-lisp
+  (global-font-lock-mode 1)
+#+end_src
+
+Crank up Emacs' garbage collection limit to 20MB, so it doesn't run as often. Mainly for [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]], since it's constantly dealing with huge JSON objects.
+
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold 20000000)
+#+end_src
+
+Don't open the Warnings buffer whenever there's a native compilation warning. It's annoying and gets in my face.
+
+#+begin_src emacs-lisp
+  (setq native-comp-async-report-warnings-errors 'silent)
+#+end_src
+
+Write customizations to it's own, dedicated file. Writing to =init.el= isn't going to fly under NixOS, since it manages that file with a symlink.
+
+#+begin_src emacs-lisp
+  (setq custom-file (concat user-emacs-directory "customizations.el"))
+  (load-file custom-file)
+#+end_src
+
+And, last but not least... STOP MAKING NOISES
+
+#+begin_src emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+end_src
+
+** File editing bits and bobs
+Trailing whitespace is yucky. Except for trailing newlines at the end of a file though - those are good. We want those. Let's make that happen.
+
+#+begin_src emacs-lisp
+  (setq require-final-newline 'visit-save)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+Backups and auto-save files are an absolute godsend. They've saved my ass /so/ many times. But the default behaviour of just cramming them next to the actual file is really annoying, especially for version control. We'll adjust their behaviour a little bit, so that:
+
+- Backup files go to =~/.emacs.d/backups=
+- Autosave files go to =~/.emacs.d/auto-saves=
+- Some extra options are tweaked (see comments)
+
+  #+begin_src emacs-lisp
+    (setq backup-by-copying t    ; Keep symlinks intact
+          version-control t      ; Make sure backups are numbered
+          delete-old-versions t  ; Always delete old backips
+          kept-new-versions 10   ; Keep the last 10 backups
+          kept-old-versions 0    ; Don't worry about keeping initial ones
+          auto-save-interval 50) ; Autosave every 50 characters typed
+
+    (let ((backup-dir (concat user-emacs-directory "backups/"))
+          (auto-save-dir (concat user-emacs-directory "auto-saves/"))
+          (max-file-size (* 5 1024 1024))) ; 2 MB
+      (if (not (file-exists-p backup-dir))
+          (make-directory backup-dir))
+      (if (not (file-exists-p auto-save-dir))
+          (make-directory auto-save-dir))
+      (setq backup-directory-alist `(("" . ,backup-dir))
+            auto-save-file-name-transforms `((".*" ,auto-save-dir t))))
+  #+end_src
+
+  Lockfiles though - those suck. I don't need those. Go away. You smell.
+
+  #+begin_src emacs-lisp
+    (setq create-lockfiles nil)
+  #+end_src
+
+  Typing over text doesn't really work the way you'd expect it to in Emacs by default, but luckily there's a minor mode to fix that.
+
+  #+begin_src emacs-lisp
+    (delete-selection-mode 1)
+  #+end_src
+
+  Single space after full stops. Come on. Why isn't this the default?
+
+  #+begin_src emacs-lisp
+    (setq sentence-end-double-space nil)
+  #+end_src
+
+  Indent with spaces, not tabs. Come on. Why isn't this the default?
+
+  #+begin_src emacs-lisp
+    (setq-default indent-tabs-mode nil)
+  #+end_src
+
+  2 space indents. Come on. Why isn't thi
+
+  #+begin_src emacs-lisp
+    (setq-default tab-width 2)
+  #+end_src
+
+  Default line length is 80 characters. Wrap lines to that length.
+
+  #+begin_src emacs-lisp
+    (setq-default fill-column 80)
+  #+end_src
+
+** Package preparation
+There are much smarter people out there, who can write way better and much cooler stuff with Emacs than I can. We can ~steal~ leverage their work through the help of a package manager. My package manager of choice is [[https://github.com/raxod502/straight.el][straight.el]]. I like it for a few reasons:
+
+- Grabs packages straight from Git, so I have the latest and greatest versions
+- Loads packages declaratively - don't load anything I don't tell it to
+- Lets me hack on packages if I need to, and I often find myself needing to
+
+  Let's set it up. I'll pinch that little block from their repo's README.
+
+  #+begin_src emacs-lisp
+    (defvar bootstrap-version)
+    (let ((bootstrap-file
+           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+          (bootstrap-version 5))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+             'silent 'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage))
+  #+end_src
+
+  While we're here, let's bring in another cool tool for managing packages: [[https://github.com/jwiegley/use-package][use-package]]. This little macro is wonderful for organizing package configuration in once central place. It's even got integration with straight.el, so it can install the packages too.
+
+  #+begin_src emacs-lisp
+    (straight-use-package 'use-package)
+    (setq straight-use-package-by-default t)
+  #+end_src
+
+* Moving around and doing things
+** A heretical interface
+I love Vim keybindings. Modal editing just makes so much sense to me. Being able to yank lines, move between words, easily navigate through my documents with simple, (usually) mnemonic keybindings feels so nice. Over here in Emacs-land, we've got a package aptly titled [[https://github.com/emacs-evil/evil][Evil]]... y'know, because Vim keybindings... editor holy wars... Vim is evil if you're in the Emacs camp...
+
+Meh, whatever. Let's get it set up.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package evil
+    :init
+    <<EVIL-INIT>>
+    :config
+    <<EVIL-CONFIG>>)
+#+end_src
+
+First thing that needs to be done, is enabling =evil-mode=. That'll get us all our keybindings active.
+#+begin_src emacs-lisp :tangle no :noweb-ref EVIL-CONFIG
+  (evil-mode 1)
+#+end_src
+
+We'll also add [[https://github.com/emacs-evil/evil-collection][evil-collection]], which extends Evil's keybindings to a few other modes and extra packages.
+#+begin_src emacs-lisp
+  (use-package evil-collection
+    :config
+    (evil-collection-init))
+#+end_src
+
+But first - evil-collection requires =evil-want-keybinding= to be set to =nil= before Evil is loaded.
+#+begin_src emacs-lisp :tangle no :noweb-ref EVIL-INIT
+  (setq evil-want-keybinding nil)
+#+end_src
+
+** Managing the keyboard buttons
+The keyboard is the best interface to Emacs. Keybindings can do everything. Although, managing keybindings can be a bit tricky. Luckily, [[https://github.com/noctuid/general.el][general.el]] has us covered there. General provides a nice interface for managing keybindings, especially when it comes to things like enabling bindings only in certain Evil states.
+
+#+begin_src emacs-lisp
+  (use-package general)
+#+end_src
+
+Another useful tool is [[https://github.com/abo-abo/hydra/][Hydra]], which creates transient layers with a set of keybindings defined, that deactivates when another key is pressed. It's hard to describe. Go check out that link, they describe it there better than I could.
+
+#+begin_src emacs-lisp
+  (use-package hydra)
+#+end_src
+
+Finding all these keybindings can be a pain. Luckily we have [[https://github.com/justbur/emacs-which-key][which-key]] to help us with that. It shows us a list of all avaliable commands when we hit a prefix, such as =C-c=. Useful for identifying just what the hell the "switch buffer" command is. Was is =C-c C-b=? =C-c b=? Some other insane combination? I don't know, you tell me.
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config
+    (which-key-mode 1))
+#+end_src
+
+Because I might use EXWM in this config (more on that later), I need to be able to set global keys for EXWM, in case I want to be able to use those keybindings when in graphical windows. The way my Nix config is managed, I can toggle it on and off in there, and have the state exposed to Emacs through the variable =srxl/use-exwm=. We'll define a helper function for making such global keybindings, that does 2 things for us:
+- Use =exwm-input-set-key= if EXWM is in use, or =general-def= otherwise
+- Use Super as the prefix only when we're using EXWM, and fallback to Meta otherwise. Super isn't always guarranteed to work outside of EXWM, since other window managers have a tendency to eat those key events.
+
+#+begin_src emacs-lisp
+  (defun srxl/define-global-key (key cmd)
+    "Binds CMD, using `exwm-input-set-key' to s-KEY globally if EXWM is in use,
+  or using `general-def' to M-KEY otherwise."
+    (if srxl/use-exwm
+        (exwm-input-set-key (kbd (format "s-%s" key)) cmd)
+      (general-def (format "M-%s" key) cmd)))
+#+end_src
+
+** Window navigation
+Navigating between windows is something I do in Emacs /constantly/. Especially when I use EXWM, which I'll get to later in this config. Keybindings to help me do that would be nice. Let's start off with a simple one - moving between windows. For that, we'll use the Vim arrows to move between windows.
+
+Since these are keybindings we want to be able to use from EXWM windows, we'll use that helpful little =srxl/define-global-key= function I defined earlier to define them.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref POST-EXWM
+  (srxl/define-global-key "h" 'windmove-left)
+  (srxl/define-global-key "j" 'windmove-down)
+  (srxl/define-global-key "k" 'windmove-up)
+  (srxl/define-global-key "l" 'windmove-right)
+#+end_src
+
+Now for moving windows around. Surprisingly, Emacs doesn't seem to have a good built-in equivalent of =windmove= for swapping windows. Luckily, [[https://github.com/lukhas/buffer-move][buffer-move]] provides this functionality for us. We'll use the same keybindings as above, but also hold Shift for moving windows.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref POST-EXWM
+  (use-package buffer-move)
+  (srxl/define-global-key "H" 'buf-move-left)
+  (srxl/define-global-key "J" 'buf-move-down)
+  (srxl/define-global-key "K" 'buf-move-up)
+  (srxl/define-global-key "L" 'buf-move-right)
+#+end_src
+
+Looking good. But what if we want to do a whole bunch of window moving operations at once? Surely we don't have to keep holding down Super all the time. That would suck. Good thing we don't. This is where Hydra comes in handy - we can define a window management hydra that puts us in a "window management mode" indefinitely, until we're done with managing windows. Perfect!
+
+We'll also add bindings for creating new windows through splits in here. Since making splits is something you would almost always do in combination with another window move or swap, it doesn't really need it's own separate binding. I also can't think of a nice standalone binding, so this is a good excuse.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref POST-EXWM
+  (defhydra srxl/window-management (:hint nil)
+    "
+  Window Management
+
+  ^^Move:       ^^Swap:       ^^Create
+  _h_: Left     _H_: Left     _s-l_: Left side
+  _j_: Down     _J_: Down     _s-j_: Bottom side
+  _k_: Up       _K_: Up       _x_:   Close
+  _l_: Right    _L_: Right"
+    ("h" windmove-left)
+    ("j" windmove-down)
+    ("k" windmove-up)
+    ("l" windmove-right)
+    ("H" buf-move-left)
+    ("J" buf-move-down)
+    ("K" buf-move-up)
+    ("L" buf-move-right)
+    ("s-l" split-window-right)
+    ("s-j" split-window-below)
+    ("x" delete-window))
+
+  (srxl/define-global-key "w" 'srxl/window-management/body)
+#+end_src
+
+Cool, windows are sorted - now we need some stuff for switching buffers. We'll keep it simple - =s-b= to search for a buffer.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref POST-EXWM
+  (srxl/define-global-key "b" 'counsel-switch-buffer)
+#+end_src
+
+** Searching and completing and filtering and
+So, you expect me to just hit =M-x=, and know the exact name of the thing I'm looking for? Yeah, alright. I'm clueless. I don't know what things are called. Besides, even if I did, that's way too much typing. If only there was an autocompletion framework out there to make this easier...
+
+Ok, ok. It's called [[https://github.com/abo-abo/swiper#ivy][Ivy]]. And [[https://github.com/abo-abo/swiper#counsel][Counsel]]. These two packages together give me a really nice, simple and lightweight autocompletion system for any =completing-read= task I may need.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package ivy
+    :after flx
+    :config
+    (ivy-mode 1)
+    <<IVY-CONFIG>>)
+
+  (use-package counsel
+    :after ivy
+    :config
+    (counsel-mode 1))
+#+end_src
+
+Include recently accessed files in =ivy-switch-buffer= results.
+#+begin_src emacs-lisp :tangle no :noweb-ref IVY-CONFIG
+  (setq ivy-use-virtual-buffers t)
+#+end_src
+
+Show the amount of avaliable completions in [square braces], because I like the look of it.
+#+begin_src emacs-lisp :tangle no :noweb-ref IVY-CONFIG
+  (setq ivy-count-format "[%d] ")
+#+end_src
+
+Fuzzy search! Ivy leverages [[https://github.com/lewang/flx][flx]] to help sort the results in a meaningful way.
+#+begin_src emacs-lisp :tangle no :noweb-ref IVY-CONFIG
+  (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+#+end_src
+#+begin_src emacs-lisp
+  (use-package flx)
+#+end_src
+
+No initial search value - I don't always want ^ at the start of my searches.
+#+begin_src emacs-lisp :tangle no :noweb-ref IVY-CONFIG
+  (setq ivy-initial-inputs-alist nil)
+#+end_src
+
+Rebind a couple of keys I think are pretty clunky in Ivy:
+- =ivy-immediate-done= :: from =C-M-j= to =S-RET=
+- =ivy-dispatching-done= :: from =M-o= to =C-RET=
+#+begin_src emacs-lisp :tangle no :noweb-ref IVY-CONFIG
+  (general-def 'ivy-minibuffer-map
+    "S-<return>" 'ivy-immediate-done
+    "C-<return>" 'ivy-dispatching-done)
+#+end_src
+* ✨aesthetics✨
+If I'm going to use Emacs as much as I do, I want to use something that's actually nice to look at. Default Emacs might be nice to some people... but not to me. Time to fix that up.
+
+** Pretty letters
+We'll start off by setting some nicer fonts. That's one of the things that's a part of my NixOS config, so we'll read the variables set from there.
+
+#+begin_src emacs-lisp
+  (add-to-list 'default-frame-alist `(font . ,(concat srxl/font-family-monospace " " srxl/font-size-monospace)))
+  (set-face-attribute 'variable-pitch nil :family srxl/font-family-ui :height srxl/font-size-ui)
+#+end_src
+
+We're also going to define a face for a serif font. This'll get used later, for stuff like Org mode.
+
+#+begin_src emacs-lisp
+  (defface serif
+    `((t (:inherit variable-pitch :family ,srxl/font-family-serif :height ,srxl/font-size-serif)))
+    "Serif font.")
+#+end_src
+
+** Pretty colours
+Default emacs burns my eyes. /hiss/. I'll take a nicer theme, courtesy of [[https://github.com/hlissner/emacs-doom-themes][doom-themes]]. They've got a whole bunch of really nice ones. Which one do I use? That's defined in my NixOS configuration. Go check that out if you really wanna know.
+
+#+begin_src emacs-lisp :noweb no-export
+  (use-package all-the-icons)
+  (use-package doom-themes
+    :config
+    (load-theme srxl/theme-name t)
+    <<DOOMTHEMES-CONFIG>>)
+#+end_src
+** Pretty modeline
+The mode line in Emacs is that little line at the bottom of the window that has all the status stuff, like filename... uh... man, the default mode line doesn't really have a lot of useful stuff in it, huh? Hmm.
+
+I'm far too lazy to write my own mode line. Luckily, multiple people have done it for me, and I just need to pick the one I like. And I like [[https://github.com/dbordak/telephone-line][telephone-line]]. It's got a really nice configuration interface, it's fairly lightweight, doesn't rely on any external icon fonts, and - most importantly - it looks really nice. Let's set it up.
+
+#+begin_src emacs-lisp :noweb no-export
+  (use-package telephone-line
+    :config
+    <<TELELINE-CONFIG>>)
+#+end_src
+
+First, let's set the separators. telephone-line supports a whole bunch of fancy Powerline-style separators, but honestly, I'm not about that. I just like simple boxes. So we'll use the "flat" separator as the primary one, and don't worry about a secondary separator - those go between all the segments, not just the coloured bits. Too noisy.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+  (setq telephone-line-primary-left-separator 'telephone-line-flat
+        telephone-line-primary-right-separator 'telephone-line-flat
+        telephone-line-secondary-left-separator 'telephone-line-nil
+        telephone-line-secondary-right-separator 'telephone-line-nil)
+#+end_src
+
+I like my modeline a little taller. Bit more prominent.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+  (setq telephone-line-height 24)
+#+end_src
+
+And now for the segments. For the left side, we'll have the following:
+- The current Evil status (normal, insert, visual, etc.)
+- The buffer information (name, unsaved indicator)
+
+  #+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+    (setq telephone-line-lhs
+          '((evil . (telephone-line-evil-tag-segment))
+            (nil . (telephone-line-buffer-segment))))
+  #+end_src
+
+  And on the right side:
+  - The major mode name
+  - Any "extra info" (we'll get to that in a bit)
+
+    #+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+      (setq telephone-line-rhs
+            '((nil . (telephone-line-misc-info-segment))
+              (accent . (telephone-line-major-mode-segment))))
+    #+end_src
+
+    One more thing - I need a clock, so I know what the time is. Because, yknow. That's like, important. Gotta have that. This'll put it in that extra info segment.
+
+    #+begin_src emacs-lisp
+      (display-time-mode 1)
+    #+end_src
+
+    And activate.
+
+    #+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
+      (telephone-line-mode 1)
+    #+end_src
+* Emacs, my favourite word processor
+[[https://orgmode.org/][org-mode]] might just be one of the most amazing programs ever made. Like, seriously. This thing is amazing. It's a markup language, a todo list, a calendar, a spreadsheet, Jupyter Notebook on sterioids... I could keep going on here, but that's probably not what you're here for. You're here to see me configure this delightful thing. And I'm not about to waste anymore time.
+
+#+begin_src emacs-lisp :noweb no-export
+  (use-package org
+    :config
+    <<ORG-CONFIG>>)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (add-hook 'org-mode-hook 'visual-line-mode)
+#+end_src
+
+** Making documents look pretty
+Monospaced text just doesn't quite do org-mode justice. This isn't code (well, not entirely) - it's a document! Let's make it look like one by using a fancy serif font. Check the NixOS config for which specific one it is.
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (add-hook 'org-mode-hook (lambda () (progn
+                                        (setq-local buffer-face-mode-face 'serif)
+                                        (buffer-face-mode 1))))
+#+end_src
+
+Code should probably still be monospace though. That makes sense.
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
+#+end_src
+
+Make headings look a little prettier with [[https://github.com/sabof/org-bullets][org-bullets]].
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode))
+#+end_src
+
+And make them a bit more distinct at each level, by setting different sizes for them.
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (set-face-attribute 'org-document-title nil :height 1.5)
+  (set-face-attribute 'org-level-1 nil :height 1.5)
+  (set-face-attribute 'org-level-2 nil :height 1.25)
+  (set-face-attribute 'org-level-3 nil :height 1.125)
+  (set-face-attribute 'org-level-4 nil :height 1.1)
+#+end_src
+
+Don't worry about showing the symbols around things like *bold*, /italic/ or =inline code=.
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (setq org-hide-emphasis-markers t)
+#+end_src
+
+doom-themes from earlier includes some stuff to tidy up Org visuals a little bit.
+#+begin_src emacs-lisp :tangle no :noweb-ref DOOMTHEMES-CONFIG
+  (doom-themes-org-config)
+#+end_src
+* Emacs, my favourite IDE
+Yeah, this is the one everyone knows Emacs for. Code editor! That's the main one everyone uses Emacs for. And for good reason - it does a damn good job of editing code. Although, it does need a little assistance to get it off the ground in that regard. Let's give it a hand.
 
 ** General
-   Before we start any code: enable =lexical-binding= for an ever so slight
-   performace boost, and ease of mind that we're writing good practice Elisp.
-
-   #+begin_src emacs-lisp
-     ;;; config.el -*- lexical-binding: t; -*-
-   #+end_src
-
-   We'll also bring in our NixOS config-defined variables so they're immediately
-   ready for use.
-
-   #+begin_src emacs-lisp
-     (load-file (concat user-emacs-directory "config-vars.el"))
-   #+end_src
-
-   Now, with that out of the way - let's get started.
-
-   First thing we'll do is disable the startup splash and clear the scratch
-   buffer. We want a clean slate when we start up.
-
-   #+begin_src emacs-lisp
-     (setq inhibit-startup-screen t
-           initial-scratch-message nil)
-   #+end_src
-
-   Next, let's change every "yes or no" prompt to be "y or n". Less typing for
-   me. Oh, and don't make graphical popups for those. I'd rather not use my
-   mouse, thanks.
-
-   #+begin_src emacs-lisp
-     (fset 'yes-or-no-p 'y-or-n-p)
-     (setq use-dialog-box nil)
-   #+end_src
-
-   Now that we have that, we'll ask one of those questions whenever we go to
-   close Emacs. Can never be too safe.
-
-   #+begin_src emacs-lisp
-     (setq confirm-kill-emacs 'y-or-n-p)
-   #+end_src
-
-   Let's get rid of those gaudy UI elements. Who needs a toolbar or a scrollbar
-   when you have a keyboard and every keybinding you could ever want?
-
-   #+begin_src emacs-lisp
-     (menu-bar-mode -1)
-     (tool-bar-mode -1)
-     (scroll-bar-mode -1)
-   #+end_src
-
-   We'll start up all Emacs windows fullscreen, so that we have as much space as
-   possible to view all the terrible code we'll be writing.
-
-   #+begin_src emacs-lisp
-     (add-to-list 'initial-frame-alist '(fullscreen . maximized))
-   #+end_src
-
-   While we're doing windows - opening a file in macOS from the Finder seems to
-   always create a new frame, which is really annoying. Stop doing that.
-
-   #+begin_src emacs-lisp
-     (when (eq window-system 'ns)
-       (setq ns-pop-up-frames nil))
-   #+end_src
-
-   Automatically reload buffers when their underlying files change on the disk.
-
-   #+begin_src emacs-lisp
-     (global-auto-revert-mode 1)
-   #+end_src
-
-   Make sure all code files have their syntax highlighting enabled.
-
-   #+begin_src emacs-lisp
-     (global-font-lock-mode 1)
-   #+end_src
-
-   Crank up Emacs' garbage collection limit to 20MB, so it doesn't run as often.
-   Mainly for [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]], since it's constantly dealing with huge JSON objects.
-
-   #+begin_src emacs-lisp
-     (setq gc-cons-threshold 20000000)
-   #+end_src
-
-   Don't open the Warnings buffer whenever there's a native comp warning. It's
-   annoying and gets in my face.
-
-   #+begin_src emacs-lisp
-     (setq native-comp-async-report-warnings-errors 'silent)
-   #+end_src
-
-   Write customizations to it's own, dedicated file. Writing to =init.el= isn't
-   going to fly under NixOS, since it manages that file with a symlink.
-
-   #+begin_src emacs-lisp
-     (setq custom-file (concat user-emacs-directory "customizations.el"))
-     (load-file custom-file)
-   #+end_src
-
-   And, last but not least... STOP MAKING NOISES
-
-   #+begin_src emacs-lisp
-     (setq ring-bell-function 'ignore)
-   #+end_src
-
-** Fonts
-   Load in the fonts as specified in the NixOS home-manager config, under
-   =srxl.fonts=.
-
-   #+begin_src emacs-lisp
-     (add-to-list 'default-frame-alist `(font . ,(concat srxl/font-family-monospace " " srxl/font-size-monospace)))
-     (set-face-attribute 'variable-pitch nil :family srxl/font-family-ui :height srxl/font-size-ui)
-   #+end_src
-
-** Files
-   Configuration relating to reading and writing files.
-
-   Let's start by setting up Emacs to create any parent folders of a file if
-   they don't exist when we go to save it.
-
-   #+begin_src emacs-lisp
-     (defun srxl/create-file-parent-directory ()
-       "Offer to create the parent directory of a file, if it doesn't exist."
-       (when buffer-file-name
-         (let ((dir (file-name-directory buffer-file-name)))
-           (when (and (not (file-exists-p dir))
-                      (y-or-n-p (format "%s doesn't exist. Create it now?" dir)))
-             (make-directory dir t)))))
-
-     (add-hook 'before-save-hook 'srxl/create-file-parent-directory)
-   #+end_src
-
-   If we open a symlink, let's follow it to it's original file and edit that
-   instead.
-
-   #+begin_src emacs-lisp
-     (setq vc-follow-symlinks t)
-   #+end_src
-
-   Automatically handle trailing whitespaces for us - trim off any trailing
-   whitespace, and add a newline right at the end of files.
-
-   #+begin_src emacs-lisp
-     (setq require-final-newline 'visit-save)
-     (add-hook 'before-save-hook 'delete-trailing-whitespace)
-   #+end_src
-
-   If we're editing a shell script, mark it as executable when we save it, so we
-   don't have to do it ourselves manually.
-
-   #+begin_src emacs-lisp
-     (add-hook 'before-save-hook 'executable-make-buffer-file-executable-if-script-p)
-   #+end_src
-
-   Don't make lockfiles, because I only ever run one Emacs instance and they
-   mess with some programs for running local development servers.
-
-   #+begin_src emacs-lisp
-     (setq create-lockfiles nil)
-   #+end_src
-
-*** Backup files and auto saving
-    Backup files and autosave files are a godsend. But they tend to clobber the
-    directory you're working in (particularly backup files). Let's make it a
-    little cleaner, by doing the following:
-
-    - Keep backup files in =~/.emacs.d/backup=
-    - Keep autosave files in =~/.emacs.d/auto-saves=
-    - Preserve the first 6, and last 9 backup files for each file
-    - Create autosaves a little more often
-    - Make a backup file on every save instead of only the first
-
-    #+begin_src emacs-lisp
-      (setq make-backup-files t
-            backup-by-copying t
-            version-control t
-            vc-make-backup-files t
-            delete-old-versions t
-            delete-by-moving-to-trash t
-            kept-old-versions 6
-            kept-new-versions 9
-            auto-save-default t
-            auto-save-timeout 20
-            auto-save-interval 200)
-
-      (defvar srxl/backup-directory (concat user-emacs-directory "backup/")
-        "Location to save backup files to.")
-
-      (if (not (file-exists-p srxl/backup-directory))
-          (make-directory srxl/backup-directory))
-      (setq backup-directory-alist `(("" . ,srxl/backup-directory)))
-
-      (defvar srxl/auto-save-directory (concat user-emacs-directory "auto-saves/")
-        "Location to save auto save files to.")
-
-      (if (not (file-exists-p srxl/auto-save-directory))
-          (make-directory srxl/auto-save-directory t))
-      (setq auto-save-file-name-transforms `((".*" ,srxl/auto-save-directory t)))
-
-      (defun srxl/force-backup-of-buffer ()
-        "Force backups for every save."
-        (let ((buffer-backed-up nil))
-          (backup-buffer)))
-
-      (add-hook 'before-save-hook 'srxl/force-backup-of-buffer)
-   #+end_src
-
-** Editing
-   Configuration relating to editing files.
-
-   First, some style conventions:
-   - Single space after a full stop, not double
-   - Lines are max 80 lines long
-   - Don't use tabs to indent
-
-   #+begin_src emacs-lisp
-     (setq sentence-end-double-space nil)
-     (setq-default fill-column 80
-                   indent-tabs-mode nil)
-   #+end_src
-
-   Show line numbers in code files, and always show column number in the
-   modeline.
-
-   #+begin_src emacs-lisp
-     (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-     (column-number-mode 1)
-   #+end_src
-
-   Make selections act a little more like you'd expect them to, by deactivating
-   them after performing an action on them, and deleting the selected text when
-   typing over it.
-
-   #+begin_src emacs-lisp
-     (transient-mark-mode 1)
-     (delete-selection-mode 1)
-   #+end_src
-
-   Finally, highlight matching parentheses when hovering over them.
-
-   #+begin_src emacs-lisp
-     (setq show-paren-delay 0.0)
-     (show-paren-mode 1)
-   #+end_src
-
-   That's it for all the vanilla Emacs stuff. Now let's move on the fun stuff -
-   all the plugins.
-
-* Plugins
-  This section contains all plugin-specific configuration.
-
-** [[https://github.com/raxod502/straight.el][straight.el]]
-   A package manager that does a great job of being reproducible and functional,
-   just like Nix, but still gives me the flexibility to hack on packages if I
-   need to.
-
-   #+begin_src emacs-lisp
-     (defvar bootstrap-version)
-     (let ((bootstrap-file
-            (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-           (bootstrap-version 5))
-       (unless (file-exists-p bootstrap-file)
-         (with-current-buffer
-             (url-retrieve-synchronously
-              "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-              'silent 'inhibit-cookies)
-           (goto-char (point-max))
-           (eval-print-last-sexp)))
-       (load bootstrap-file nil 'nomessage))
-   #+end_src
-
-** [[https://github.com/jwiegley/use-package][use-package]]
-   A macro for organizing package configuration, Super handy, super cool, and
-   super neat. Also integrates with [[*\[\[https://github.com/raxod502/straight.el\]\[straight.el\]\]][straight.el]] to automatically install
-   packages.
-
-   #+begin_src emacs-lisp
-     (straight-use-package 'use-package)
-     (setq straight-use-package-by-default t)
-   #+end_src
-** [[https://github.com/purcell/exec-path-from-shell/][exec-path-from-shell]] (macOS)
-   macOS smells weird, so we gotta use =exec-path-from-shell= to properly
-   populate =exec-path=.
-
-   #+begin_src emacs-lisp
-     (use-package exec-path-from-shell
-       :if (memq window-system '(mac ns))
-       :custom
-       (exec-path-from-shell-variables '("PATH" "MANPATH" "NIX_PATH"))
-       :config
-       (exec-path-from-shell-initialize))
-   #+end_src
-
-** [[https://github.com/jschaf/esup][Emacs Start Up Profiler]]
-   Help chase down what takes Emacs so goddamn long to start up.
-
-   #+begin_src emacs-lisp
-     (use-package esup)
-   #+end_src
-
-** [[https://github.com/noctuid/general.el][General]]
-   Unite all keybindings under the forces of the Emacs Militia.
-
-   - Create a definer to add keybindings under =SPC= as a leader key
-
-   #+begin_src emacs-lisp
-     (defun srxl/edit-config ()
-       "Open the Emacs configuration in a new buffer."
-       (interactive)
-       (find-file "/etc/nixos/configs/emacs/config.org"))
-     (defun srxl/reload-config ()
-       "Reload the Emacs configuration."
-       (interactive)
-       (load-file (concat user-emacs-directory "init.el")))
-
-     (use-package general
-       :config
-       (general-create-definer srxl/leader-key-def
-         :states '(normal insert emacs motion treemacs)
-         :prefix "SPC"
-         :non-normal-prefix "M-SPC"))
-   #+end_src
-
-** [[https://github.com/abo-abo/hydra][Hydra]]
-   Every time you cut off the neckbeard of an Emacs user, two grow back in it's
-   place. Bit weird, but that's just how it is.
-
-   Hydra allows us to create what is effectively transient minor modes for key
-   bindings. Trigger one binding, and you get a bunch of other bindings that
-   disappear as soon as you trigger a different one. It's hard to explain.
-   Hydra's readme does it way better.
-
-   Bring in [[https://gitlab.com/to1ne/use-package-hydra][use-package-hydra]] for integration with =use-package= as well.
-
-   #+begin_src emacs-lisp
-     (use-package hydra)
-     (use-package use-package-hydra)
-   #+end_src
-
-** [[https://github.com/justbur/emacs-which-key][which-key]]
-   Like a cheatsheet, if the cheatsheet was the application itself.
-
-   #+begin_src emacs-lisp
-     (use-package which-key
-       :config
-       (which-key-mode t))
-   #+end_src
-
-** [[https://github.com/emacs-evil/evil][Evil]]
-   Yes, I use Evil. Yes, I'm a heretic. No, I won't just use (Neo)Vim.
-
-   - Bind the window navigation commands to =SPC w= in a [[*\[\[https://github.com/abo-abo/hydra\]\[Hydra\]\]][hydra]]
-   - Unbind =SPC= in motion mode to resolve conflict with leader key
-
-   *Key Bindings*
-   | Key     | Function                      |
-   |---------+-------------------------------|
-   | =SPC w= | Evil window management prefix |
-
-   #+begin_src emacs-lisp
-     (use-package evil
-       :init
-       (setq evil-want-keybinding nil)
-       :config
-       (evil-mode t)
-       :hydra
-       (hydra-windows (:color red :hint nil)
-                      "
-     Navigate:  ^^Resize:          ^^Manipulate:
-     _h_ Left     _+_ Grow height    _s_ Horizontal split
-     _j_ Down     _-_ Shrink height  _v_ Vertical split
-     _k_ Up       _>_ Grow width     _x_ Kill window
-     _l_ Right    _<_ Shrink width
-                ^^_=_ Balance"
-                      ("h" evil-window-left)
-                      ("j" evil-window-down)
-                      ("k" evil-window-up)
-                      ("l" evil-window-right)
-                      ("+" evil-window-increase-height)
-                      ("-" evil-window-decrease-height)
-                      (">" evil-window-increase-width)
-                      ("<" evil-window-decrease-width)
-                      ("=" balance-windows)
-                      ("s" evil-window-split)
-                      ("v" evil-window-vsplit)
-                      ("x" evil-window-delete))
-       :general
-       (general-unbind 'motion "SPC")
-       (srxl/leader-key-def
-         "w" '(hydra-windows/body :wk "Windows")))
-   #+end_src
-
-   Bring in [[https://github.com/emacs-evil/evil-collection][evil-collection]] so I can be evil everywhere.
-
-   #+begin_src emacs-lisp
-     (use-package evil-collection
-       :after evil
-       :config
-       (evil-collection-init))
-   #+end_src
-
-** General Keybindings
-   Now that [[*\[\[https://github.com/noctuid/general.el\]\[General\]\]][General]] and [[*\[\[https://github.com/emacs-evil/evil\]\[Evil\]\]][Evil]] are all set up, we can define a few general-purpose
-   keybindings.
-
-   *Key Bindings*
-   | Key       | Function            |
-   |-----------+---------------------|
-   | =SPC c r= | Reload Emacs config |
-   | =SPC c e= | Edit Emacs config   |
-   | =SPC h F= | Describe face       |
-   | =SPC h b= | Describe binding    |
-   | =SPC h f= | Describe function   |
-   | =SPC h k= | Describe key        |
-   | =SPC h m= | Describe mode       |
-   | =SPC h v= | Describe variable   |
-
-   #+begin_src emacs-lisp
-     (srxl/leader-key-def
-      "c"   '(:ignore t              :wk "Configuration")
-      "c e" '(srxl/edit-config   :wk "Edit")
-      "c r" '(srxl/reload-config :wk "Reload"))
-
-     (srxl/leader-key-def
-      "h"   '(:ignore t         :wk "Help")
-      "h F" '(describe-face     :wk "Describe face")
-      "h b" '(describe-bindings :wk "Describe binding")
-      "h f" '(describe-function :wk "Describe function")
-      "h k" '(describe-key      :wk "Describe key")
-      "h m" '(describe-mode     :wk "Describe mode")
-      "h v" '(describe-variable :wk "Describe variable"))
-   #+end_src
-
-** [[https://github.com/joaotavora/yasnippet][YASnippet]]
-   Provides template/snippet functionality for Emacs. I don't use any particular
-   snippets myself, but a few other packages use it for some things, like
-   [[*\[\[https://github.com/emacs-evil/evil\]\[Evil\]\]][evil-collection]] and [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]].
-
-   #+begin_src emacs-lisp
-     (use-package yasnippet
-       :config
-       (yas-global-mode))
-   #+end_src
-
-** [[https://github.com/seagle0128/doom-modeline][doom-modeline]]
-   A modeline that's not only pretty, but also actually useful.
-
-   When emacs starts as a daemon, doom-modeline doesn't show modeline icons.
-   We'll add a function that gets called on all frame creations to make sure
-   they're turned on in graphical frames.
-
-   #+begin_src emacs-lisp
-     (defun srxl/fix-doom-modeline-in-daemon (frame)
-       "Ensure doom-modeline shows icons when running Emacs as a daemon in graphical
-     mode."
-       (when (display-graphic-p frame)
-         (setq doom-modeline-icon t)))
-
-     (use-package doom-modeline
-       :init
-       (when (daemonp)
-           (add-hook 'after-make-frame-functions 'srxl/fix-doom-modeline-in-daemon))
-       :config
-       (doom-modeline-mode))
-   #+end_src
-
-** [[https://github.com/abo-abo/swiper#ivy][Ivy]]
-   A lightweight completion framework. All hail the minibuffer.
-
-   We'll change =ivy-count-format= so that it displays both the amount of
-   selections and the current position in the list of them in the modeline.
-
-   #+begin_src emacs-lisp
-     (use-package ivy
-       :custom
-       (ivy-count-format "(%d/%d) ")
-       :config
-       (ivy-mode t))
-   #+end_src
-
-** [[https://github.com/abo-abo/swiper#counsel][Counsel]]
-   Soup up some Emacs functionality with Ivy magic.
-
-   #+begin_src emacs-lisp
-     (use-package counsel
-       :config
-       (counsel-mode t))
-   #+end_src
-
-** [[https://github.com/bbatsov/projectile][Projectile]]
-   All the project editing, searching and manipulating you could ever want.
-
-   *Key Bindings*
-   | Key         | Function                                       |
-   |-------------+------------------------------------------------|
-   | =SPC p a=   | Find other file                                |
-   | =SPC p e=   | Edit =.dir-locals.el=                          |
-   | =SPC p f=   | Find file in project                           |
-   | =SPC p F=   | Find file at point                             |
-   | =SPC p p=   | Switch project                                 |
-   | =SPC p R=   | Find and replace string in project             |
-   | =SPC p s=   | Grep project (with =ripgrep=)                  |
-   | =SPC p S=   | Save all open buffers in project               |
-   | =SPC p t=   | Switch between implementation and test file    |
-   | =SPC p r b= | Run project build command                      |
-   | =SPC p r c= | Run project configure command                  |
-   | =SPC p r r= | Run project run command                        |
-   | =SPC p r t= | Run project test command                       |
-   | =SPC p r T= | Open terminal in project root                  |
-   | =SPC p w a= | Open related file in new window                |
-   | =SPC p w f= | Open file at point in new window               |
-   | =SPC p w t= | Open implementation or test file in new window |
-   | =SPC b b=   | Switch buffer (from project)                   |
-   | =SPC b B=   | Switch buffer (all buffers)                    |
-   | =SPC b k=   | Kill buffer                                    |
-
-   #+begin_src emacs-lisp
-     (use-package projectile
-       :custom
-       ;; Search specified directory for projects
-       (projectile-project-search-path `(,srxl/project-dir))
-       (projectile-enable-caching t)
-       :config
-       (projectile-mode t)
-       ;; Make BlaBlaTest.scala a test file of BlaBla.scala
-       (projectile-update-project-type
-        'sbt
-        :related-files-fn
-        (list
-         (projectile-related-files-fn-test-with-suffix "scala" "Spec")
-         (projectile-related-files-fn-test-with-suffix "scala" "Test")))
-       (projectile-update-project-type
-        'bloop
-        :related-files-fn
-        (list
-         (projectile-related-files-fn-test-with-suffix "scala" "Spec")
-         (projectile-related-files-fn-test-with-suffix "scala" "Test")))
-       :general
-       (srxl/leader-key-def
-         "ESC" '(projectile-project-buffers-other-buffer :wk "Switch to last buffer")
-
-         "p"   '(:ignore t :wk "Project")
-         "p a" '(projectile-find-other-file                        :wk "Switch to related file")
-         "p e" '(projectile-edit-dir-locals                        :wk "Edit .dir-locals.el")
-         "p R" '(projectile-replace-regexp                         :wk "Replace in project")
-         "p S" '(projectile-save-project-buffers                   :wk "Save all files")
-         "p t" '(projectile-toggle-between-implementation-and-test :wk "Switch to impl/test file")
-
-         "p r"   '(:ignore t :wk "Run...")
-         "p r b" '(projectile-compile-project   :wk "Build")
-         "p r c" '(projectile-configure-project :wk "Configure")
-         "p r r" '(projectile-run-project       :wk "Run")
-         "p r t" '(projectile-test-project      :wk "Test")
-         "p r T" '(projectile-run-vterm         :wk "Terminal")
-
-         "p w"   '(:ignore t :wk "Open in new window...")
-         "p w a" '(projectile-find-other-file-other-window             :wk "Related file")
-         "p w f" '(projectile-find-file-dwim-other-window              :wk "File at point")
-         "p w t" '(projectile-find-implementation-or-test-other-window :wk "Impl/test")))
-   #+end_src
-
-   Projectile ripgrep integration.
-
-   #+begin_src emacs-lisp
-     (use-package projectile-ripgrep)
-   #+end_src
-
-   Counsel integration, for some advanced minibuffer searching commands.
-
-   #+begin_src emacs-lisp
-     (use-package counsel-projectile
-       :config
-       (counsel-projectile-mode t)
-       :general
-       (srxl/leader-key-def
-         "p SPC" '(counsel-projectile                :wk "Jump to file/buffer")
-         "p f"   '(counsel-projectile-find-file      :wk "Find file")
-         "p F"   '(counsel-projectile-find-file-dwim :wk "Find file at point")
-         "p p"   '(counsel-projectile-switch-project :wk "Switch project")
-         "p s"   '(counsel-projectile-rg             :wk "Grep project")
-
-         "b"   '(:ignore t                           :wk "Buffers")
-         "b b" '(counsel-projectile-switch-to-buffer :wk "Switch buffer (project)")
-         "b B" '(counsel-switch-buffer               :wk "Switch buffer (all)")))
-   #+end_src
-
-** [[https://github.com/Alexander-Miller/treemacs][Treemacs]]
-   Simple file/project explorer that lives on the side of your screen, like in
-   every IDE ever. Sorry NeoTREE, I prefer this one.
-
-   *Key Bindings*
-   | Key       | Function                            |
-   |-----------+-------------------------------------|
-   | =SPC .=   | Open Treemacs                       |
-   | =SPC s a= | Add projectile project to workspace |
-   | =SPC s A= | Add directory to workspace          |
-   | =SPC s d= | Delete workspace                    |
-   | =SPC s e= | Edit workspaces                     |
-   | =SPC s n= | Create new workspace                |
-   | =SPC s r= | Rename workspace                    |
-   | =SPC s s= | Switch workspace                    |
-
-   #+begin_src emacs-lisp
-     (defun srxl/treemacs-close-window (&rest _r)
-       "Close the Treemacs window if it is open."
-       (when-let ((treemacs-window (treemacs-get-local-window)))
-         (delete-window treemacs-window)))
-
-     (defun srxl/open-or-focus-treemacs (&rest _r)
-       "Open the Treemacs window, or focus it if it's already open."
-       (if-let ((treemacs-window (treemacs-get-local-window)))
-           (select-window treemacs-window)
-         (treemacs)))
-
-     (use-package treemacs
-       :custom
-       ;; Use the minibuffer to prompt for input
-       (treemacs-read-string-input 'from-minibuffer)
-       ;; Use the function defined above to visit files
-       (treemacs-default-visit-action 'treemacs-visit-node-in-most-recently-used-window)
-       :config
-       ;; Show Git status of files
-       (treemacs-git-mode 'deferred)
-       ;; Watch the filesystem and automatically update
-       (treemacs-filewatch-mode t)
-       ;; Advise treemacs-visit functions to close Treemacs window after opening
-       ;; files
-       (advice-add 'treemacs-visit-node-in-most-recently-used-window :after 'srxl/treemacs-close-window)
-       (advice-add 'treemacs-visit-node-vertical-split :after 'srxl/treemacs-close-window)
-       (advice-add 'treemacs-visit-node-horizontal-split :after 'srxl/treemacs-close-window)
-       ;; Advise workspace manipulation functions to focus or open Treemacs window
-       (advice-add 'treemacs-add-project-to-workspace :after 'srxl/open-or-focus-treemacs)
-       (advice-add 'treemacs-create-workspace :after 'srxl/open-or-focus-treemacs)
-       (advice-add 'treemacs-rename-workspace :after 'srxl/open-or-focus-treemacs)
-       (advice-add 'treemacs-switch-workspace :after 'srxl/open-or-focus-treemacs)
-       :general
-       (srxl/leader-key-def "." '(treemacs :wk "Open Treemacs"))
-       (srxl/leader-key-def
-         "s" '(:ignore t :wk "Workspaces")
-
-         "s A" '(treemacs-add-project-to-workspace :wk "Add dir to workspace")
-         "s d" '(treemacs-remove-workspace         :wk "Delete workspace")
-         "s e" '(treemacs-edit-workspaces          :wk "Edit workspaces")
-         "s n" '(treemacs-create-workspace         :wk "Create new workspace")
-         "s r" '(treemacs-rename-workspace         :wk "Rename workspace")
-         "s s" '(treemacs-switch-workspace         :wk "Switch workspace")))
-
-     ;; Evil keybindings
-     (use-package treemacs-evil)
-
-     ;; Projectile integration
-     (use-package treemacs-projectile
-       :general
-       (srxl/leader-key-def
-        "s a" '(treemacs-projectile :wk "Add projectile project to workspace")))
-   #+end_src
-
-** [[https://github.com/hlissner/emacs-doom-themes][doom-themes]]
-   The doom themes packages has a few nice bits and pieces in it. We'll use the
-   following:
-
-   - Theme selected by the user in =config-vars.el=
-   - Org-mode patches
-   - The doom-colors [[*\[\[https://github.com/Alexander-Miller/treemacs\]\[Treemacs\]\]][Treemacs]] theme
-
-   #+begin_src emacs-lisp
-     (use-package doom-themes
-       :custom
-       (doom-themes-treemacs-theme "doom-colors")
-       :config
-       (load-theme srxl/theme-name t)
-       (doom-themes-treemacs-config)
-       (doom-themes-org-config))
-   #+end_src
-
-** [[http://company-mode.github.io/][company-mode]]
-   Autocomplete! You know, the thing that made us all lazy devs that are too lazy
-   to check documentation.
-
-   #+begin_src emacs-lisp
-     (use-package company
-       :custom
-       ;; Show autocomplete immediately after starting a word, with no delay
-       (company-minimum-prefix-length 1)
-       (company-idle-delay 0.0)
-       :config
-       ;; Don't use the dabbrev backend, I just want code completion, not
-       ;; word-I-already-typed completion
-       (delete 'company-dabbrev company-backends)
-       (global-company-mode t))
-
-     ;; A nicer looking autocomplete modal
-     (use-package company-box
-       :hook (company-mode . company-box-mode))
-   #+end_src
-
-** [[https://github.com/akermu/emacs-libvterm][Libvterm]]
-   Terminal windows inside of Emacs.
-
-   *Key Bindings*
-   | Key     | Function                        |
-   |---------+---------------------------------|
-   | =SPC T= | Open terminal in focused window |
-
-   #+begin_src emacs-lisp
-     (use-package vterm
-       :general
-       (srxl/leader-key-def
-	 "T" '(vterm :wk "Open terminal in window")))
-   #+end_src
-
-** [[https://github.com/kyagi/shell-pop-el][shell-pop]]
-   Popup terminals at the bottom of the frame, like in VS Code and basically
-   every other editor out there.
-
-   *Key Bindings*
-   | Key     | Function            |
-   |---------+---------------------|
-   | =SPC t= | Open popup terminal |
-
-   #+begin_src emacs-lisp
-     (use-package shell-pop
-       :custom
-       ;; Use Vterm
-       (shell-pop-shell-type
-        '("vterm" "vterm-sp" (lambda () (vterm "vterm-sp"))))
-       :general
-       (srxl/leader-key-def
-         "t" '(shell-pop :wk "Open terminal")))
-   #+end_src
-
-** [[https://magit.vc/][Magit]] and [[https://magit.vc/manual/forge/][Forge]]
-   The ultimate Git interface. Not just in Emacs. Ever. This thing is seriously
-   damn good.
-
-   *Key Bindings*
-   | Key     | Function                 |
-   |---------+--------------------------|
-   | =SPC v= | Open the Magit interface |
-
-   #+begin_src emacs-lisp
-     (use-package magit
-       :general
-       (srxl/leader-key-def
-	 "v" '(magit-status :wk "Version control")))
-   #+end_src
-
-** [[https://www.flycheck.org][Flycheck]]
-   Syntax checking and linting so we can be even lazier devs.
-
-   *Key Bindings*
-   | Key     | Function        |
-   |---------+-----------------|
-   | =SPC f= | Flycheck prefix |
-
-   #+begin_src emacs-lisp
-     (use-package flycheck
-       :config
-       (global-flycheck-mode t)
-       :general
-       (srxl/leader-key-def
-	 "f"   '(:ignore t :wk "Code checker")
-	 "f C" '(flycheck-clear                  :wk "Clear errors")
-	 "f c" '(flycheck-buffer                 :wk "Check buffer")
-	 "f e" '(flycheck-explain-error-at-point :wk "Explain error at point")
-	 "f h" '(flycheck-display-error-at-point :wk "Display error at point")
-	 "f i" '(flycheck-manual                 :wk "Flycheck manual")
-	 "f l" '(flycheck-list-errors            :wk "List errors")
-	 "f n" '(flycheck-next-error             :wk "Goto next error")
-	 "f p" '(flycheck-previous-error         :wk "Goto prev error")
-	 "f s" '(flycheck-select-checker         :wk "Select checker")
-	 "f x" '(flycheck-disable-checker        :wk "Disable checker")
-	 "f y" '(flycheck-copy-errors-as-kill    :wk "Copy errors")))
-   #+end_src
-
-** [[https://github.com/raxod502/apheleia][Apheleia]]
-   Automatic code formatting to make your code look pretty at all times. Or,
-   well, at least tolerable to look at.
-
-   #+begin_src emacs-lisp
-     (use-package apheleia
-       :straight (apheleia :host github
-                           :repo "raxod502/apheleia")
-       :config
-       (apheleia-global-mode t))
-   #+end_src
-
-** [[https://github.com/wbolster/emacs-direnv][direnv-mode]]
-   Automatically source direnv files, and update =process-environment= and
-   =exec-path= based on it's contents. Really useful when working with [[https://nixos.org/][Nix]].
-
-   #+begin_src emacs-lisp
-     (use-package direnv
-       :config
-       (direnv-mode))
-   #+end_src
-
-** [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]]
-   Language Server Protocol support to allow us to become the laziest devs to
-   ever exist.
-
-   *Key Bindings*
-   | Key         | Function                                     |
-   |-------------+----------------------------------------------|
-   | =SPC l a=   | Run code action at point                     |
-   | =SPC l c=   | Show function call hierachy                  |
-   | =SPC l d=   | Show file definitions                        |
-   | =SPC l e=   | Show project errors                          |
-   | =SPC l f=   | Format buffer                                |
-   | =SPC l F=   | Format region                                |
-   | =SPC l h=   | Show documentation popup for symbol at point |
-   | =SPC l l=   | Run lens action                              |
-   | =SPC l o=   | Sort imports in file                         |
-   | =SPC l r=   | Rename symbol at point                       |
-   | =SPC l t=   | Show type hierachy                           |
-   | =SPC l g g= | Show symbol definitions                      |
-   | =SPC l g i= | Show symbol implementations                  |
-   | =SPC l g r= | Show symbol references                       |
-   | =SPC l g s= | Search for symbol in project                 |
-   | =SPC l g t= | Go to type definition                        |
-   | =SPC l w d= | Disconnect from LSP server                   |
-   | =SPC l w i= | Show LSP session info                        |
-   | =SPC l w q= | Shutdown LSP server                          |
-   | =SPC l w r= | Restart LSP server                           |
-   | =SPC l w s= | Start LSP server                             |
-
-   #+begin_src emacs-lisp
-     (use-package lsp-mode
-       :hook
-       (lsp-mode . lsp-enable-which-key-integration)
-       :commands (lsp lsp-dependency)
-       :custom
-       (lsp-lens-enable t)
-       (lsp-modeline-code-actions-enable nil)
-       :config
-       ;; lsp-mode likes this value to be higher, see M-x lsp-diagnose
-       (setq read-process-output-max (* 1024 1024))
-       ;; Run hack-local-variables, then direnv-update-environment before starting
-       ;; lsp, so that all project-specific configuration is ready to go.
-       (advice-add 'lsp :before 'hack-local-variables '((depth . -1)))
-       (advice-add 'lsp :before 'direnv-update-environment)
-       :general
-       (srxl/leader-key-def
-         "l"   '(:ignore t :wk "LSP")
-         "l a" '(lsp-execute-code-action :wk "Run code action")
-         "l f" '(lsp-format-buffer       :wk "Format buffer")
-         "l F" '(lsp-format-region       :wk "Format selected region")
-         "l l" '(lsp-avy-lens            :wk "Run lens action")
-         "l o" '(lsp-organize-imports    :wk "Organize imports")
-         "l r" '(lsp-rename              :wk "Rename symbol")
-
-         "l g"   '(:ignore t :wk "Goto...")
-         "l g t" '(lsp-find-type-definition :wk "Type definiton")
-
-         "l w"   '(:ignore t :wk "Workspaces")
-         "l w d" '(lsp-disconnect         :wk "Disconnect from server")
-         "l w i" '(lsp-describe-session   :wk "Show session info")
-         "l w q" '(lsp-workspace-shutdown :wk "Shutdown server")
-         "l w r" '(lsp-workspace-restart  :wk "Restart server")
-         "l w s" '(lsp                    :wk "Start server")))
-
-     ;; Required for `lsp-avy-lens'
-     (use-package avy)
-
-     ;; Debug Adapter Protocol support
-     (use-package dap-mode
-       :defer t)
-   #+end_src
-
-   [[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] provides some cool UI elements, like code peeking, sideline code
-   actions, and documentation popups.
-
-   #+begin_src emacs-lisp
-     (use-package lsp-ui
-       :custom
-       (lsp-ui-doc-enable nil)
-       (lsp-ui-peek-show-directory nil)
-       :general
-       (srxl/leader-key-def
-         "l h" '(lsp-ui-doc-glance :wk "Show hover info")
-
-         "l g g" '(lsp-ui-peek-find-definitions    :wk "Definition")
-         "l g i" '(lsp-ui-peek-find-implementation :wk "Implementations")
-         "l g r" '(lsp-ui-peek-find-references     :wk "References")))
-   #+end_src
-
-   [[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] gives us even more UI stuff, like function call hierachies and
-   project error displays.
-
-   #+begin_src emacs-lisp
-     (use-package lsp-treemacs
-       :config
-       (treemacs-resize-icons 16)
-       :general
-       (srxl/leader-key-def
-         "l c" '(lsp-treemacs-call-hierarchy :wk "Show call hierachy")
-         "l d" '(lsp-treemacs-symbols        :wk "Show definitions")
-         "l e" '(lsp-treemacs-errors-list    :wk "Show errors")
-         "l t" '(lsp-treemacs-type-hierarchy :wk "Show type hierachy")))
-   #+end_src
-
-   [[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] adds Ivy integration for a few commands.
-
-   #+begin_src emacs-lisp
-     (use-package lsp-ivy
-       :commands lsp-ivy-workspace-symbol
-       :general
-       (srxl/leader-key-def
-         "l g s" '(lsp-ivy-workspace-symbol :wk "Symbol")))
-   #+end_src
-
-** [[https://github.com/Fuco1/smartparens][smartparens]]
-   Auto-close parentheses and quotes. I know it only saves one keypress, but that
-   one press is still time saved. Plus, there's some cool navigation stuff too.
-
-   - Add [[https://github.com/expez/evil-smartparens][evil-smartparens]] to integrate with [[*\[\[https://github.com/emacs-evil/evil\]\[Evil\]\]][Evil]] keybindings
-
-   #+begin_src emacs-lisp
-     (use-package smartparens
-       :config
-       (require 'smartparens-config)
-       (smartparens-global-mode 1))
-
-     (use-package evil-smartparens
-       :hook (smartparens-enable . evil-smartparens-mode))
-   #+end_src
-
-** [[https://polymode.github.io/][Polymode]]
-   Yo dawg, I heard you like modes
-
-   So we put a mode in your mode so you can mode while you mode
-
-   We'll just install the package here, but we'll use it in a few other places
-   to create some combination modes.
-
-   #+begin_src emacs-lisp
-     (use-package polymode)
-   #+end_src
-
-* Languages
-  This section contains all configuration for specific programming languages.
-
-** Emacs Lisp
-   Configuring packages to help write configurations for packages. That's almost
-   as meta as Emacs Lisp macros. Which we're configuring packages to help with.
-   Why do I have a headache?
-
-   - Cask support
-     - Use [[https://github.com/Wilfred/cask-mode][cask-mode]] to highlight Cask project files
-     - Use [[https://github.com/flycheck/flycheck-cask][flycheck-cask]] to link Elisp files in Cask projects with Cask packages
-   - Add [[https://github.com/Wilfred/elisp-def][elisp-def]] for jump-to-definition functionality
-   - Add [[https://github.com/Fanael/highlight-quoted][highlight-quoted]] to highlight quoted values
-   - Add [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] to highlight parentheses by depth
-
-   #+begin_src emacs-lisp
-     (use-package cask-mode
-       :mode "Cask")
-
-     (use-package flycheck-cask
-       :hook (flycheck-mode . flycheck-cask-setup))
-
-     (use-package elisp-def
-       :hook (emacs-lisp-mode . elisp-def-mode))
-
-     (use-package highlight-quoted
-       :hook (emacs-lisp-mode . highlight-quoted-mode))
-
-     (use-package rainbow-delimiters
-       :hook (emacs-lisp-mode . rainbow-delimiters-mode))
-   #+end_src
-
-** Org
-   Very likely the best conceivable way to write documents, of any type.
-   Including documentation for Emacs configurations.
-
-   - Use the latest version of Org-mode from Org ELPA
-   - Set the avaliable export backends
-   - Define some global keybindings
-
-   *Key Bindings*
-   | Key       | Function                                      |
-   |-----------+-----------------------------------------------|
-   | =SPC o a= | View org agenda                               |
-   | =SPC o c= | Capture something to use in Org mode document |
-   | =SPC o l= | Store link to use in Org mode document        |
-
-   #+begin_src emacs-lisp
-     (use-package org
-       :custom
-       (org-export-backends '(ascii html icalendar latex odt md))
-       :mode ("\\.org\\'" . org-mode)
-       :hook (org-mode . auto-fill-mode)
-       :general
-       (srxl/leader-key-def
-         "o" '(:ignore t :wk "Org")
-
-         "o a" '(org-agenda     :wk "View agenda")
-         "o c" '(org-capture    :wk "Capture")
-         "o l" '(org-store-link :wk "Store link")))
-   #+end_src
-
-** Nix
-   Pure-functional, declarative package management, full system configuration, and
-   build system. What more could you want?
-
-   - Add [[https://github.com/NixOS/nix-mode][nix-mode]] to provide many utilities for Nix development
-
-    #+begin_src emacs-lisp
-      (use-package nix-mode
-        :mode "\\.nix\\'")
-    #+end_src
-
-** HTML/CSS
-   All the stuff for that Internet thing. Have you heard of it? It's pretty hip
-   and cool these days. [[https://web-mode.org/][web-mode]] brings in support for HTML, CSS, and just about
-   any Web templating language you can possibly think of.
-
-    *Key Bindings*
-    | Key   | Function       |
-    |-------+----------------|
-    | =z a= | Toggle fold    |
-    | =] a= | Next attribute |
-    | =] e= | Child element  |
-    | =] t= | Next tag       |
-    | =[ a= | Prev attribute |
-    | =[ e= | Parent element |
-    | =[ t= | Prev tag       |
-
-    #+begin_src emacs-lisp
-      (use-package web-mode
-        :mode
-        "\\.html\\'"
-        "\\.\\(?:le\\|sa\\|sc\\|c\\)ss\\'"
-        "\\.eex\\'"
-        :hook (web-mode . lsp)
-        :custom
-        (web-mode-markup-indent-offset 2)
-        (web-mode-css-indent-offset 2)
-        (web-mode-code-indent-offset 2)
-        (web-mode-style-padding 2)
-        (web-mode-script-padding 2)
-        (web-mode-auto-close-style 2)
-        :general
-        (general-def 'normal 'web-mode-map
-          "z a" 'web-mode-fold-or-unfold
-          "] a" 'web-mode-attribute-next
-          "] e" 'web-mode-element-child
-          "] t" 'web-mode-tag-next
-          "[ a" 'web-mode-attribute-previous
-          "[ e" 'web-mode-element-parent
-          "[ t" 'web-mode-tag-previous))
-    #+end_src
-
-** Javascript/Typescript
-   The godforsaken languages that we have to deal with on the web. And if we're
-   really unlucky, the server too. /shudders/
-
-   #+begin_src emacs-lisp
-     (use-package js-mode
-       :straight nil
-       :mode "\\.[mc]?js\\'"
-       :hook (js-mode . lsp)
-       :init
-       (setq js-indent-level 2))
-   #+end_src
-
-   We'll also use [[https://github.com/emacs-typescript/typescript.el][typescript.el]] to provide Typescript highlighting, which is
-   good, since it's a much more tolerable language than plain Javascript.
-
-   #+begin_src emacs-lisp
-     (use-package typescript-mode
-       :mode "\\.ts\\'"
-       :hook (typescript-mode . lsp)
-       :config
-       (setq typescript-indent-level 2))
-   #+end_src
-
-   Unfortunately, typescript.el [[https://github.com/emacs-typescript/typescript.el/issues/4][doesn't support TSX]]. To work around this, we'll
-   create a typescript-tsx-mode that derives from web-mode, so we can borrow
-   web-mode's TSX support while still being a distinct mode, which is useful to
-   prevent LSP and Flycheck using the wrong tools on TSX files.
-
-   #+begin_src emacs-lisp
-     (define-derived-mode typescript-tsx-mode web-mode "TypeScript (TSX)")
-     (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
-     (add-hook 'typescript-tsx-mode-hook (lambda ()
-                                           (setq-local lsp-enabled-clients '(ts-ls eslint))))
-   #+end_src
-
-   Do a similar thing for Svelte files.
-
-   #+begin_src emacs-lisp
-     (define-derived-mode svelte-mode web-mode "Svelte")
-     (add-to-list 'auto-mode-alist '("\\.svelte\\'" . svelte-mode))
-     (add-hook 'svelte-mode-hook (lambda ()
-                                   (setq-local lsp-enabled-clients '(svelte-ls eslint))))
-     (with-eval-after-load 'lsp-mode
-       (add-to-list 'lsp-language-id-configuration '(svelte-mode . "svelte")))
-   #+end_src
-
-   And for JSX files too, because web-mode is nicer to use IMO.
-
-   #+begin_src emacs-lisp
-     (define-derived-mode jsx2-mode web-mode "JavaScript (JSX)")
-     (add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx2-mode))
-     (add-hook 'jsx2-mode (lambda ()
-                            (setq-local lsp-enabled-clients '(ts-ls eslint))))
-   #+end_src
-
-   Because ESLint, Typescript and Svelte need some patching to work properly in
-   a Yarn 2 project using PnP, we'll define some functions to help locate the
-   binaries in dir-locals. To setup a project using PnP, there's a helpful
-   little =yarn-pnp= snippet for use in =.dir-locals.el= that sets up the
-   project for Typescript, ESLint and/or Svelte.
-
-   #+begin_src emacs-lisp
-     (defun srxl/get-project-yarn-sdk-dir (&optional path)
-       "Gets the current Yarn SDK tool directory for PATH is supplied, or otherwise
-     from the current buffer's path."
-       (when-let ((yarn-dir (locate-dominating-file (or path (buffer-file-name) "") ".yarn")))
-         (concat yarn-dir ".yarn/sdks/")))
-
-     (defmacro srxl/find-pnp-dependency (path default)
-       "Returns a function that locates the program at PATH relative to the project's
-     Yarn SDK tool dir, or DEFAULT if it doesn't exist."
-       `(lambda ()
-          (let ((server-path (concat (srxl/get-project-yarn-sdk-dir) ,path)))
-            (if (file-exists-p server-path)
-                (expand-file-name server-path)
-              ,default))))
-   #+end_src
-** Scala
-   Finally, a JVM language that's actually nice to use!
-
-   - Add [[https://github.com/hvesalai/emacs-scala-mode][scala-mode]] for Scala syntax highlighting
-   - Add [[https://github.com/hvesalai/emacs-sbt-mode][sbt-mode]] for SBT integration inside Emacs
-   - Add [[https://github.com/emacs-lsp/lsp-metals/][lsp-metals]] for Metals LSP integration with [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]]
-
-    #+begin_src emacs-lisp
-      (use-package scala-mode
-        :interpreter "scala"
-        :mode
-        "\\.scala\'"
-        "\\.sbt\'"
-        :hook (scala-mode . lsp))
-
-      (use-package sbt-mode
-        :commands sbt-start sbt-command)
-
-      (use-package lsp-metals
-        :defer t
-        :config
-        (setq lsp-metals-treeview-show-when-views-received t))
-    #+end_src
-
-** Elixir
-   A modern, cleaner version of Erlang. One of my favourite languages to work
-   with.
-
-   - Add [[https://github.com/elixir-editors/emacs-elixir][elixir-mode]] for Elixir syntax highlighting
-     - Configure [[*\[\[https://github.com/emacs-lsp/lsp-mode\]\[lsp-mode\]\]][lsp-mode]] to use global =elixir-ls=
-   - Add [[https://github.com/ayrat555/mix.el][mix.el]] for integration with the Mix build tool
-
-    #+begin_src emacs-lisp
-      (use-package elixir-mode
-        :mode ("\\.exs?\\'")
-        :hook (elixir-mode . lsp)
-        :custom
-        (lsp-elixir-server-command '("elixir-ls")))
-
-      (use-package mix
-        :hook (elixir-mode . mix-minor-mode))
-    #+end_src
-
-** Haskell
-   λ
-
-   - Use [[https://github.com/haskell/haskell-mode][haskell-mode]] to provide syntax highlighting
-   - Use [[https://github.com/emacs-lsp/lsp-haskell/][lsp-haskell]] to provide LSP support through [[https://github.com/haskell/haskell-language-server][haskell-langauge-server]]
-
-   #+begin_src emacs-lisp
-     (use-package haskell-mode
-       :mode "\\.hs\\'"
-       :config
-       (setq haskell-process-type 'cabal-new-repl))
-
-     (use-package lsp-haskell
-       :hook ((haskell-mode . lsp)
-              (haskell-literate-mode . lsp)))
-   #+end_src
-
-** Structured Data (JSON, YAML, etc.)
-   Structured data and config file formats.
-
-   - Add [[https://github.com/joshwnj/json-mode][json-mode]] for highlighting and editing JSON files
-     - Use electric-pair-mode to auto-insert braces, quotes, etc.
-     - Set indent level to 2 spaces
-     - Add JSON-specific keybindings
-   - Add [[https://github.com/yoshiki/yaml-mode][yaml-mode]] for highlighting YAML files
-
-    *Key Bindings: JSON*
-    | Key       | Function                           |
-    |-----------+------------------------------------|
-    | =SPC m f= | Format buffer/selection            |
-    | =SPC m t= | Toggle boolean at point            |
-    | =SPC m k= | Replace value at point with =null= |
-    | =SPC m p= | Print path to node at point        |
-    | =SPC m y= | Copy path to node at point         |
-    | =SPC m i= | Increment number at point          |
-    | =SPC m d= | Decrement number at point          |
-
-    #+begin_src emacs-lisp
-      (use-package json-mode
-        :mode ("\\.json\\'"
-               "\\.babelrc\\'"
-               "\\.eslintrc\\'")
-        :hook (json-mode . electric-pair-mode)
-        :config
-        (setq js-indent-level 2)
-        :general
-        (srxl/leader-key-def json-mode-map
-          "m" '(:ignore t :wk "JSON")
-
-          "m d" '(json-decrement-number-at-point :wk "Decrement number")
-          "m f" '(json-mode-beautify             :wk "Format")
-          "m i" '(json-increment-number-at-point :wk "Increment number")
-          "m k" '(json-nullify-sexp              :wk "Nullify value")
-          "m p" '(json-mode-show-path            :wk "Print node path")
-          "m t" '(json-toggle-boolean            :wk "Toggle boolean")
-          "m y" '(json-mode-kill-path            :wk "Copy node path")))
-
-      (use-package yaml-mode
-        :mode "\\.ya?ml\\'")
-    #+end_src
+First, a few general bits and pieces that we want to have when editing code.
+
+Show line numbers in all code files. Pretty much every programming mode derives from =prog-mode=, so we can hook into that.
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'linum-mode)
+#+end_src
+
+Keeping things like quotation marks for strings, and parentheses balanced is really important for code edititng. =electric-pair-mode= is a good builtin option for this, but it's a little too basic for my tastes. [[https://github.com/Fuco1/smartparens][Smartparens]] provides some nicer functionality in this regard, so we'll get it set up.
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-strict-mode 1))
+#+end_src
+
+We'll also define a little helper function, that can be used to get newline indenting for certain pairs on certain modes.
+#+begin_src emacs-lisp
+  (defun srxl/newline-indent (&rest _)
+    "Insert a newline after point, and recalculate indentation."
+    (newline)
+    (indent-according-to-mode)
+    (forward-line -1)
+    (indent-according-to-mode))
+#+end_src
+
+** Project management
+When it comes to project management, we're going to be keeping it pretty minimal and mostly leverage Emacs' built-in project.el library. It's simple, while still being pretty fully featured - and Eglot makes use of it too, which is something we'll set up later.
+
+To start off - I want all my project management related keybindings to be under the =SPC= prefix. It's a nice little pattern I'm borrowing from things like Doom and Spacemacs - I'm just not using it as extensively. We'll leverage general.el to create a /definer/, that can be used to create keybindings in Evil's normal, motion and emacs modes under =SPC=.
+
+Oh, but first - motion state defines =SPC= as moving forward in the buffer, for some inexplicable reason. We'll need to unbind that first so that we can actually use these bindings in motion mode.
+#+begin_src emacs-lisp
+  (general-unbind 'motion "SPC")
+  (general-create-definer srxl/def-project-key
+    :states '(normal motion emacs)
+    :prefix "SPC")
+#+end_src
+
+First thing we'll put under that prefix is some of the project.el keys. Basically everything useful that's under =C-x p= by default.
+#+begin_src emacs-lisp
+  (srxl/def-project-key
+    "b" '(project-switch-to-buffer :wk "Switch buffer")
+    "F" '(project-find-file :wk "Find file")
+    "s" '(project-switch-project :wk "Switch project")
+    "x" '(project-kill-buffers :wk "Close project"))
+#+end_src
+
+Other bindings will be coming in the following sections.
+
+** File exploring
+Next, we'll get outselves a file explorer, by way of [[https://github.com/Alexander-Miller/treemacs][Treemacs]]. It's a fully-featured file tree sidebar, just like you'd have in every IDE.
+
+#+begin_src emacs-lisp :noweb no-export
+  (use-package treemacs
+    :config
+    <<TREEMACS-CONFIG>>)
+#+end_src
+
+Grab the Evil extensions, otherwise navigating through that tree is gonna be no fun at all.
+#+begin_src emacs-lisp
+  (use-package treemacs-evil)
+#+end_src
+
+Ensure that Treemacs follows the project we're currently in. I don't have much use for the workspaces feature it provides - I prefer to work in one project at a time.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
+  ;; (treemacs-project-follow-mode 1)
+#+end_src
+
+Watch for filesystem changes.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
+  (treemacs-filewatch-mode 1)
+#+end_src
+
+Colour nodes in the tree based on Git status.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
+  (treemacs-git-mode 'deferred)
+#+end_src
+
+doom-themes has some nice icon themes for Treemacs. We'll use those icons.
+#+begin_src emacs-lisp :tangle no :noweb-ref DOOMTHEMES-CONFIG
+  (setq doom-themes-treemacs-theme "doom-atom")
+  (doom-themes-treemacs-config)
+#+end_src
+
+Bind =SPC .= to toggle Treemacs on and off.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
+  (srxl/def-project-key
+    "." '(treemacs :wk "Toggle Treemacs"))
+#+end_src
+** Version control
+Remember how I said org-mode might be one of the best programs ever made? [[https://magit.vc/][Magit]] is like, tied. At least second place. Magit is, without a doubt, the single most comprehensive Git interface I have ever seen. I haven't found a task I can't do in Magit yet. It's amazing. Seriously, if you use Emacs, and manage Git projects, but aren't using Magit, you're missing out big time.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package magit
+    :config
+    <<MAGIT-CONFIG>>)
+#+end_src
+
+Open the Magit interface with =SPC v=.
+#+begin_src emacs-lisp :tangle no :noweb-ref MAGIT-CONFIG
+  (srxl/def-project-key
+    "v" '(magit-status :wk "View Git status"))
+#+end_src
+
+Treemacs has some integration with Magit, to get the Git status highlighting of files in sync.
+#+begin_src emacs-lisp
+  (use-package treemacs-magit
+    :after (treemacs magit))
+#+end_src
+** Autocomplete
+First off, let's get some autocomplete capability in here. We gotta have that - what's an IDE without autocomplete? Although, this doesn't provide language-specific completions, just the UI for autocompletion. We'll get to that in a bit.
+
+Over in Emacs land, [[https://company-mode.github.io/][company-mode]] is the de facto way to get that going. Let's set it up.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package company
+    :custom
+    <<COMPANY-CUSTOM>>
+    :config
+    <<COMPANY-CONFIG>>)
+#+end_src
+
+Like most editors, we want the autocomplete options to appear right after we've finished typing, without a delay.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CUSTOM
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0)
+#+end_src
+
+The backend for =dabbrev= is enabled by default, but I'm not a fan of that. I want autocomplete for my code, not for just typing words. Not as useful, and tends to clutter up the completion list.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+  (delete 'company-dabbrev company-backends)
+#+end_src
+
+Use fuzzy searching in completions.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+  (add-to-list 'completion-styles 'flex)
+#+end_src
+
+[[https://github.com/sebastiencs/company-box][company-box]] is a frontend for company-mode that makes the UI a little nicer - icons next to completions, showing documentation, and has fewer visual issues.
+#+begin_src emacs-lisp
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+#+end_src
+
+Aaaaaaaaand enable.
+#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+  (global-company-mode 1)
+#+end_src
+
+** Language Server Protocol
+And now we get to the special sauce - LSP support. [[https://github.com/joaotavora/eglot][Eglot]] is a really cool, language-agnostic package that soups up the facilities Emacs already has for things like autocomplete (=completion-at-point=), jump to definition (=xref-find-definitions=) and diagnostics (=flymake-mode=).
+
+#+begin_src emacs-lisp
+  (use-package eglot)
+#+end_src
+
+If Eglot started successfully, enable flymake for the buffer.
+#+begin_src emacs-lisp
+  (add-hook 'eglot-server-initialized-hook 'flymake-mode)
+#+end_src
+** Direnv integration
+[[https://direnv.net/][Direnv]] is a really useful tool for setting environments per directory. It's a total godsend when working with Nix projects, since it means I can just =cd= into a directory and get that shell right away. =direnv-mode= provides that functionality for Emacs itself, so that it can call out to programs in a Nix shell. As a heavy Nix user, I can't live without it.
+#+begin_src emacs-lisp
+  (use-package direnv
+    :config
+    (direnv-mode))
+#+end_src
+** Languages
+Now for all the language specific fun.
+
+*** Nix
+I use [[https://nixos.org/][Nix]] and NixOS extensively. Being able to declaratively manage system configurations, project environments, and even remote systems is just /so damn good/. I spend a lot of time editing Nix expressions as a result, so we should make sure Emacs gives me a good editing experience here.
+
+[[https://github.com/NixOS/nix-mode][nix-mode]] provides syntax highlighting for Nix files. We'll also make sure Eglot gets enabled for them.
+#+begin_src emacs-lisp
+  (use-package nix-mode
+    :mode "\\.nix\\'"
+    :hook (nix-mode . eglot-ensure))
+#+end_src
+*** Web Markup
+There's a lot of languages used on the web. HTML, CSS, JS, the infinite amount of templating frameworks every server-side MVC framework they just had to have their own one for... Surely we can't support them all, right? Maybe not all, but [[https://web-mode.org/][web-mode]] supports a hell of a lot of them.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package web-mode
+    :mode ("\\.html\\'"
+           "\\.\\(?:le\\|sa\\|sc\\|c\\)ss\\'")
+    :config
+    <<WEB-CONFIG>>)
+#+end_src
+
+2 space indentation.
+#+begin_src emacs-lisp :tangle no :noweb-ref WEB-CONFIG
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-style-padding 2
+        web-mode-script-padding 2)
+#+end_src
+
+Change the HTML tag autoclosing to "Auto-close on > and </".
+#+begin_src emacs-lisp :tangle no :noweb-ref WEB-CONFIG
+  (setq web-mode-auto-close-style 2)
+#+end_src
+*** Javascript and Typescript
+The lingua franca of the web. Like it or not, it's what we're stuck with, so we're gonna have to use it.
+
+**** Javascript
+For Javascript: [[https://github.com/mooz/js2-mode][js2-mode]]. It's a bit more up to date with newer JS syntax than =js-mode= is.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package js2-mode
+    :mode "\\.js\\'"
+    :hook (js2-mode-hook . eglot-ensure)
+    :config
+    <<JS2-CONFIG>>)
+#+end_src
+
+Indent with 2 spaces, not 4.
+#+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
+  (setq js-indent-level 2)
+#+end_src
+
+Don't show the warnings and errors - we have LSP and flycheck for that.
+#+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
+  (setq js2-mode-show-parse-errors nil
+        js2-mode-show-strict-warnings nil)
+#+end_src
+
+Speaking of LSP - use the Typescript Language Server for JS files.
+#+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
+  (add-to-list 'eglot-server-programs '(js2-mode . ("typescript-language-server" "--stdio")))
+#+end_src
+**** JSX
+JSX is an extension of Javascript that supports inline HTML, typically used with libraries like [[https://reactjs.org/][React]]. Support for those files is a liiiiitle different, so we'll set that up correctly here.
+
+=js2-mode= supports JSX... with an asterix. It's not actually JSX support, but rather E4X support, which is similar... but not quite the same. To remedy this, we'll use [[https://github.com/felipeochoa/rjsx-mode/][rjsx-mode]], which extends =js2-mode= with a spec-compliant JSX parser.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package rjsx-mode
+    :mode "\\.jsx\\'"
+    :hook (rjsx-mode-hook . eglot-ensure)
+    :config
+    <<RJSX-CONFIG>>)
+#+end_src
+
+Use the Typescript Language Server for JSX files.
+#+begin_src emacs-lisp :tangle no :noweb-ref RJSX-CONFIG
+  (add-to-list 'eglot-server-programs '(rjsx-mode . ("typescript-language-server" "--stdio")))
+#+end_src
+
+**** Typescript
+[[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :hook (typescript-mode-hook . eglot-ensure)
+    :config
+    <<TS-CONFIG>>)
+#+end_src
+
+As with Javascript - indent with 2 spaces, not 4.
+#+begin_src emacs-lisp :tangle no :noweb-ref TS-CONFIG
+  (setq typescript-indent-level 2)
+#+end_src
+**** TSX
+=typescript-mode= doesn't have any TSX support built in. For that, we'll define a mode derived from =web-mode= instead, which has support for TSX built in, and use it for TSX files. The derived mode is useful for distinguishing TSX files from other =web-mode= types, like HTML or CSS.
+
+#+begin_src emacs-lisp
+  (define-derived-mode typescript-tsx-mode web-mode "TypeScript (TSX)")
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
+#+end_src
+
+Setup LSP support for this new mode, as well.
+#+begin_src emacs-lisp
+  (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
+  (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
+#+end_src
+* Emacs, my favourite window manager
+TODO: write some shit here
+
+#+begin_src emacs-lisp :noweb no-export
+  (use-package exwm
+    :if srxl/use-exwm
+    :custom
+    <<EXWM-CUSTOM>>
+    :config
+    <<EXWM-CONFIG>>)
+
+  <<POST-EXWM>>
+#+end_src
+
+I'd like 9 workspaces by default. One for each number.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CUSTOM
+  (exwm-workspace-number 10)
+#+end_src
+
+We'll use a little hook to automatically set the buffer title to the name of the application running in there.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+  (add-hook 'exwm-update-class-hook
+            (lambda ()
+              (exwm-workspace-rename-buffer exwm-class-name)))
+#+end_src
+
+Bind a couple keys to be used in EXWM windows:
+- =s-r= :: Go back to line-mode
+- =s-SPC= :: Open an app launcher
+- =s-q= :: Quit an app
+
+  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+    (setq exwm-input-global-keys
+          `((,(kbd "s-r") . exwm-reset)
+            (,(kbd "s-SPC") . counsel-linux-app)
+            (,(kbd "s-q") . kill-this-buffer)))
+  #+end_src
+
+  We'll also generate a few keybindings for =s-<number>= to switch to that workspace.
+
+  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+    (nconc exwm-input-global-keys
+           (mapcar (lambda (i)
+                     `(,(kbd (format "s-%d" i)) .
+                       (lambda ()
+                         (interactive)
+                         (exwm-workspace-switch-create ,i))))
+                   (number-sequence 0 9)))
+  #+end_src
+
+  And for =s-S-<number>=, to move a buffer to that workspace.
+
+  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+    (nconc exwm-input-global-keys
+           (cl-mapcar (lambda (k i)
+                        `(,(kbd (format "s-%s" k)) .
+                          (lambda ()
+                            (interactive)
+                            (exwm-workspace-move-window ,i))))
+                      '(")" "!" "@" "#" "$" "%" "^" "&" "*" "(")
+                      (number-sequence 0 9)))
+  #+end_src
+
+  We'll enable EXWM's system tray support, so we can use those little icon thingies.
+
+  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+    (require 'exwm-systemtray)
+    (exwm-systemtray-enable)
+  #+end_src
+
+  Finally, enable this Frankenstein's monster of a window manager.
+
+  #+begin_src emacs-lisp :tangle no :noweb-ref EXWM-CONFIG
+    (exwm-enable)
+  #+end_src
