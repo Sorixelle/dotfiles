@@ -359,7 +359,8 @@ Ok, ok. It's called [[https://github.com/abo-abo/swiper#ivy][Ivy]]. And [[https:
   (use-package counsel
     :after ivy
     :config
-    (counsel-mode 1))
+    (counsel-mode 1)
+    <<COUNSEL-CONFIG>>)
 #+end_src
 
 Include recently accessed files in =ivy-switch-buffer= results.
@@ -392,6 +393,12 @@ Rebind a couple of keys I think are pretty clunky in Ivy:
   (general-def 'ivy-minibuffer-map
     "S-<return>" 'ivy-immediate-done
     "C-<return>" 'ivy-dispatching-done)
+#+end_src
+
+Also rebind =/= to =counsel-grep-or-swiper=. It's a really nice interface for searching files.
+#+begin_src emacs-lisp :tangle no :noweb-ref COUNSEL-CONFIG
+  (general-def '(normal motion)
+    "/" 'counsel-grep-or-swiper)
 #+end_src
 * ✨aesthetics✨
 If I'm going to use Emacs as much as I do, I want to use something that's actually nice to look at. Default Emacs might be nice to some people... but not to me. Time to fix that up.
