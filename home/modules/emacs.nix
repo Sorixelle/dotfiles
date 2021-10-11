@@ -76,16 +76,6 @@ in with lib; {
     '';
 
     home = {
-      # Emacs doesn't regenerate the tangled config on changes because of the
-      # symlinks home-manager creates to the config. So we clear the cached
-      # version ourselves here.
-      activation.clearTangledConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
-        CONFIG_FILE=$HOME/.emacs.d/config.el
-        if [ -f "$CONFIG_FILE" ]; then
-          $DRY_RUN_CMD rm $VERBOSE_ARG "$CONFIG_FILE"
-        fi
-      '';
-
       packages = lib.optional conf.useEXWM
         pkgs.gtk3; # For gtk-launch, used by counsel-linux-app
 
