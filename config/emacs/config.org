@@ -3,6 +3,7 @@
 #+email: ruby@srxl.me
 #+description: My personal Emacs configuration, as a Literate Org-Mode document
 #+startup: overview indent
+#+property: header-args :tangle yes
 
 Hello, reader.
 

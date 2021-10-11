@@ -35,6 +35,23 @@ in with lib; {
   config = let
     emacsPkgs = pkgs.emacsPackagesNgGen conf.package;
     emacsPackage = emacsPkgs.emacsWithPackages (e: [ e.vterm ]);
+
+    tangledConfig = pkgs.stdenv.mkDerivation {
+      name = "hm-emacs-tangled-config";
+
+      src = ../../config/emacs/config.org;
+      phases = "buildPhase installPhase";
+
+      buildPhase = ''
+        cp $src config.org
+        ${emacsPackage}/bin/emacs --batch -l org --eval "(org-babel-tangle-file \"config.org\")"
+        ls -la
+      '';
+
+      installPhase = ''
+        cp config.el $out
+      '';
+    };
   in mkIf conf.enable {
     programs.emacs = {
       enable = true;
@@ -73,10 +90,9 @@ in with lib; {
         pkgs.gtk3; # For gtk-launch, used by counsel-linux-app
 
       file = {
-        ".emacs.d" = {
-          source = ../../config/emacs;
-          target = ".emacs.d";
-          recursive = true;
+        "init.el" = {
+          source = tangledConfig;
+          target = ".emacs.d/init.el";
         };
 
         "config-vars.el" = {
