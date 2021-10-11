@@ -237,7 +237,7 @@ First thing that needs to be done, is enabling =evil-mode=. That'll get us all o
 #+end_src
 
 We'll also add [[https://github.com/emacs-evil/evil-collection][evil-collection]], which extends Evil's keybindings to a few other modes and extra packages.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb no-export
   (use-package evil-collection
     :config
     (evil-collection-init)
