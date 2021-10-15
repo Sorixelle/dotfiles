@@ -554,7 +554,7 @@ Keeping things like quotation marks for strings, and parentheses balanced is rea
   (use-package smartparens
     :config
     (require 'smartparens-config)
-    (smartparens-global-strict-mode 1))
+    (smartparens-global-mode 1))
 #+end_src
 
 And [[https://github.com/expez/evil-smartparens][evil-smartparens]] so that Evil commands keep parentheses balanced.
