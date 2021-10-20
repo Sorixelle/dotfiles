@@ -4,7 +4,10 @@ let hmConf = config.home-manager.users.ruby;
 in {
   imports = [ ./hardware/amethyst.nix ];
 
-  time.timeZone = "Australia/Melbourne";
+  time = {
+    hardwareClockInLocalTime = true;
+    timeZone = "Australia/Melbourne";
+  };
 
   boot.loader = {
     efi.canTouchEfiVariables = true;
