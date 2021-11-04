@@ -401,6 +401,11 @@ Also rebind =/= to =counsel-grep-or-swiper=. It's a really nice interface for se
   (general-def '(normal motion)
     "/" 'counsel-grep-or-swiper)
 #+end_src
+
+Don't fuzzy search in there though. That's usually pretty unusable.
+#+begin_src emacs-lisp :tangle no :noweb-ref COUNSEL-CONFIG
+  (add-to-list 'ivy-re-builders-alist '(swiper . ivy--regex-plus))
+#+end_src
 * ✨aesthetics✨
 If I'm going to use Emacs as much as I do, I want to use something that's actually nice to look at. Default Emacs might be nice to some people... but not to me. Time to fix that up.
 
