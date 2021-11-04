@@ -27,7 +27,6 @@
     pavucontrol
     picard
     protonvpn-cli
-    protonvpn-gui
     python3
     remmina
     rnix-lsp
