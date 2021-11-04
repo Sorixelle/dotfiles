@@ -549,28 +549,9 @@ Show line numbers in all code files. Pretty much every programming mode derives 
   (add-hook 'prog-mode-hook 'linum-mode)
 #+end_src
 
-Keeping things like quotation marks for strings, and parentheses balanced is really important for code edititng. =electric-pair-mode= is a good builtin option for this, but it's a little too basic for my tastes. [[https://github.com/Fuco1/smartparens][Smartparens]] provides some nicer functionality in this regard, so we'll get it set up.
+Keeping things like quotation marks for strings, and parentheses balanced is really important for code edititng. =electric-pair-mode= is a good builtin option for this. So we'll use it.
 #+begin_src emacs-lisp
-  (use-package smartparens
-    :config
-    (require 'smartparens-config)
-    (smartparens-global-mode 1))
-#+end_src
-
-And [[https://github.com/expez/evil-smartparens][evil-smartparens]] so that Evil commands keep parentheses balanced.
-#+begin_src emacs-lisp
-  (use-package evil-smartparens
-    :hook (smartparens-enabled . evil-smartparens-mode))
-#+end_src
-
-We'll also define a little helper function, that can be used to get newline indenting for certain pairs on certain modes.
-#+begin_src emacs-lisp
-  (defun srxl/newline-indent (&rest _)
-    "Insert a newline after point, and recalculate indentation."
-    (newline)
-    (indent-according-to-mode)
-    (forward-line -1)
-    (indent-according-to-mode))
+  (add-hook 'prog-mode-hook 'electric-pair-mode)
 #+end_src
 
 ** Autocomplete
