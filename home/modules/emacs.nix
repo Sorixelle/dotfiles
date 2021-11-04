@@ -45,7 +45,6 @@ in with lib; {
       buildPhase = ''
         cp $src config.org
         ${emacsPackage}/bin/emacs --batch -l org --eval "(org-babel-tangle-file \"config.org\")"
-        ls -la
       '';
 
       installPhase = ''
