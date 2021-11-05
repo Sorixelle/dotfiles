@@ -695,11 +695,24 @@ Use the shell-provided title in the buffer name.
   (setq vterm-buffer-name-string "vterm (%s)")
 #+end_src
 
-Use =SPC t= to open a terminal in a new window, and =SPC T= to open one in the existing window.
-#+begin_src emacs-lisp :tangle no :noweb-ref VTERM-CONFIG
+[[https://github.com/kyagi/shell-pop-el][shell-pop]] is a tool that gives us a popup terminal that behaves a lot like the integrated one in VSCode.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package shell-pop
+    :custom
+    <<SHELLPOP-CUSTOM>>
+    :config
+    <<SHELLPOP-CONFIG>>)
+#+end_src
+
+Setup shell-pop to use vterm as the backing terminal mode.
+#+begin_src emacs-lisp :tangle no :noweb-ref SHELLPOP-CUSTOM
+  (shell-pop-shell-type '("vterm" "vterm-sp" (lambda () (vterm "vterm-sp"))))
+#+end_src
+
+Use =SPC t= to open the terminal.
+#+begin_src emacs-lisp :tangle no :noweb-ref SHELLPOP-CONFIG
   (srxl/def-project-key
-    "t" '(vterm-other-window :wk "Open terminal")
-    "T" '(vterm :wk "Open terminal in current window"))
+    "t" '(shell-pop :wk "Open terminal"))
 #+end_src
 ** Language Server Protocol
 And now we get to the special sauce - LSP support. [[https://github.com/joaotavora/eglot][Eglot]] is a really cool, language-agnostic package that soups up the facilities Emacs already has for things like autocomplete (=completion-at-point=), jump to definition (=xref-find-definitions=) and diagnostics (=flymake-mode=).
