@@ -818,11 +818,6 @@ Indent with 2 spaces, not 4.
 #+begin_src emacs-lisp :tangle no :noweb-ref JS-CONFIG
   (setq js-indent-level 2)
 #+end_src
-
-Use the Typescript Language Server as the LSP provider for JS files.
-#+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
-  (add-to-list 'eglot-server-programs '(js2-mode . ("typescript-language-server" "--stdio")))
-#+end_src
 **** Typescript
 [[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
 #+begin_src emacs-lisp :noweb no-export
