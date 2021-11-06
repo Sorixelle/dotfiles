@@ -805,47 +805,24 @@ Change the HTML tag autoclosing to "Auto-close on > and </".
 The lingua franca of the web. Like it or not, it's what we're stuck with, so we're gonna have to use it.
 
 **** Javascript
-For Javascript: [[https://github.com/mooz/js2-mode][js2-mode]]. It's a bit more up to date with newer JS syntax than =js-mode= is.
+For Javascript: js-mode. It's built-in, and has everything we need for plain-old Javascript files.
 #+begin_src emacs-lisp :noweb no-export
-  (use-package js2-mode
+  (use-package js-mode
     :mode "\\.js\\'"
-    :hook (js2-mode . eglot-ensure)
+    :hook (js-mode . eglot-ensure)
     :config
-    <<JS2-CONFIG>>)
+    <<JS-CONFIG>>)
 #+end_src
 
 Indent with 2 spaces, not 4.
-#+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
+#+begin_src emacs-lisp :tangle no :noweb-ref JS-CONFIG
   (setq js-indent-level 2)
 #+end_src
 
-Don't show the warnings and errors - we have LSP and flycheck for that.
-#+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
-  (setq js2-mode-show-parse-errors nil
-        js2-mode-show-strict-warnings nil)
-#+end_src
-
-Speaking of LSP - use the Typescript Language Server for JS files.
+Use the Typescript Language Server as the LSP provider for JS files.
 #+begin_src emacs-lisp :tangle no :noweb-ref JS2-CONFIG
   (add-to-list 'eglot-server-programs '(js2-mode . ("typescript-language-server" "--stdio")))
 #+end_src
-**** JSX
-JSX is an extension of Javascript that supports inline HTML, typically used with libraries like [[https://reactjs.org/][React]]. Support for those files is a liiiiitle different, so we'll set that up correctly here.
-
-=js2-mode= supports JSX... with an asterix. It's not actually JSX support, but rather E4X support, which is similar... but not quite the same. To remedy this, we'll use [[https://github.com/felipeochoa/rjsx-mode/][rjsx-mode]], which extends =js2-mode= with a spec-compliant JSX parser.
-#+begin_src emacs-lisp :noweb no-export
-  (use-package rjsx-mode
-    :mode "\\.jsx\\'"
-    :hook (rjsx-mode . eglot-ensure)
-    :config
-    <<RJSX-CONFIG>>)
-#+end_src
-
-Use the Typescript Language Server for JSX files.
-#+begin_src emacs-lisp :tangle no :noweb-ref RJSX-CONFIG
-  (add-to-list 'eglot-server-programs '(rjsx-mode . ("typescript-language-server" "--stdio")))
-#+end_src
-
 **** Typescript
 [[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
 #+begin_src emacs-lisp :noweb no-export
@@ -860,16 +837,22 @@ As with Javascript - indent with 2 spaces, not 4.
 #+begin_src emacs-lisp :tangle no :noweb-ref TS-CONFIG
   (setq typescript-indent-level 2)
 #+end_src
-**** TSX
-=typescript-mode= doesn't have any TSX support built in. For that, we'll define a mode derived from =web-mode= instead, which has support for TSX built in, and use it for TSX files. The derived mode is useful for distinguishing TSX files from other =web-mode= types, like HTML or CSS.
+**** JSX/TSX
+=js-mode= and =typescript-mode= don't have JSX/TSX support built in. For that, we'll define modes derived from =web-mode= instead, which has support for them built in, and use it for those files. The derived mode is useful for distinguishing files from other =web-mode= types, like HTML or CSS.
 
 #+begin_src emacs-lisp
+  (define-derived-mode javascript-jsx-mode web-mode "JavaScript (JSX)")
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-jsx-mode))
+
   (define-derived-mode typescript-tsx-mode web-mode "TypeScript (TSX)")
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
 #+end_src
 
-Setup LSP support for this new mode, as well.
+Setup LSP support for these new modes, as well.
 #+begin_src emacs-lisp
+  (add-hook 'javascript-jsx-mode-hook 'eglot-ensure)
+  (add-to-list 'eglot-server-programs '(javascript-jsx-mode . ("typescript-language-server" "--stdio")))
+
   (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
   (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
 #+end_src
