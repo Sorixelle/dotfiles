@@ -656,6 +656,11 @@ Colour nodes in the tree based on Git status.
   (treemacs-git-mode 'deferred)
 #+end_src
 
+Set the default file opening behaviour to open the file in the last visited window.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CUSTOM
+  (treemacs-default-visit-action 'treemacs-visit-node-in-most-recently-used-window)
+#+end_src
+
 doom-themes has some nice icon themes for Treemacs. We'll use those icons.
 #+begin_src emacs-lisp :tangle no :noweb-ref DOOMTHEMES-CONFIG
   (setq doom-themes-treemacs-theme "doom-atom")
@@ -666,6 +671,21 @@ Bind =SPC .= to toggle Treemacs on and off.
 #+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
   (srxl/def-project-key
     "." '(treemacs :wk "Toggle Treemacs"))
+#+end_src
+
+I'm not a fan of having Treemacs open all the time. It takes up space when I'm editing files, and I end up using my mouse to navigate between files more often than I'd like when it's left open. To solve this, we'll first define a helper function to close the Treemacs window if it's opened.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-PRE
+  (defun srxl/close-treemacs-if-open (&rest _)
+    "Close the Treemacs window if it is open. Otherwise, do nothing."
+    (when-let (win (treemacs-get-local-window))
+      (delete-window win)))
+#+end_src
+
+Then, we'll add advice to the =treemacs-visit= class of functions, so that the window gets closed when a file is selected. Much cleaner view for code editing.
+#+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
+  (advice-add 'treemacs-visit-node-in-most-recently-used-window :after 'srxl/close-treemacs-if-open)
+  (advice-add 'treemacs-visit-node-vertical-split :after 'srxl/close-treemacs-if-open)
+  (advice-add 'treemacs-visit-node-horizontal-split :after 'srxl/close-treemacs-if-open)
 #+end_src
 ** Version control
 Remember how I said org-mode might be one of the best programs ever made? [[https://magit.vc/][Magit]] is like, tied. At least second place. Magit is, without a doubt, the single most comprehensive Git interface I have ever seen. I haven't found a task I can't do in Magit yet. It's amazing. Seriously, if you use Emacs, and manage Git projects, but aren't using Magit, you're missing out big time.
