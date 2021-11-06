@@ -374,9 +374,10 @@ Show the amount of avaliable completions in [square braces], because I like the 
   (setq ivy-count-format "[%d] ")
 #+end_src
 
-Fuzzy search! Ivy leverages [[https://github.com/lewang/flx][flx]] to help sort the results in a meaningful way.
+Fuzzy search! Ivy leverages [[https://github.com/lewang/flx][flx]] to help sort the results in a meaningful way. Don't fuzzy search in =swiper= though, that gets really unusable.
 #+begin_src emacs-lisp :tangle no :noweb-ref IVY-CONFIG
-  (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+  (setq ivy-re-builders-alist '((swiper . ivy--regex-plus)
+                                (t . ivy--regex-fuzzy)))
 #+end_src
 #+begin_src emacs-lisp
   (use-package flx)
@@ -400,11 +401,6 @@ Also rebind =/= to =counsel-grep-or-swiper=. It's a really nice interface for se
 #+begin_src emacs-lisp :tangle no :noweb-ref COUNSEL-CONFIG
   (general-def '(normal motion)
     "/" 'counsel-grep-or-swiper)
-#+end_src
-
-Don't fuzzy search in there though. That's usually pretty unusable.
-#+begin_src emacs-lisp :tangle no :noweb-ref COUNSEL-CONFIG
-  (add-to-list 'ivy-re-builders-alist '(swiper . ivy--regex-plus))
 #+end_src
 * ✨aesthetics✨
 If I'm going to use Emacs as much as I do, I want to use something that's actually nice to look at. Default Emacs might be nice to some people... but not to me. Time to fix that up.
