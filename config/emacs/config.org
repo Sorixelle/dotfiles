@@ -535,6 +535,19 @@ Don't worry about showing the symbols around things like *bold*, /italic/ or =in
   (setq org-hide-emphasis-markers t)
 #+end_src
 
+But add a function and a keybinding to toggle them, in case we want them.
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (defun srxl/org-toggle-emphasis-markers ()
+    "Toggle the visibility of emphasis markers in Org mode buffers."
+    (interactive)
+    (setq org-hide-emphasis-markers (not org-hide-emphasis-markers))
+    (font-lock-fontify-buffer))
+
+  ;; TODO: finalize binding
+  (general-def 'org-mode-map
+    "C-c t" 'srxl/org-toggle-emphasis-markers)
+#+end_src
+
 doom-themes from earlier includes some stuff to tidy up Org visuals a little bit.
 #+begin_src emacs-lisp :tangle no :noweb-ref DOOMTHEMES-CONFIG
   (doom-themes-org-config)
