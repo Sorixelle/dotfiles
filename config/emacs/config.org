@@ -625,8 +625,13 @@ Other bindings will be coming in the following sections.
 ** File exploring
 Next, we'll get outselves a file explorer, by way of [[https://github.com/Alexander-Miller/treemacs][Treemacs]]. It's a fully-featured file tree sidebar, just like you'd have in every IDE.
 
+The project follow mode seems to have some issues with byte compilation, so we won't byte-compile Treemacs.
 #+begin_src emacs-lisp :noweb no-export
+  <<TREEMACS-PRE>>
   (use-package treemacs
+    :straight (:build (:not compile))
+    :custom
+    <<TREEMACS-CUSTOM>>
     :config
     <<TREEMACS-CONFIG>>)
 #+end_src
@@ -638,7 +643,7 @@ Grab the Evil extensions, otherwise navigating through that tree is gonna be no 
 
 Ensure that Treemacs follows the project we're currently in. I don't have much use for the workspaces feature it provides - I prefer to work in one project at a time.
 #+begin_src emacs-lisp :tangle no :noweb-ref TREEMACS-CONFIG
-  ;; (treemacs-project-follow-mode 1)
+  (treemacs-project-follow-mode 1)
 #+end_src
 
 Watch for filesystem changes.
