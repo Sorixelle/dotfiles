@@ -806,17 +806,18 @@ The lingua franca of the web. Like it or not, it's what we're stuck with, so we'
 
 **** Javascript
 For Javascript: js-mode. It's built-in, and has everything we need for plain-old Javascript files.
-#+begin_src emacs-lisp :noweb no-export
-  (use-package js-mode
-    :mode "\\.js\\'"
-    :hook (js-mode . eglot-ensure)
-    :config
-    <<JS-CONFIG>>)
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))
 #+end_src
 
 Indent with 2 spaces, not 4.
-#+begin_src emacs-lisp :tangle no :noweb-ref JS-CONFIG
+#+begin_src emacs-lisp
   (setq js-indent-level 2)
+#+end_src
+
+Make sure LSP is running is JS buffers.
+#+begin_src emacs-lisp
+  (add-hook 'js-mode-hook 'eglot-ensure)
 #+end_src
 **** Typescript
 [[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
