@@ -852,6 +852,52 @@ Setup LSP support for these new modes, as well.
   (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
   (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
 #+end_src
+**** JS Frameworks
+Some JS frameworks are special and have their own file types. Time to get those set up as well, I guess.
+
+***** Vue
+For Vue - [[https://github.com/AdamNiederer/vue-mode][vue-mode]]. Particularly, a fork of it that fixes support for Vue 3's =<script setup>=. Hopefully [[https://github.com/AdamNiederer/vue-mode/pull/115][the PR]] gets merged soon, but considering the commit history on that repo... I'm not holding my breath.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package vue-mode
+    :mode "\\.vue\\'"
+    :straight (vue-mode :type git :host github :repo "garyo/vue-mode" :branch "script-setup-support")
+    :config
+    <<VUE-CONFIG>>)
+#+end_src
+
+Get rid of that annoying background face. It's a byproduct of mmm-mode, which vue-mode uses to provide syntax highlighting for the different language sections of a Vue component.
+#+begin_src emacs-lisp :tangle no :noweb-ref VUE-CONFIG
+  (add-hook 'mmm-mode-hook (lambda ()
+                             (set-face-background 'mmm-default-submode-face nil)))
+#+end_src
+
+Setup LSP support using Volar. Annoyingly, Volar is a bit of a special language server, and need some extra configuration on Eglot's side to get going. I'll upstream all this to Eglot soon, don't worry.
+#+begin_src emacs-lisp :tangle no :noweb-ref VUE-CONFIG
+  (defclass eglot-volar (eglot-lsp-server) ()
+    :documentation "Volar Language Server for Vue")
+
+  (cl-defmethod eglot-initialization-options ((server eglot-volar))
+    "Required initialization options for Volar"
+    `(:typescript
+      (:serverPath ,(expand-file-name (concat (project-root (project-current)) "node_modules/typescript/lib/tsserverlibrary.js")))
+      :languageFeatures
+      (:references
+       t
+       :definition t
+       :typeDefinition t
+       :hover t
+       :rename t
+       :signatureHelp t
+       :completion (:defaultTagNameCase "both" :defaultAttrNameCase "kebabCase")
+       :documentHighlight t
+       :workspaceSymbol t
+       :codeAction t
+       :diagnostics t)
+      :documentFeatures
+      (:documentSymbol t)))
+
+  (add-to-list 'eglot-server-programs '(vue-mode "volar-server" "--stdio"))
+#+end_src
 *** Markdown
 A lot of people write Markdown. I don't know why they would do that when org-mode exists, but hey. Guess some people just haven't seen the light yet. Oh well.
 
