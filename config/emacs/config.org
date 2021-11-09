@@ -196,7 +196,6 @@ There are much smarter people out there, who can write way better and much coole
 - Lets me hack on packages if I need to, and I often find myself needing to
 
 Let's set it up. I'll pinch that little block from their repo's README.
-
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -213,10 +212,19 @@ Let's set it up. I'll pinch that little block from their repo's README.
 #+end_src
 
 While we're here, let's bring in another cool tool for managing packages: [[https://github.com/jwiegley/use-package][use-package]]. This little macro is wonderful for organizing package configuration in once central place. It's even got integration with straight.el, so it can install the packages too.
-
 #+begin_src emacs-lisp
   (straight-use-package 'use-package)
   (setq straight-use-package-by-default t)
+#+end_src
+
+And while we're here, let's set up our first package - [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]. This ensures that =exec-path= is correctly setup on macOS, because macOS is really dumb and stupid and doesn't know what it's doing.
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :if (memq window-system '(mac ns))
+    :custom
+    (exec-path-from-shell-variables '("PATH" "MANPATH" "NIX_PATH"))
+    :config
+    (exec-path-from-shell-initialize))
 #+end_src
 
 * Moving around and doing things
