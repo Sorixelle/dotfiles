@@ -904,7 +904,7 @@ Setup LSP support using Volar. Annoyingly, Volar is a bit of a special language 
       :documentFeatures
       (:documentSymbol t)))
 
-  (add-to-list 'eglot-server-programs '(vue-mode "volar-server" "--stdio"))
+  (add-to-list 'eglot-server-programs '(vue-mode . (eglot-volar "volar-server" "--stdio")))
 #+end_src
 *** Markdown
 A lot of people write Markdown. I don't know why they would do that when org-mode exists, but hey. Guess some people just haven't seen the light yet. Oh well.
