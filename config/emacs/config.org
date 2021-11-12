@@ -815,7 +815,7 @@ The lingua franca of the web. Like it or not, it's what we're stuck with, so we'
 **** Javascript
 For Javascript: js-mode. It's built-in, and has everything we need for plain-old Javascript files.
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))
+  (add-to-list 'auto-mode-alist '("\\.[mc]?js\\'" . js-mode))
 #+end_src
 
 Indent with 2 spaces, not 4.
