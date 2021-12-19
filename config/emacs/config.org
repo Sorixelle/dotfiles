@@ -906,6 +906,18 @@ Setup LSP support using Volar. Annoyingly, Volar is a bit of a special language 
 
   (add-to-list 'eglot-server-programs '(vue-mode . (eglot-volar "volar-server" "--stdio")))
 #+end_src
+***** Svelte
+For Svelte, we'll just use web-mode. Told you it supports a hell of a lot of template languages. We'll do a similar thing we did for JSX/TSX so that we can distinguish a Svelte file from any old web-mode file.
+#+begin_src emacs-lisp
+  (define-derived-mode svelte-mode web-mode "Svelte")
+  (add-to-list 'auto-mode-alist '("\\.svelte\\'" . svelte-mode))
+#+end_src
+
+And LSP setup.
+#+begin_src emacs-lisp
+  (add-hook 'svelte-mode-hook 'eglot-ensure)
+  (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
+#+end_src
 *** Markdown
 A lot of people write Markdown. I don't know why they would do that when org-mode exists, but hey. Guess some people just haven't seen the light yet. Oh well.
 
