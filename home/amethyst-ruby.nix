@@ -7,10 +7,12 @@
     bless
     cachix
     calibre
+    darktable
     discord
     dunst
     element-desktop
     evince
+    ffmpeg-full
     fusee-launcher
     gimp
     gnome3.eog
@@ -34,6 +36,7 @@
     sshfs
     steam
     steam-run
+    spek
     transmission-gtk
     trezor_agent
     trezorctl
