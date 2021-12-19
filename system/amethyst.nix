@@ -98,6 +98,8 @@ in {
 
     geoclue2.enable = true;
 
+    gnome.at-spi2-core.enable = true;
+
     gvfs.enable = true;
 
     mopidy = {
