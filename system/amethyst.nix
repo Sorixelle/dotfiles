@@ -178,14 +178,7 @@ in {
 
   sound.enable = true;
 
-  musnix = {
-    enable = true;
-    kernel = {
-      optimize = true;
-      realtime = true;
-      packages = pkgs.linuxPackages_5_9_rt;
-    };
-  };
+  musnix.enable = true;
 
   home-manager.users.ruby = import ../home/amethyst-ruby.nix;
 
