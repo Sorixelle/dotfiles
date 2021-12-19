@@ -72,8 +72,6 @@
   boot = {
     # Clean /tmp on startup
     cleanTmpDir = true;
-    # Mount /tmp as tmpfs
-    tmpOnTmpfs = true;
   };
 
   home-manager = {
