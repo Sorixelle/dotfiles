@@ -55,7 +55,6 @@ in {
   nix.trustedUsers = [ "ruby" ];
 
   environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
-  environment.etc."pipewire/media-session.d/with-pulseaudio" = { text = ""; };
 
   location.provider = "geoclue2";
 
@@ -126,6 +125,7 @@ in {
       };
       jack.enable = true;
       pulse.enable = true;
+      media-session.enable = true;
     };
 
     printing = {
