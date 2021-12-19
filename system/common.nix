@@ -1,5 +1,4 @@
-{ name, flakePkgs }:
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, name, flakePkgs, ... }:
 
 {
   imports = [ ./modules/joycond.nix ./modules/qmk.nix ];

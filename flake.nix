@@ -52,15 +52,15 @@
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
 
-          (import ./system/common.nix {
-            inherit name;
-            flakePkgs = pkgsBySystem."${system}";
-          })
+          (import ./system/common.nix)
 
           (import config)
         ];
 
-        specialArgs = { inherit inputs; };
+        specialArgs = {
+          inherit inputs name;
+          flakePkgs = pkgsBySystem."${system}";
+        };
       });
 
       # Like defineSystem above, but for nix-darwin (macOS) configurations
