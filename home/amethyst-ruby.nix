@@ -167,7 +167,10 @@
     };
   };
 
-  services = { udiskie.enable = true; };
+  services = {
+    easyeffects.enable = true;
+    udiskie.enable = true;
+  };
 
   srxl.theme.onedark.enable = true;
 
