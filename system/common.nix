@@ -1,7 +1,7 @@
 { pkgs, lib, inputs, name, flakePkgs, ... }:
 
 {
-  imports = [ ./modules/joycond.nix ./modules/qmk.nix ];
+  imports = [ ./modules/qmk.nix ];
 
   # Set the hostname
   networking.hostName = name;

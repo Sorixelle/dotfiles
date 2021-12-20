@@ -102,6 +102,8 @@ in {
 
     gvfs.enable = true;
 
+    joycond.enable = true;
+
     mopidy = {
       enable = true;
       extensionPackages = with pkgs; [ mopidy-mpd mopidy-subidy ];
@@ -160,7 +162,6 @@ in {
       };
     };
 
-    srxl.joycond.enable = true;
     srxl.qmk.enable = true;
 
     trezord.enable = true;
