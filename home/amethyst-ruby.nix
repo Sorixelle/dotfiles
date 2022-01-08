@@ -170,6 +170,12 @@
   services = {
     easyeffects.enable = true;
     udiskie.enable = true;
+
+    gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+      pinentryFlavor = "gnome3";
+    };
   };
 
   srxl.theme.onedark.enable = true;
