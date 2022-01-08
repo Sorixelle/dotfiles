@@ -41,13 +41,15 @@ in {
       extraPackages = with pkgs; [ rocm-opencl-icd rocm-opencl-runtime ];
     };
 
+    sane.enable = true;
+
     steam-hardware.enable = true;
   };
 
   users = {
     users.ruby = {
       description = "Ruby";
-      extraGroups = [ "adbusers" "camera" "docker" "wheel" ];
+      extraGroups = [ "adbusers" "camera" "docker" "lp" "scanner" "wheel" ];
       isNormalUser = true;
       uid = 1000;
     };
