@@ -523,6 +523,11 @@ Code should probably still be monospace though. That makes sense.
   (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
 #+end_src
 
+So should tables, otherwise they look all ugly and misaligned.
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG-CONFIG
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+#+end_src
+
 Make headings look a little prettier with [[https://github.com/sabof/org-bullets][org-bullets]].
 #+begin_src emacs-lisp
   (use-package org-bullets
