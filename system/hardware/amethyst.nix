@@ -17,6 +17,12 @@
     fsType = "vfat";
   };
 
+  fileSystems."/vault" = {
+    device = "/dev/disk/by-label/Vault";
+    fsType = "exfat";
+    options = [ "defaults" "umask=000" ];
+  };
+
   swapDevices = [{ device = "/dev/disk/by-label/Swap"; }];
 
   nix.maxJobs = lib.mkDefault 12;

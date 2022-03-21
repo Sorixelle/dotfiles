@@ -52,7 +52,6 @@
   environment.systemPackages = with pkgs; [
     bat
     dnsutils
-    exfat
     fd
     file
     htop
