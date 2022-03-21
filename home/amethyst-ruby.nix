@@ -61,6 +61,11 @@
   manual.html.enable = true;
 
   programs = {
+    chromium = {
+      enable = true;
+      package = pkgs.ungoogled-chromium;
+    };
+
     direnv = {
       enable = true;
       enableFishIntegration = true;
