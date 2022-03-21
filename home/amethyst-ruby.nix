@@ -194,5 +194,22 @@
     };
   };
 
+  xdg = {
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "x-scheme-handler/http" = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
+      };
+    };
+    userDirs = {
+      enable = true;
+      documents = "$HOME/usr/misc";
+      download = "$HOME/usr/download";
+      music = "$HOME/usr/music";
+      pictures = "$HOME/usr/img";
+    };
+  };
+
   home.stateVersion = "21.05";
 }
