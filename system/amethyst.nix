@@ -57,7 +57,26 @@ in {
 
   nix.trustedUsers = [ "ruby" ];
 
-  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
+  environment.systemPackages = with pkgs; [
+    ntfs3g
+    pciutils
+    usbutils
+
+    ardour
+    calf
+    caps
+    carla
+    distrho
+    eq10q
+    geonkick
+    gxplugins-lv2
+    helm
+    lsp-plugins
+    noise-repellent
+    rubberband
+    wolf-shaper
+    zyn-fusion
+  ];
 
   location.provider = "geoclue2";
 
