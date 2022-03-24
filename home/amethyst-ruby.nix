@@ -24,11 +24,11 @@
     keepassxc
     magic-wormhole
     moserial
-    multimc
     mullvad-vpn
     neofetch
     pavucontrol
     picard
+    polymc
     python3
     remmina
     rnix-lsp
