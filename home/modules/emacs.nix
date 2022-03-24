@@ -33,7 +33,7 @@ in with lib; {
   };
 
   config = let
-    emacsPkgs = pkgs.emacsPackagesNgGen conf.package;
+    emacsPkgs = pkgs.emacsPackagesFor conf.package;
     emacsPackage = emacsPkgs.emacsWithPackages (e: [ e.vterm ]);
 
     tangledConfig = pkgs.stdenv.mkDerivation {

@@ -55,7 +55,7 @@ in {
     };
   };
 
-  nix.trustedUsers = [ "ruby" ];
+  nix.settings.trusted-users = [ "ruby" ];
 
   environment.systemPackages = with pkgs; [
     ntfs3g
@@ -154,7 +154,6 @@ in {
       };
       jack.enable = true;
       pulse.enable = true;
-      media-session.enable = true;
 
       config.pipewire-pulse = {
         "context.modules" = [

@@ -17,6 +17,15 @@
     # Use a flakes-enabled version of Nix
     package = pkgs.nixUnstable;
 
+    settings = {
+      # Additional binary caches
+      substituters = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+      ];
+    };
+
     # Enable nix-command and flakes, and persist derivations/outputs
     # for nix-direnv
     extraOptions = ''
@@ -39,13 +48,6 @@
         flake = inputs.nixpkgs;
       };
     };
-
-    # Additional binary caches
-    binaryCaches = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
-    binaryCachePublicKeys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-    ];
   };
 
   # Common packages
