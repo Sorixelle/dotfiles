@@ -84,6 +84,8 @@ in {
     networkmanager.enable = true;
 
     firewall.enable = false;
+
+    wireguard.enable = true;
   };
 
   fonts.enableDefaultFonts = true;
@@ -141,6 +143,8 @@ in {
       # can't commit to a public repo goes here
       extraConfigFiles = [ "/etc/mopidy/mopidy.conf" ];
     };
+
+    mullvad-vpn.enable = true;
 
     pipewire = {
       enable = true;
