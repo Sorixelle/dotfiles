@@ -4,7 +4,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    emacs.url = "github:nix-community/emacs-overlay";
+    emacs = {
+      url = "github:nix-community/emacs-overlay";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
     nur.url = "github:nix-community/NUR";
     musnix = {
       url = "github:musnix/musnix";
