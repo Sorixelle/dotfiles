@@ -180,6 +180,11 @@
       enableSshSupport = true;
       pinentryFlavor = "gnome3";
     };
+
+    syncthing = {
+      enable = true;
+      tray.enable = true;
+    };
   };
 
   srxl.theme.onedark.enable = true;
