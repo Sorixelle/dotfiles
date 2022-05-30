@@ -17,7 +17,7 @@ end
 
 set -l rebuild (switch (uname -s)
   case "Linux"
-    echo "sudo nixos-rebuild"
+    echo "nixos-rebuild --use-remote-sudo"
   case "Darwin"
     echo "darwin-rebuild"
 end)
