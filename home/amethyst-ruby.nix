@@ -9,9 +9,9 @@
     calibre
     darktable
     discord
-    dunst
     element-desktop
     evince
+    feh
     ffmpeg-full
     fusee-launcher
     gimp
@@ -19,17 +19,20 @@
     gnome3.file-roller
     gnome3.gedit
     insomnia
-    ipmitool
+    hexchat
     libreoffice-fresh
     keepassxc
     magic-wormhole
     moserial
+    monero-gui
     mullvad-vpn
     neofetch
+    nmap
     pavucontrol
     picard
     polymc
     python3
+    qbittorrent
     remmina
     rnix-lsp
     shutter
@@ -37,7 +40,7 @@
     steam
     steam-run
     spek
-    transmission-gtk
+    traceroute
     trezor_agent
     trezorctl
     veracrypt
