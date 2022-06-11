@@ -132,7 +132,7 @@
       userEmail = "ruby@srxl.me";
       userName = "Ruby Iris Juric";
       signing = {
-        key = "12BFCA4D4B2EE0EB";
+        key = "B6D7116C451A5B41";
         signByDefault = true;
       };
     };
