@@ -52,6 +52,7 @@
     xorg.xkill
     xfce.thunar
     xfce.xfconf
+    yubikey-manager
   ];
 
   imports = [ ./modules/common-linux.nix ];

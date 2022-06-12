@@ -146,6 +146,8 @@ in {
 
     mullvad-vpn.enable = true;
 
+    pcscd.enable = true;
+
     pipewire = {
       enable = true;
       alsa = {
