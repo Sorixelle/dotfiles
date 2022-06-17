@@ -141,6 +141,7 @@
     gpg = {
       enable = true;
       settings = { keyserver = "hkps://keys.openpgp.org"; };
+      scdaemonSettings = { disable-ccid = true; };
     };
 
     ncmpcpp = {
@@ -181,7 +182,6 @@
 
     gpg-agent = {
       enable = true;
-      enableSshSupport = true;
       pinentryFlavor = "gnome3";
     };
 

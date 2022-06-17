@@ -114,6 +114,8 @@ in {
     };
 
     gphoto2.enable = true;
+
+    ssh.startAgent = true;
   };
 
   services = {
