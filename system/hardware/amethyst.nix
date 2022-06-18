@@ -8,12 +8,12 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/NixOS";
+    device = "/dev/disk/by-label/NixOS-Root";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/ESP";
+    device = "/dev/disk/by-label/BOOT";
     fsType = "vfat";
   };
 
