@@ -88,6 +88,9 @@ in {
         fade = true;
         fadeDelta = 2;
         vSync = true;
+        shadow = true;
+        shadowOffsets = [ (-10) (-10) ];
+        shadowOpacity = "0.7";
       };
 
       # polybar = import ./polybar.nix config pkgs;
