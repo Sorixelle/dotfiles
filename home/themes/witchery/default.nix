@@ -84,6 +84,7 @@ in {
 
       picom = {
         enable = true;
+        blur = true;
         experimentalBackends = true;
         fade = true;
         fadeDelta = 2;
@@ -91,6 +92,12 @@ in {
         shadow = true;
         shadowOffsets = [ (-10) (-10) ];
         shadowOpacity = "0.7";
+        extraOptions = ''
+          blur: {
+            method = "dual_kawase";
+            strength = 5;
+          }
+        '';
       };
 
       # polybar = import ./polybar.nix config pkgs;

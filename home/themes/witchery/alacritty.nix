@@ -4,9 +4,12 @@
   programs.alacritty = {
     enable = true;
     settings = {
-      window.padding = {
-        x = 20;
-        y = 20;
+      window = {
+        padding = {
+          x = 20;
+          y = 20;
+        };
+        opacity = 0.9;
       };
       font = {
         normal.family = config.srxl.fonts.monospace.name;
