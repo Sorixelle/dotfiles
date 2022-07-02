@@ -4,12 +4,12 @@
   home.packages = with pkgs; [
     acousticbrainz-gui
     audacity
+    betterdiscordctl
     bless
     cachix
     calibre
     darktable
     discord
-    element-desktop
     evince
     feh
     ffmpeg-full
@@ -19,14 +19,14 @@
     gnome3.file-roller
     gnome3.gedit
     insomnia
-    hexchat
     libreoffice-fresh
     keepassxc
     magic-wormhole
     moserial
-    monero-gui
     mullvad-vpn
+    mtr
     neofetch
+    nheko
     nmap
     pavucontrol
     picard
@@ -40,12 +40,7 @@
     steam
     steam-run
     spek
-    traceroute
-    trezor_agent
-    trezorctl
-    veracrypt
     virt-manager
-    virt-viewer
     vlc
     wineWowPackages.staging
     winetricks
