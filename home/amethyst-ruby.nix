@@ -186,7 +186,7 @@
     };
   };
 
-  srxl.theme.onedark.enable = true;
+  srxl.theme.witchery.enable = true;
 
   systemd.user = {
     services = {
