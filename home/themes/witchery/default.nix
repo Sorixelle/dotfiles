@@ -40,12 +40,12 @@ in {
           set -g theme_nerd_fonts yes
           set -g theme_color_scheme terminal-light
 
-          set -g fish_color_command blue
-          set -g fish_color_param cyan
-          set -g fish_color_redirection cyan
-          set -g fish_color_end green
-          set -g fish_color_quote yellow
-          set -g fish_color_error red
+          set -g fish_color_command brcyan
+          set -g fish_color_param brmagenta
+          set -g fish_color_redirection brgreen
+          set -g fish_color_end brblue
+          set -g fish_color_quote bryellow
+          set -g fish_color_error brred
 
           set -g VIRTUAL_ENV_DISABLE_PROMPT 1
 
