@@ -1,18 +1,11 @@
 { config, lib, pkgs, ... }:
 
-let conf = config.srxl.theme.winter;
+let conf = config.srxl.theme.witchery;
 in {
-  imports = [ ../../modules/fonts.nix ];
+  imports = [ ./alacritty.nix ];
 
-  options.srxl.theme.winter = with lib; {
-    enable = mkEnableOption "the winter system theme for this user";
-
-    monitors = with types;
-      mkOption {
-        type = listOf string;
-        default = [ ];
-        description = "List of monitor names.";
-      };
+  options.srxl.theme.witchery = with lib; {
+    enable = mkEnableOption "the witchery system theme for this user";
   };
 
   config = lib.mkIf conf.enable {
@@ -27,6 +20,8 @@ in {
         package = arc-theme;
       };
     };
+
+    home.packages = [ pkgs.dmenu ];
 
     programs = {
       fish = let
@@ -59,10 +54,6 @@ in {
           end
         '';
       };
-
-      kitty = import ./kitty.nix config;
-
-      rofi = import ./rofi.nix config;
     };
 
     srxl = {
@@ -89,7 +80,7 @@ in {
     };
 
     services = {
-      dunst = import ./dunst.nix config pkgs;
+      # dunst = import ./dunst.nix config pkgs;
 
       picom = {
         enable = true;
@@ -99,21 +90,24 @@ in {
         vSync = true;
       };
 
-      polybar = import ./polybar.nix config pkgs;
+      # polybar = import ./polybar.nix config pkgs;
 
-      sxhkd = import ./sxhkd.nix;
+      # sxhkd = import ./sxhkd.nix;
     };
 
     xsession = {
       enable = true;
       scriptPath = ".xsession-hm";
 
-      windowManager.bspwm = import ./bspwm.nix lib conf;
+      windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+      };
     };
 
     home.file = {
       ".background-image" = {
-        source = ./winter.png;
+        source = ./wp.png;
         target = ".background-image";
       };
     };
