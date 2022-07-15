@@ -11,17 +11,23 @@ in {
   config = lib.mkIf conf.enable {
     gtk = with pkgs; {
       enable = true;
-      iconTheme = {
-        name = "Arc";
-        package = arc-icon-theme;
+      iconTheme = rec {
+        name = "witchery";
+        package = pkgs.oomoxPlugins.theme-oomox.generate {
+          inherit name;
+          src = ./witchery.oomox-theme;
+        };
       };
-      theme = {
-        name = "Arc-Lighter";
-        package = arc-theme;
+      theme = rec {
+        name = "witchery";
+        package = pkgs.oomoxPlugins.icons-numix.generate {
+          inherit name;
+          src = ./witchery.oomox-theme;
+        };
       };
     };
 
-    home.packages = [ pkgs.dmenu ];
+    home.packages = [ pkgs.dmenu pkgs.maim ];
 
     programs = {
       fish = let
@@ -84,20 +90,19 @@ in {
 
       picom = {
         enable = true;
-        blur = true;
         experimentalBackends = true;
         fade = true;
         fadeDelta = 2;
         vSync = true;
         shadow = true;
         shadowOffsets = [ (-10) (-10) ];
-        shadowOpacity = "0.7";
-        extraOptions = ''
-          blur: {
+        shadowOpacity = 0.7;
+        settings = {
+          blur = {
             method = "dual_kawase";
             strength = 5;
-          }
-        '';
+          };
+        };
       };
 
       # polybar = import ./polybar.nix config pkgs;
