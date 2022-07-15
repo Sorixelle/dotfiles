@@ -16,6 +16,13 @@
       url = "github:musnix/musnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixmox = {
+      url = "github:Sorixelle/nixmox";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -45,7 +52,12 @@
       genNixpkgsConfig = system: {
         inherit system;
         config = import ./nixpkgs/config.nix;
-        overlays = [ inputs.nur.overlay self.overlay inputs.emacs.overlay ];
+        overlays = [
+          inputs.nixmox.overlay
+          inputs.nur.overlay
+          self.overlay
+          inputs.emacs.overlay
+        ];
       };
 
       pkgsBySystem =
