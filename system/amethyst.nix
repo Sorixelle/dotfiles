@@ -81,8 +81,6 @@ in {
   location.provider = "geoclue2";
 
   networking = {
-    networkmanager.enable = true;
-
     firewall.enable = false;
 
     wireguard.enable = true;
