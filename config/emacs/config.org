@@ -420,6 +420,7 @@ We'll start off by setting some nicer fonts. That's one of the things that's a p
 #+begin_src emacs-lisp
   (add-to-list 'default-frame-alist `(font . ,(concat srxl/font-family-monospace " " srxl/font-size-monospace)))
   (set-face-attribute 'variable-pitch nil :family srxl/font-family-ui :height srxl/font-size-ui)
+  (set-face-attribute 'fixed-pitch nil :family srxl/font-family-monospace :height (* 10 (string-to-number srxl/font-size-monospace)))
 #+end_src
 
 We're also going to define a face for a serif font. This'll get used later, for stuff like Org mode.
