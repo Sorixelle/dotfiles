@@ -13,7 +13,7 @@ in {
       enable = true;
       iconTheme = rec {
         name = "witchery";
-        package = pkgs.oomoxPlugins.theme-oomox.generate {
+        package = pkgs.oomoxPlugins.theme-materia.generate {
           inherit name;
           src = ./witchery.oomox-theme;
         };
