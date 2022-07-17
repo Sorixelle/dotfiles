@@ -62,6 +62,11 @@ in {
       };
     };
 
+    qt = {
+      enable = true;
+      platformTheme = "gtk";
+    };
+
     srxl = {
       emacs = {
         enable = true;
