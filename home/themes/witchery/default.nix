@@ -70,7 +70,7 @@ in {
     srxl = {
       emacs = {
         enable = true;
-        theme = "doom-nord-light";
+        theme = "doom-miramare";
       };
 
       fonts = {
