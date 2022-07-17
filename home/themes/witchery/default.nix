@@ -75,8 +75,8 @@ in {
 
       fonts = {
         monospace = {
-          name = "Blex Mono NerdFont";
-          package = pkgs.nerdfonts.override { fonts = [ "IBMPlexMono" ]; };
+          name = "Iosevka";
+          package = pkgs.iosevka;
         };
         ui = {
           name = "Inter";
