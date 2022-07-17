@@ -2,7 +2,7 @@
 
 let conf = config.srxl.theme.witchery;
 in {
-  imports = [ ./alacritty.nix ];
+  imports = [ ./alacritty.nix ./picom.nix ];
 
   options.srxl.theme.witchery = with lib; {
     enable = mkEnableOption "the witchery system theme for this user";
@@ -87,23 +87,6 @@ in {
 
     services = {
       # dunst = import ./dunst.nix config pkgs;
-
-      picom = {
-        enable = true;
-        experimentalBackends = true;
-        fade = true;
-        fadeDelta = 2;
-        vSync = true;
-        shadow = true;
-        shadowOffsets = [ (-10) (-10) ];
-        shadowOpacity = 0.7;
-        settings = {
-          blur = {
-            method = "dual_kawase";
-            strength = 5;
-          };
-        };
-      };
 
       # polybar = import ./polybar.nix config pkgs;
 
