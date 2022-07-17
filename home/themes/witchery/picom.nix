@@ -21,6 +21,7 @@
         method = "dual_kawase";
         strength = 5;
       };
+      blur-background-exclude = [ "class_g = 'slop'" ];
     };
   };
 }
