@@ -21,7 +21,7 @@
     insomnia
     libreoffice-fresh
     keepassxc
-    magic-wormhole
+    # magic-wormhole
     moserial
     mullvad-vpn
     mtr
