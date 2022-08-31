@@ -62,7 +62,13 @@
   programs = {
     chromium = {
       enable = true;
-      package = pkgs.ungoogled-chromium;
+      package = pkgs.chromium;
+      extensions = [
+        { id = "ldpochfccmkkmhdbclfhpagapcfdljkj"; } # Decentraleyes
+        { id = "oboonakemofpalcgghocfoadofidjkkk"; } # KeePassXC Browser
+        { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # Privacy Badger
+        { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # uBlock Origin
+      ];
     };
 
     direnv = {
@@ -75,17 +81,17 @@
       package = pkgs.firefox;
       extensions = with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs; [
+          bypass-paywalls-clean
           decentraleyes
           firefox-color
           frankerfacez
-          https-everywhere
           keepassxc-browser
-          metamask
           multi-account-containers
           privacy-badger
           react-devtools
           reddit-enhancement-suite
           sidebery
+          sponsorblock
           tridactyl
           ublock-origin
           violentmonkey
