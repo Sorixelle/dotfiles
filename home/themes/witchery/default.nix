@@ -75,8 +75,8 @@ in {
 
       fonts = {
         monospace = {
-          name = "Iosevka";
-          package = pkgs.iosevka;
+          name = "Iosevka Nerd Font";
+          package = pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; };
         };
         ui = {
           name = "Inter";
