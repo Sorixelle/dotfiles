@@ -196,6 +196,14 @@
 
   systemd.user = {
     services = {
+      nightly-backup = {
+        Unit = { Description = "Backup user data directory to NAS"; };
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${pkgs.kopia}/bin/kopia snapshot create /home/ruby/usr";
+        };
+      };
+
       polkit-gnome = {
         Unit = { Description = "GNOME Polkit authentication agent"; };
         Service = {
@@ -203,6 +211,16 @@
             "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
           Restart = "on-failure";
         };
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
+    };
+
+    timers = {
+      nightly-backup = {
+        Unit = {
+          Description = "Backup user data directory to NAS every night at 2am";
+        };
+        Timer = { OnCalendar = "02:00:00"; };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };

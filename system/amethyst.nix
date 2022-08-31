@@ -28,6 +28,13 @@ in {
     };
   };
 
+  fileSystems."/home/ruby/.backup" = {
+    device = "fluorite:/mnt/Fluorite-HDD/Machine-Backups/Amethyst";
+    fsType = "nfs";
+    options =
+      [ "noauto" "noatime" "x-systemd.automount" "x-systemd.idle-timeout=600" ];
+  };
+
   hardware = {
     bluetooth.enable = true;
 
