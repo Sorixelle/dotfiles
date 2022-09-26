@@ -81,6 +81,7 @@
       package = pkgs.firefox;
       extensions = with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs; [
+          alter
           bypass-paywalls-clean
           decentraleyes
           firefox-color

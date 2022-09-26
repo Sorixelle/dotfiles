@@ -4,6 +4,7 @@ let
   gcc-cortex-a-9 = target:
     prev.callPackage ./gcc-cortex-a.nix { inherit target; };
 in {
+  alter = prev.callPackage ./ff-exts/alter.nix { };
   frankerfacez = prev.callPackage ./ff-exts/frankerfacez.nix { };
 
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
