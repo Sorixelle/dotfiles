@@ -552,9 +552,12 @@ Show line numbers in all code files. Pretty much every programming mode derives 
   (add-hook 'prog-mode-hook 'linum-mode)
 #+end_src
 
-Keeping things like quotation marks for strings, and parentheses balanced is really important for code edititng. =electric-pair-mode= is a good builtin option for this. So we'll use it.
+Keeping things like quotation marks for strings, and parentheses balanced is really important for code edititng. [[https://github.com/Fuco1/smartparens][Smartparens]] is a good option for this. So we'll use it.
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook 'electric-pair-mode)
+  (use-package smartparens
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode))
 #+end_src
 
 ** Autocomplete
