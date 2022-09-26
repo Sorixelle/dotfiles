@@ -546,6 +546,17 @@ doom-themes from earlier includes some stuff to tidy up Org visuals a little bit
   (doom-themes-org-config)
 #+end_src
 
+** Editing trickery
+As part of writing these documents, I create a lot of emacs-lisp source blocks in Org. Like, a lot. A faster way to create those is definitely in order. Luckily, =org-structure-template-alist= comes in handy for us to add whatever shortcust we want for producing blocks. Let's add a shortcut for making an emacs-lisp source block.
+#+begin_src emacs-lisp :noweb-ref ORG-CONFIG
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+#+end_src
+
+To make things even faster, we can use Org Tempo to summon a block, just by typing =<el= and hitting TAB.
+#+begin_src emacs-lisp :noweb-ref ORG-CONFIG
+  (require 'org-tempo)
+#+end_src
+
 * Emacs, my favourite IDE
 Yeah, this is the one everyone knows Emacs for. Code editor! That's the main one everyone uses Emacs for. And for good reason - it does a damn good job of editing code. Although, it does need a little assistance to get it off the ground in that regard. Let's give it a hand.
 
