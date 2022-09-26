@@ -440,63 +440,36 @@ Default emacs burns my eyes. /hiss/. I'll take a nicer theme, courtesy of [[http
     (load-theme srxl/theme-name t)
     <<DOOMTHEMES-CONFIG>>)
 #+end_src
+
 ** Pretty modeline
 The mode line in Emacs is that little line at the bottom of the window that has all the status stuff, like filename... uh... man, the default mode line doesn't really have a lot of useful stuff in it, huh? Hmm.
 
-I'm far too lazy to write my own mode line. Luckily, multiple people have done it for me, and I just need to pick the one I like. And I like [[https://github.com/dbordak/telephone-line][telephone-line]]. It's got a really nice configuration interface, it's fairly lightweight, doesn't rely on any external icon fonts, and - most importantly - it looks really nice. Let's set it up.
+I'm far too lazy to write my own mode line. Luckily, multiple people have done it for me, and I just need to pick the one I like. And I like [[https://github.com/seagle0128/doom-modeline][doom-modeline]]. It's got everything I could possibly want in a modeline, and it looks cool to boot. Let's get it going.
 
 #+begin_src emacs-lisp :noweb no-export
-  (use-package telephone-line
+  (use-package doom-modeline
     :config
-    <<TELELINE-CONFIG>>)
+    <<DOOMLINE-CONFIG>>)
 #+end_src
 
-First, let's set the separators. telephone-line supports a whole bunch of fancy Powerline-style separators, but honestly, I'm not about that. I just like simple boxes. So we'll use the "flat" separator as the primary one, and don't worry about a secondary separator - those go between all the segments, not just the coloured bits. Too noisy.
+Enable =column-number-mode= so that we can get column number displayed in the modeline, along with the line number.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-  (setq telephone-line-primary-left-separator 'telephone-line-flat
-        telephone-line-primary-right-separator 'telephone-line-flat
-        telephone-line-secondary-left-separator 'telephone-line-nil
-        telephone-line-secondary-right-separator 'telephone-line-nil)
+#+begin_src emacs-lisp :tangle no :noweb-ref DOOMLINE-CONFIG
+  (column-number-mode 1)
 #+end_src
 
-I like my modeline a little taller. Bit more prominent.
+And enable =display-time-mode= for a clock in there as well.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-  (setq telephone-line-height 24)
-#+end_src
-
-And now for the segments. For the left side, we'll have the following:
-- The current Evil status (normal, insert, visual, etc.)
-- The buffer information (name, unsaved indicator)
-
-#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-  (setq telephone-line-lhs
-        '((evil . (telephone-line-evil-tag-segment))
-          (nil . (telephone-line-buffer-segment))))
-#+end_src
-
-And on the right side:
-- The major mode name
-- Any "extra info" (we'll get to that in a bit)
-
-#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-  (setq telephone-line-rhs
-        '((nil . (telephone-line-misc-info-segment))
-          (accent . (telephone-line-major-mode-segment))))
-#+end_src
-
-One more thing - I need a clock, so I know what the time is. Because, yknow. That's like, important. Gotta have that. This'll put it in that extra info segment.
-
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no :noweb-ref DOOMLINE-CONFIG
   (display-time-mode 1)
 #+end_src
 
 And activate.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref TELELINE-CONFIG
-  (telephone-line-mode 1)
+#+begin_src emacs-lisp :tangle no :noweb-ref DOOMLINE-CONFIG
+  (doom-modeline-mode 1)
 #+end_src
+
 * Emacs, my favourite word processor
 [[https://orgmode.org/][org-mode]] might just be one of the most amazing programs ever made. Like, seriously. This thing is amazing. It's a markup language, a todo list, a calendar, a spreadsheet, Jupyter Notebook on sterioids... I could keep going on here, but that's probably not what you're here for. You're here to see me configure this delightful thing. And I'm not about to waste anymore time.
 
