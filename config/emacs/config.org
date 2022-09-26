@@ -453,6 +453,11 @@ I'm far too lazy to write my own mode line. Luckily, multiple people have done i
     <<DOOMLINE-CONFIG>>)
 #+end_src
 
+Make the modeline nice and thick.
+#+begin_src emacs-lisp :tangle no :noweb-ref DOOMLINE-CONFIG
+  (setq doom-modeline-height 32)
+#+end_src
+
 Enable =column-number-mode= so that we can get column number displayed in the modeline, along with the line number.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref DOOMLINE-CONFIG
