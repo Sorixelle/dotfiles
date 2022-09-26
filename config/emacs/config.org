@@ -563,40 +563,70 @@ Keeping things like quotation marks for strings, and parentheses balanced is rea
 ** Autocomplete
 First off, let's get some autocomplete capability in here. We gotta have that - what's an IDE without autocomplete? Although, this doesn't provide language-specific completions, just the UI for autocompletion. We'll get to that in a bit.
 
-Over in Emacs land, [[https://company-mode.github.io/][company-mode]] is the de facto way to get that going. Let's set it up.
+[[https://github.com/minad/corfu][Corfu]] is a super neat little library that builds off =completion-at-point= to provide a nice little autocomplete box.
 #+begin_src emacs-lisp :noweb no-export
-  (use-package company
-    :custom
-    <<COMPANY-CUSTOM>>
+  (use-package corfu
     :config
-    <<COMPANY-CONFIG>>)
+    <<CORFU-CONFIG>>)
 #+end_src
 
 Like most editors, we want the autocomplete options to appear right after we've finished typing, without a delay.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CUSTOM
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0)
+#+begin_src emacs-lisp :tangle no :noweb-ref CORFU-CONFIG
+  (setq corfu-auto t
+        corfu-auto-delay 0
+        corfu-auto-prefix 0)
 #+end_src
 
-The backend for =dabbrev= is enabled by default, but I'm not a fan of that. I want autocomplete for my code, not for just typing words. Not as useful, and tends to clutter up the completion list.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
-  (delete 'company-dabbrev company-backends)
+We also want to cycle back to the top of the list if we try to go past the end.
+#+begin_src emacs-lisp :tangle no :noweb-ref CORFU-CONFIG
+  (setq corfu-cycle t)
+#+end_src
+
+Don't select any completion by default...
+#+begin_src emacs-lisp :tangle no :noweb-ref CORFU-CONFIG
+  (setq corfu-preselect-first nil)
+#+end_src
+
+...because we want to hit Tab to cycle through completions, and just fill the one we land on.
+#+begin_src emacs-lisp :tangle no :noweb-ref CORFU-CONFIG
+  (general-def 'corfu-map
+    "TAB" 'corfu-next
+    [tab] 'corfu-next
+    "S-TAB" 'corfu-previous
+    [backtab] 'corfu-previous)
 #+end_src
 
 Use fuzzy searching in completions.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
+#+begin_src emacs-lisp :tangle no :noweb-ref CORFU-CONFIG
   (add-to-list 'completion-styles 'flex)
 #+end_src
 
-[[https://github.com/sebastiencs/company-box][company-box]] is a frontend for company-mode that makes the UI a little nicer - icons next to completions, showing documentation, and has fewer visual issues.
+Being able to see the documentation of items I've selected is nice. [[https://github.com/galeo/corfu-doc][corfu-doc]] can do that for us.
 #+begin_src emacs-lisp
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
+  (use-package corfu-doc
+    :hook (corfu-mode . corfu-doc-mode))
+#+end_src
+
+[[https://github.com/jdtsmith/kind-icon][kind-icon]] is another package that will give us little icons next to competions, kinda like how VSCode does it. It looks pretty. I like it.
+#+begin_src emacs-lisp :noweb no-export
+  (use-package kind-icon
+    :config
+    <<KIND-ICON-CONFIG>>)
+#+end_src
+
+Set the default face for icons to be the one corfu uses, so that kind-icon can compute it's background colours correctly.
+#+begin_src emacs-lisp :tangle no :noweb-ref KIND-ICON-CONFIG
+  (setq kind-icon-default-face 'corfu-default)
+#+end_src
+
+Tell Corfu to use kind-icon.
+#+begin_src emacs-lisp :tangle no :noweb-ref KIND-ICON-CONFIG
+  (add-to-list 'corfu-margin-formatters 'kind-icon-margin-formatter)
 #+end_src
 
 Aaaaaaaaand enable.
-#+begin_src emacs-lisp :tangle no :noweb-ref COMPANY-CONFIG
-  (global-company-mode 1)
+#+begin_src emacs-lisp :tangle no :noweb-ref CORFU-CONFIG
+  (global-corfu-mode 1)
 #+end_src
 
 ** Project management
