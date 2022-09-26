@@ -75,16 +75,19 @@ in {
 
       fonts = {
         monospace = {
-          name = "Iosevka Nerd Font";
-          package = pkgs.nerdfonts.override { fonts = [ "Iosevka" ]; };
+          name = "BlexMono Nerd Font";
+          package = pkgs.nerdfonts.override { fonts = [ "IBMPlexMono" ]; };
+          size = 12;
         };
         ui = {
           name = "Inter";
           package = pkgs.inter;
+          size = 12;
         };
         serif = {
           name = "IBM Plex Serif";
           package = pkgs.ibm-plex;
+          size = 12;
         };
         extraFonts = with pkgs; [ emacs-all-the-icons-fonts noto-fonts-cjk ];
       };
