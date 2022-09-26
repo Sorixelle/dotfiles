@@ -14,7 +14,7 @@
     shadowOffsets = [ (-10) (-10) ];
     shadowOpacity = 0.7;
 
-    opacityRules = [ "90:class_g = 'Emacs'" ];
+    # opacityRules = [ "90:class_g = 'Emacs'" ];
 
     settings = {
       blur = {
