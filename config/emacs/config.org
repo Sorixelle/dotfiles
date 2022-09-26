@@ -136,7 +136,7 @@ Backups and auto-save files are an absolute godsend. They've saved my ass /so/ m
 #+begin_src emacs-lisp
   (setq backup-by-copying t    ; Keep symlinks intact
         version-control t      ; Make sure backups are numbered
-        delete-old-versions t  ; Always delete old backips
+        delete-old-versions t  ; Always delete old backups
         kept-new-versions 10   ; Keep the last 10 backups
         kept-old-versions 0    ; Don't worry about keeping initial ones
         auto-save-interval 50) ; Autosave every 50 characters typed
@@ -410,6 +410,7 @@ Also rebind =/= to =counsel-grep-or-swiper=. It's a really nice interface for se
   (general-def '(normal motion)
     "/" 'counsel-grep-or-swiper)
 #+end_src
+
 * ✨aesthetics✨
 If I'm going to use Emacs as much as I do, I want to use something that's actually nice to look at. Default Emacs might be nice to some people... but not to me. Time to fix that up.
 
@@ -565,6 +566,7 @@ doom-themes from earlier includes some stuff to tidy up Org visuals a little bit
 #+begin_src emacs-lisp :tangle no :noweb-ref DOOMTHEMES-CONFIG
   (doom-themes-org-config)
 #+end_src
+
 * Emacs, my favourite IDE
 Yeah, this is the one everyone knows Emacs for. Code editor! That's the main one everyone uses Emacs for. And for good reason - it does a damn good job of editing code. Although, it does need a little assistance to get it off the ground in that regard. Let's give it a hand.
 
@@ -709,6 +711,7 @@ Then, we'll add advice to the =treemacs-visit= class of functions, so that the w
   (advice-add 'treemacs-visit-node-vertical-split :after 'srxl/close-treemacs-if-open)
   (advice-add 'treemacs-visit-node-horizontal-split :after 'srxl/close-treemacs-if-open)
 #+end_src
+
 ** Version control
 Remember how I said org-mode might be one of the best programs ever made? [[https://magit.vc/][Magit]] is like, tied. At least second place. Magit is, without a doubt, the single most comprehensive Git interface I have ever seen. I haven't found a task I can't do in Magit yet. It's amazing. Seriously, if you use Emacs, and manage Git projects, but aren't using Magit, you're missing out big time.
 #+begin_src emacs-lisp :noweb no-export
@@ -728,6 +731,7 @@ Treemacs has some integration with Magit, to get the Git status highlighting of 
   (use-package treemacs-magit
     :after (treemacs magit))
 #+end_src
+
 ** Integrated terminal
 [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]] is probably the most fully-featured terminal emulator out there. It provides a really nice integration experience with Emacs.
 
@@ -761,6 +765,7 @@ Use =SPC t= to open the terminal.
   (srxl/def-project-key
     "t" '(shell-pop :wk "Open terminal"))
 #+end_src
+
 ** Language Server Protocol
 And now we get to the special sauce - LSP support. [[https://github.com/joaotavora/eglot][Eglot]] is a really cool, language-agnostic package that soups up the facilities Emacs already has for things like autocomplete (=completion-at-point=), jump to definition (=xref-find-definitions=) and diagnostics (=flymake-mode=).
 
@@ -772,6 +777,7 @@ If Eglot started successfully, enable flymake for the buffer.
 #+begin_src emacs-lisp
   (add-hook 'eglot-server-initialized-hook 'flymake-mode)
 #+end_src
+
 ** Direnv integration
 [[https://direnv.net/][Direnv]] is a really useful tool for setting environments per directory. It's a total godsend when working with Nix projects, since it means I can just =cd= into a directory and get that shell right away. =direnv-mode= provides that functionality for Emacs itself, so that it can call out to programs in a Nix shell. As a heavy Nix user, I can't live without it.
 #+begin_src emacs-lisp
@@ -779,6 +785,7 @@ If Eglot started successfully, enable flymake for the buffer.
     :config
     (direnv-mode))
 #+end_src
+
 ** Languages
 Now for all the language specific fun.
 
@@ -791,6 +798,7 @@ I use [[https://nixos.org/][Nix]] and NixOS extensively. Being able to declarati
     :mode "\\.nix\\'"
     :hook (nix-mode . eglot-ensure))
 #+end_src
+
 *** Web Markup
 There's a lot of languages used on the web. HTML, CSS, JS, the infinite amount of templating frameworks every server-side MVC framework they just had to have their own one for... Surely we can't support them all, right? Maybe not all, but [[https://web-mode.org/][web-mode]] supports a hell of a lot of them.
 #+begin_src emacs-lisp :noweb no-export
@@ -814,6 +822,7 @@ Change the HTML tag autoclosing to "Auto-close on > and </".
 #+begin_src emacs-lisp :tangle no :noweb-ref WEB-CONFIG
   (setq web-mode-auto-close-style 2)
 #+end_src
+
 *** Javascript and Typescript
 The lingua franca of the web. Like it or not, it's what we're stuck with, so we're gonna have to use it.
 
@@ -832,6 +841,7 @@ Make sure LSP is running is JS buffers.
 #+begin_src emacs-lisp
   (add-hook 'js-mode-hook 'eglot-ensure)
 #+end_src
+
 **** Typescript
 [[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
 #+begin_src emacs-lisp :noweb no-export
@@ -846,6 +856,7 @@ As with Javascript - indent with 2 spaces, not 4.
 #+begin_src emacs-lisp :tangle no :noweb-ref TS-CONFIG
   (setq typescript-indent-level 2)
 #+end_src
+
 **** JSX/TSX
 =js-mode= and =typescript-mode= don't have JSX/TSX support built in. For that, we'll define modes derived from =web-mode= instead, which has support for them built in, and use it for those files. The derived mode is useful for distinguishing files from other =web-mode= types, like HTML or CSS.
 
@@ -865,6 +876,7 @@ Setup LSP support for these new modes, as well.
   (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
   (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
 #+end_src
+
 **** JS Frameworks
 Some JS frameworks are special and have their own file types. Time to get those set up as well, I guess.
 
@@ -911,6 +923,7 @@ Setup LSP support using Volar. Annoyingly, Volar is a bit of a special language 
 
   (add-to-list 'eglot-server-programs '(vue-mode . (eglot-volar "volar-server" "--stdio")))
 #+end_src
+
 ***** Svelte
 For Svelte, we'll just use web-mode. Told you it supports a hell of a lot of template languages. We'll do a similar thing we did for JSX/TSX so that we can distinguish a Svelte file from any old web-mode file.
 #+begin_src emacs-lisp
@@ -930,6 +943,7 @@ A lot of people write Markdown. I don't know why they would do that when org-mod
   (use-package markdown-mode
     :mode ("\\.md\\'" . gfm-mode))
 #+end_src
+
 *** Data
 JSON.
 #+begin_src emacs-lisp
@@ -942,6 +956,7 @@ YAML.
   (use-package yaml-mode
     :mode "\\.ya?ml\\'")
 #+end_src
+
 * Emacs, my favourite window manager
 TODO: write some shit here
 
