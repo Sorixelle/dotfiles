@@ -16,7 +16,7 @@ in {
       enable = true;
       device = "nodev";
       efiSupport = true;
-      gfxmodeEfi = "1920x1080";
+      gfxmodeEfi = "2560x1440";
       # Add OpenCore macOS boot entry
       extraEntries = ''
         menuentry "macOS" {
