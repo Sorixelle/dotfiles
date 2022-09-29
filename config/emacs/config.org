@@ -646,25 +646,66 @@ Aaaaaaaaand enable.
 #+end_src
 
 ** Project management
-When it comes to project management, we're going to be keeping it pretty minimal and mostly leverage Emacs' built-in project.el library. It's simple, while still being pretty fully featured - and Eglot makes use of it too, which is something we'll set up later.
+When I'm working in projects, having some keybinds and commands to quickly get around and run some local dev servers or whatever is really useful. [[https://docs.projectile.mx/projectile/index.html][Projectile]] gives a whole lot of that.
 
-To start off - I want all my project management related keybindings to be under the =SPC= prefix. It's a nice little pattern I'm borrowing from things like Doom and Spacemacs - I'm just not using it as extensively. We'll leverage general.el to create a /definer/, that can be used to create keybindings in Evil's normal, motion and emacs modes under =SPC=.
-
-Oh, but first - motion state defines =SPC= as moving forward in the buffer, for some inexplicable reason. We'll need to unbind that first so that we can actually use these bindings in motion mode.
+Now that we have that function setup, let's bring Projectile in.
 #+begin_src emacs-lisp :tangle yes
-  (general-unbind 'motion "SPC")
-  (general-create-definer srxl/def-project-key
+  <<projectile-pre>>
+  (use-package projectile
+    :config
+    <<projectile-config>>
+    (projectile-mode 1))
+#+end_src
+
+Projectile is able to use ripgrep to search in projects, which is awesome - with the caveat that we need to bring in a supporting package.
+#+begin_src emacs-lisp :tangle yes
+  (use-package rg
+    :after projectile)
+#+end_src
+
+And also with the caveat that it needs to run in a POSIX-compliant shell. I use Fish on most of my machines, so that's not gonna fly. We'll make sure Emacs uses a standard shell instead.
+#+begin_src emacs-lisp :noweb-ref projectile-pre
+  (setq shell-file-name "/bin/sh")
+#+end_src
+
+I generally tend to keep all my projects in a single folder. Since that can be different on different machines, it's defined in =config-vars.el=. Giving that path to Projectile can help it to auto-detect projects.
+#+begin_src emacs-lisp :noweb-ref projectile-config
+  (setq projectile-project-search-path (list srxl/project-dir))
+#+end_src
+
+When calling functions that run project commands, like =projectile-compile-project=, Projectile shows the command's output in a Compilation Mode buffer. By default, it doesn't handle ANSI colors correctly, but there's a function we can add to =compilation-filter-hook= to do this for us.
+#+begin_src emacs-lisp :noweb-ref projectile-config
+  (require 'ansi-color)
+  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+#+end_src
+
+Let's add some keybindings to get started here. We're going to use the same =SPC= leader key pattern that Emacs frameworks like Doom and Spacemacs use - I'm a fan of it, makes things really easy to access while working in a project buffer. Less having to hold =C-whatever= as well, which is always nice. Using General, which we setup earlier, we can make a /definer/ function, that acts as a shortcut to adding keys under a prefix, and in specific Evil states.
+#+begin_src emacs-lisp :noweb-ref projectile-pre
+  (general-create-definer srxl/def-leader-key
     :states '(normal motion emacs)
     :prefix "SPC")
 #+end_src
 
-First thing we'll put under that prefix is some of the project.el keys. Basically everything useful that's under =C-x p= by default.
-#+begin_src emacs-lisp :tangle yes
-  (srxl/def-project-key
-    "b" '(project-switch-to-buffer :wk "Switch buffer")
-    "F" '(project-find-file :wk "Find file")
-    "s" '(project-switch-project :wk "Switch project")
-    "x" '(project-kill-buffers :wk "Close project"))
+One thing to note though - Evil's motion state defines =SPC= as moving point forward, which conflicts with this leader key definition. We'll have to remove that before we can get anywhere.
+#+begin_src emacs-lisp :noweb-ref projectile-pre
+  (general-unbind 'motion "SPC")
+#+end_src
+
+And now, keybindings.
+#+begin_src emacs-lisp :noweb-ref projectile-config
+  (srxl/def-leader-key
+    "b" '(projectile-switch-to-buffer :wk "Switch buffer")
+    "f" '(projectile-find-file :wk "Find file")
+    "s" '(projectile-switch-project :wk "Switch project")
+    "x" '(projectile-kill-buffers :wk "Close project")
+    "/" '(projectile-ripgrep :wk "Grep project")
+
+    "r" '(:ignore t :wk "Run command...")
+    "r b" '(projectile-package-project :wk "Build")
+    "r c" '(projectile-compile-project :wk "Compile")
+    "r i" '(projectile-install-project :wk "Install")
+    "r s" '(projectile-configure-project :wk "Configure")
+    "r t" '(projectile-test-project :wk "Test"))
 #+end_src
 
 Other bindings will be coming in the following sections.
@@ -716,7 +757,7 @@ doom-themes has some nice icon themes for Treemacs. We'll use those icons.
 
 Bind =SPC .= to toggle Treemacs on and off.
 #+begin_src emacs-lisp :noweb-ref TREEMACS-CONFIG
-  (srxl/def-project-key
+  (srxl/def-leader-key
     "." '(treemacs :wk "Toggle Treemacs"))
 #+end_src
 
@@ -745,7 +786,7 @@ Remember how I said org-mode might be one of the best programs ever made? [[http
 
 Open the Magit interface with =SPC v=.
 #+begin_src emacs-lisp :noweb-ref MAGIT-CONFIG
-  (srxl/def-project-key
+  (srxl/def-leader-key
     "v" '(magit-status :wk "View Git status"))
 #+end_src
 
@@ -772,20 +813,43 @@ Use the shell-provided title in the buffer name.
 [[https://github.com/kyagi/shell-pop-el][shell-pop]] is a tool that gives us a popup terminal that behaves a lot like the integrated one in VSCode.
 #+begin_src emacs-lisp :tangle yes
   (use-package shell-pop
-    :custom
-    <<SHELLPOP-CUSTOM>>
     :config
     <<SHELLPOP-CONFIG>>)
 #+end_src
 
-Setup shell-pop to use vterm as the backing terminal mode.
-#+begin_src emacs-lisp :noweb-ref SHELLPOP-CUSTOM
-  (shell-pop-shell-type '("vterm" "vterm-sp" (lambda () (vterm "vterm-sp"))))
+Typically, if I'm in a project, I want a terminal to open in the root of that project, not somewhere in the middle of the source code tree. We can write a function to check if we're in a project, and if so, open a project in the project root - otherwise, just use the current =default-directory=.
+#+begin_src emacs-lisp :noweb-ref SHELLPOP-CONFIG
+  (defun srxl/open-vterm-in-project (&optional name)
+    "Create a new vterm buffer named NAME.
+
+  If in a project, start the shell in `projectile-project-root'. Otherwise, start
+  it in `default-directory'."
+    (let ((default-directory (or (projectile-project-root) default-directory)))
+      (message default-directory)
+      (vterm name)))
+#+end_src
+
+We'll use that function to open terminal buffers in shell-pop.
+#+begin_src emacs-lisp :noweb-ref SHELLPOP-CONFIG
+  (custom-set-variables
+   '(shell-pop-shell-type '("vterm" "vterm-sp" (lambda () (srxl/open-vterm-in-project "vterm-sp")))))
+#+end_src
+
+Don't forget to tell shell-pop to not automatically change to the directory of the buffer we called it from, because that screws with the function we just wrote.
+#+begin_src emacs-lisp :noweb-ref SHELLPOP-CONFIG
+  (setq shell-pop-autocd-to-working-dir nil)
+#+end_src
+
+Since we had to overwrite the default shell during the Projectile setup, we'll need to restore it back to what we want for vterm and shell-pop. If it's defined in =config-vars.el=, we'll use that - otherwise just leave it alone.
+#+begin_src emacs-lisp :noweb-ref VTERM-CONFIG
+  (when (boundp 'srxl/shell-executable)
+    (setq vterm-shell srxl/shell-executable
+          shell-pop-term-shell srxl/shell-executable))
 #+end_src
 
 Use =SPC t= to open the terminal.
 #+begin_src emacs-lisp :noweb-ref SHELLPOP-CONFIG
-  (srxl/def-project-key
+  (srxl/def-leader-key
     "t" '(shell-pop :wk "Open terminal"))
 #+end_src
 
@@ -799,6 +863,15 @@ And now we get to the special sauce - LSP support. [[https://github.com/joaotavo
 If Eglot started successfully, enable flymake for the buffer.
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'eglot-server-initialized-hook 'flymake-mode)
+#+end_src
+
+Eglot relies on the built-in project.el for project detection. We can make Projectile use the same logic project.el does, just to keep things consistent.
+#+begin_src emacs-lisp :noweb-ref projectile-config
+  (defun srxl/projectile-get-current-project (dir)
+    "Get the root of the project at DIR with project.el's `project-current'."
+    (cdr (project-current nil dir)))
+
+  (setq projectile-project-root-functions '(srxl/projectile-get-current-project))
 #+end_src
 
 ** Direnv integration

@@ -86,7 +86,12 @@ in with lib; {
 
         "config-vars.el" = {
           target = ".emacs.d/config-vars.el";
-          text = let toBool = b: if b then "t" else "nil";
+          text = let
+            toBool = b: if b then "t" else "nil";
+            shell = if config.programs.fish.enable then
+              "/run/current-system/sw/bin/fish"
+            else
+              "/bin/sh";
           in ''
             (setq
              srxl/font-family-monospace "${config.srxl.fonts.monospace.name}"
@@ -101,9 +106,10 @@ in with lib; {
              }
              srxl/theme-name '${conf.theme}
              srxl/project-dir "~/usr/devel"
+             srxl/shell-executable "${shell}"
              srxl/use-exwm ${toBool conf.useEXWM})
 
-             ${conf.extraConfig}
+            ${conf.extraConfig}
           '';
         };
       };
