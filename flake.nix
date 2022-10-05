@@ -103,9 +103,9 @@
         });
     in {
       nixosConfigurations = mapAttrs' defineSystem {
-        amethyst = {
+        sapphire = {
           system = "x86_64-linux";
-          config = ./system/amethyst.nix;
+          config = ./system/sapphire.nix;
         };
       };
 

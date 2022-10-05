@@ -2,7 +2,7 @@
 
 let hmConf = config.home-manager.users.ruby;
 in {
-  imports = [ ./hardware/amethyst.nix ];
+  imports = [ ./hardware/sapphire.nix ];
 
   time = {
     hardwareClockInLocalTime = true;
@@ -236,7 +236,7 @@ in {
 
   musnix.enable = true;
 
-  home-manager.users.ruby = import ../home/amethyst-ruby.nix;
+  home-manager.users.ruby = import ../home/sapphire-ruby.nix;
 
   system.stateVersion = "21.05";
 }
