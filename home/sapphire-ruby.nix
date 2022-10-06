@@ -20,8 +20,10 @@
     gnome.gedit
     insomnia
     libreoffice-fresh
+    liquidctl
+    lm_sensors
     keepassxc
-    # magic-wormhole
+    magic-wormhole
     moserial
     mullvad-vpn
     mtr
