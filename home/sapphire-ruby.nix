@@ -15,9 +15,9 @@
     ffmpeg-full
     fusee-launcher
     gimp
-    gnome3.eog
-    gnome3.file-roller
-    gnome3.gedit
+    gnome.eog
+    gnome.file-roller
+    gnome.gedit
     insomnia
     libreoffice-fresh
     keepassxc
