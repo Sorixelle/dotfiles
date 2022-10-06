@@ -40,7 +40,6 @@ in {
     opengl = {
       enable = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [ rocm-opencl-icd rocm-opencl-runtime ];
     };
 
     sane.enable = true;
@@ -51,7 +50,8 @@ in {
   users = {
     users.ruby = {
       description = "Ruby";
-      extraGroups = [ "adbusers" "camera" "docker" "lp" "scanner" "wheel" ];
+      extraGroups =
+        [ "adbusers" "camera" "docker" "libvirtd" "lp" "scanner" "wheel" ];
       isNormalUser = true;
       uid = 1000;
     };
@@ -93,7 +93,13 @@ in {
   virtualisation = {
     docker.enable = true;
 
-    libvirtd.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        swtpm.enable = true;
+      };
+    };
   };
 
   # Allow setuid for libvirtd USB passthrough helper
@@ -199,8 +205,18 @@ in {
 
     tumbler.enable = true;
 
+    udev.extraRules = ''
+      # Use vendor-reset when resetting GPU to avoid GPU being unusable after shutting down VM
+      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x1002", ATTR{device}=="0x731f", RUN+="${pkgs.bash}/bin/bash -c 'echo device_specific > /sys$env{DEVPATH}/reset_method'"
+    '';
+
     xserver = {
       enable = true;
+
+      # Force X to use iGPU
+      deviceSection = ''
+        BusID "PCI:24@0:0:0"
+      '';
 
       displayManager.lightdm = {
         enable = true;
