@@ -9,22 +9,19 @@ in {
     timeZone = "Australia/Melbourne";
   };
 
-  boot.loader = {
-    efi.canTouchEfiVariables = true;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
 
-    grub = {
-      enable = true;
-      device = "nodev";
-      efiSupport = true;
-      gfxmodeEfi = "2560x1440";
-      # Add OpenCore macOS boot entry
-      extraEntries = ''
-        menuentry "macOS" {
-          set root=(hd0,1)
-          chainloader /EFI/BOOT/BOOTx64.EFI
-        }
-      '';
-      useOSProber = true;
+    loader = {
+      efi.canTouchEfiVariables = true;
+
+      grub = {
+        enable = true;
+        device = "nodev";
+        efiSupport = true;
+        gfxmodeEfi = "2560x1440";
+        useOSProber = true;
+      };
     };
   };
 
