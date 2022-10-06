@@ -2,8 +2,6 @@
 
 let hmConf = config.home-manager.users.ruby;
 in {
-  imports = [ ./hardware/sapphire.nix ];
-
   time = {
     hardwareClockInLocalTime = true;
     timeZone = "Australia/Melbourne";
@@ -11,6 +9,18 @@ in {
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
+
+    initrd = {
+      availableKernelModules =
+        [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+      kernelModules = [ "kvm-amd" ];
+    };
+
+    extraModulePackages = with config.boot.kernelPackages; [ vendor-reset ];
+
+    extraModprobeConfig = ''
+      options vfio_pci ids=1022:14da,1022:14db,1002:1478,1002:1479,1002:731f,1002:ab38
+    '';
 
     loader = {
       efi.canTouchEfiVariables = true;
@@ -25,12 +35,34 @@ in {
     };
   };
 
-  fileSystems."/home/ruby/.backup" = {
-    device = "fluorite:/mnt/Fluorite-HDD/Machine-Backups/Amethyst";
-    fsType = "nfs";
-    options =
-      [ "noauto" "noatime" "x-systemd.automount" "x-systemd.idle-timeout=600" ];
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/90155dc3-0542-40e0-950e-661154c53980";
+      fsType = "ext4";
+    };
+    "/boot" = {
+      device = "/dev/disk/by-uuid/76DD-0B53";
+      fsType = "vfat";
+    };
+    "/vault" = {
+      device = "/dev/disk/by-uuid/F279-E82B";
+      fsType = "exfat";
+      options = [ "defaults" "umask=000" ];
+    };
+    "/home/ruby/.backup" = {
+      device = "fluorite:/mnt/Fluorite-HDD/Machine-Backups/Amethyst";
+      fsType = "nfs";
+      options = [
+        "noauto"
+        "noatime"
+        "x-systemd.automount"
+        "x-systemd.idle-timeout=600"
+      ];
+    };
   };
+
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/ec0749a5-6ca5-4c31-b1b8-3bc178e756cd"; }];
 
   hardware = {
     bluetooth.enable = true;
@@ -57,7 +89,10 @@ in {
     };
   };
 
-  nix.settings.trusted-users = [ "ruby" ];
+  nix.settings = {
+    max-jobs = 24;
+    trusted-users = [ "ruby" ];
+  };
 
   environment.systemPackages = with pkgs; [
     ntfs3g
