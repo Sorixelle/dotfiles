@@ -819,14 +819,13 @@ Use the shell-provided title in the buffer name.
 
 Typically, if I'm in a project, I want a terminal to open in the root of that project, not somewhere in the middle of the source code tree. We can write a function to check if we're in a project, and if so, open a project in the project root - otherwise, just use the current =default-directory=.
 #+begin_src emacs-lisp :noweb-ref SHELLPOP-CONFIG
-  (defun srxl/open-vterm-in-project (&optional name)
-    "Create a new vterm buffer named NAME.
+  (defun srxl/open-vterm-in-project (&rest args)
+    "Create a new vterm buffer, passing ARGS to `vterm'.
 
   If in a project, start the shell in `projectile-project-root'. Otherwise, start
   it in `default-directory'."
     (let ((default-directory (or (projectile-project-root) default-directory)))
-      (message default-directory)
-      (vterm name)))
+      (apply 'vterm args)))
 #+end_src
 
 We'll use that function to open terminal buffers in shell-pop.
@@ -869,7 +868,7 @@ Eglot relies on the built-in project.el for project detection. We can make Proje
 #+begin_src emacs-lisp :noweb-ref projectile-config
   (defun srxl/projectile-get-current-project (dir)
     "Get the root of the project at DIR with project.el's `project-current'."
-    (when-let (proj-dir (cdr (project-current nil dir)))
+    (when-let ((proj-dir (cdr (project-current nil dir))))
       (expand-file-name proj-dir)))
 
   (setq projectile-project-root-functions '(srxl/projectile-get-current-project))
