@@ -25,5 +25,5 @@
 
   swapDevices = [{ device = "/dev/disk/by-label/Swap"; }];
 
-  nix.settings.max-jobs = lib.mkDefault 12;
+  nix.settings.max-jobs = lib.mkDefault 24;
 }
