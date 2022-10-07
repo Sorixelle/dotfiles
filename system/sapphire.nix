@@ -13,7 +13,7 @@ in {
     initrd = {
       availableKernelModules =
         [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [ "kvm-amd" ];
+      kernelModules = [ "vendor-reset" "kvm-amd" ];
     };
 
     extraModulePackages = with config.boot.kernelPackages; [ vendor-reset ];
