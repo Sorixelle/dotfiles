@@ -87,6 +87,8 @@ in {
       isNormalUser = true;
       uid = 1000;
     };
+
+    groups.dgpu = { };
   };
 
   nix.settings = {
@@ -243,6 +245,9 @@ in {
     udev.extraRules = ''
       # Use vendor-reset when resetting GPU to avoid GPU being unusable after shutting down VM
       ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x1002", ATTR{device}=="0x731f", RUN+="${pkgs.bash}/bin/bash -c 'echo device_specific > /sys$env{DEVPATH}/reset_method'"
+
+      KERNEL=="card[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{boot_vga}=="1", GROUP="dgpu", TAG="nothing", ENV{ID_SEAT}="none"
+      KERNEL=="renderD12[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{boot_vga}=="1", GROUP="dgpu", MODE="0660"
     '';
 
     xserver = {
