@@ -22,6 +22,7 @@
     libreoffice-fresh
     liquidctl
     lm_sensors
+    looking-glass-client
     keepassxc
     magic-wormhole
     moserial

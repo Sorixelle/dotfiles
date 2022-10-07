@@ -280,6 +280,8 @@ in {
 
   sound.enable = true;
 
+  systemd.tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 ruby kvm -" ];
+
   musnix.enable = true;
 
   home-manager.users.ruby = import ../home/sapphire-ruby.nix;
