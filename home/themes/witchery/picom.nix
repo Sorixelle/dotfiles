@@ -17,6 +17,7 @@
     # opacityRules = [ "90:class_g = 'Emacs'" ];
 
     settings = {
+      unredir-if-possible = true;
       blur = {
         method = "dual_kawase";
         strength = 5;
