@@ -200,6 +200,16 @@
 
   systemd.user = {
     services = {
+      setup-displays = {
+        Unit = { Description = "Configure display settings"; };
+        Service = {
+          Type = "oneshot";
+          ExecStart =
+            "${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-A-1 --pos -1920x0 --output DisplayPort-3 --pos 0x0 --primary --mode 2560x1440 --rate 170.00";
+        };
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
+
       nightly-backup = {
         Unit = { Description = "Backup user data directory to NAS"; };
         Service = {
