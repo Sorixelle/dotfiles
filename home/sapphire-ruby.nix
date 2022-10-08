@@ -218,6 +218,15 @@
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
 
+      scream = {
+        Unit = { Description = "Scream client for Windows VM audio"; };
+        Service = {
+          ExecStart = "${pkgs.scream}/bin/scream -o pulse -i virbr0";
+          Restart = "on-failure";
+        };
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
+
       setup-displays = {
         Unit = { Description = "Configure display settings"; };
         Service = {
