@@ -29,7 +29,7 @@
         gaps_in = 30
         gaps_out = 75
         col.inactive_border = 0xFF121E1D
-        col.active_border = 0xFF3B6E27
+        col.active_border = 0xFF40772B
       }
 
       decoration {
@@ -40,6 +40,7 @@
         blur_new_optimizations = true
         drop_shadow = false
       }
+      blurls=launcher
 
       input {
         accel_profile = flat

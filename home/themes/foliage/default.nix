@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [ ./alacritty.nix ./hyprland.nix ];
@@ -53,6 +53,20 @@
       hostname = "bg:blue";
       nix = "bg:cyan";
       time = "white";
+    };
+  };
+
+  xdg.configFile = {
+    "tofi/config" = {
+      text = ''
+        font = ${config.srxl.fonts.ui.name}
+        font-size = ${toString config.srxl.fonts.ui.size}
+        background-color = #121E1DC0
+        border-color = #40772B
+        text-color = #DFE4F3
+        border-width = 3
+        outline-width = 0
+      '';
     };
   };
 }
