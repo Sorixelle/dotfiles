@@ -14,10 +14,9 @@
       font = {
         normal = {
           family = config.srxl.fonts.monospace.name;
-          style = "Light Italic";
+          style = "Italic";
         };
-        bold.style = "Medium Italic";
-        bold_italic.style = "Medium Italic";
+        bold.style = "Bold Italic";
         size = config.srxl.fonts.monospace.size;
       };
       colors = {
