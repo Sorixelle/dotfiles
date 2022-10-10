@@ -70,6 +70,9 @@
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
 
+  # Disable command not found handler since it's broken with flakes
+  programs.command-not-found.enable = false;
+
   boot = {
     # Clean /tmp on startup
     cleanTmpDir = true;
