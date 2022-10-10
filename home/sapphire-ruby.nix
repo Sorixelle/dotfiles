@@ -81,7 +81,8 @@
 
     firefox = {
       enable = true;
-      package = pkgs.firefox;
+      package =
+        pkgs.firefox.override { cfg = { enableTridactylNative = true; }; };
       extensions = with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs; [
           alter
