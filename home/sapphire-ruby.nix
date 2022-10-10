@@ -180,6 +180,8 @@
         mpd_connection_timeout = 60;
       };
     };
+
+    starship.enableFishIntegration = true;
   };
 
   services = {
@@ -195,6 +197,11 @@
       enable = true;
       tray.enable = true;
     };
+  };
+
+  srxl = {
+    emacs.enable = true;
+    starship.enable = true;
   };
 
   systemd.user = {
