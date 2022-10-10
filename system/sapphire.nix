@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
-let hmConf = config.home-manager.users.ruby;
-in {
+{
   time = {
     hardwareClockInLocalTime = true;
     timeZone = "Australia/Melbourne";
@@ -187,6 +186,19 @@ in {
       gnome-keyring.enable = true;
     };
 
+    greetd = {
+      enable = true;
+      settings = let
+        swayConfig = pkgs.writeText "sway-config" ''
+          exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l; ${pkgs.sway}/bin/swaymsg exit"
+        '';
+      in {
+        default_session = {
+          command = "${pkgs.sway}/bin/sway --config ${swayConfig}";
+        };
+      };
+    };
+
     gvfs.enable = true;
 
     joycond.enable = true;
@@ -267,38 +279,6 @@ in {
 
       SUBSYSTEM=="kvmfr", OWNER="ruby", GROUP="kvm", MODE="0660"
     '';
-
-    xserver = {
-      enable = true;
-
-      # Force X to use iGPU
-      deviceSection = ''
-        BusID "PCI:24@0:0:0"
-      '';
-
-      displayManager.lightdm = {
-        enable = true;
-        greeters.gtk = {
-          enable = true;
-          inherit (hmConf.gtk) iconTheme theme;
-          extraConfig = ''
-            font-name = ${hmConf.gtk.font.name}
-          '';
-        };
-      };
-
-      videoDrivers = [ "amdgpu" "qxl" ];
-
-      wacom.enable = true;
-
-      windowManager.session = [{
-        name = "home-manager";
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.xsession-hm &
-          waitPID=$!
-        '';
-      }];
-    };
   };
 
   sound.enable = true;

@@ -53,7 +53,7 @@
     yubikey-manager
   ];
 
-  imports = [ ./modules/common-linux.nix ];
+  imports = [ ./modules/common-linux.nix ./themes/foliage ];
 
   home.sessionVariables = {
     BROWSER = "${config.programs.firefox.package}/bin/firefox";
@@ -196,8 +196,6 @@
       tray.enable = true;
     };
   };
-
-  srxl.theme.witchery.enable = true;
 
   systemd.user = {
     services = {
