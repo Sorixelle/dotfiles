@@ -5,6 +5,24 @@
 
   home.packages = with pkgs; [ fish ];
 
+  gtk = with pkgs; {
+    enable = true;
+    iconTheme = rec {
+      name = "Foliage";
+      package = pkgs.oomoxPlugins.icons-suruplus-aspromauros.generate {
+        inherit name;
+        src = ./foliage.oomox-theme;
+      };
+    };
+    theme = rec {
+      name = "Foliage";
+      package = pkgs.oomoxPlugins.theme-materia.generate {
+        inherit name;
+        src = ./foliage.oomox-theme;
+      };
+    };
+  };
+
   programs = {
     fish = {
       interactiveShellInit = ''
