@@ -1,6 +1,6 @@
-{ ... }:
+{ config, lib, ... }:
 
-{
+lib.mkIf config.srxl.theme.witchery.enable {
   services.picom = {
     enable = true;
     experimentalBackends = true;

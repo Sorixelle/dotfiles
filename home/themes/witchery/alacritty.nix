@@ -1,7 +1,7 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
-  programs.alacritty = {
+  programs.alacritty = lib.mkIf config.srxl.theme.witchery.enable {
     enable = true;
     settings = {
       window = {
