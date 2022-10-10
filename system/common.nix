@@ -80,6 +80,8 @@
     useUserPackages = true;
     # Use globally configures Nixpkgs set
     useGlobalPkgs = true;
+    # Add some home-manager modules from flakes to all users
+    sharedModules = [ inputs.hyprland.homeManagerModules.default ];
   };
 
   # Set flake revision

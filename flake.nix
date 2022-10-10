@@ -23,6 +23,10 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
