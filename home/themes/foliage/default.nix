@@ -24,6 +24,12 @@
   };
 
   programs = {
+    eww = {
+      enable = true;
+      package = pkgs.eww.override { withWayland = true; };
+      configDir = ./eww;
+    };
+
     fish = {
       interactiveShellInit = ''
         set -g fish_color_command green

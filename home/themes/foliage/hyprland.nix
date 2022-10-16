@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   xdg.configFile = {
@@ -32,6 +32,7 @@
         gaps_out = 75
         col.inactive_border = 0xFF121E1D
         col.active_border = 0xFF40772B
+        cursor_inactive_timeout = 5
       }
 
       decoration {
@@ -50,6 +51,7 @@
       }
 
       exec=${pkgs.hyprpaper}/bin/hyprpaper
+      exec-once=${config.programs.eww.package}/bin/eww open bar
 
       bind=SUPER,Q,killactive,
       bind=SUPER_SHIFT,Q,exit,

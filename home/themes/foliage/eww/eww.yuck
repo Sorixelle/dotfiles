@@ -1,0 +1,24 @@
+(defwindow bar
+    :monitor 1
+    :geometry (geometry :x "0%"
+                        :y "10px"
+                        :width "98%"
+                        :anchor "top center")
+    :staching "fg"
+    (box :class "container"
+         (box :halign "start"
+              {curr-win.title})
+         (box :halign "end"
+              (clock))))
+
+(defwidget clock []
+    (box :class "clock-text"
+         time))
+
+(defpoll time
+    :interval "500ms"
+    `date "+%I:%M %P"`)
+
+(defpoll curr-win
+    :interval "250ms"
+    `hyprctl -j activewindow`)
