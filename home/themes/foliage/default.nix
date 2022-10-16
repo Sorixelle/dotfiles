@@ -3,7 +3,7 @@
 {
   imports = [ ./alacritty.nix ./hyprland.nix ];
 
-  home.packages = with pkgs; [ fish ];
+  home.packages = with pkgs; [ fish grim ];
 
   gtk = with pkgs; {
     enable = true;
@@ -39,6 +39,13 @@
   qt = {
     enable = true;
     platformTheme = "gtk";
+  };
+
+  services = {
+    wired = {
+      enable = true;
+      config = ./wired.ron;
+    };
   };
 
   srxl = {
@@ -82,6 +89,7 @@
         background-color = #121E1DC0
         border-color = #40772B
         text-color = #DFE4F3
+        selection-color = #40772B
         border-width = 3
         outline-width = 0
       '';
