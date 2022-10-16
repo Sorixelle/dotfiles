@@ -24,6 +24,8 @@
       monitor=DP-4,2560x1440@120,1920x0,1
       exec-once=${pkgs.hyprland}/bin/hyprctl keyword monitor DP-4,2560x1440@170,1920x0,1
 
+      exec-once=${pkgs.hyprland}/bin/hyprctl dispatch dpms on
+
       general {
         border_size = 3
         gaps_in = 30
@@ -41,6 +43,7 @@
         drop_shadow = false
       }
       blurls=launcher
+      blurls=gtk-layer-shell
 
       input {
         accel_profile = flat
@@ -110,8 +113,7 @@
       bind=SUPER,grave,togglespecialworkspace,
       bind=SUPER_SHIFT,grave,movetoworkspace,special
 
-      bind=SUPER,bracketleft,movecurrentworkspacetomonitor,l
-      bind=SUPER,bracketright,movecurrentworkspacetomonitor,r
+      bind=SUPER,S,swapactiveworkspaces,0 1
     '';
   };
 }
