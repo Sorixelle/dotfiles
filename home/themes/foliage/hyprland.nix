@@ -44,7 +44,6 @@
         drop_shadow = false
       }
       blurls=launcher
-      blurls=gtk-layer-shell
 
       input {
         accel_profile = flat
