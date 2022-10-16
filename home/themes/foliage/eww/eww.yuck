@@ -7,7 +7,7 @@
     :staching "fg"
     (box :class "container"
          (box :halign "start"
-              {curr-win.title})
+              {curr-win?.title ?: ""})
          (box :halign "end"
               (clock))))
 

@@ -34,6 +34,17 @@
         utils.follows = "flake-utils";
       };
     };
+    eww = {
+      url = "github:elkowar/eww";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -64,7 +75,9 @@
         inherit system;
         config = import ./nixpkgs/config.nix;
         overlays = [
+          inputs.rust-overlay.overlays.default
           inputs.emacs.overlay
+          inputs.eww.overlays.default
           inputs.nixmox.overlay
           inputs.nur.overlay
           inputs.wired-notify.overlays.default
