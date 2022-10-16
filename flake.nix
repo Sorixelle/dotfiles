@@ -27,6 +27,13 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wired-notify = {
+      url = "github:Toqozz/wired-notify";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "flake-utils";
+      };
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -57,10 +64,11 @@
         inherit system;
         config = import ./nixpkgs/config.nix;
         overlays = [
+          inputs.emacs.overlay
           inputs.nixmox.overlay
           inputs.nur.overlay
+          inputs.wired-notify.overlays.default
           self.overlay
-          inputs.emacs.overlay
         ];
       };
 

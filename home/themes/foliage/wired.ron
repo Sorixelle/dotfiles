@@ -1,0 +1,70 @@
+(
+  max_notifications: 5,
+  timeout: 10000,
+  poll_interval: 6,
+
+  replacing_resets_timeout: true,
+  focus_follows: Window,
+
+  layout_blocks: [
+    (
+      name: "root",
+      parent: "",
+      hook: Hook(parent_anchor: TR, self_anchor: TR),
+      offset: Vec2(x: -10, y: 10),
+      params: NotificationBlock((
+        monitor: -1,
+        border_width: 3,
+        border_rounding: 0,
+        background_color: Color(hex: "#C0121E1D"),
+        border_color: Color(hex: "#C0121E1D"),
+        gap: Vec2(x: 0, y: 0),
+        notification_hook: Hook(parent_anchor: BR, self_anchor: TR),
+      )),
+    ),
+    (
+      name: "image",
+      parent: "root",
+      hook: Hook(parent_anchor: TL, self_anchor: TL),
+      offset: Vec2(x: 0, y: 0),
+      params: ImageBlock((
+        image_type: HintThenApp,
+        padding: Padding(left: 10, top: 10, bottom: 10, right: 0),
+        rounding: 0,
+        scale_width: 64,
+        scale_height: 64,
+        filter_mode: Lanczos3,
+      )),
+    ),
+    (
+      name: "title",
+      parent: "image",
+      hook: Hook(parent_anchor: TR, self_anchor: TL),
+      offset: Vec2(x: 0, y: 0),
+      params: TextBlock((
+        padding: Padding(left: 10, top: 10, bottom: 1, right: 10),
+        text: "<span font_features='ss01, ss02'>%s</span>",
+        font: "Inter Bold 12",
+        color: Color(hex: "#DFE4F3"),
+        dimensions: (width: (min: 0, max: 300), height: (min: 0, max: 0)),
+      )),
+    ),
+    (
+      name: "message",
+      parent: "title",
+      hook: Hook(parent_anchor: BL, self_anchor: TL),
+      offset: Vec2(x: 0, y: 0),
+      params: ScrollingTextBlock((
+        padding: Padding(left: 10, top: 1, bottom: 10, right: 10),
+        text: "<span font_features='ss01, ss02'>%b</span>",
+        font: "Inter Regular 12",
+        color: Color(hex: "#DFE4F3"),
+        width: (min: 200, max: 500),
+        scroll_speed: 0.1,
+        lhs_dist: 0,
+        rhs_dist: 20,
+        scroll_t: 1,
+      )),
+    ),
+  ],
+)
