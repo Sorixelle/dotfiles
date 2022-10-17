@@ -33,7 +33,6 @@
     nmap
     pavucontrol
     picard
-    polymc
     python3
     qbittorrent
     remmina
