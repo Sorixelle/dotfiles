@@ -115,6 +115,8 @@
       bind=SUPER_SHIFT,grave,movetoworkspace,special
 
       bind=SUPER,S,swapactiveworkspaces,0 1
+      bind=SUPER,bracketleft,movecurrentworkspacetomonitor,l
+      bind=SUPER,bracketright,movecurrentworkspacetomonitor,r
     '';
   };
 }
