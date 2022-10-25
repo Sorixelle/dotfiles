@@ -90,6 +90,7 @@
       extraGroups =
         [ "adbusers" "camera" "docker" "libvirtd" "lp" "scanner" "wheel" ];
       isNormalUser = true;
+      shell = pkgs.powershell;
       uid = 1000;
     };
 
