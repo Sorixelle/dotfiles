@@ -182,20 +182,6 @@
 
     joycond.enable = true;
 
-    mopidy = {
-      enable = true;
-      extensionPackages = with pkgs; [ mopidy-mpd mopidy-subidy ];
-
-      configuration = ''
-        [audio]
-        output = pulsesink server=127.0.0.1:4713
-      '';
-
-      # All the configuration that has passwords and stuff that I obviously
-      # can't commit to a public repo goes here
-      extraConfigFiles = [ "/etc/mopidy/mopidy.conf" ];
-    };
-
     mullvad-vpn.enable = true;
 
     pcscd.enable = true;
@@ -208,26 +194,6 @@
       };
       jack.enable = true;
       pulse.enable = true;
-
-      config.pipewire-pulse = {
-        "context.modules" = [
-          {
-            name = "libpipewire-module-rtkit";
-            flags = [ "ifexists" "nofail" ];
-          }
-          { name = "libpipewire-module-protocol-native"; }
-          { name = "libpipewire-module-client-node"; }
-          { name = "libpipewire-module-adapter"; }
-          { name = "libpipewire-module-metadata"; }
-          {
-            name = "libpipewire-module-protocol-pulse";
-            args = {
-              "server.address" = [ "unix:native" "tcp:4713" ];
-              "vm.overrides" = { "pulse.min.quantum" = "1024/48000"; };
-            };
-          }
-        ];
-      };
     };
 
     redshift = {

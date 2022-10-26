@@ -191,6 +191,21 @@
       pinentryFlavor = "gnome3";
     };
 
+    mopidy = {
+      enable = true;
+      extensionPackages = with pkgs; [
+        mopidy-mpd
+        mopidy-mpris
+        mopidy-jellyfin
+      ];
+
+      settings = { audio = { output = "pipewiresink"; }; };
+
+      # All the configuration that has passwords and stuff that I obviously
+      # can't commit to a public repo goes here
+      extraConfigFiles = [ "${config.xdg.configHome}/mopidy/jellyfin.conf" ];
+    };
+
     syncthing = {
       enable = true;
       tray.enable = true;
