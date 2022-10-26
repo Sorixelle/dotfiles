@@ -50,7 +50,7 @@
       }
 
       exec=${pkgs.hyprpaper}/bin/hyprpaper
-      exec-once=${config.programs.eww.package}/bin/eww open bar
+      exec-once=${config.programs.eww.package}/bin/eww open clock
 
       workspace=DP-4,name:Firefox
       workspace=HDMI-A-2,name:Chat
