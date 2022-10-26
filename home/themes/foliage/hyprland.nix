@@ -52,6 +52,9 @@
       exec=${pkgs.hyprpaper}/bin/hyprpaper
       exec-once=${config.programs.eww.package}/bin/eww open bar
 
+      workspace=DP-4,name:Firefox
+      workspace=HDMI-A-2,name:Chat
+
       bind=SUPER,Q,killactive,
       bind=SUPER_SHIFT,Q,exit,
       bind=SUPER,return,exec,alacritty
@@ -89,9 +92,9 @@
 
       submap=reset
 
-      bind=SUPER,1,workspace,1
-      bind=SUPER,2,workspace,2
-      bind=SUPER,3,workspace,3
+      bind=SUPER,1,workspace,name:Firefox
+      bind=SUPER,2,workspace,name:Chat
+      bind=SUPER,3,workspace,name:Code
       bind=SUPER,4,workspace,4
       bind=SUPER,5,workspace,5
       bind=SUPER,6,workspace,6
@@ -100,9 +103,9 @@
       bind=SUPER,9,workspace,9
       bind=SUPER,0,workspace,0
 
-      bind=SUPER_SHIFT,1,movetoworkspace,1
-      bind=SUPER_SHIFT,2,movetoworkspace,2
-      bind=SUPER_SHIFT,3,movetoworkspace,3
+      bind=SUPER_SHIFT,1,movetoworkspace,name:Firefox
+      bind=SUPER_SHIFT,2,movetoworkspace,name:Chat
+      bind=SUPER_SHIFT,3,movetoworkspace,name:Code
       bind=SUPER_SHIFT,4,movetoworkspace,4
       bind=SUPER_SHIFT,5,movetoworkspace,5
       bind=SUPER_SHIFT,6,movetoworkspace,6
