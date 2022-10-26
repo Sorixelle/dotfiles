@@ -79,16 +79,13 @@
       driSupport32Bit = true;
     };
 
-    sane.enable = true;
-
     steam-hardware.enable = true;
   };
 
   users = {
     users.ruby = {
       description = "Ruby";
-      extraGroups =
-        [ "adbusers" "camera" "docker" "libvirtd" "lp" "scanner" "wheel" ];
+      extraGroups = [ "adbusers" "camera" "docker" "libvirtd" "wheel" ];
       isNormalUser = true;
       shell = pkgs.powershell;
       uid = 1000;
@@ -102,26 +99,7 @@
     trusted-users = [ "ruby" ];
   };
 
-  environment.systemPackages = with pkgs; [
-    ntfs3g
-    pciutils
-    usbutils
-
-    ardour
-    calf
-    caps
-    carla
-    distrho
-    eq10q
-    geonkick
-    gxplugins-lv2
-    helm
-    lsp-plugins
-    noise-repellent
-    rubberband
-    wolf-shaper
-    zyn-fusion
-  ];
+  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
 
   location.provider = "geoclue2";
 
@@ -252,11 +230,6 @@
       };
     };
 
-    printing = {
-      enable = true;
-      drivers = [ pkgs.epson-escpr ];
-    };
-
     redshift = {
       enable = true;
       temperature = {
@@ -283,8 +256,6 @@
   };
 
   sound.enable = true;
-
-  musnix.enable = true;
 
   home-manager.users.ruby = import ../home/sapphire-ruby.nix;
 

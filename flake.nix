@@ -12,10 +12,6 @@
       };
     };
     nur.url = "github:nix-community/NUR";
-    musnix = {
-      url = "github:musnix/musnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixmox = {
       url = "github:Sorixelle/nixmox";
       inputs = {
@@ -98,7 +94,6 @@
         modules = [
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
-          inputs.musnix.nixosModules.musnix
 
           (import ./system/common.nix)
 

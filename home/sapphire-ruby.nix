@@ -38,7 +38,6 @@
     remmina
     rnix-lsp
     shutter
-    sshfs
     steam
     steam-run
     spek
