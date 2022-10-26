@@ -51,6 +51,7 @@
 
       exec=${pkgs.hyprpaper}/bin/hyprpaper
       exec-once=${config.programs.eww.package}/bin/eww open clock
+      exec-once=${config.programs.waybar.package}/bin/waybar
 
       workspace=DP-4,name:Firefox
       workspace=HDMI-A-2,name:Chat

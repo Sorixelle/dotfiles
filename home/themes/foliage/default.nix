@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./alacritty.nix ./hyprland.nix ];
+  imports = [ ./alacritty.nix ./hyprland.nix ./waybar.nix ];
 
   home.packages = with pkgs; [ fish grim ];
 
