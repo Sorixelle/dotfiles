@@ -22,7 +22,6 @@
     libreoffice-fresh
     liquidctl
     lm_sensors
-    looking-glass-client
     keepassxc
     magic-wormhole
     moserial
@@ -232,15 +231,6 @@
         Service = {
           ExecStart =
             "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-          Restart = "on-failure";
-        };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
-      };
-
-      scream = {
-        Unit = { Description = "Scream client for Windows VM audio"; };
-        Service = {
-          ExecStart = "${pkgs.scream}/bin/scream -o pulse -i virbr0";
           Restart = "on-failure";
         };
         Install = { WantedBy = [ "graphical-session.target" ]; };

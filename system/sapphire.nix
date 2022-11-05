@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   time = {
@@ -12,20 +12,8 @@
     initrd = {
       availableKernelModules =
         [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [ "vendor-reset" "kvm-amd" ];
+      kernelModules = [ "kvm-amd" ];
     };
-
-    extraModulePackages = with config.boot.kernelPackages; [
-      kvmfr
-      vendor-reset
-    ];
-
-    extraModprobeConfig = ''
-      options vfio_pci ids=1022:14da,1022:14db,1002:1478,1002:1479,1002:731f,1002:ab38
-      options kvmfr static_size_mb=64
-    '';
-
-    kernelModules = [ "kvmfr" ];
 
     loader = {
       efi.canTouchEfiVariables = true;
@@ -90,8 +78,6 @@
       shell = pkgs.powershell;
       uid = 1000;
     };
-
-    groups.dgpu = { };
   };
 
   nix.settings = {
@@ -119,16 +105,6 @@
       qemu = {
         package = pkgs.qemu_kvm;
         swtpm.enable = true;
-        verbatimConfig = ''
-          namespaces = []
-
-          cgroup_device_acl = [
-            "/dev/null", "/dev/full", "/dev/zero",
-            "/dev/random", "/dev/urandom",
-            "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-            "/dev/rtc", "/dev/hpet", "/dev/kvmfr0",
-          ]
-        '';
       };
     };
   };
@@ -209,16 +185,6 @@
     trezord.enable = true;
 
     tumbler.enable = true;
-
-    udev.extraRules = ''
-      # Use vendor-reset when resetting GPU to avoid GPU being unusable after shutting down VM
-      ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x1002", ATTR{device}=="0x731f", RUN+="${pkgs.bash}/bin/bash -c 'echo device_specific > /sys$env{DEVPATH}/reset_method'"
-
-      KERNEL=="card[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{boot_vga}=="1", GROUP="dgpu", TAG="nothing", ENV{ID_SEAT}="none"
-      KERNEL=="renderD12[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{boot_vga}=="1", GROUP="dgpu", MODE="0660"
-
-      SUBSYSTEM=="kvmfr", OWNER="ruby", GROUP="kvm", MODE="0660"
-    '';
   };
 
   sound.enable = true;
