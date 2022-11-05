@@ -75,7 +75,6 @@
       description = "Ruby";
       extraGroups = [ "adbusers" "camera" "docker" "libvirtd" "wheel" ];
       isNormalUser = true;
-      shell = pkgs.powershell;
       uid = 1000;
     };
   };
