@@ -5,8 +5,8 @@
     "hypr/hyprpaper.conf" = {
       text = ''
         preload = ${./wp.png}
-        wallpaper = DP-4,${./wp.png}
-        wallpaper = HDMI-A-2,${./wp.png}
+        wallpaper = DP-1,${./wp.png}
+        wallpaper = HDMI-A-1,${./wp.png}
       '';
     };
   };
@@ -14,15 +14,15 @@
   wayland.windowManager.hyprland = {
     enable = true;
     extraConfig = ''
-      monitor=HDMI-A-2,1920x1080@60,0x0,1
+      monitor=HDMI-A-1,1920x1080@60,0x0,1
 
       # So I have no idea what the flying fuck is going on with this monitor. If
       # I set it initially to 170Hz, the cursor gets real laggy when moving
       # between windows. If I set it to 120Hz, then back to 170Hz, everything is
       # fine. No idea why, and I feel like the answer will give me permanent
       # warp, so I just do this and be content with it.
-      monitor=DP-4,2560x1440@120,1920x0,1
-      exec-once=${pkgs.hyprland}/bin/hyprctl keyword monitor DP-4,2560x1440@170,1920x0,1
+      monitor=DP-1,2560x1440@120,1920x0,1
+      # exec-once=${pkgs.hyprland}/bin/hyprctl keyword monitor DP-4,2560x1440@170,1920x0,1
 
       exec-once=${pkgs.hyprland}/bin/hyprctl dispatch dpms on
 
@@ -53,8 +53,8 @@
       exec-once=${config.programs.eww.package}/bin/eww open clock
       exec-once=${config.programs.waybar.package}/bin/waybar
 
-      workspace=DP-4,name:Firefox
-      workspace=HDMI-A-2,name:Chat
+      workspace=DP-1,name:Firefox
+      workspace=HDMI-A-1,name:Chat
 
       bind=SUPER,Q,killactive,
       bind=SUPER_SHIFT,Q,exit,
