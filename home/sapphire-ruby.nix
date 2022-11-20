@@ -32,6 +32,7 @@
     nmap
     pavucontrol
     picard
+    prismlauncher
     python3
     qbittorrent
     remmina
