@@ -865,16 +865,6 @@ If Eglot started successfully, enable flymake for the buffer.
   (add-hook 'eglot-server-initialized-hook 'flymake-mode)
 #+end_src
 
-Eglot relies on the built-in project.el for project detection. We can make Projectile use the same logic project.el does, just to keep things consistent.
-#+begin_src emacs-lisp :noweb-ref projectile-config
-  (defun srxl/projectile-get-current-project (dir)
-    "Get the root of the project at DIR with project.el's `project-current'."
-    (when-let ((proj-dir (cdr (project-current nil dir))))
-      (expand-file-name proj-dir)))
-
-  (setq projectile-project-root-functions '(srxl/projectile-get-current-project))
-#+end_src
-
 ** Direnv integration
 [[https://direnv.net/][Direnv]] is a really useful tool for setting environments per directory. It's a total godsend when working with Nix projects, since it means I can just =cd= into a directory and get that shell right away. =direnv-mode= provides that functionality for Emacs itself, so that it can call out to programs in a Nix shell. As a heavy Nix user, I can't live without it.
 #+begin_src emacs-lisp :tangle yes
