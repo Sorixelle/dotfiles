@@ -18,7 +18,7 @@
 
         "custom/wintitle" = {
           exec =
-            "${config.wayland.windowManager.hyprland.package}/bin/hyprctl activewindow -j | ${pkgs.jq}/bin/jq -r .title | sed 's/&/&amp;/'";
+            "${config.wayland.windowManager.hyprland.package}/bin/hyprctl activewindow -j | ${pkgs.jq}/bin/jq -r .title";
           interval = 1;
           max-length = 50;
         };
@@ -46,7 +46,6 @@
         exclusive = false;
 
         modules-left = [ "wlr/workspaces" ];
-        modules-right = [ "tray" ];
 
         "wlr/workspaces" = {
           sort-by-name = false;
