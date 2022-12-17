@@ -188,6 +188,11 @@
 
   sound.enable = true;
 
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+  };
+
   home-manager.users.ruby = import ../home/sapphire-ruby.nix;
 
   system.stateVersion = "21.05";
