@@ -190,7 +190,6 @@
   };
 
   services = {
-    easyeffects.enable = true;
     udiskie.enable = true;
 
     gpg-agent = {
