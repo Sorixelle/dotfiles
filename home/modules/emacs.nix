@@ -9,7 +9,7 @@ in with lib; {
 
     package = mkOption {
       type = package;
-      default = pkgs.emacsNativeComp;
+      default = pkgs.emacsUnstable;
       description = "The Emacs package to install.";
     };
 
