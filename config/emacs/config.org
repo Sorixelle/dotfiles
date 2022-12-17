@@ -579,9 +579,10 @@ Keeping things like quotation marks for strings, and parentheses balanced is rea
 ** Autocomplete
 First off, let's get some autocomplete capability in here. We gotta have that - what's an IDE without autocomplete? Although, this doesn't provide language-specific completions, just the UI for autocompletion. We'll get to that in a bit.
 
-[[https://github.com/minad/corfu][Corfu]] is a super neat little library that builds off =completion-at-point= to provide a nice little autocomplete box.
+[[https://github.com/minad/corfu][Corfu]] is a super neat little library that builds off =completion-at-point= to provide a nice little autocomplete box. We add the extensions to the load path, since they're not in there by default and we want to use some of them.
 #+begin_src emacs-lisp :tangle yes
   (use-package corfu
+    :load-path "straight/repos/corfu/extensions"
     :config
     <<CORFU-CONFIG>>)
 #+end_src
@@ -617,10 +618,10 @@ Use fuzzy searching in completions.
   (add-to-list 'completion-styles 'flex)
 #+end_src
 
-Being able to see the documentation of items I've selected is nice. [[https://github.com/galeo/corfu-doc][corfu-doc]] can do that for us.
-#+begin_src emacs-lisp :tangle yes
-  (use-package corfu-doc
-    :hook (corfu-mode . corfu-doc-mode))
+Being able to see the documentation of items I've selected is nice. Corfu's built-in popupinfo extension can do that for us.
+#+begin_src emacs-lisp :noweb-ref CORFU-CONFIG
+  (require 'corfu-popupinfo)
+  (add-hook 'corfu-mode-hook 'corfu-popupinfo-mode)
 #+end_src
 
 [[https://github.com/jdtsmith/kind-icon][kind-icon]] is another package that will give us little icons next to competions, kinda like how VSCode does it. It looks pretty. I like it.
