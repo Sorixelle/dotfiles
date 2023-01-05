@@ -565,7 +565,7 @@ First, a few general bits and pieces that we want to have when editing code.
 
 Show line numbers in all code files. Pretty much every programming mode derives from =prog-mode=, so we can hook into that.
 #+begin_src emacs-lisp :tangle yes
-  (add-hook 'prog-mode-hook 'linum-mode)
+  (add-hook 'prog-mode-hook (lambda () (setq-local display-line-numbers t)))
 #+end_src
 
 Keeping things like quotation marks for strings, and parentheses balanced is really important for code edititng. [[https://github.com/Fuco1/smartparens][Smartparens]] is a good option for this. So we'll use it.
