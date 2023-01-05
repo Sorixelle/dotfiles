@@ -144,7 +144,7 @@
           name = "srxl-dotfiles";
 
           nativeBuildInputs = [
-            nix-linter
+            # nix-linter
             nixfmt
             (nixos-generators.override { nix = nixUnstable; })
             rnix-lsp
@@ -163,7 +163,7 @@
           };
           hooks = {
             nixfmt.enable = true;
-            nix-linter.enable = true;
+            # nix-linter.enable = true;
           };
         };
       });
