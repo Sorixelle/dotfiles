@@ -9,7 +9,7 @@
     settings = {
       top = {
         layer = "top";
-        output = [ "DP-1" "HDMI-A-1" ];
+        output = [ "DP-3" "HDMI-A-1" ];
         position = "top";
         margin = "24";
         exclusive = false;
@@ -40,7 +40,7 @@
 
       bottom = {
         layer = "top";
-        output = [ "DP-1" "HDMI-A-1" ];
+        output = [ "DP-3" "HDMI-A-1" ];
         position = "bottom";
         margin = "24";
         exclusive = false;

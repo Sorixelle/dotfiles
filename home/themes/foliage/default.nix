@@ -3,7 +3,7 @@
 {
   imports = [ ./alacritty.nix ./hyprland.nix ./waybar.nix ];
 
-  home.packages = with pkgs; [ fish grim ];
+  home.packages = with pkgs; [ fish grim slurp ];
 
   gtk = with pkgs; {
     enable = true;
