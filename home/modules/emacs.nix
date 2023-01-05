@@ -9,7 +9,7 @@ in with lib; {
 
     package = mkOption {
       type = package;
-      default = pkgs.emacsUnstable;
+      default = pkgs.emacsPgtk;
       description = "The Emacs package to install.";
     };
 
