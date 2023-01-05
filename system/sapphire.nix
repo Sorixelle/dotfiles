@@ -30,11 +30,11 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/90155dc3-0542-40e0-950e-661154c53980";
+      device = "/dev/disk/by-uuid/058c81bf-408d-4425-9ca5-0d790ec1c12d";
       fsType = "ext4";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/76DD-0B53";
+      device = "/dev/disk/by-uuid/06D4-6CD6";
       fsType = "vfat";
     };
     "/vault" = {
@@ -55,7 +55,7 @@
   };
 
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/ec0749a5-6ca5-4c31-b1b8-3bc178e756cd"; }];
+    [{ device = "/dev/disk/by-uuid/06764441-8c0d-4e61-a105-f1fab1c66149"; }];
 
   hardware = {
     bluetooth.enable = true;
