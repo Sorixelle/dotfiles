@@ -21,7 +21,7 @@
       # between windows. If I set it to 120Hz, then back to 170Hz, everything is
       # fine. No idea why, and I feel like the answer will give me permanent
       # warp, so I just do this and be content with it.
-      monitor=DP-3,2560x1440@120,1920x0,1
+      monitor=DP-3,2560x1440@170,1920x0,1
       # exec-once=${pkgs.hyprland}/bin/hyprctl keyword monitor DP-4,2560x1440@170,1920x0,1
 
       exec-once=${pkgs.hyprland}/bin/hyprctl dispatch dpms on
