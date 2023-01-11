@@ -86,6 +86,12 @@
 
   environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
 
+  fonts.fontconfig.defaultFonts = {
+    sansSerif = [ "Inter" "IBM Plex Mono JP" ];
+    serif = [ "IBM Plex Serif" ];
+    monospace = [ "BlexMono Nerd Font" ];
+  };
+
   location.provider = "geoclue2";
 
   networking = {
