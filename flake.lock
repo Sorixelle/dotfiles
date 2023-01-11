@@ -279,6 +279,26 @@
         "type": "github"
       }
     },
+    "musnix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1671929177,
+        "narHash": "sha256-FEdR6hym7X4Z9xk1Gmfeg1cTA3bXG7N6Kpq8V0YrOsc=",
+        "owner": "musnix",
+        "repo": "musnix",
+        "rev": "594a4ee643a9962e1249f1e34f50af1f27f51170",
+        "type": "github"
+      },
+      "original": {
+        "owner": "musnix",
+        "repo": "musnix",
+        "type": "github"
+      }
+    },
     "nixmox": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -410,6 +430,7 @@
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
+        "musnix": "musnix",
         "nixmox": "nixmox",
         "nixpkgs": "nixpkgs",
         "nur": "nur",

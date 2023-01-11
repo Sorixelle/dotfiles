@@ -7,7 +7,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
 
     initrd = {
       availableKernelModules =
@@ -73,7 +73,7 @@
   users = {
     users.ruby = {
       description = "Ruby";
-      extraGroups = [ "adbusers" "camera" "docker" "libvirtd" "wheel" ];
+      extraGroups = [ "adbusers" "audio" "camera" "docker" "libvirtd" "wheel" ];
       isNormalUser = true;
       uid = 1000;
     };
@@ -129,6 +129,8 @@
 
     ssh.startAgent = true;
   };
+
+  srxl.audioprod.enable = true;
 
   services = {
     blueman.enable = true;
