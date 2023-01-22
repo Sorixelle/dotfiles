@@ -23,6 +23,7 @@
     liquidctl
     lm_sensors
     keepassxc
+    kopia
     magic-wormhole
     moserial
     mullvad-vpn
