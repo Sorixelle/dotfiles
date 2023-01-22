@@ -42,7 +42,7 @@
       fsType = "exfat";
       options = [ "defaults" "umask=000" ];
     };
-    "/home/ruby/.backup" = {
+    "/home/ruby/.local/share/backup" = {
       device = "fluorite:/mnt/Fluorite-HDD/Machine-Backups/Amethyst";
       fsType = "nfs";
       options = [
