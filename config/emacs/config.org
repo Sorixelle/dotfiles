@@ -697,7 +697,6 @@ And now, keybindings.
   (srxl/def-leader-key
     "b" '(projectile-switch-to-buffer :wk "Switch buffer")
     "f" '(projectile-find-file :wk "Find file")
-    "s" '(projectile-switch-project :wk "Switch project")
     "x" '(projectile-kill-buffers :wk "Close project")
     "/" '(projectile-ripgrep :wk "Grep project")
 
@@ -710,6 +709,52 @@ And now, keybindings.
 #+end_src
 
 Other bindings will be coming in the following sections.
+
+** Workspace management
+Working across multiple projects gets real clunky, real fast. Thankfully, we have [[https://github.com/nex3/perspective-el][perspective]] to help us manage the load, by constraining window layouts and buffer lists to "perspectives", and letting us switch between them. Just like workspaces.
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package perspective
+    :config
+    <<PERSP-CONFIG>>
+    (persp-mode))
+#+end_src
+
+First off, some keybinds.  We're mostly going to replace a lot of the default "switch buffer" type commands with ones that are perspective-aware, so we get the buffer constraining behaviour by default.
+
+#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
+  (general-def
+    "C-x b"   'persp-ivy-switch-buffer
+    "C-x C-b" 'persp-list-buffer)
+#+end_src
+
+And now a whole bunch more under the leader key. These probably won't see heavy use, but it's still good to have them around.
+
+#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
+  (srxl/def-leader-key
+    "p" '(:ignore t :wk "Perspectives...")
+    "p a" '(persp-add-buffer :wk "Add buffer to persp")
+    "p k" '(persp-remove-buffer :wk "Remove buffer from persp")
+    "p m" '(persp-merge :wk "Merge current persp with other")
+    "p r" '(persp-rename :wk "Rename persp")
+    "p s" '(persp-switch :wk "Switch persp")
+    "p x" '(persp-kill :wk "Delete persp"))
+#+end_src
+
+Get that little warning about not defining =persp-mode-prefix-key= to shut up. We defined the keybindings ourself, it's fine. Shush.
+
+#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
+  (setq persp-suppress-no-prefix-key-warning t)
+#+end_src
+
+When we're dealing with code projects, you really wanna be focusing on one at a time. Perspective's workspace-like isolation is perfect for this. [[https://github.com/bbatsov/persp-projectile][persp-projectile]] gives us a nice integration that lets us switch to a project and create a perspective for it at the same time. Exactly the kind of integration we want.
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package persp-projectile
+    :config
+    (srxl/def-leader-key
+      "s" '(projectile-persp-switch-project :wk "Switch project")))
+#+end_src
 
 ** File exploring
 Next, we'll get outselves a file explorer, by way of [[https://github.com/Alexander-Miller/treemacs][Treemacs]]. It's a fully-featured file tree sidebar, just like you'd have in every IDE.
