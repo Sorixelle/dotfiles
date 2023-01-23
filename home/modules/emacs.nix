@@ -19,6 +19,12 @@ in with lib; {
       description = "The name of the Emacs theme to use.";
     };
 
+    useMu4e = mkOption {
+      type = bool;
+      default = false;
+      description = "Whether to use the mu4e email client.";
+    };
+
     useEXWM = mkOption {
       type = bool;
       default = false;
@@ -34,7 +40,8 @@ in with lib; {
 
   config = let
     emacsPkgs = pkgs.emacsPackagesFor conf.package;
-    emacsPackage = emacsPkgs.emacsWithPackages (e: [ e.vterm ]);
+    emacsPackage = emacsPkgs.emacsWithPackages
+      (e: [ e.vterm ] ++ (lib.optional conf.useMu4e pkgs.mu));
 
     tangledConfig = pkgs.stdenv.mkDerivation {
       name = "hm-emacs-tangled-config";
