@@ -55,7 +55,10 @@
   };
 
   srxl = {
-    emacs.theme = "doom-henna";
+    emacs = {
+      theme = "doom-henna";
+      package = pkgs.emacsPgtk;
+    };
 
     fonts = {
       monospace = {

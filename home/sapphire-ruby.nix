@@ -256,6 +256,7 @@
   srxl = {
     emacs = {
       enable = true;
+      package = pkgs.emacsGit;
       useMu4e = true;
     };
     starship.enable = true;
