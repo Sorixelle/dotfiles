@@ -148,6 +148,10 @@
       scdaemonSettings = { disable-ccid = true; };
     };
 
+    mbsync.enable = true;
+
+    mu.enable = true;
+
     ncmpcpp = {
       enable = true;
       package = pkgs.ncmpcpp.override { visualizerSupport = true; };
@@ -219,8 +223,41 @@
     };
   };
 
+  accounts.email = {
+    maildirBasePath = "usr/mail";
+    accounts = {
+      "ruby@srxl.me" = rec {
+        address = "ruby@srxl.me";
+        realName = "Ruby Iris Juric";
+        gpg.key = "B6D7116C451A5B41";
+        primary = true;
+
+        userName = address;
+        # TODO: make this not suck balls
+        passwordCommand = "cat ~/.email-password";
+        imap = {
+          host = "imap.migadu.com";
+          port = 993;
+        };
+        smtp = {
+          host = "smtp.migadu.com";
+          port = 465;
+        };
+
+        mbsync = {
+          enable = true;
+          create = "both";
+        };
+        mu.enable = true;
+      };
+    };
+  };
+
   srxl = {
-    emacs.enable = true;
+    emacs = {
+      enable = true;
+      useMu4e = true;
+    };
     starship.enable = true;
   };
 
