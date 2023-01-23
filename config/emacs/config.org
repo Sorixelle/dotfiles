@@ -1124,18 +1124,10 @@ TODO: write some shit here
 #+begin_src emacs-lisp :tangle yes
   (use-package exwm
     :if srxl/use-exwm
-    :custom
-    <<EXWM-CUSTOM>>
     :config
     <<EXWM-CONFIG>>)
 
   <<POST-EXWM>>
-#+end_src
-
-I'd like 9 workspaces by default. One for each number.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CUSTOM
-  (exwm-workspace-number 10)
 #+end_src
 
 We'll use a little hook to automatically set the buffer title to the name of the application running in there.
@@ -1156,7 +1148,7 @@ Bind a couple keys to be used in all buffers under EXWM, X window or not:
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (general-def '(exwm-mode-map global-map)
     "s-SPC" 'counsel-linux-app
-    "s-RET" 'vterm
+    "s-<return>" 'vterm
 
     "M-SPC" srxl/leader-key-map
     "M-<tab>" 'persp-next
@@ -1173,7 +1165,15 @@ And some keybinds for X window buffers, in both line and char mode:
             (,(kbd "s-q") . kill-this-buffer)))
 #+end_src
 
-We'll also generate a few keybindings for =s-<number>= to switch to that workspace.
+EXWM provides workspaces, but they're a little clunky for multiple monitor setups, in my opinion. There's no great way to move a workspace to another monitor - you gotta manually poke and prod at =exwm-randr-workspace-monitor-plist= to do it, since that's the single source of truth for what workspace is on what monitor. I could write some functions to do that, but we have perspective setup - we can get most of the workspace functionality we want out of that anyway, AND we can name them anything we want instead of predefined mappings to numbers. Sounds optimal to me (for now at least. Maybe I'll get off my ass and actually write some functions to make workspaces more like how most tiling WMs do it).
+
+With all that said - 2 workspaces by default. One for each monitor.
+
+#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
+  (setopt exwm-workspace-number 2)
+#+end_src
+
+We'll also generate a few keybindings for =s-0= and =s-1= to switch to the primary and secondary monitor, respectively.
 
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (nconc exwm-input-global-keys
@@ -1182,10 +1182,10 @@ We'll also generate a few keybindings for =s-<number>= to switch to that workspa
                      (lambda ()
                        (interactive)
                        (exwm-workspace-switch-create ,i))))
-                 (number-sequence 0 9)))
+                 (number-sequence 0 1)))
 #+end_src
 
-And for =s-S-<number>=, to move a buffer to that workspace.
+And for =s-S-<number>=, to move a buffer to that monitor.
 
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (nconc exwm-input-global-keys
@@ -1195,7 +1195,19 @@ And for =s-S-<number>=, to move a buffer to that workspace.
                           (interactive)
                           (exwm-workspace-move-window ,i))))
                     '(")" "!" "@" "#" "$" "%" "^" "&" "*" "(")
-                    (number-sequence 0 9)))
+                    (number-sequence 0 1)))
+#+end_src
+
+=exwm-randr= has all the magic to make multi-monitor work, so we'll configure that as well. =exwm-randr-workspace-monitor-plist= defines a mapping of workspaces to monitor outputs, and the hook will call =xrandr= to position my monitors correctly, as well as set correct refresh rates.
+
+#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
+  (require 'exwm-randr)
+  (setq exwm-randr-workspace-monitor-plist '(0 "DisplayPort-2" 1 "HDMI-A-0"))
+  (add-hook 'exwm-randr-screen-change-hook
+            (lambda ()
+              (start-process-shell-command
+               "xrandr" nil "xrandr --output HDMI-A-0 --pos -1920x0 --output DisplayPort-2 --pos 0x0 --primary --mode 2560x1440 --rate 170.00")))
+  (exwm-randr-enable)
 #+end_src
 
 We'll enable EXWM's system tray support, so we can use those little icon thingies.
@@ -1203,18 +1215,6 @@ We'll enable EXWM's system tray support, so we can use those little icon thingie
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (require 'exwm-systemtray)
   (exwm-systemtray-enable)
-#+end_src
-
-Some basic configuration for my multi-monitor setup.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (require 'exwm-randr)
-  (setq exwm-randr-workspace-output-plist '(1 "DisplayPort-2" 2 "HDMI-A-0"))
-  (add-hook 'exwm-randr-screen-change-hook
-            (lambda ()
-              (start-process-shell-command
-               "xrandr" nil "xrandr --output HDMI-A-0 --pos -1920x0 --output DisplayPort-2 --pos 0x0 --primary --mode 2560x1440 --rate 170.00")))
-  (exwm-randr-enable)
 #+end_src
 
 Finally, enable this Frankenstein's monster of a window manager.
