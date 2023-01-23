@@ -91,9 +91,16 @@
 
       picom = {
         enable = true;
-        fade = true;
-        fadeDelta = 2;
+        backend = "glx";
         vSync = true;
+
+        settings = {
+          blur = {
+            method = "dual_kawase";
+            size = 5;
+            strength = 3;
+          };
+        };
       };
     };
 

@@ -1217,6 +1217,13 @@ We'll enable EXWM's system tray support, so we can use those little icon thingie
   (exwm-systemtray-enable)
 #+end_src
 
+Throw a tinge of transparency on the frames, so we can see our pretty wallpapers a bit.
+
+#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
+  (set-frame-parameter (selected-frame) 'alpha 80)
+  (add-to-list 'default-frame-alist '(alpha . 90))
+#+end_src
+
 Finally, enable this Frankenstein's monster of a window manager.
 
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
