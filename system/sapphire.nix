@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   time = {
@@ -148,19 +148,6 @@
       gnome-keyring.enable = true;
     };
 
-    greetd = {
-      enable = true;
-      settings = let
-        swayConfig = pkgs.writeText "sway-config" ''
-          exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l; ${pkgs.sway}/bin/swaymsg exit"
-        '';
-      in {
-        default_session = {
-          command = "${pkgs.sway}/bin/sway --config ${swayConfig}";
-        };
-      };
-    };
-
     gvfs.enable = true;
 
     joycond.enable = true;
@@ -192,6 +179,34 @@
     trezord.enable = true;
 
     tumbler.enable = true;
+
+    xserver = {
+      enable = true;
+
+      displayManager.lightdm = {
+        enable = true;
+        greeters.gtk = let hmConf = config.home-manager.users.ruby;
+        in {
+          enable = true;
+          inherit (hmConf.gtk) iconTheme theme;
+          extraConfig = ''
+            font-name = ${hmConf.gtk.font.name}
+          '';
+        };
+      };
+
+      videoDrivers = [ "amdgpu" "qxl" ];
+
+      wacom.enable = true;
+
+      windowManager.session = [{
+        name = "home-manager";
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.xsession-hm &
+          waitPID=$!
+        '';
+      }];
+    };
   };
 
   sound.enable = true;

@@ -52,7 +52,7 @@
     yubikey-manager
   ];
 
-  imports = [ ./modules/common-linux.nix ./themes/foliage ];
+  imports = [ ./modules/common-linux.nix ./themes/indev ];
 
   home.sessionVariables = {
     BROWSER = "${config.programs.firefox.package}/bin/firefox";
