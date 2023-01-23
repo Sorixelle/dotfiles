@@ -1146,24 +1146,31 @@ We'll use a little hook to automatically set the buffer title to the name of the
               (exwm-workspace-rename-buffer exwm-class-name)))
 #+end_src
 
-Bind a couple keys to be used in EXWM windows:
-- =s-r= :: Go back to line-mode
+Bind a couple keys to be used in all buffers under EXWM, X window or not:
 - =s-SPC= :: Open an app launcher
-- =s-q= :: Quit an app
 - =s-RET= :: Open a terminal using vterm
 - =M-SPC= :: Same leader key as =SPC= in normal Emacs buffers
+- =M-<tab>= :: Switch to the next perspective
+- =M-<backtab>= :: Switch to the previous perspective
 
-The leader key definition goes under =exwm-mode-map=, because =exwm-input-global-keys= isn't great for tacking a keymap onto, and we probably don't need the leader key in char mode anyway.
+#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
+  (general-def '(exwm-mode-map global-map)
+    "s-SPC" 'counsel-linux-app
+    "s-RET" 'vterm
+
+    "M-SPC" srxl/leader-key-map
+    "M-<tab>" 'persp-next
+    "M-<backtab>" 'persp-prev)
+#+end_src
+
+And some keybinds for X window buffers, in both line and char mode:
+- =s-r= :: Go back to line-mode
+- =s-q= :: Quit an app
 
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (setopt exwm-input-global-keys
           `((,(kbd "s-r") . exwm-reset)
-            (,(kbd "s-SPC") . counsel-linux-app)
-            (,(kbd "s-q") . kill-this-buffer)
-            (,(kbd "s-<return>") . vterm)))
-
-  (general-def exwm-mode-map
-    "M-SPC" srxl/leader-key-map)
+            (,(kbd "s-q") . kill-this-buffer)))
 #+end_src
 
 We'll also generate a few keybindings for =s-<number>= to switch to that workspace.
