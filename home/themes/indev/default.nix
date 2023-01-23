@@ -52,7 +52,7 @@
     srxl = {
       emacs = {
         enable = true;
-        theme = "modus-vivendi";
+        theme = "modus-vivendi-tinted";
         useEXWM = true;
       };
 
