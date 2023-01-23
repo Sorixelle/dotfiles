@@ -1146,6 +1146,18 @@ We'll enable EXWM's system tray support, so we can use those little icon thingie
   (exwm-systemtray-enable)
 #+end_src
 
+Some basic configuration for my multi-monitor setup.
+
+#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
+  (require 'exwm-randr)
+  (setq exwm-randr-workspace-output-plist '(1 "DisplayPort-2" 2 "HDMI-A-0"))
+  (add-hook 'exwm-randr-screen-change-hook
+            (lambda ()
+              (start-process-shell-command
+               "xrandr" nil "xrandr --output HDMI-A-0 --pos -1920x0 --output DisplayPort-2 --pos 0x0 --primary --mode 2560x1440 --rate 170.00")))
+  (exwm-randr-enable)
+#+end_src
+
 Finally, enable this Frankenstein's monster of a window manager.
 
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
