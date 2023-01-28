@@ -792,6 +792,13 @@ When we're dealing with code projects, you really wanna be focusing on one at a 
       "s" '(projectile-persp-switch-project :wk "Switch project")))
 #+end_src
 
+It looks like there's currently [[https://github.com/nex3/perspective-el/issues/195][a bit of a bug]] in this package that causes some strange behaviour when killing a frame that only has one dedicated window in it. Sounds like a weird edge case, I know, but this actually happens a lot in EXWM since things like floating dialog boxes are frames with one dedicated window in them. I /think/ we can work around this by just picking out the offending function from a hook when we're using EXWM. It's not like I'm making and closing a lot of new frames in EXWM, let alone using perspectives in them, so this should be safe, right? ...Right?
+
+#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
+  (cond srxl/use-exwm
+        (setq delete-frame-functions (remove 'persp-delete-frame delete-frame-functions)))
+#+end_src
+
 ** File exploring
 Next, we'll get outselves a file explorer, by way of [[https://github.com/Alexander-Miller/treemacs][Treemacs]]. It's a fully-featured file tree sidebar, just like you'd have in every IDE.
 
