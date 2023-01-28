@@ -557,6 +557,41 @@ To make things even faster, we can use Org Tempo to summon a block, just by typi
   (require 'org-tempo)
 #+end_src
 
+* Emacs, my favourite email client
+Email is so cool. It's such a ubiquitous way to communicate with people. Everyone has an email address. I have an email address. I also have an Emacs. Why don't I put the E-Mail in the E-Macs? Sounds like a no brainer to me. mu4e, let's do it.
+
+We've got =:straight nil= in this one because mu4e comes with the mu package, not from some external package repo. We don't want straight trying to pull down whatever it finds in repos, we just want to make it look in the existing load path.
+#+begin_src emacs-lisp :tangle yes
+  (use-package mu4e
+    :if srxl/use-mu4e
+    :straight nil
+    :config
+    <<MU4E-CONFIG>>)
+#+end_src
+
+We'll set =user-mail-address= so things know to use the right email. That email comes from my NixOS configuration.
+#+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
+  (setq user-mail-address srxl/email)
+#+end_src
+
+I use =mbsync= to copy my emails from IMAP to a Maildir directory, so we'll setup mu4e to use that.
+#+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
+  (setq mu4e-get-mail-command "mbsync -a"
+        mu4e-change-filenames-when-moving t)
+#+end_src
+
+Make sure mu4e points itself at the right folder names for standard email folders.
+#+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
+  (setq mu4e-sent-folder "/Sent"
+        mu4e-drafts-folder "/Drafts"
+        mu4e-trash-folder "/Trash"
+        mu4e-refile-folder "/Archive")
+#+end_src
+
+Synchronize my emails automatically every 5 minutes.
+#+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
+  (setq mu4e-update-interval (* 5 60))
+#+end_src
 * Emacs, my favourite IDE
 Yeah, this is the one everyone knows Emacs for. Code editor! That's the main one everyone uses Emacs for. And for good reason - it does a damn good job of editing code. Although, it does need a little assistance to get it off the ground in that regard. Let's give it a hand.
 

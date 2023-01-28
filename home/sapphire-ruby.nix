@@ -256,8 +256,11 @@
   srxl = {
     emacs = {
       enable = true;
-      package = pkgs.emacsGit;
-      useMu4e = true;
+      # package = pkgs.emacsGit;
+      mu4e = {
+        enable = true;
+        address = "ruby@srxl.me";
+      };
     };
     starship.enable = true;
   };

@@ -19,6 +19,16 @@ in with lib; {
       description = "The name of the Emacs theme to use.";
     };
 
+    mu4e = {
+      enable = mkEnableOption "the mu4e email client.";
+
+      address = mkOption {
+        type = str;
+        default = "";
+        description = "The email to use in Emacs.";
+      };
+    };
+
     useMu4e = mkOption {
       type = bool;
       default = false;
@@ -114,7 +124,9 @@ in with lib; {
              srxl/theme-name '${conf.theme}
              srxl/project-dir "~/usr/devel"
              srxl/shell-executable "${shell}"
-             srxl/use-exwm ${toBool conf.useEXWM})
+             srxl/use-exwm ${toBool conf.useEXWM}
+             srxl/use-mu4e ${toBool conf.mu4e.enable}
+             srxl/email "${conf.mu4e.address}")
 
             ${conf.extraConfig}
           '';
