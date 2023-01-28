@@ -592,6 +592,12 @@ Synchronize my emails automatically every 5 minutes.
 #+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
   (setq mu4e-update-interval (* 5 60))
 #+end_src
+
+And a keybind to quickly pop open the client.
+#+begin_src emacs-lisp
+  (srxl/def-leader-key
+    "e" '(mu4e :wk "Email"))
+#+end_src
 * Emacs, my favourite IDE
 Yeah, this is the one everyone knows Emacs for. Code editor! That's the main one everyone uses Emacs for. And for good reason - it does a damn good job of editing code. Although, it does need a little assistance to get it off the ground in that regard. Let's give it a hand.
 
