@@ -82,23 +82,6 @@
       enable = true;
       package =
         pkgs.firefox.override { cfg = { enableTridactylNative = true; }; };
-      extensions = with pkgs.nur.repos.rycee.firefox-addons;
-        with pkgs; [
-          bypass-paywalls-clean
-          decentraleyes
-          firefox-color
-          frankerfacez
-          keepassxc-browser
-          multi-account-containers
-          privacy-badger
-          react-devtools
-          reddit-enhancement-suite
-          sidebery
-          sponsorblock
-          tridactyl
-          ublock-origin
-          violentmonkey
-        ];
       profiles.Default = {
         id = 0;
         isDefault = true;
@@ -110,6 +93,24 @@
           "gfx.webrender.all" = true;
           "network.dns.blockDotOnion" = false;
         };
+        extensions = with pkgs.nur.repos.rycee.firefox-addons;
+          with pkgs; [
+            bypass-paywalls-clean
+            decentraleyes
+            ff-stylish
+            firefox-color
+            frankerfacez
+            keepassxc-browser
+            multi-account-containers
+            privacy-badger
+            react-devtools
+            reddit-enhancement-suite
+            sidebery
+            sponsorblock
+            tridactyl
+            ublock-origin
+            violentmonkey
+          ];
       };
     };
 
