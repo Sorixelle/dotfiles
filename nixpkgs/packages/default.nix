@@ -6,6 +6,7 @@ let
 in {
   alter = prev.callPackage ./ff-exts/alter.nix { };
   frankerfacez = prev.callPackage ./ff-exts/frankerfacez.nix { };
+  ff-stylish = prev.callPackage ./ff-exts/stylish.nix { };
 
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
 
