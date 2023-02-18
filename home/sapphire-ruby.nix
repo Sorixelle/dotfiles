@@ -95,7 +95,6 @@
         };
         extensions = with pkgs.nur.repos.rycee.firefox-addons;
           with pkgs; [
-            bypass-paywalls-clean
             decentraleyes
             ff-stylish
             firefox-color
@@ -105,8 +104,10 @@
             privacy-badger
             react-devtools
             reddit-enhancement-suite
+            return-youtube-dislikes
             sidebery
             sponsorblock
+            startpage-private-search
             tridactyl
             ublock-origin
             violentmonkey
