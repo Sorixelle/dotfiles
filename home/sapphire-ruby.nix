@@ -25,6 +25,7 @@
     keepassxc
     kopia
     magic-wormhole
+    maim
     moserial
     mullvad-vpn
     mtr

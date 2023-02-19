@@ -100,6 +100,8 @@
             size = 5;
             strength = 3;
           };
+
+          blur-background-exclude = [ "class_g *?= 'slop'" ];
         };
       };
     };
