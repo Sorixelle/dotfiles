@@ -445,14 +445,24 @@ We're also going to define a face for a serif font. This'll get used later, for 
 #+end_src
 
 ** Pretty colours
-Default emacs burns my eyes. /hiss/. I'll take a nicer theme, courtesy of [[https://github.com/hlissner/emacs-doom-themes][doom-themes]]. They've got a whole bunch of really nice ones. Which one do I use? That's defined in my NixOS configuration. Go check that out if you really wanna know.
+Default emacs burns my eyes. /hiss/. I'll take a nicer theme, thanks.
 
+[[https://github.com/hlissner/emacs-doom-themes][doom-themes]] has a bunch of good ones. Implementations for basically every common colour scheme under the sun like Monokai, Solarized, Dracula, and then some.
 #+begin_src emacs-lisp :tangle yes
   (use-package all-the-icons)
   (use-package doom-themes
     :config
-    (load-theme srxl/theme-name t)
     <<DOOMTHEMES-CONFIG>>)
+#+end_src
+
+[[https://github.com/protesilaos/modus-themes][modus-themes]] also has some really nice themes that I sometimes use. It's shipped default in Emacs, but the very latest changes bring in some cool stuff that aren't upstreamed yet in all but the very bleeding edge of Emacs. So we'll pull down the latest version, just to be safe.
+#+begin_src emacs-lisp :tangle yes
+  (use-package modus-themes)
+#+end_src
+
+But which one do I use? That's defined in my NixOS configuration. Go check that out if you really wanna know. In any case, it'll get enabled here.
+#+begin_src emacs-lisp :tangle yes
+  (load-theme srxl/theme-name t)
 #+end_src
 
 ** Pretty modeline
