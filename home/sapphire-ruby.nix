@@ -34,6 +34,7 @@
     nmap
     pavucontrol
     picard
+    plexamp
     prismlauncher
     python3
     qbittorrent
