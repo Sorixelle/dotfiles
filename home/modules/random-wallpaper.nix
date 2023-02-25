@@ -42,7 +42,10 @@
 
       timers.switch-wallpaper = {
         Unit = { Description = "Periodically switch wallpapers"; };
-        Timer = { OnCalendar = conf.duration; };
+        Timer = {
+          OnCalendar = conf.duration;
+          OnStartupSec = "0";
+        };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };
