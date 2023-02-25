@@ -1261,10 +1261,6 @@ And for =s-S-<number>=, to move a buffer to that monitor.
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (require 'exwm-randr)
   (setq exwm-randr-workspace-monitor-plist '(0 "DisplayPort-0" 1 "HDMI-A-0"))
-  (add-hook 'exwm-randr-screen-change-hook
-            (lambda ()
-              (start-process-shell-command
-               "xrandr" nil "xrandr --output HDMI-A-0 --pos -1920x0 --output DisplayPort-0 --pos 0x0 --primary --mode 2560x1440 --rate 170.00")))
   (exwm-randr-enable)
 #+end_src
 
@@ -1279,7 +1275,7 @@ Throw a tinge of transparency on the frames, so we can see our pretty wallpapers
 
 #+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
   (set-frame-parameter (selected-frame) 'alpha 80)
-  (add-to-list 'default-frame-alist '(alpha . 90))
+  (add-to-list 'default-frame-alist '(alpha . 80))
 #+end_src
 
 Finally, enable this Frankenstein's monster of a window manager.
