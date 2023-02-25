@@ -220,10 +220,7 @@
       extraConfigFiles = [ "${config.xdg.configHome}/mopidy/jellyfin.conf" ];
     };
 
-    syncthing = {
-      enable = true;
-      tray.enable = true;
-    };
+    syncthing.enable = true;
   };
 
   accounts.email = {
