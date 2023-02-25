@@ -75,6 +75,8 @@
         extraFonts = with pkgs; [ emacs-all-the-icons-fonts noto-fonts-cjk ];
       };
 
+      randomWallpaper.enable = true;
+
       starship.styles = {
         directory = "bg:black";
         directoryReadOnly = "fg:red bg:black";
