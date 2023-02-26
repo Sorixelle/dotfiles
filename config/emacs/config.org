@@ -546,6 +546,11 @@ And make them a bit more distinct at each level, by setting different sizes for 
   (set-face-attribute 'org-level-4 nil :height 1.1)
 #+end_src
 
+Enable visual indentation when viewing files, for a little extra visual separation between headers.
+#+begin_src emacs-lisp :noweb-ref ORG-CONFIG
+  (setq org-inhibit-startup t)
+#+end_src
+
 Don't worry about showing the symbols around things like *bold*, /italic/ or =inline code=.
 #+begin_src emacs-lisp :noweb-ref ORG-CONFIG
   (setq org-hide-emphasis-markers t)
