@@ -46,6 +46,7 @@
     spek
     virt-manager
     vlc
+    winbox
     wineWowPackages.staging
     winetricks
     xorg.xkill
