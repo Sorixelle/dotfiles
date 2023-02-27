@@ -51,7 +51,7 @@ in with lib; {
   config = let
     emacsPkgs = pkgs.emacsPackagesFor conf.package;
     emacsPackage = emacsPkgs.emacsWithPackages
-      (e: [ e.vterm ] ++ (lib.optional conf.useMu4e pkgs.mu));
+      (e: [ e.vterm e.org-roam ] ++ (lib.optional conf.useMu4e pkgs.mu));
 
     tangledConfig = pkgs.stdenv.mkDerivation {
       name = "hm-emacs-tangled-config";
@@ -126,7 +126,8 @@ in with lib; {
              srxl/shell-executable "${shell}"
              srxl/use-exwm ${toBool conf.useEXWM}
              srxl/use-mu4e ${toBool conf.mu4e.enable}
-             srxl/email "${conf.mu4e.address}")
+             srxl/email "${conf.mu4e.address}"
+             srxl/roam-dir "~/usr/notes")
 
             ${conf.extraConfig}
           '';

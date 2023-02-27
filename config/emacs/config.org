@@ -585,6 +585,35 @@ To make things even faster, we can use Org Tempo to summon a block, just by typi
   (require 'org-tempo)
 #+end_src
 
+** Keeping notes and tracking knowledge
+With Org documents being such a great way to structure text, why not use them to create my own personal wiki? Just have a bunch of notes on whatever subject I can pull up to reference and add to any time I want. Sounds great to me. We can use [[https://orgroam.com][org-roam]] to facilitate this - it creates a database of Org documents that can be linked together and easily sorted by topic.
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-roam
+    :straight nil
+    :config
+    <<ORG-ROAM-CONFIG>>)
+#+end_src
+
+We need a directory to stash all our notes away in, so let's make sure that exists and tell org-roam what it is.
+#+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
+  (if (not (file-exists-p srxl/roam-dir))
+      (make-directory srxl/roam-dir))
+  (setq org-roam-directory srxl/roam-dir)
+#+end_src
+
+There's some periodic jobs that need to be run to ensure the org-roam database is kept up to date - =org-roam-db-autosync-mode= will make sure those fire off when they need to.
+#+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
+  (org-roam-db-autosync-mode)
+#+end_src
+
+There's no keybindings by default. We probably want some.
+#+begin_src emacs-lisp
+  (srxl/def-leader-key
+    "n f" '(org-roam-node-find :wk "Find node")
+    "n l" '(org-roam-node-insert :wk "Insert link to node")
+    "n c" '(org-roam-capture :wk "Capture node"))
+#+end_src
+
 * Emacs, my favourite email client
 Email is so cool. It's such a ubiquitous way to communicate with people. Everyone has an email address. I have an email address. I also have an Emacs. Why don't I put the E-Mail in the E-Macs? Sounds like a no brainer to me. mu4e, let's do it.
 
