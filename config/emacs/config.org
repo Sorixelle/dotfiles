@@ -548,7 +548,7 @@ And make them a bit more distinct at each level, by setting different sizes for 
 
 Enable visual indentation when viewing files, for a little extra visual separation between headers.
 #+begin_src emacs-lisp :noweb-ref ORG-CONFIG
-  (setq org-inhibit-startup t)
+  (setq org-startup-indented t)
 #+end_src
 
 Don't worry about showing the symbols around things like *bold*, /italic/ or =inline code=.
@@ -607,7 +607,7 @@ There's some periodic jobs that need to be run to ensure the org-roam database i
 #+end_src
 
 There's no keybindings by default. We probably want some.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
   (srxl/def-leader-key
     "n f" '(org-roam-node-find :wk "Find node")
     "n l" '(org-roam-node-insert :wk "Insert link to node")
