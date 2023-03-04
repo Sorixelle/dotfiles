@@ -49,6 +49,7 @@
     winbox
     wineWowPackages.staging
     winetricks
+    wireshark
     xorg.xkill
     xfce.thunar
     xfce.xfconf
