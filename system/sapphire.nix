@@ -43,13 +43,14 @@
       options = [ "defaults" "umask=000" ];
     };
     "/home/ruby/.local/share/backup" = {
-      device = "fluorite:/mnt/Fluorite-HDD/Machine-Backups/Amethyst";
-      fsType = "nfs";
+      device = "//2404:e80:61cb:2::6/sapphire-backup";
+      fsType = "cifs";
       options = [
-        "noauto"
-        "noatime"
         "x-systemd.automount"
         "x-systemd.idle-timeout=600"
+        "cred=/home/ruby/.smbcreds" # TODO: make this not shit
+        "uid=${toString config.users.users.ruby.uid}"
+        "gid=${toString config.users.groups.users.gid}"
       ];
     };
   };
