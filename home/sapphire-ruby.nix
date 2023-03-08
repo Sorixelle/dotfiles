@@ -302,9 +302,9 @@
     timers = {
       nightly-backup = {
         Unit = {
-          Description = "Backup user data directory to NAS every night at 2am";
+          Description = "Backup user data directory to NAS every night at 6pm";
         };
-        Timer = { OnCalendar = "02:00:00"; };
+        Timer = { OnCalendar = "18:00:00"; };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };
