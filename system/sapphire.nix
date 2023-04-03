@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   time = {
@@ -80,12 +80,24 @@
     };
   };
 
+  krb5 = {
+    enable = true;
+    libdefaults = { default_realm = "AD.ONGEMST.ONE"; };
+
+    # Special Secret Sauce that makes sshd not get confused about what principals map to which users
+    # eg. without this, a principal for "ruby@AD.ONGEMST.ONE" will map to the user "ruby" (wrong) and not
+    # "ruby@ad.ongemst.one" (correct)
+    extraConfig = ''
+      includedir /var/lib/sss/pubconf/krb5.include.d
+    '';
+  };
+
   nix.settings = {
     max-jobs = 24;
     trusted-users = [ "ruby" ];
   };
 
-  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
+  environment.systemPackages = with pkgs; [ adcli ntfs3g pciutils usbutils ];
 
   fonts.fontconfig.defaultFonts = {
     sansSerif = [ "Inter" "IBM Plex Mono JP" ];
@@ -96,6 +108,8 @@
   location.provider = "geoclue2";
 
   networking = {
+    domain = "ad.ongemst.one";
+
     firewall.enable = false;
 
     wireguard.enable = true;
@@ -150,6 +164,9 @@
 
     mullvad-vpn.enable = true;
 
+    # https://github.com/NixOS/nixpkgs/issues/196934
+    nscd.enableNsncd = false;
+
     pcscd.enable = true;
 
     pipewire = {
@@ -171,6 +188,30 @@
     };
 
     srxl.qmk.enable = true;
+
+    sssd = {
+      enable = true;
+      config = ''
+        [sssd]
+        config_file_version = 2
+        domains = ad.ongemst.one
+        services = nss, pam
+
+        [domain/ad.ongemst.one]
+        access_provider = ad
+        auth_provider = ad
+        ad_domain = ad.ongemst.one
+        cache_credentials = True
+        default_shell = ${pkgs.bashInteractive}/bin/bash
+        fallback_homedir = /home/%u@%d
+        id_provider = files
+        krb5_map_user = ruby:ruby
+        krb5_realm = AD.ONGEMST.ONE
+        krb5_store_password_if_offline = True
+        ldap_id_mapping = True
+        use_fully_qualified_names = True
+      '';
+    };
 
     trezord.enable = true;
 
