@@ -113,13 +113,8 @@
         swtpm.enable = true;
       };
     };
-  };
 
-  # Allow setuid for libvirtd USB passthrough helper
-  security.wrappers.spice-client-glib-usb-acl-helper = {
-    owner = "root";
-    group = "root";
-    source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+    spiceUSBRedirection.enable = true;
   };
 
   programs = {
