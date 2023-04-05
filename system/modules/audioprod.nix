@@ -51,11 +51,8 @@ in {
           },
           { "name": "libpipewire-module-protocol-native" },
           { "name": "libpipewire-module-profiler" },
-          { "name": "libpipewire-module-metadata" },
           { "name": "libpipewire-module-spa-device-factory" },
           { "name": "libpipewire-module-spa-node-factory" },
-          { "name": "libpipewire-module-client-node" },
-          { "name": "libpipewire-module-client-device" },
           {
             "name": "libpipewire-module-portal",
             "flags": [ "ifexists", "nofail" ]
