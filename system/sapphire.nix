@@ -138,6 +138,11 @@
   programs = {
     adb.enable = true;
 
+    cifs-utils = {
+      enable = true;
+      idmapPlugin = "${pkgs.sssd}/lib/cifs-utils/cifs_idmap_sss.so";
+    };
+
     dconf.enable = true;
 
     gnupg.agent = {
@@ -146,22 +151,6 @@
     };
 
     gphoto2.enable = true;
-
-    keyutils = {
-      enable = true;
-      keyPrograms = [
-        {
-          op = "create";
-          type = "cifs.spnego";
-          command = "${pkgs.cifs-utils}/bin/cifs.upcall %k";
-        }
-        {
-          op = "create";
-          type = "cifs.idmap";
-          command = "${pkgs.cifs-utils}/bin/cifs.idmap %k";
-        }
-      ];
-    };
 
     ssh.startAgent = true;
   };

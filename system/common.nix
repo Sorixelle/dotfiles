@@ -1,8 +1,12 @@
 { pkgs, lib, inputs, name, flakePkgs, ... }:
 
 {
-  imports =
-    [ ./modules/audioprod.nix ./modules/keyutils.nix ./modules/qmk.nix ];
+  imports = [
+    ./modules/audioprod.nix
+    ./modules/cifs-utils.nix
+    ./modules/keyutils.nix
+    ./modules/qmk.nix
+  ];
 
   # Set the hostname
   networking.hostName = name;
