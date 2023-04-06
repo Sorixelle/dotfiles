@@ -10,6 +10,9 @@ in {
 
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
 
+  cifs-utils = prev.cifs-utils.overrideAttrs
+    (old: { buildInputs = old.buildInputs ++ [ prev.samba ]; });
+
   gcc-cortex-a-arm = gcc-cortex-a-9 "arm";
   gcc-cortex-a-armhf = gcc-cortex-a-9 "armhf";
   gcc-cortex-a-aarch64 = gcc-cortex-a-9 "aarch64";

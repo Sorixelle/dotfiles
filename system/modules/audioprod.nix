@@ -16,10 +16,10 @@ in {
   config = lib.mkIf conf.enable {
     musnix = {
       enable = true;
-      kernel = {
-        realtime = true;
-        packages = pkgs.linuxPackages_latest_rt;
-      };
+      # kernel = {
+      #   realtime = true;
+      #   packages = pkgs.linuxPackages_latest_rt;
+      # };
     };
 
     security.rtkit.enable = true;

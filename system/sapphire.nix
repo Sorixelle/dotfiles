@@ -7,7 +7,7 @@
   };
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages-rt_latest;
 
     initrd = {
       availableKernelModules =
@@ -99,6 +99,9 @@
 
   environment.systemPackages = with pkgs; [ adcli ntfs3g pciutils usbutils ];
 
+  environment.etc."cifs-utils/idmap-plugin".source =
+    "${pkgs.sssd}/lib/cifs-utils/cifs_idmap_sss.so";
+
   fonts.fontconfig.defaultFonts = {
     sansSerif = [ "Inter" "IBM Plex Mono JP" ];
     serif = [ "IBM Plex Serif" ];
@@ -143,6 +146,22 @@
     };
 
     gphoto2.enable = true;
+
+    keyutils = {
+      enable = true;
+      keyPrograms = [
+        {
+          op = "create";
+          type = "cifs.spnego";
+          command = "${pkgs.cifs-utils}/bin/cifs.upcall %k";
+        }
+        {
+          op = "create";
+          type = "cifs.idmap";
+          command = "${pkgs.cifs-utils}/bin/cifs.idmap %k";
+        }
+      ];
+    };
 
     ssh.startAgent = true;
   };
