@@ -82,7 +82,10 @@
 
   krb5 = {
     enable = true;
-    libdefaults = { default_realm = "AD.ONGEMST.ONE"; };
+    libdefaults = {
+      default_realm = "AD.ONGEMST.ONE";
+      forwardable = true;
+    };
 
     # Special Secret Sauce that makes sshd not get confused about what principals map to which users
     # eg. without this, a principal for "ruby@AD.ONGEMST.ONE" will map to the user "ruby" (wrong) and not
