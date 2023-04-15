@@ -31,6 +31,7 @@
     mtr
     neofetch
     nheko
+    nix-prefetch-scripts
     nmap
     pavucontrol
     picard
