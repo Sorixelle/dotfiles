@@ -80,7 +80,7 @@
 
   boot = {
     # Clean /tmp on startup
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
   };
 
   home-manager = {
