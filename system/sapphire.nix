@@ -105,10 +105,14 @@
   environment.etc."cifs-utils/idmap-plugin".source =
     "${pkgs.sssd}/lib/cifs-utils/cifs_idmap_sss.so";
 
-  fonts.fontconfig.defaultFonts = {
-    sansSerif = [ "Inter" "IBM Plex Mono JP" ];
-    serif = [ "IBM Plex Serif" ];
-    monospace = [ "BlexMono Nerd Font" ];
+  fonts = {
+    enableDefaultFonts = true;
+    fonts = with pkgs; [ corefonts roboto ];
+    fontconfig.defaultFonts = {
+      sansSerif = [ "Inter" "IBM Plex Mono JP" ];
+      serif = [ "IBM Plex Serif" ];
+      monospace = [ "BlexMono Nerd Font" ];
+    };
   };
 
   location.provider = "geoclue2";
@@ -120,8 +124,6 @@
 
     wireguard.enable = true;
   };
-
-  fonts.enableDefaultFonts = true;
 
   virtualisation = {
     docker.enable = true;
