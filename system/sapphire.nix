@@ -221,6 +221,8 @@
         id_provider = files
         krb5_map_user = ruby:ruby
         krb5_realm = AD.ONGEMST.ONE
+        krb5_renewable_lifetime = 6h
+        krb5_renew_interval = 1h
         krb5_store_password_if_offline = True
         ldap_id_mapping = True
         use_fully_qualified_names = True
