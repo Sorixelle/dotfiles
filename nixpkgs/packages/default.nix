@@ -39,6 +39,8 @@ in {
   gcc-cortex-a-aarch64-gnu = gcc-cortex-a-9 "aarch64-gnu";
   gcc-cortex-a-aarch64be-gnu = gcc-cortex-a-9 "aarch64be-gnu";
 
+  igir = prev.callPackage ./igir.nix { };
+
   makerom = prev.callPackage ./makerom.nix { };
 
   mopidy-subidy = prev.callPackage ./mopidy-subidy.nix { };

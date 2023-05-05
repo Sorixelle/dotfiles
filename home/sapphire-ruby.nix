@@ -19,6 +19,7 @@
     gnome.eog
     gnome.file-roller
     gnome.gedit
+    igir
     insomnia
     libreoffice-fresh
     liquidctl
