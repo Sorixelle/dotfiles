@@ -101,7 +101,6 @@
         extensions = with pkgs.nur.repos.rycee.firefox-addons;
           with pkgs; [
             decentraleyes
-            ff-stylish
             firefox-color
             frankerfacez
             keepassxc-browser
@@ -113,6 +112,7 @@
             sidebery
             sponsorblock
             startpage-private-search
+            stylus
             tridactyl
             ublock-origin
             violentmonkey
