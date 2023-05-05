@@ -8,6 +8,7 @@
     bless
     cachix
     calibre
+    ctrtool
     darktable
     discord
     evince
@@ -26,6 +27,7 @@
     kopia
     magic-wormhole
     maim
+    makerom
     moserial
     mullvad-vpn
     mtr

@@ -13,11 +13,33 @@ in {
   cifs-utils = prev.cifs-utils.overrideAttrs
     (old: { buildInputs = old.buildInputs ++ [ prev.samba ]; });
 
+  ctrtool = prev.ctrtool.overrideAttrs (_: rec {
+    version = "1.2.0";
+
+    src = prev.fetchFromGitHub {
+      owner = "3DSGuy";
+      repo = "Project_CTR";
+      rev = "ctrtool-v${version}";
+      hash = "sha256-wjU/DJHrAHE3MSB7vy+swUDVPzw0Jrv4ymOjhfr0BBk=";
+    };
+
+    preBuild = ''
+      make deps
+    '';
+
+    installPhase = ''
+      mkdir $out/bin -p
+      cp bin/ctrtool${prev.stdenv.hostPlatform.extensions.executable} $out/bin/
+    '';
+  });
+
   gcc-cortex-a-arm = gcc-cortex-a-9 "arm";
   gcc-cortex-a-armhf = gcc-cortex-a-9 "armhf";
   gcc-cortex-a-aarch64 = gcc-cortex-a-9 "aarch64";
   gcc-cortex-a-aarch64-gnu = gcc-cortex-a-9 "aarch64-gnu";
   gcc-cortex-a-aarch64be-gnu = gcc-cortex-a-9 "aarch64be-gnu";
+
+  makerom = prev.callPackage ./makerom.nix { };
 
   mopidy-subidy = prev.callPackage ./mopidy-subidy.nix { };
 
