@@ -444,6 +444,19 @@ We're also going to define a face for a serif font. This'll get used later, for 
     "Serif font.")
 #+end_src
 
+Sometimes, unicode characters just pick whatever the hell font it wants, which is annoying. We'll force it to our monospace font, so we minimize the amount of weird spacing issues.
+
+#+begin_src emacs-lisp :tangle yes
+  (set-fontset-font t 'unicode "IBM Plex Mono")
+#+end_src
+
+Make sure emoji get the full colour treatment on Linux.
+
+#+begin_src emacs-lisp :tangle yes
+  (when (not (memq window-system '(mac ns)))
+    (set-fontset-font t 'emoji "Noto Color Emoji"))
+#+end_src
+
 ** Pretty colours
 Default emacs burns my eyes. /hiss/. I'll take a nicer theme, thanks.
 
