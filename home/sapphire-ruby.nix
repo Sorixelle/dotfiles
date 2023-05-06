@@ -108,6 +108,7 @@
             frankerfacez
             keepassxc-browser
             multi-account-containers
+            old-reddit-redirect
             privacy-badger
             react-devtools
             reddit-enhancement-suite
