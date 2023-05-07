@@ -37,6 +37,7 @@
     nix-prefetch-scripts
     nmap
     pavucontrol
+    perlPackages.ArchiveZip # crc32 command-line utility
     picard
     plexamp
     prismlauncher
