@@ -42,6 +42,17 @@
       fsType = "exfat";
       options = [ "defaults" "umask=000" ];
     };
+    "/home/ruby/usr/media" = {
+      device = "//fluorite.ad.ongemst.one/media";
+      fsType = "smb3";
+      options = [
+        "sec=krb5"
+        "multiuser"
+        "domain=GEM"
+        "x-systemd.automount"
+        "x-systemd.requires=k5start-root.service"
+      ];
+    };
     "/home/ruby/.local/share/backup" = {
       device = "//fluorite.ad.ongemst.one/sapphire-backup";
       fsType = "smb3";
