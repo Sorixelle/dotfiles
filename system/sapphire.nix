@@ -43,14 +43,15 @@
       options = [ "defaults" "umask=000" ];
     };
     "/home/ruby/.local/share/backup" = {
-      device = "//2404:e80:61cb:2::6/sapphire-backup";
-      fsType = "cifs";
+      device = "//fluorite.ad.ongemst.one/sapphire-backup";
+      fsType = "smb3";
       options = [
+        "sec=krb5"
+        "multiuser"
+        "domain=GEM"
         "x-systemd.automount"
         "x-systemd.idle-timeout=600"
-        "cred=/home/ruby/.smbcreds" # TODO: make this not shit
-        "uid=${toString config.users.users.ruby.uid}"
-        "gid=${toString config.users.groups.users.gid}"
+        "x-systemd.requires=k5start-root.service"
       ];
     };
   };
@@ -275,6 +276,20 @@
   };
 
   sound.enable = true;
+
+  systemd.services = {
+    k5start-root = {
+      description = "Obtain and renew Kerberos ticket for machine account";
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.kstart}/bin/k5start -f /etc/krb5.keytab -K 60 -v ${
+            lib.toUpper config.networking.hostName
+          }$";
+      };
+    };
+  };
 
   xdg.portal = {
     enable = true;

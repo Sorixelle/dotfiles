@@ -41,6 +41,8 @@ in {
 
   igir = prev.callPackage ./igir.nix { };
 
+  kstart = prev.callPackage ./kstart.nix { };
+
   makerom = prev.callPackage ./makerom.nix { };
 
   mopidy-subidy = prev.callPackage ./mopidy-subidy.nix { };
