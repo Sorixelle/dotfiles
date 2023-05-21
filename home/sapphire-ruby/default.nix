@@ -14,7 +14,6 @@
   ];
 
   home.packages = with pkgs; [
-    acousticbrainz-gui
     audacity
     betterdiscordctl
     bless
@@ -24,13 +23,10 @@
     darktable
     discord
     evince
-    feh
     ffmpeg-full
-    fusee-launcher
     gimp
     gnome.eog
     gnome.file-roller
-    gnome.gedit
     igir
     insomnia
     libreoffice-fresh
@@ -39,7 +35,6 @@
     keepassxc
     kopia
     magic-wormhole
-    maim
     makerom
     moserial
     mullvad-vpn
@@ -57,7 +52,6 @@
     qbittorrent
     remmina
     rnix-lsp
-    shutter
     steam
     steam-run
     spek
@@ -67,7 +61,6 @@
     wineWowPackages.staging
     winetricks
     wireshark
-    xorg.xkill
     xfce.thunar
     xfce.xfconf
     yubikey-manager
