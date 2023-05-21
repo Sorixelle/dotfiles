@@ -230,13 +230,14 @@
         cache_credentials = True
         default_shell = ${pkgs.bashInteractive}/bin/bash
         fallback_homedir = /home/%u@%d
-        id_provider = files
+        id_provider = proxy
         krb5_map_user = ruby:ruby
         krb5_realm = AD.ONGEMST.ONE
         krb5_renewable_lifetime = 6h
         krb5_renew_interval = 1h
         krb5_store_password_if_offline = True
         ldap_id_mapping = True
+        proxy_lib_name = files
         use_fully_qualified_names = True
       '';
     };
