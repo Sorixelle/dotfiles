@@ -152,7 +152,10 @@
     emacs = {
       enable = true;
       # package = pkgs.emacsGit;
-      theme = "modus-vivendi-tinted";
+      theme = "catppuccin";
+      extraConfig = ''
+        (setq catppuccin-flavor 'macchiato)
+      '';
     };
 
     fonts = {

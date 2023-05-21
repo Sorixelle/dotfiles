@@ -473,6 +473,11 @@ Default emacs burns my eyes. /hiss/. I'll take a nicer theme, thanks.
   (use-package modus-themes)
 #+end_src
 
+[[https://github.com/catppuccin/emacs][Catppuccin]] is another really nice one.
+#+begin_src emacs-lisp :tangle yes
+  (use-package catppuccin-theme)
+#+end_src
+
 But which one do I use? That's defined in my NixOS configuration. Go check that out if you really wanna know. In any case, it'll get enabled here.
 #+begin_src emacs-lisp :tangle yes
   (load-theme srxl/theme-name t)
