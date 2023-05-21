@@ -158,11 +158,15 @@
       '';
     };
 
-    fonts = {
+    fonts = let
+      nerdfonts = pkgs.nerdfonts.override {
+        fonts = [ "IBMPlexMono" "NerdFontsSymbolsOnly" ];
+      };
+    in {
       monospace = {
-        name = "Blex Mono NerdFont";
+        name = "IBM Plex Mono";
         size = 12;
-        package = pkgs.nerdfonts.override { fonts = [ "IBMPlexMono" ]; };
+        package = pkgs.ibm-plex;
       };
       ui = {
         name = "Inter";
@@ -174,7 +178,11 @@
         size = 12;
         package = pkgs.ibm-plex;
       };
-      extraFonts = with pkgs; [ emacs-all-the-icons-fonts noto-fonts-cjk ];
+      extraFonts = with pkgs; [
+        emacs-all-the-icons-fonts
+        nerdfonts
+        noto-fonts-cjk
+      ];
     };
   };
 

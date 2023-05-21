@@ -444,12 +444,6 @@ We're also going to define a face for a serif font. This'll get used later, for 
     "Serif font.")
 #+end_src
 
-Sometimes, unicode characters just pick whatever the hell font it wants, which is annoying. We'll force it to our monospace font, so we minimize the amount of weird spacing issues.
-
-#+begin_src emacs-lisp :tangle yes
-  (set-fontset-font t 'unicode "IBM Plex Mono")
-#+end_src
-
 Make sure emoji get the full colour treatment on Linux.
 
 #+begin_src emacs-lisp :tangle yes
@@ -489,6 +483,7 @@ The mode line in Emacs is that little line at the bottom of the window that has 
 I'm far too lazy to write my own mode line. Luckily, multiple people have done it for me, and I just need to pick the one I like. And I like [[https://github.com/seagle0128/doom-modeline][doom-modeline]]. It's got everything I could possibly want in a modeline, and it looks cool to boot. Let's get it going.
 
 #+begin_src emacs-lisp :tangle yes
+  (use-package nerd-icons)
   (use-package doom-modeline
     :config
     <<DOOMLINE-CONFIG>>)
