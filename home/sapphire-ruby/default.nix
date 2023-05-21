@@ -46,7 +46,6 @@
     nheko
     nix-prefetch-scripts
     nmap
-    nxdumptool-host
     pavucontrol
     perlPackages.ArchiveZip # crc32 command-line utility
     picard
