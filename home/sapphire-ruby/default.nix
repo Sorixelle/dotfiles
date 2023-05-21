@@ -9,6 +9,7 @@
     ./firefox.nix
     ./fish.nix
     ./hyprland.nix
+    ./kitty.nix
     ./starship.nix
   ];
 
