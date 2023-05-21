@@ -169,6 +169,8 @@
 
     gphoto2.enable = true;
 
+    hyprland.enable = true;
+
     ssh.startAgent = true;
   };
 
@@ -205,13 +207,13 @@
       pulse.enable = true;
     };
 
-    redshift = {
-      enable = true;
-      temperature = {
-        day = 6500;
-        night = 4000;
-      };
-    };
+    # redshift = {
+    #   enable = true;
+    #   temperature = {
+    #     day = 6500;
+    #     night = 4000;
+    #   };
+    # };
 
     srxl.qmk.enable = true;
 
@@ -249,17 +251,7 @@
     xserver = {
       enable = true;
 
-      displayManager.lightdm = {
-        enable = true;
-        greeters.gtk = let hmConf = config.home-manager.users.ruby;
-        in {
-          enable = true;
-          inherit (hmConf.gtk) iconTheme theme;
-          extraConfig = ''
-            font-name = ${hmConf.gtk.font.name}
-          '';
-        };
-      };
+      displayManager.sddm.enable = true;
 
       videoDrivers = [ "amdgpu" "qxl" ];
 
@@ -301,11 +293,6 @@
           }$";
       };
     };
-  };
-
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
   };
 
   home-manager.users.ruby = import ../home/sapphire-ruby;

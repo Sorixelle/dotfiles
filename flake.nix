@@ -99,6 +99,7 @@
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
           inputs.musnix.nixosModules.musnix
+          inputs.hyprland.nixosModules.default
 
           (import ./system/common.nix)
 

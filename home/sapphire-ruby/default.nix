@@ -8,6 +8,7 @@
     ./email.nix
     ./firefox.nix
     ./fish.nix
+    ./hyprland.nix
     ./starship.nix
   ];
 
@@ -83,7 +84,7 @@
     };
   };
 
-  home.sessionVariables = { EDITOR = "${pkgs.vim}/bin/vim"; };
+  home.sessionVariables.EDITOR = "${pkgs.vim}/bin/vim";
 
   manual.html.enable = true;
 
@@ -143,22 +144,6 @@
       pinentryFlavor = "gnome3";
     };
 
-    picom = {
-      enable = true;
-      backend = "glx";
-      vSync = true;
-
-      settings = {
-        blur = {
-          method = "dual_kawase";
-          size = 5;
-          strength = 3;
-        };
-
-        blur-background-exclude = [ "class_g *?= 'slop'" ];
-      };
-    };
-
     syncthing.enable = true;
   };
 
@@ -167,7 +152,6 @@
       enable = true;
       # package = pkgs.emacsGit;
       theme = "modus-vivendi-tinted";
-      useEXWM = true;
     };
 
     fonts = {
@@ -188,8 +172,6 @@
       };
       extraFonts = with pkgs; [ emacs-all-the-icons-fonts noto-fonts-cjk ];
     };
-
-    randomWallpaper.enable = true;
   };
 
   systemd.user = {
@@ -208,16 +190,6 @@
           ExecStart =
             "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
           Restart = "on-failure";
-        };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
-      };
-
-      setup-displays = {
-        Unit = { Description = "Configure display settings"; };
-        Service = {
-          Type = "oneshot";
-          ExecStart =
-            "${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-A-1 --pos -1920x0 --output DisplayPort-3 --pos 0x0 --primary --mode 2560x1440 --rate 170.00";
         };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
@@ -249,11 +221,6 @@
       music = "$HOME/usr/music";
       pictures = "$HOME/usr/img";
     };
-  };
-
-  xsession = {
-    enable = true;
-    scriptPath = ".xsession-hm";
   };
 
   home.stateVersion = "21.05";
