@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  imports = [ ./emacs.nix ./fonts.nix ./starship.nix ];
+  imports = [ ./emacs.nix ./fonts.nix ];
 
   config = {
     home = {

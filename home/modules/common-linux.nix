@@ -1,9 +1,5 @@
+{ ... }:
+
 {
-  imports = [
-    ./common.nix
-    ../themes/winter
-    ../themes/onedark
-    ../themes/witchery
-    ./random-wallpaper.nix
-  ];
+  imports = [ ./common.nix ./random-wallpaper.nix ];
 }

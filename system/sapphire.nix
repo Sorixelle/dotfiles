@@ -307,7 +307,7 @@
     wlr.enable = true;
   };
 
-  home-manager.users.ruby = import ../home/sapphire-ruby.nix;
+  home-manager.users.ruby = import ../home/sapphire-ruby;
 
   system.stateVersion = "21.05";
 }
