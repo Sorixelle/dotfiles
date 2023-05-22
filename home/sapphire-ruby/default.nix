@@ -135,6 +135,11 @@
     };
   };
 
+  qt = {
+    enable = true;
+    platformTheme = "gtk";
+  };
+
   services = {
     udiskie.enable = true;
 
