@@ -119,11 +119,44 @@
 
   fonts = {
     enableDefaultFonts = true;
-    fonts = with pkgs; [ corefonts roboto ];
-    fontconfig.defaultFonts = {
-      sansSerif = [ "Inter" "IBM Plex Mono JP" ];
-      serif = [ "IBM Plex Serif" ];
-      monospace = [ "BlexMono Nerd Font" ];
+    fonts = with pkgs; [ corefonts ibm-plex inter roboto ];
+    fontconfig = {
+      defaultFonts = {
+        sansSerif = [ "Inter" ];
+        serif = [ "IBM Plex Serif" ];
+        monospace = [ "IBM Plex Mono" ];
+      };
+      localConf = ''
+        <?xml version="1.0"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <match target="font">
+            <test name="fontformat" compare="not_eq">
+              <string />
+            </test>
+            <test name="family">
+              <string>Inter</string>
+            </test>
+            <edit name="fontfeatures" mode="append">
+              <string>ss01 on</string>
+              <string>ss02 on</string>
+            </edit>
+          </match>
+
+          <match target="font">
+            <test name="fontformat" compare="not_eq">
+              <string />
+            </test>
+            <test name="family">
+              <string>IBM Plex Mono</string>
+            </test>
+            <edit name="fontfeatures" mode="append">
+              <string>ss02 on</string>
+              <string>ss03 on</string>
+            </edit>
+          </match>
+        </fontconfig>
+      '';
     };
   };
 
