@@ -6,10 +6,11 @@
     recommendedEnvironment = true;
 
     extraConfig = ''
-      monitor = DP-1, highrr, 1920x0, 1, bitdepth, 10
+      monitor = DP-1, highrr, 1920x0, 1
       monitor = HDMI-A-1, preferred, 0x0, 1
 
       general {
+        border_size = 0
         gaps_in = 16
         gaps_out = 32
         cursor_inactive_timeout = 5
@@ -17,6 +18,12 @@
 
       decoration {
         rounding = 16
+        shadow_range = 4
+        shadow_render_power = 1
+        shadow_offset = 2 2
+        col.shadow = 0x70000000
+        dim_inactive = true
+        dim_strength = 0.2
       }
 
       input {
@@ -35,6 +42,11 @@
       bind = SUPER, J, movefocus, d
       bind = SUPER, K, movefocus, u
       bind = SUPER, L, movefocus, r
+
+      bind = SUPER SHIFT, H, swapwindow, l
+      bind = SUPER SHIFT, J, swapwindow, d
+      bind = SUPER SHIFT, K, swapwindow, u
+      bind = SUPER SHIFT, L, swapwindow, r
 
       bind = SUPER, 1, workspace, 1
       bind = SUPER, 2, workspace, 2
