@@ -11,8 +11,13 @@
   # Set the hostname
   networking.hostName = name;
 
-  # Use flake's nixpkgs
-  nixpkgs.pkgs = flakePkgs;
+  nixpkgs = {
+    # Allow OpenSSL 1.1 - unfortunately PowerShell requires it
+    config.permittedInsecurePackages = [ "openssl-1.1.1t" ];
+
+    # Use flake's nixpkgs
+    pkgs = flakePkgs;
+  };
 
   # Add nixpkgs to NIX_PATH, by linking it to /etc/nixpkgs
   environment.etc.nixpkgs.source = inputs.nixpkgs;

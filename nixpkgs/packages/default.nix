@@ -55,6 +55,16 @@ in {
 
   pmbootstrap = prev.callPackage ./pmbootstrap.nix { };
 
+  powershell = prev.powershell.overrideAttrs (old: rec {
+    version = "7.3.4";
+    src = prev.fetchzip {
+      url =
+        "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
+      hash = "sha256-MohiC9mN74F2HZOsQI0ANO/R6hfIXH2MOMW2/Rce9io=";
+      stripRoot = false;
+    };
+  });
+
   pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
 
   schemer2 = prev.callPackage ./schemer2.nix { };
