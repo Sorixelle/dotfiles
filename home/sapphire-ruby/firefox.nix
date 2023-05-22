@@ -27,7 +27,6 @@
           return-youtube-dislikes
           sidebery
           sponsorblock
-          startpage-private-search
           stylus
           tridactyl
           ublock-origin
