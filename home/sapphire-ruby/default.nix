@@ -73,8 +73,12 @@
       package = arc-icon-theme;
     };
     theme = {
-      name = "Arc-Dark";
-      package = arc-theme;
+      name = "Catppuccin-Macchiato-Standard-Teal-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        variant = "macchiato";
+        tweaks = [ "rimless" ];
+        accents = [ "teal" ];
+      };
     };
   };
 
