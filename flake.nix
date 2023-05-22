@@ -23,6 +23,14 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland-contrib = {
+      url = "github:hyprwm/contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    shadower = {
+      url = "github:n3oney/shadower";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     wired-notify = {
       url = "github:Toqozz/wired-notify";
       inputs = {
@@ -75,11 +83,13 @@
         inherit system;
         config = import ./nixpkgs/config.nix;
         overlays = [
-          inputs.rust-overlay.overlays.default
           inputs.emacs.overlay
           inputs.eww.overlays.default
+          inputs.hyprland-contrib.overlays.default
           inputs.nixmox.overlay
           inputs.nur.overlay
+          inputs.rust-overlay.overlays.default
+          inputs.shadower.overlay
           inputs.wired-notify.overlays.default
           self.overlay
         ];

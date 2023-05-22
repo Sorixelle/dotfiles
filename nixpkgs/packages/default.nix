@@ -68,4 +68,6 @@ in {
   pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
 
   schemer2 = prev.callPackage ./schemer2.nix { };
+
+  scr = prev.callPackage ./scr.nix { };
 }

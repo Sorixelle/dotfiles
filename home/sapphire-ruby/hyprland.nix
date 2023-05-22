@@ -73,6 +73,10 @@
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty
       bind = SUPER, space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun
 
+      bind = SUPER, S, exec, ${pkgs.scr}/bin/scr -Mode Active -Clipboard
+      bind = SUPER SHIFT, S, exec, ${pkgs.scr}/bin/scr -Mode Selection -Clipboard
+      bind = SUPER ALT, S, exec, ${pkgs.scr}/bin/scr -Mode Screen -Clipboard
+
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
     '';
   };

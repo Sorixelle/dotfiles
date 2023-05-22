@@ -52,6 +52,7 @@
     qbittorrent
     remmina
     rnix-lsp
+    scr
     steam
     steam-run
     spek
