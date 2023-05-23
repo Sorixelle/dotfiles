@@ -77,6 +77,9 @@
       bind = SUPER SHIFT, S, exec, ${pkgs.scr}/bin/scr -Mode Selection -Clipboard
       bind = SUPER ALT, S, exec, ${pkgs.scr}/bin/scr -Mode Screen -Clipboard
 
+      bindm = SUPER, mouse:272, movewindow
+      bindm = SUPER, mouse:273, resizewindow
+
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
     '';
   };
