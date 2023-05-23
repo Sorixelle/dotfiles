@@ -10,6 +10,7 @@
     ./fish.nix
     ./hyprland.nix
     ./kitty.nix
+    ./rofi.nix
     ./starship.nix
   ];
 
