@@ -20,6 +20,7 @@
     cachix
     calibre
     ctrtool
+    cutentr
     darktable
     discord
     evince
