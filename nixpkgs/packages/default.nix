@@ -37,6 +37,8 @@ in {
 
   cutentr = prev.callPackage ./cutentr.nix { };
 
+  fbi-servefiles = prev.callPackage ./fbi-servefiles.nix { };
+
   gcc-cortex-a-arm = gcc-cortex-a-9 "arm";
   gcc-cortex-a-armhf = gcc-cortex-a-9 "armhf";
   gcc-cortex-a-aarch64 = gcc-cortex-a-9 "aarch64";

@@ -26,6 +26,7 @@
     darktable
     discord
     evince
+    fbi-servefiles
     ffmpeg-full
     gimp
     gnome.eog
