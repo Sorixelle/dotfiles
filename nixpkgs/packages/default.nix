@@ -8,6 +8,8 @@ in {
   frankerfacez = prev.callPackage ./ff-exts/frankerfacez.nix { };
   ff-stylish = prev.callPackage ./ff-exts/stylish.nix { };
 
+  _3dsconv = prev.callPackage ./3dsconv { };
+
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
 
   cifs-utils = prev.cifs-utils.overrideAttrs

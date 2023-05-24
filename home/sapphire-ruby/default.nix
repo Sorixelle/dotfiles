@@ -15,6 +15,7 @@
   ];
 
   home.packages = with pkgs; [
+    _3dsconv
     audacity
     betterdiscordctl
     bless

@@ -1,0 +1,28 @@
+diff --git a/setup.py b/setup.py
+index cd3fc80..3c15d52 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,7 +1,7 @@
+ from setuptools import setup, find_packages
+ 
+ setup(
+-    name='3dsconv',
++    name='threedsconv',
+     version='4.2',
+     url='https://github.com/ihaveamac/3dsconv',
+     author='Ian',
+@@ -9,5 +9,5 @@ setup(
+     description='Converts Nintendo 3DS CTR Cart Image files (CCI, ".cci", ".3ds") to the CTR Importable Archive format (CIA)',
+     install_requires=['pyaes'],
+     packages=find_packages(),
+-    entry_points={'console_scripts': ['3dsconv=3dsconv.3dsconv:main']},
++    entry_points={'console_scripts': ['3dsconv=threedsconv.threedsconv:main']},
+ )
+diff --git a/3dsconv/__init__.py b/threedsconv/__init__.py
+similarity index 100%
+rename from 3dsconv/__init__.py
+rename to threedsconv/__init__.py
+diff --git a/3dsconv/3dsconv.py b/threedsconv/threedsconv.py
+similarity index 100%
+rename from 3dsconv/3dsconv.py
+rename to threedsconv/threedsconv.py
