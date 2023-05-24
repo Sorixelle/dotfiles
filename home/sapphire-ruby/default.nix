@@ -231,6 +231,11 @@
       defaultApplications = {
         "x-scheme-handler/http" = [ "firefox.desktop" ];
         "x-scheme-handler/https" = [ "firefox.desktop" ];
+
+        "application/pdf" = [ "org.gnome.Evince.desktop" ];
+        "application/zip" = [ "org.gnome.FileRoller.desktop" ];
+        "image/jpeg" = [ "org.gnome.eog.desktop" ];
+        "image/png" = [ "org.gnome.eog.desktop" ];
       };
     };
     userDirs = {
