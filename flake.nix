@@ -85,6 +85,7 @@
         overlays = [
           inputs.emacs.overlay
           inputs.eww.overlays.default
+          inputs.hyprland.overlays.default
           inputs.hyprland-contrib.overlays.default
           inputs.nixmox.overlay
           inputs.nur.overlay
