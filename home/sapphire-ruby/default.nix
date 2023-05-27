@@ -90,6 +90,8 @@
   manual.html.enable = true;
 
   programs = {
+    bash.enable = true;
+
     chromium = {
       enable = true;
       package = pkgs.chromium;
