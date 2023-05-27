@@ -297,46 +297,34 @@ Finding all these keybindings can be a pain. Luckily we have [[https://github.co
     (which-key-mode 1))
 #+end_src
 
-Because I might use EXWM in this config (more on that later), I need to be able to set global keys for EXWM, in case I want to be able to use those keybindings when in graphical windows. The way my Nix config is managed, I can toggle it on and off in there, and have the state exposed to Emacs through the variable =srxl/use-exwm=. We'll define a helper function for making such global keybindings, that does 2 things for us:
-- Use =exwm-input-set-key= if EXWM is in use, or =general-def= otherwise
-- Use Super as the prefix only when we're using EXWM, and fallback to Meta otherwise. Super isn't always guarranteed to work outside of EXWM, since other window managers have a tendency to eat those key events.
+** Window navigation
+Navigating between windows is something I do in Emacs /constantly/. Keybindings to help me do that would be nice. Let's start off with a simple one - moving between windows. For that, we'll use the Vim arrows to move between windows.
 
 #+begin_src emacs-lisp :tangle yes
-  (defun srxl/define-global-key (key cmd)
-    "Binds CMD, using `exwm-input-set-key' to s-KEY globally if EXWM is in use,
-  or using `general-def' to M-KEY otherwise."
-    (if srxl/use-exwm
-        (exwm-input-set-key (kbd (format "s-%s" key)) cmd)
-      (general-def (format "M-%s" key) cmd)))
-#+end_src
-
-** Window navigation
-Navigating between windows is something I do in Emacs /constantly/. Especially when I use EXWM, which I'll get to later in this config. Keybindings to help me do that would be nice. Let's start off with a simple one - moving between windows. For that, we'll use the Vim arrows to move between windows.
-
-Since these are keybindings we want to be able to use from EXWM windows, we'll use that helpful little =srxl/define-global-key= function I defined earlier to define them.
-
-#+begin_src emacs-lisp :noweb-ref POST-EXWM
-  (srxl/define-global-key "h" 'windmove-left)
-  (srxl/define-global-key "j" 'windmove-down)
-  (srxl/define-global-key "k" 'windmove-up)
-  (srxl/define-global-key "l" 'windmove-right)
+  (general-def
+    "M-h" 'windmove-left
+    "M-j" 'windmove-down
+    "M-k" 'windmove-up
+    "M-l" 'windmove-right)
 #+end_src
 
 Now for moving windows around. Surprisingly, Emacs doesn't seem to have a good built-in equivalent of =windmove= for swapping windows. Luckily, [[https://github.com/lukhas/buffer-move][buffer-move]] provides this functionality for us. We'll use the same keybindings as above, but also hold Shift for moving windows.
 
-#+begin_src emacs-lisp :noweb-ref POST-EXWM
-  (use-package buffer-move)
-  (srxl/define-global-key "H" 'buf-move-left)
-  (srxl/define-global-key "J" 'buf-move-down)
-  (srxl/define-global-key "K" 'buf-move-up)
-  (srxl/define-global-key "L" 'buf-move-right)
+#+begin_src emacs-lisp :tangle yes
+  (use-package buffer-move
+    :config
+    (general-def
+      "M-H" 'buf-move-left
+      "M-J" 'buf-move-down
+      "M-K" 'buf-move-up
+      "M-L" 'buf-move-right))
 #+end_src
 
 Looking good. But what if we want to do a whole bunch of window moving operations at once? Surely we don't have to keep holding down Super all the time. That would suck. Good thing we don't. This is where Hydra comes in handy - we can define a window management hydra that puts us in a "window management mode" indefinitely, until we're done with managing windows. Perfect!
 
 We'll also add bindings for creating new windows through splits in here. Since making splits is something you would almost always do in combination with another window move or swap, it doesn't really need it's own separate binding. I also can't think of a nice standalone binding, so this is a good excuse.
 
-#+begin_src emacs-lisp :noweb-ref POST-EXWM
+#+begin_src emacs-lisp :tangle yes
   (defhydra srxl/window-management (:hint nil)
     "
   Window Management
@@ -358,13 +346,13 @@ We'll also add bindings for creating new windows through splits in here. Since m
     ("s-j" split-window-below)
     ("x" delete-window))
 
-  (srxl/define-global-key "w" 'srxl/window-management/body)
+  (general-def "M-w" 'srxl/window-management/body)
 #+end_src
 
 Cool, windows are sorted - now we need some stuff for switching buffers. We'll keep it simple - =s-b= to search for a buffer.
 
-#+begin_src emacs-lisp :noweb-ref POST-EXWM
-  (srxl/define-global-key "b" 'counsel-switch-buffer)
+#+begin_src emacs-lisp :tangle yes
+  (general-def "M-b" 'counsel-switch-buffer)
 #+end_src
 
 ** Searching and completing and filtering and
@@ -855,10 +843,11 @@ When we're dealing with code projects, you really wanna be focusing on one at a 
       "s" '(projectile-persp-switch-project :wk "Switch project")))
 #+end_src
 
+NOTE: This snippet is being kept around since I have an open bug report for this in perspective-el, in case I need it to help troubleshoot there. I'm not really using EXWM anymore.
 It looks like there's currently [[https://github.com/nex3/perspective-el/issues/195][a bit of a bug]] in this package that causes some strange behaviour when killing a frame that only has one dedicated window in it. Sounds like a weird edge case, I know, but this actually happens a lot in EXWM since things like floating dialog boxes are frames with one dedicated window in them. I /think/ we can work around this by just picking out the offending function from a hook when we're using EXWM. It's not like I'm making and closing a lot of new frames in EXWM, let alone using perspectives in them, so this should be safe, right? ...Right?
 
 #+begin_src emacs-lisp :tangle yes
-  (when srxl/use-exwm
+  (when 'nil
         (setq delete-frame-functions (remove 'persp-delete-frame delete-frame-functions)))
 #+end_src
 
@@ -1221,112 +1210,4 @@ YAML.
 #+begin_src emacs-lisp :tangle yes
   (use-package yaml-mode
     :mode "\\.ya?ml\\'")
-#+end_src
-
-* Emacs, my favourite window manager
-TODO: write some shit here
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package exwm
-    :if srxl/use-exwm
-    :config
-    <<EXWM-CONFIG>>)
-
-  <<POST-EXWM>>
-#+end_src
-
-We'll use a little hook to automatically set the buffer title to the name of the application running in there.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (add-hook 'exwm-update-class-hook
-            (lambda ()
-              (exwm-workspace-rename-buffer exwm-class-name)))
-#+end_src
-
-Bind a couple keys to be used in all buffers under EXWM, X window or not:
-- =s-SPC= :: Open an app launcher
-- =s-RET= :: Open a terminal using vterm
-- =M-SPC= :: Same leader key as =SPC= in normal Emacs buffers
-- =M-<tab>= :: Switch to the next perspective
-- =M-<backtab>= :: Switch to the previous perspective
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (general-def '(exwm-mode-map global-map)
-    "s-SPC" 'counsel-linux-app
-    "s-<return>" 'vterm
-
-    "M-SPC" srxl/leader-key-map
-    "M-<tab>" 'persp-next
-    "M-<backtab>" 'persp-prev)
-#+end_src
-
-And some keybinds for X window buffers, in both line and char mode:
-- =s-r= :: Go back to line-mode
-- =s-q= :: Quit an app
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (setq exwm-input-global-keys
-          `((,(kbd "s-r") . exwm-reset)
-            (,(kbd "s-q") . kill-this-buffer)))
-#+end_src
-
-EXWM provides workspaces, but they're a little clunky for multiple monitor setups, in my opinion. There's no great way to move a workspace to another monitor - you gotta manually poke and prod at =exwm-randr-workspace-monitor-plist= to do it, since that's the single source of truth for what workspace is on what monitor. I could write some functions to do that, but we have perspective setup - we can get most of the workspace functionality we want out of that anyway, AND we can name them anything we want instead of predefined mappings to numbers. Sounds optimal to me (for now at least. Maybe I'll get off my ass and actually write some functions to make workspaces more like how most tiling WMs do it).
-
-With all that said - 2 workspaces by default. One for each monitor.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (setq exwm-workspace-number 2)
-#+end_src
-
-We'll also generate a few keybindings for =s-0= and =s-1= to switch to the primary and secondary monitor, respectively.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (nconc exwm-input-global-keys
-         (mapcar (lambda (i)
-                   `(,(kbd (format "s-%d" i)) .
-                     (lambda ()
-                       (interactive)
-                       (exwm-workspace-switch-create ,i))))
-                 (number-sequence 0 1)))
-#+end_src
-
-And for =s-S-<number>=, to move a buffer to that monitor.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (nconc exwm-input-global-keys
-         (cl-mapcar (lambda (k i)
-                      `(,(kbd (format "s-%s" k)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-move-window ,i))))
-                    '(")" "!" "@" "#" "$" "%" "^" "&" "*" "(")
-                    (number-sequence 0 1)))
-#+end_src
-
-=exwm-randr= has all the magic to make multi-monitor work, so we'll configure that as well. =exwm-randr-workspace-monitor-plist= defines a mapping of workspaces to monitor outputs, and the hook will call =xrandr= to position my monitors correctly, as well as set correct refresh rates.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (require 'exwm-randr)
-  (setq exwm-randr-workspace-monitor-plist '(0 "DisplayPort-0" 1 "HDMI-A-0"))
-  (exwm-randr-enable)
-#+end_src
-
-We'll enable EXWM's system tray support, so we can use those little icon thingies.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (require 'exwm-systemtray)
-  (exwm-systemtray-enable)
-#+end_src
-
-Throw a tinge of transparency on the frames, so we can see our pretty wallpapers a bit.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (set-frame-parameter (selected-frame) 'alpha 80)
-  (add-to-list 'default-frame-alist '(alpha . 80))
-#+end_src
-
-Finally, enable this Frankenstein's monster of a window manager.
-
-#+begin_src emacs-lisp :noweb-ref EXWM-CONFIG
-  (exwm-enable)
 #+end_src

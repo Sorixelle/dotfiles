@@ -7,6 +7,8 @@ in with lib; {
   options.srxl.emacs = with types; {
     enable = mkEnableOption "Emacs with my configuration.";
 
+    server.enable = mkEnableOption "Emacs daemon on systes startup.";
+
     package = mkOption {
       type = package;
       default = pkgs.emacsUnstable;
@@ -33,12 +35,6 @@ in with lib; {
       type = bool;
       default = false;
       description = "Whether to use the mu4e email client.";
-    };
-
-    useEXWM = mkOption {
-      type = bool;
-      default = false;
-      description = "Whether to use the EXWM window manager.";
     };
 
     extraConfig = mkOption {
@@ -87,51 +83,45 @@ in with lib; {
       '';
     };
 
-    xsession.windowManager.command = mkIf conf.useEXWM ''
-      ${emacsPackage}/bin/emacs -mm --debug-init
-    '';
+    services.emacs = mkIf conf.server.enable {
+      enable = true;
+      client.enable = true;
+      defaultEditor = true;
+    };
 
-    home = {
-      packages = lib.optional conf.useEXWM
-        pkgs.gtk3; # For gtk-launch, used by counsel-linux-app
+    home.file = {
+      "init.el" = {
+        source = tangledConfig;
+        target = ".emacs.d/init.el";
+      };
 
-      file = {
-        "init.el" = {
-          source = tangledConfig;
-          target = ".emacs.d/init.el";
-        };
+      "config-vars.el" = {
+        target = ".emacs.d/config-vars.el";
+        text = let
+          toBool = b: if b then "t" else "nil";
+          shell = if config.programs.fish.enable then
+            "/run/current-system/sw/bin/fish"
+          else
+            "/bin/sh";
+        in ''
+          (setq
+           srxl/font-family-monospace "${config.srxl.fonts.monospace.name}"
+           srxl/font-size-monospace "${
+             toString config.srxl.fonts.monospace.size
+           }"
+           srxl/font-family-ui "${config.srxl.fonts.ui.name}"
+           srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
+           srxl/font-family-serif "${config.srxl.fonts.serif.name}"
+           srxl/font-size-serif ${toString (config.srxl.fonts.serif.size * 10)}
+           srxl/theme-name '${conf.theme}
+           srxl/project-dir "~/usr/devel"
+           srxl/shell-executable "${shell}"
+           srxl/use-mu4e ${toBool conf.mu4e.enable}
+           srxl/email "${conf.mu4e.address}"
+           srxl/roam-dir "~/usr/notes")
 
-        "config-vars.el" = {
-          target = ".emacs.d/config-vars.el";
-          text = let
-            toBool = b: if b then "t" else "nil";
-            shell = if config.programs.fish.enable then
-              "/run/current-system/sw/bin/fish"
-            else
-              "/bin/sh";
-          in ''
-            (setq
-             srxl/font-family-monospace "${config.srxl.fonts.monospace.name}"
-             srxl/font-size-monospace "${
-               toString config.srxl.fonts.monospace.size
-             }"
-             srxl/font-family-ui "${config.srxl.fonts.ui.name}"
-             srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
-             srxl/font-family-serif "${config.srxl.fonts.serif.name}"
-             srxl/font-size-serif ${
-               toString (config.srxl.fonts.serif.size * 10)
-             }
-             srxl/theme-name '${conf.theme}
-             srxl/project-dir "~/usr/devel"
-             srxl/shell-executable "${shell}"
-             srxl/use-exwm ${toBool conf.useEXWM}
-             srxl/use-mu4e ${toBool conf.mu4e.enable}
-             srxl/email "${conf.mu4e.address}"
-             srxl/roam-dir "~/usr/notes")
-
-            ${conf.extraConfig}
-          '';
-        };
+          ${conf.extraConfig}
+        '';
       };
     };
   };

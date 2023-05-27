@@ -87,8 +87,6 @@
     };
   };
 
-  home.sessionVariables.EDITOR = "${pkgs.vim}/bin/vim";
-
   manual.html.enable = true;
 
   programs = {
@@ -158,6 +156,7 @@
   srxl = {
     emacs = {
       enable = true;
+      server.enable = true;
       # package = pkgs.emacsGit;
       theme = "catppuccin";
       extraConfig = ''
