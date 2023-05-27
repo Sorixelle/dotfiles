@@ -90,6 +90,8 @@
   manual.html.enable = true;
 
   programs = {
+    autojump.enable = true;
+
     bash.enable = true;
 
     chromium = {
