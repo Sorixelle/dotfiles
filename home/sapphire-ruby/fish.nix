@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.fish = {
@@ -27,6 +27,12 @@
 
       # Stop virtualenv from modifiying prompt
       set -g VIRTUAL_ENV_DISABLE_PROMPT 1
+
+      # No help message
+      set -U fish_greeting
+
+      # Pokemon :3
+      ${pkgs.krabby}/bin/krabby random --no-title
     '';
   };
 }
