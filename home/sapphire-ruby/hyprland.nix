@@ -35,6 +35,10 @@
         vrr = 2
       }
 
+      bezier = smoothPopIn, 0.22, 0.17, 0, 1
+      animation = windowsIn, 1, 7, smoothPopIn, popin
+      animation = windowsOut, 1, 7, smoothPopIn, popin
+
       bind = SUPER, Q, killactive,
       bind = SUPER SHIFT, Q, exit,
 
