@@ -51,12 +51,6 @@ in {
 
   makerom = prev.callPackage ./makerom.nix { };
 
-  mopidy-subidy = prev.callPackage ./mopidy-subidy.nix { };
-
-  # Required to use pipewiresink in mopidy config
-  mopidy = prev.mopidy.overrideAttrs
-    (old: { buildInputs = old.buildInputs ++ [ final.pipewire ]; });
-
   moserial = prev.callPackage ./moserial.nix { };
 
   pmbootstrap = prev.callPackage ./pmbootstrap.nix { };
