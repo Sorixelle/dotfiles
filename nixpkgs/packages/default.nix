@@ -67,6 +67,19 @@ in {
 
   pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
 
+  ranger = prev.ranger.overrideAttrs (old: rec {
+    version = "1.9.3-5c0cfb0";
+    src = prev.fetchFromGitHub {
+      owner = "ranger";
+      repo = "ranger";
+      rev = "5c0cfb088ea345e4ce3c195a6c5a155b84f5d2ba";
+      hash = "sha256-c9NXamACFltWHmtApBW4ZdFvohGVCDctpDfwLk3z50U=";
+    };
+
+    propagatedBuildInputs = old.propagatedBuildInputs
+      ++ (with prev.python3Packages; [ astroid pylint ]);
+  });
+
   schemer2 = prev.callPackage ./schemer2.nix { };
 
   scr = prev.callPackage ./scr.nix { };

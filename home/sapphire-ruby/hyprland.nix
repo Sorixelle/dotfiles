@@ -77,6 +77,7 @@
       bind = SUPER, T, togglefloating, active
       bind = SUPER, F, fullscreen, 0
 
+      bind = SUPER, E, exec, ${pkgs.kitty}/bin/kitty ${pkgs.ranger}/bin/ranger
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty
       bind = SUPER, space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun
 

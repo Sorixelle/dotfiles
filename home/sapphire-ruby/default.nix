@@ -55,12 +55,14 @@
     prismlauncher
     python3
     qbittorrent
+    ranger
     remmina
     rnix-lsp
     scr
     steam
     steam-run
     spek
+    trash-cli
     virt-manager
     vlc
     winbox
@@ -255,6 +257,27 @@
         image_backend="kitty"
         image_source="${./img/fetch.png}"
         image_size="35%"
+      '';
+
+      "ranger/rc.conf".text = ''
+        set preview_images_method kitty
+      '';
+      "ranger/rifle.conf".text = ''
+        ext x?html?, flag f = ${config.programs.firefox.package}/bin/firefox -- "$@"
+
+        mime ^text, label editor = ''${VISUAL:-$EDITOR} -- "$@"
+        mime ^text, label pager  = $PAGER -- "$@"
+
+        ext pdf|djvu|epub|cb[rz], flag f = ${pkgs.zathura}/bin/zathura -- "$@"
+        ext pptx?|od[dfgpst]|docx?|sxc|xlsx?|xlt|xlw|gnm|gnumeric, flag f = ${pkgs.libreoffice-fresh}/bin/libreoffice "$@"
+        ext xcf, flag f = ${pkgs.gimp}/bin/gimp -- "$@"
+
+        mime ^image, flag f = ${pkgs.imv}/bin/imv -- "$@"
+        mime ^video|^audio, flag f = ${pkgs.vlc}/bin/vlc -- "$@"
+
+        label open, flag f = ${pkgs.xdg-utils}/bin/xdg-open "$@"
+
+        label trash = ${pkgs.trash-cli}/bin/trash-put "$@"
       '';
     };
 
