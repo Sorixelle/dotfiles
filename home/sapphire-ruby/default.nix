@@ -230,6 +230,34 @@
   };
 
   xdg = {
+    configFile = {
+      "neofetch/config.conf".text = ''
+        print_info() {
+          info "" distro
+          info "󰍹" de
+          info "󰉼" theme
+          info "" term
+          info "" cpu
+          info "󰘚" memory
+          info cols
+        }
+
+        distro_shorthand="on"
+        os_arch="off"
+        memory_unit="gib"
+        shell_version="off"
+        cpu_speed="off"
+        cpu_cores="off"
+        gpu_type="dedicated"
+        gtk_shorthand="on"
+        separator=" "
+        block_width=3
+        image_backend="kitty"
+        image_source="${./img/fetch.png}"
+        image_size="15%"
+      '';
+    };
+
     mimeApps = {
       enable = true;
       defaultApplications = {
