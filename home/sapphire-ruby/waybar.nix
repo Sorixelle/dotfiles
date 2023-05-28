@@ -46,7 +46,7 @@
         "cava" = {
           framerate = 170;
           bars = 12;
-          method = "pulse";
+          method = "pipewire";
           stereo = false;
           monstercat = true;
           bar_delimiter = 0;
@@ -69,8 +69,9 @@
           format = "{status_icon} <i>{artist} - {title}</i>";
           interval = 1;
           status-icons = {
-            playing = "▶";
-            paused = "⏸";
+            playing = "󰐊";
+            paused = "󰏤";
+            stopped = "󰓛";
           };
         };
 
