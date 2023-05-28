@@ -10,7 +10,7 @@
     settings = {
       global = {
         follow = "keyboard";
-        width = "200, 512";
+        width = "(200, 512)";
         height = 128;
         origin = "top-right";
         offset = "16x16";
