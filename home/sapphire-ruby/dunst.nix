@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
-let colors = import ./colors.nix;
-in {
+{
   services.dunst = {
     enable = true;
     iconTheme = {
@@ -11,19 +10,21 @@ in {
     settings = {
       global = {
         follow = "keyboard";
-        geometry = "512x3-0-0";
-        shrink = true;
-        padding = 16;
-        horizontal_padding = 16;
-        text_icon_padding = 16;
-        frame_width = 10;
-        frame_color = colors.blue;
+        width = 300;
+        height = 128;
+        origin = "top-right";
+        offset = "16x16";
+        padding = 8;
+        horizontal_padding = 8;
+        text_icon_padding = 8;
+        frame_width = 4;
+        corner_radius = 16;
         separator_color = "frame";
-        separator_height = 10;
+        separator_height = 4;
         font =
           "${config.srxl.fonts.ui.name} ${toString config.srxl.fonts.ui.size}";
         markup = "full";
-        format = "<b>%a - %s</b>\\n%b";
+        format = "<small><i>%a</i></small>\\n<b><i>%s</i></b>\\n%b";
         alignment = "right";
         show_age_threshold = "1m";
         word_wrap = true;
@@ -31,20 +32,21 @@ in {
         browser = "${pkgs.firefox-bin}/bin/firefox";
       };
       urgency_low = {
-        background = colors.bg;
-        foreground = colors.fg;
-        frame_color = colors.fgLight;
+        background = "#24273a";
+        foreground = "#cad3f5";
+        frame_color = "#24273a";
         timeout = 5;
       };
       urgency_normal = {
-        background = colors.bg;
-        foreground = colors.fg;
+        background = "#24273a";
+        foreground = "#cad3f5";
+        frame_color = "#363a4f";
         timeout = 5;
       };
       urgency_critical = {
-        background = colors.bg;
-        foreground = colors.fg;
-        frame_color = colors.red;
+        background = "#24273a";
+        foreground = "#cad3f5";
+        frame_color = "#ed8796";
         timeout = 0;
       };
     };
