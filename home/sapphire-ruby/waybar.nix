@@ -41,7 +41,7 @@
         name = "topbar";
         modules-left = [ "hyprland/window" ];
         modules-center = [ "wlr/workspaces" ];
-        modules-right = [ "cava" "mpris" "clock" ];
+        modules-right = [ "cava" "mpris" "custom/mediaedge" "clock" ];
 
         "cava" = {
           framerate = 170;
@@ -57,6 +57,8 @@
           interval = 1;
           format = "{:%I:%M %p}";
         };
+
+        "custom/mediaedge" = { format = " "; };
 
         "hyprland/window" = {
           separate-outputs = true;
@@ -108,13 +110,18 @@
         border-right: 4px solid #ee99a0;
       }
 
-      #mpris {
-        padding: 8px;
+      #custom-mediaedge {
+        padding-left: 8px;
         margin-right: 16px;
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
         background-color: #24273a;
         border-right: 4px solid #a6da95;
+      }
+
+      #mpris {
+        padding-left: 8px;
+        background-color: #24273a;
       }
 
       #cava {
