@@ -28,40 +28,34 @@ Maybe I should get on with the actual config. Yeah, good idea. Let's do that.
 * The basics
 ** In the beginning...
 Alright, let's start by getting the very basics down. We'll start by enabling [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html][lexical binding]] for this file, so that we avoid any Certified Weirdness that comes with dynamic binding.
-
 #+begin_src emacs-lisp :tangle yes
   ;;; config.el -*- lexical-binding: t -*-
 #+end_src
 
 Cool. Now, in case you didn't know, I use [[https://nixos.org/][NixOS]] as my operating system, and I have a [[https://github.com/Sorixelle/dotfiles/][hella fancy setup]] for managing every single little piece of my machines. Including Emacs. I've written a [[https://github.com/Sorixelle/dotfiles/blob/master/home/modules/emacs.nix][cool little module]] to expose some parts of that configuration to Emacs in the form of an additional variables file. Let's load that in now.
-
 #+begin_src emacs-lisp :tangle yes
   (load-file (concat user-emacs-directory "config-vars.el"))
 #+end_src
 
 ** Setting expectations
 Ok, let's start actually setting some Emacs options. First thing we'll do is disable the startup splash and clear the scratch buffer. We want a clean slate when we start up.
-
 #+begin_src emacs-lisp :tangle yes
   (setq inhibit-startup-screen t
         initial-scratch-message nil)
 #+end_src
 
 Next, let's change every "yes or no" prompt to be "y or n". Less typing for me. Oh, and don't make graphical popups for those. I'd rather not use my mouse, thanks.
-
 #+begin_src emacs-lisp :tangle yes
   (fset 'yes-or-no-p 'y-or-n-p)
   (setq use-dialog-box nil)
 #+end_src
 
 Now that we have that, we'll ask one of those questions whenever we go to close Emacs. Can never be too safe.
-
 #+begin_src emacs-lisp :tangle yes
   (setq confirm-kill-emacs 'y-or-n-p)
 #+end_src
 
 Let's get rid of those gaudy UI elements. Who needs a toolbar or a scrollbar when you have a keyboard and every keybinding you could ever want?
-
 #+begin_src emacs-lisp :tangle yes
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -70,58 +64,49 @@ Let's get rid of those gaudy UI elements. Who needs a toolbar or a scrollbar whe
 #+end_src
 
 We'll start up all Emacs windows fullscreen, so that we have as much space as possible to wreak havoc on the world. Or at least write some words in a file.
-
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 #+end_src
 
 While we're doing windows - opening a file in macOS from the Finder seems to always create a new frame, which is really annoying. Stop doing that.
-
 #+begin_src emacs-lisp :tangle yes
   (when (eq window-system 'ns)
     (setq ns-pop-up-frames nil))
 #+end_src
 
 Automatically reload buffers when their underlying files change on the disk, when other rude tools start yanking the carpet from under me.
-
 #+begin_src emacs-lisp :tangle yes
   (global-auto-revert-mode 1)
 #+end_src
 
 Make sure all code files have their syntax highlighting enabled.
-
 #+begin_src emacs-lisp :tangle yes
   (global-font-lock-mode 1)
 #+end_src
 
 Crank up Emacs' garbage collection limit to 20MB, so it doesn't run as often.
-
 #+begin_src emacs-lisp :tangle yes
   (setq gc-cons-threshold 20000000)
 #+end_src
 
 Don't open the Warnings buffer whenever there's a native compilation warning. It's annoying and gets in my face.
-
 #+begin_src emacs-lisp :tangle yes
   (setq native-comp-async-report-warnings-errors 'silent)
 #+end_src
 
 Write customizations to it's own, dedicated file. Writing to =init.el= isn't going to fly under NixOS, since it manages that file with a symlink.
-
 #+begin_src emacs-lisp :tangle yes
   (setq custom-file (concat user-emacs-directory "customizations.el"))
   (load-file custom-file)
 #+end_src
 
 And, last but not least... STOP MAKING NOISES
-
 #+begin_src emacs-lisp :tangle yes
   (setq ring-bell-function 'ignore)
 #+end_src
 
 ** File editing bits and bobs
 Trailing whitespace is yucky. Except for trailing newlines at the end of a file though - those are good. We want those. Let's make that happen.
-
 #+begin_src emacs-lisp :tangle yes
   (setq require-final-newline 'visit-save)
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -132,7 +117,6 @@ Backups and auto-save files are an absolute godsend. They've saved my ass /so/ m
 - Backup files go to =~/.emacs.d/backups=
 - Autosave files go to =~/.emacs.d/auto-saves=
 - Some extra options are tweaked (see comments)
-
 #+begin_src emacs-lisp :tangle yes
   (setq backup-by-copying t    ; Keep symlinks intact
         version-control t      ; Make sure backups are numbered
@@ -153,37 +137,31 @@ Backups and auto-save files are an absolute godsend. They've saved my ass /so/ m
 #+end_src
 
 Lockfiles though - those suck. I don't need those. Go away. You smell.
-
 #+begin_src emacs-lisp :tangle yes
   (setq create-lockfiles nil)
 #+end_src
 
 Typing over text doesn't really work the way you'd expect it to in Emacs by default, but luckily there's a minor mode to fix that.
-
 #+begin_src emacs-lisp :tangle yes
   (delete-selection-mode 1)
 #+end_src
 
 Single space after full stops. Come on. Why isn't this the default?
-
 #+begin_src emacs-lisp :tangle yes
   (setq sentence-end-double-space nil)
 #+end_src
 
 Indent with spaces, not tabs. Come on. Why isn't this the default?
-
 #+begin_src emacs-lisp :tangle yes
   (setq-default indent-tabs-mode nil)
 #+end_src
 
 2 space indents. Come on. Why isn't thi
-
 #+begin_src emacs-lisp :tangle yes
   (setq-default tab-width 2)
 #+end_src
 
 Default line length is 80 characters. Wrap lines to that length.
-
 #+begin_src emacs-lisp :tangle yes
   (setq-default fill-column 80)
 #+end_src
@@ -265,7 +243,6 @@ Tell evil-collection NOT to eat my =TAB= binding in Outline mode (and Org mode b
 
 ** Managing the keyboard buttons
 The keyboard is the best interface to Emacs. Keybindings can do everything. Although, managing keybindings can be a bit tricky. Luckily, [[https://github.com/noctuid/general.el][general.el]] has us covered there. General provides a nice interface for managing keybindings, especially when it comes to things like enabling bindings only in certain Evil states.
-
 #+begin_src emacs-lisp :tangle yes
   (use-package general)
 #+end_src
@@ -283,14 +260,7 @@ One thing to note though - Evil's motion state defines =SPC= as moving point for
   (general-unbind 'motion "SPC")
 #+end_src
 
-Another useful tool is [[https://github.com/abo-abo/hydra/][Hydra]], which creates transient layers with a set of keybindings defined, that deactivates when another key is pressed. It's hard to describe. Go check out that link, they describe it there better than I could.
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package hydra)
-#+end_src
-
 Finding all these keybindings can be a pain. Luckily we have [[https://github.com/justbur/emacs-which-key][which-key]] to help us with that. It shows us a list of all avaliable commands when we hit a prefix, such as =C-c=. Useful for identifying just what the hell the "switch buffer" command is. Was is =C-c C-b=? =C-c b=? Some other insane combination? I don't know, you tell me.
-
 #+begin_src emacs-lisp :tangle yes
   (use-package which-key
     :config
@@ -298,61 +268,20 @@ Finding all these keybindings can be a pain. Luckily we have [[https://github.co
 #+end_src
 
 ** Window navigation
-Navigating between windows is something I do in Emacs /constantly/. Keybindings to help me do that would be nice. Let's start off with a simple one - moving between windows. For that, we'll use the Vim arrows to move between windows.
+Why should I limit myself to just one file at a time? Why not view as many as I want? That's what windows are for. Not to be confused with the frame (ie. the Emacs application window), windows subdivide the screen into multiple sections, each displaying it's own buffer.
 
+For most window operations, Evil already has us covered, with a bunch of useful keybindings tucked away under =C-w=. But that's not enough for me. A multi-key =C-w=-prefixed action can get a bit annoying when traversing across a few windows. =ace-window= is a tool that comes in really handy for these situations - when you activate it, it numbers every window, and you just need to press that number to jump to that window. Simple simple. We'll bind it to =SPC w=.
 #+begin_src emacs-lisp :tangle yes
-  (general-def
-    "M-h" 'windmove-left
-    "M-j" 'windmove-down
-    "M-k" 'windmove-up
-    "M-l" 'windmove-right)
-#+end_src
-
-Now for moving windows around. Surprisingly, Emacs doesn't seem to have a good built-in equivalent of =windmove= for swapping windows. Luckily, [[https://github.com/lukhas/buffer-move][buffer-move]] provides this functionality for us. We'll use the same keybindings as above, but also hold Shift for moving windows.
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package buffer-move
+  (use-package ace-window
     :config
-    (general-def
-      "M-H" 'buf-move-left
-      "M-J" 'buf-move-down
-      "M-K" 'buf-move-up
-      "M-L" 'buf-move-right))
+    (srxl/def-leader-key
+      "w" '(ace-window :wk "Switch window")))
 #+end_src
 
-Looking good. But what if we want to do a whole bunch of window moving operations at once? Surely we don't have to keep holding down Super all the time. That would suck. Good thing we don't. This is where Hydra comes in handy - we can define a window management hydra that puts us in a "window management mode" indefinitely, until we're done with managing windows. Perfect!
-
-We'll also add bindings for creating new windows through splits in here. Since making splits is something you would almost always do in combination with another window move or swap, it doesn't really need it's own separate binding. I also can't think of a nice standalone binding, so this is a good excuse.
-
+And now that we have window management down, we also should have a good way to change their buffers. =SPC b= will do just fine for that - we'll even use the Counsel-enhanced version (we'll get to what Counsel is in a moment...) which previews the buffer as we flip through the list.
 #+begin_src emacs-lisp :tangle yes
-  (defhydra srxl/window-management (:hint nil)
-    "
-  Window Management
-
-  ^^Move:       ^^Swap:       ^^Create
-  _h_: Left     _H_: Left     _s-l_: Left side
-  _j_: Down     _J_: Down     _s-j_: Bottom side
-  _k_: Up       _K_: Up       _x_:   Close
-  _l_: Right    _L_: Right"
-    ("h" windmove-left)
-    ("j" windmove-down)
-    ("k" windmove-up)
-    ("l" windmove-right)
-    ("H" buf-move-left)
-    ("J" buf-move-down)
-    ("K" buf-move-up)
-    ("L" buf-move-right)
-    ("s-l" split-window-right)
-    ("s-j" split-window-below)
-    ("x" delete-window))
-
-  (general-def "M-w" 'srxl/window-management/body)
-#+end_src
-
-Cool, windows are sorted - now we need some stuff for switching buffers. We'll keep it simple - =s-b= to search for a buffer.
-
-#+begin_src emacs-lisp :tangle yes
-  (general-def "M-b" 'counsel-switch-buffer)
+  (srxl/def-leader-key
+    "b" '(counsel-switch-buffer :wk "Switch buffer"))
 #+end_src
 
 ** Searching and completing and filtering and
@@ -417,7 +346,6 @@ If I'm going to use Emacs as much as I do, I want to use something that's actual
 
 ** Pretty letters
 We'll start off by setting some nicer fonts. That's one of the things that's a part of my NixOS config, so we'll read the variables set from there.
-
 #+begin_src emacs-lisp :tangle yes
   (add-to-list 'default-frame-alist `(font . ,(concat srxl/font-family-monospace " " srxl/font-size-monospace)))
   (set-face-attribute 'variable-pitch nil :family srxl/font-family-ui :height srxl/font-size-ui)
@@ -425,7 +353,6 @@ We'll start off by setting some nicer fonts. That's one of the things that's a p
 #+end_src
 
 We're also going to define a face for a serif font. This'll get used later, for stuff like Org mode.
-
 #+begin_src emacs-lisp :tangle yes
   (defface serif
     `((t (:inherit variable-pitch :family ,srxl/font-family-serif :height ,srxl/font-size-serif)))
@@ -433,7 +360,6 @@ We're also going to define a face for a serif font. This'll get used later, for 
 #+end_src
 
 Make sure emoji get the full colour treatment on Linux.
-
 #+begin_src emacs-lisp :tangle yes
   (when (not (memq window-system '(mac ns)))
     (set-fontset-font t 'emoji "Noto Color Emoji"))
@@ -469,7 +395,6 @@ But which one do I use? That's defined in my NixOS configuration. Go check that 
 The mode line in Emacs is that little line at the bottom of the window that has all the status stuff, like filename... uh... man, the default mode line doesn't really have a lot of useful stuff in it, huh? Hmm.
 
 I'm far too lazy to write my own mode line. Luckily, multiple people have done it for me, and I just need to pick the one I like. And I like [[https://github.com/seagle0128/doom-modeline][doom-modeline]]. It's got everything I could possibly want in a modeline, and it looks cool to boot. Let's get it going.
-
 #+begin_src emacs-lisp :tangle yes
   (use-package nerd-icons)
   (use-package doom-modeline
@@ -483,34 +408,26 @@ Make the modeline nice and thick.
 #+end_src
 
 Enable =column-number-mode= so that we can get column number displayed in the modeline, along with the line number.
-
 #+begin_src emacs-lisp :noweb-ref DOOMLINE-CONFIG
   (column-number-mode 1)
 #+end_src
 
 And enable =display-time-mode= for a clock in there as well.
-
 #+begin_src emacs-lisp :noweb-ref DOOMLINE-CONFIG
   (display-time-mode 1)
 #+end_src
 
 And activate.
-
 #+begin_src emacs-lisp :noweb-ref DOOMLINE-CONFIG
   (doom-modeline-mode 1)
 #+end_src
 
 * Emacs, my favourite word processor
 [[https://orgmode.org/][org-mode]] might just be one of the most amazing programs ever made. Like, seriously. This thing is amazing. It's a markup language, a todo list, a calendar, a spreadsheet, Jupyter Notebook on sterioids... I could keep going on here, but that's probably not what you're here for. You're here to see me configure this delightful thing. And I'm not about to waste anymore time.
-
 #+begin_src emacs-lisp :tangle yes
   (use-package org
     :config
     <<ORG-CONFIG>>)
-#+end_src
-
-#+begin_src emacs-lisp :noweb-ref ORG-CONFIG
-  (add-hook 'org-mode-hook 'visual-line-mode)
 #+end_src
 
 ** Making documents look pretty
@@ -545,6 +462,11 @@ And make them a bit more distinct at each level, by setting different sizes for 
   (set-face-attribute 'org-level-2 nil :height 1.25)
   (set-face-attribute 'org-level-3 nil :height 1.125)
   (set-face-attribute 'org-level-4 nil :height 1.1)
+#+end_src
+
+Sometimes, lines get pretty long in Org documents. Visual Line mode will make sure they wrap around and don't fly way off the edge of the screen.
+#+begin_src emacs-lisp :noweb-ref ORG-CONFIG
+  (add-hook 'org-mode-hook 'visual-line-mode)
 #+end_src
 
 Enable visual indentation when viewing files, for a little extra visual separation between headers.
@@ -747,8 +669,6 @@ Aaaaaaaaand enable.
 
 ** Project management
 When I'm working in projects, having some keybinds and commands to quickly get around and run some local dev servers or whatever is really useful. [[https://docs.projectile.mx/projectile/index.html][Projectile]] gives a whole lot of that.
-
-Now that we have that function setup, let's bring Projectile in.
 #+begin_src emacs-lisp :tangle yes
   <<projectile-pre>>
   (use-package projectile
@@ -782,7 +702,7 @@ When calling functions that run project commands, like =projectile-compile-proje
 And now, keybindings.
 #+begin_src emacs-lisp :noweb-ref projectile-config
   (srxl/def-leader-key
-    "b" '(projectile-switch-to-buffer :wk "Switch buffer")
+    "s" '(projectile-switch-project :wk "Switch project")
     "f" '(projectile-find-file :wk "Find file")
     "x" '(projectile-kill-buffers :wk "Close project")
     "/" '(projectile-ripgrep :wk "Grep project")
@@ -796,60 +716,6 @@ And now, keybindings.
 #+end_src
 
 Other bindings will be coming in the following sections.
-
-** Workspace management
-Working across multiple projects gets real clunky, real fast. Thankfully, we have [[https://github.com/nex3/perspective-el][perspective]] to help us manage the load, by constraining window layouts and buffer lists to "perspectives", and letting us switch between them. Just like workspaces.
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package perspective
-    :config
-    <<PERSP-CONFIG>>
-    (persp-mode))
-#+end_src
-
-First off, some keybinds.  We're mostly going to replace a lot of the default "switch buffer" type commands with ones that are perspective-aware, so we get the buffer constraining behaviour by default.
-
-#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
-  (general-def
-    "C-x b"   'persp-ivy-switch-buffer
-    "C-x C-b" 'persp-list-buffer)
-#+end_src
-
-And now a whole bunch more under the leader key. These probably won't see heavy use, but it's still good to have them around.
-
-#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
-  (srxl/def-leader-key
-    "p" '(:ignore t :wk "Perspectives...")
-    "p a" '(persp-add-buffer :wk "Add buffer to persp")
-    "p k" '(persp-remove-buffer :wk "Remove buffer from persp")
-    "p m" '(persp-merge :wk "Merge current persp with other")
-    "p r" '(persp-rename :wk "Rename persp")
-    "p s" '(persp-switch :wk "Switch persp")
-    "p x" '(persp-kill :wk "Delete persp"))
-#+end_src
-
-Get that little warning about not defining =persp-mode-prefix-key= to shut up. We defined the keybindings ourself, it's fine. Shush.
-
-#+begin_src emacs-lisp :noweb-ref PERSP-CONFIG
-  (setq persp-suppress-no-prefix-key-warning t)
-#+end_src
-
-When we're dealing with code projects, you really wanna be focusing on one at a time. Perspective's workspace-like isolation is perfect for this. [[https://github.com/bbatsov/persp-projectile][persp-projectile]] gives us a nice integration that lets us switch to a project and create a perspective for it at the same time. Exactly the kind of integration we want.
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package persp-projectile
-    :config
-    (srxl/def-leader-key
-      "s" '(projectile-persp-switch-project :wk "Switch project")))
-#+end_src
-
-NOTE: This snippet is being kept around since I have an open bug report for this in perspective-el, in case I need it to help troubleshoot there. I'm not really using EXWM anymore.
-It looks like there's currently [[https://github.com/nex3/perspective-el/issues/195][a bit of a bug]] in this package that causes some strange behaviour when killing a frame that only has one dedicated window in it. Sounds like a weird edge case, I know, but this actually happens a lot in EXWM since things like floating dialog boxes are frames with one dedicated window in them. I /think/ we can work around this by just picking out the offending function from a hook when we're using EXWM. It's not like I'm making and closing a lot of new frames in EXWM, let alone using perspectives in them, so this should be safe, right? ...Right?
-
-#+begin_src emacs-lisp :tangle yes
-  (when 'nil
-        (setq delete-frame-functions (remove 'persp-delete-frame delete-frame-functions)))
-#+end_src
 
 ** File exploring
 Next, we'll get outselves a file explorer, by way of [[https://github.com/Alexander-Miller/treemacs][Treemacs]]. It's a fully-featured file tree sidebar, just like you'd have in every IDE.
@@ -939,7 +805,6 @@ Treemacs has some integration with Magit, to get the Git status highlighting of 
 
 ** Integrated terminal
 [[https://github.com/akermu/emacs-libvterm][emacs-libvterm]] is probably the most fully-featured terminal emulator out there. It provides a really nice integration experience with Emacs.
-
 #+begin_src emacs-lisp :tangle yes
   (use-package vterm
     :config
@@ -995,7 +860,6 @@ Use =SPC t= to open the terminal.
 
 ** Language Server Protocol
 And now we get to the special sauce - LSP support. [[https://github.com/joaotavora/eglot][Eglot]] is a really cool, language-agnostic package that soups up the facilities Emacs already has for things like autocomplete (=completion-at-point=), jump to definition (=xref-find-definitions=) and diagnostics (=flymake-mode=).
-
 #+begin_src emacs-lisp :tangle yes
   (use-package eglot)
 #+end_src
