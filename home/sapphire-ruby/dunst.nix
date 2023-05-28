@@ -10,10 +10,11 @@
     settings = {
       global = {
         follow = "keyboard";
-        width = 300;
+        width = "200, 512";
         height = 128;
         origin = "top-right";
         offset = "16x16";
+        notification_limit = 6;
         padding = 8;
         horizontal_padding = 8;
         text_icon_padding = 8;

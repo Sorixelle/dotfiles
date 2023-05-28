@@ -254,7 +254,7 @@
         block_width=3
         image_backend="kitty"
         image_source="${./img/fetch.png}"
-        image_size="15%"
+        image_size="35%"
       '';
     };
 
