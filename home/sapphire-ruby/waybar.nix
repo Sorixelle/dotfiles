@@ -99,6 +99,7 @@
       }
 
       .modules-center {
+        margin: 0 16px;
         padding: 8px;
         border-radius: 8px;
         background-color: #24273a;
