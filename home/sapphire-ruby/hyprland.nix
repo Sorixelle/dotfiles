@@ -89,6 +89,7 @@
       bindm = SUPER, mouse:273, resizewindow
 
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
+      exec-once = ${pkgs.systemd}/bin/systemctl --user import-environment KRB5CCNAME
     '';
   };
 
