@@ -275,7 +275,7 @@
         block_width=3
         image_backend="kitty"
         image_source="${./img/fetch.png}"
-        image_size="35%"
+        image_size="15%"
       '';
 
       "ranger/rc.conf".text = ''
