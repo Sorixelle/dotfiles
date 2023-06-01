@@ -202,10 +202,20 @@
   systemd.user = {
     services = {
       nightly-backup = {
-        Unit = { Description = "Backup user data directory to NAS"; };
+        Unit = { Description = "Backup user data directory to local NAS"; };
         Service = {
           Type = "oneshot";
           ExecStart = "${pkgs.kopia}/bin/kopia snapshot create /home/ruby/usr";
+        };
+      };
+      weekly-backup = {
+        Unit = {
+          Description = "Backup user data directory to offsite storage";
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart =
+            "${pkgs.kopia}/bin/kopia --config-file /home/ruby/.config/kopia/remote.config snapshot create /home/ruby/usr";
         };
       };
 
@@ -223,9 +233,18 @@
     timers = {
       nightly-backup = {
         Unit = {
-          Description = "Backup user data directory to NAS every night at 6pm";
+          Description =
+            "Backup user data directory to local NAS every night at 6pm";
         };
         Timer = { OnCalendar = "18:00:00"; };
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
+      weekly-backup = {
+        Unit = {
+          Description =
+            "Backup user data directory to offsite storage every Saturday at 12pm";
+        };
+        Timer = { OnCalendar = "Sat *-*-* 12:00:00"; };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };
