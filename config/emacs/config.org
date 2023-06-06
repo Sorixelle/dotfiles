@@ -597,6 +597,44 @@ Keeping things like quotation marks for strings, and parentheses balanced is rea
     (smartparens-global-mode))
 #+end_src
 
+Some expansions by default are a little odd. To explain what I mean, I'll demonstrate with a text example, where =|= is the position of the cursor before and after hitting =RET=:
+
+#+begin_example
+  {|}
+  -----
+  {
+  |}
+#+end_example
+
+It's a little weird, isn't it? I'd expect something a little more like:
+
+#+begin_example
+  {|}
+  -----
+  {
+    |
+  }
+#+end_example
+
+Much more reasonable, yeah? Luckily, we can write a function to fix this for us. Smartparens lets us hook into it's insertions, and trigger functions after them. We'll first write a function that will do the newline insertion and indentation we need.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun srxl/newline-indent (&rest _)
+    "Insert a newline, and correct surrounding indentation."
+    (newline)
+    (indent-according-to-mode)
+    (forward-line -1)
+    (indent-according-to-mode))
+#+end_src
+
+Now, we can add another function to fixup this indentation behaviour for the modes we want it in. It'll fire that function we just called after hitting =RET=.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun srxl/fix-brace-indentation (mode)
+    "Adjust Smartparens brace insertion hook for MODE."
+    (sp-local-pair mode "{" nil :post-handlers '((srxl/newline-indent "RET"))))
+#+end_src
+
 ** Autocomplete
 First off, let's get some autocomplete capability in here. We gotta have that - what's an IDE without autocomplete? Although, this doesn't provide language-specific completions, just the UI for autocompletion. We'll get to that in a bit.
 
@@ -887,7 +925,9 @@ I use [[https://nixos.org/][Nix]] and NixOS extensively. Being able to declarati
 #+begin_src emacs-lisp :tangle yes
   (use-package nix-mode
     :mode "\\.nix\\'"
-    :hook (nix-mode . eglot-ensure))
+    :hook (nix-mode . eglot-ensure)
+    :config
+    (srxl/fix-brace-indentation 'nix-mode))
 #+end_src
 
 *** Web Markup
@@ -934,6 +974,11 @@ Make sure LSP is running is JS buffers.
   (add-hook 'js-mode-hook 'eglot-ensure)
 #+end_src
 
+Add that Smartparens brace fix we defined earlier.
+#+begin_src emacs-lisp :tangle yes
+  (srxl/fix-brace-indentation 'js-mode)
+#+end_src
+
 **** Typescript
 [[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
 #+begin_src emacs-lisp :tangle yes
@@ -947,6 +992,11 @@ Make sure LSP is running is JS buffers.
 As with Javascript - indent with 2 spaces, not 4.
 #+begin_src emacs-lisp :noweb-ref TS-CONFIG
   (setq typescript-indent-level 2)
+#+end_src
+
+And the brace indent fix.
+#+begin_src emacs-lisp :noweb-ref TS-CONFIG
+  (srxl/fix-brace-indentation 'typescript-mode)
 #+end_src
 
 **** JSX/TSX
@@ -967,6 +1017,12 @@ Setup LSP support for these new modes, as well.
 
   (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
   (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
+#+end_src
+
+And fix their curly braces.
+#+begin_src emacs-lisp
+  (srxl/fix-brace-indentation 'javascript-jsx-mode)
+  (srxl/fix-brace-indentation 'typescript-tsx-mode)
 #+end_src
 
 **** JS Frameworks
@@ -1067,7 +1123,9 @@ A lot of people write Markdown. I don't know why they would do that when org-mod
 JSON.
 #+begin_src emacs-lisp :tangle yes
   (use-package json-mode
-    :mode "\\.json\\'")
+    :mode "\\.json\\'"
+    :config
+    (srxl/fix-brace-indentation 'json-mode))
 #+end_src
 
 YAML.
