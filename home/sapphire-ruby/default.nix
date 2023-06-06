@@ -101,6 +101,7 @@
       enable = true;
       package = pkgs.chromium;
       extensions = [
+        { id = "cmpdlhmnmjhihmcfnigoememnffkimlk"; } # Catppuccin Theme
         { id = "ldpochfccmkkmhdbclfhpagapcfdljkj"; } # Decentraleyes
         { id = "oboonakemofpalcgghocfoadofidjkkk"; } # KeePassXC Browser
         { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # Privacy Badger
