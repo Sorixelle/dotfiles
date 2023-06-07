@@ -12,9 +12,6 @@
   networking.hostName = name;
 
   nixpkgs = {
-    # Allow OpenSSL 1.1 - unfortunately PowerShell requires it
-    config.permittedInsecurePackages = [ "openssl-1.1.1t" ];
-
     # Use flake's nixpkgs
     pkgs = flakePkgs;
   };

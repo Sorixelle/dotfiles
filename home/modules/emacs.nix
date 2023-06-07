@@ -11,7 +11,7 @@ in with lib; {
 
     package = mkOption {
       type = package;
-      default = pkgs.emacsUnstable;
+      default = pkgs.emacs-unstable;
       description = "The Emacs package to install.";
     };
 
