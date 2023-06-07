@@ -22,7 +22,9 @@
   # Configure Nix
   nix = {
     # Use a flakes-enabled version of Nix
-    package = pkgs.nixUnstable;
+    # Known bug in 2.16 is breaking this config, revert when it gets fixed
+    # https://github.com/NixOS/nix/issues/8443
+    package = pkgs.nixVersions.nix_2_15;
 
     # Run automatic garbage collection at 4pm every Sunday
     gc = {
