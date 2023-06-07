@@ -15,6 +15,18 @@
           end
         '';
       };
+
+      pnpc = {
+        description = "Initialize a project with pnpm create";
+        body = ''
+          set -l pnpm_command (which pnpm 2> /dev/null)
+          if [ -n "$pnpm_command" ]
+            $pnpm_command create $argv
+          else
+            nix-shell -p nodePackages.pnpm --run "pnpm create $argv"
+          end
+        '';
+      };
     };
 
     interactiveShellInit = ''
