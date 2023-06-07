@@ -902,6 +902,14 @@ Use =SPC t= to open the terminal.
     "t" '(shell-pop :wk "Open terminal"))
 #+end_src
 
+** Code formatting
+Always nice to keep code clean, neat and pretty looking. Running a code formatter on save is what most people do to ensure consistent formatting. [[https://github.com/radian-software/apheleia][Apheleia]] can help us do that in Emacs. Luckily, it's default collection of formatters are exactly what I prefer, so I don't need to worry about configuring it up. Just set and forget. Nice when things work out like that, isn't it?
+#+begin_src emacs-lisp
+  (use-package apheleia
+    :config
+    (apheleia-global-mode))
+#+end_src
+
 ** Language Server Protocol
 And now we get to the special sauce - LSP support. [[https://github.com/joaotavora/eglot][Eglot]] is a really cool, language-agnostic package that soups up the facilities Emacs already has for things like autocomplete (=completion-at-point=), jump to definition (=xref-find-definitions=) and diagnostics (=flymake-mode=).
 #+begin_src emacs-lisp :tangle yes
