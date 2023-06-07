@@ -165,7 +165,7 @@
     emacs = {
       enable = true;
       server.enable = true;
-      # package = pkgs.emacsGit;
+      package = pkgs.emacs-git;
       theme = "catppuccin";
       extraConfig = ''
         (setq catppuccin-flavor 'macchiato)

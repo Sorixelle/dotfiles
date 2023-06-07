@@ -46,8 +46,9 @@ in with lib; {
 
   config = let
     emacsPkgs = pkgs.emacsPackagesFor conf.package;
-    emacsPackage = emacsPkgs.emacsWithPackages
-      (e: [ e.vterm e.org-roam ] ++ (lib.optional conf.useMu4e pkgs.mu));
+    emacsPackage = emacsPkgs.emacsWithPackages (e:
+      [ e.org-roam e.treesit-grammars.with-all-grammars e.vterm ]
+      ++ (lib.optional conf.useMu4e pkgs.mu));
 
     tangledConfig = pkgs.stdenv.mkDerivation {
       name = "hm-emacs-tangled-config";

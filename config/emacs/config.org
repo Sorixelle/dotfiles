@@ -391,6 +391,11 @@ But which one do I use? That's defined in my NixOS configuration. Go check that 
   (load-theme srxl/theme-name t)
 #+end_src
 
+The tree-sitter modes have an option to set the amount of different things to colorize. I think it looks best with that setting cranked all the way up.
+#+begin_src emacs-lisp :tangle yes
+  (setq treesit-font-lock-level 4)
+#+end_src
+
 ** Pretty modeline
 The mode line in Emacs is that little line at the bottom of the window that has all the status stuff, like filename... uh... man, the default mode line doesn't really have a lot of useful stuff in it, huh? Hmm.
 
@@ -932,17 +937,25 @@ I use [[https://nixos.org/][Nix]] and NixOS extensively. Being able to declarati
 #+end_src
 
 *** Web Markup
-There's a lot of languages used on the web. HTML, CSS, JS, the infinite amount of templating frameworks every server-side MVC framework they just had to have their own one for... Surely we can't support them all, right? Maybe not all, but [[https://web-mode.org/][web-mode]] supports a hell of a lot of them.
+Emacs ships some basic tree-sitter powered modes for HTML and CSS. We'll make sure those are getting used.
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . html-ts-mode))
+  (add-hook 'html-ts-mode-hook 'eglot-ensure)
+
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . css-ts-mode))
+  (add-hook 'css-ts-mode-hook 'eglot-ensure)
+  (srxl/fix-brace-indentation 'css-ts-mode "{")
+#+end_src
+
+That's the basics covered, but there's a lot of languages used on the web. Less, Sass, the infinite amount of templating frameworks every server-side MVC framework they just had to have their own one for... Surely we can't support them all, right? Maybe not all, but [[https://web-mode.org/][web-mode]] supports a hell of a lot of them.
 #+begin_src emacs-lisp :tangle yes
   (use-package web-mode
-    :mode ("\\.html\\'"
-           "\\.\\(?:le\\|sa\\|sc\\|c\\)ss\\'"
-           "\\.heex\\'")
+    :mode ("\\.\\(?:le\\|sa\\|sc\\)ss\\'")
     :config
     <<WEB-CONFIG>>)
 #+end_src
 
-2 space indentation.
+Make sure they use 2 space indentation.
 #+begin_src emacs-lisp :noweb-ref WEB-CONFIG
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
@@ -951,79 +964,36 @@ There's a lot of languages used on the web. HTML, CSS, JS, the infinite amount o
         web-mode-script-padding 2)
 #+end_src
 
-Change the HTML tag autoclosing to "Auto-close on > and </".
-#+begin_src emacs-lisp :noweb-ref WEB-CONFIG
-  (setq web-mode-auto-close-style 2)
-#+end_src
-
 *** Javascript and Typescript
 The lingua franca of the web. Like it or not, it's what we're stuck with, so we're gonna have to use it.
 
 **** Javascript
-For Javascript: js-mode. It's built-in, and has everything we need for plain-old Javascript files.
+For Javascript: js-ts-mode. It's built-in, and has everything we need for both plain-old Javascript and JSX files. The JS-TS part sounds a bit confusing, but TS stands for tree-sitter here, not TypeScript.
 #+begin_src emacs-lisp :tangle yes
-  (add-to-list 'auto-mode-alist '("\\.[mc]?js\\'" . js-mode))
-#+end_src
-
-Indent with 2 spaces, not 4.
-#+begin_src emacs-lisp :tangle yes
-  (setq js-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\\.[mc]?jsx?\\'" . js-ts-mode))
 #+end_src
 
 Make sure LSP is running is JS buffers.
 #+begin_src emacs-lisp :tangle yes
-  (add-hook 'js-mode-hook 'eglot-ensure)
+  (add-hook 'js-ts-mode-hook 'eglot-ensure)
 #+end_src
 
 Add that Smartparens brace fix we defined earlier.
 #+begin_src emacs-lisp :tangle yes
-  (srxl/fix-brace-indentation 'js-mode "{" "(" "[")
+  (srxl/fix-brace-indentation 'js-ts-mode "{" "(" "[")
 #+end_src
 
 **** Typescript
-[[https://github.com/emacs-typescript/typescript.el][typescript-mode]] is the way to go for editing Typescript files.
+Just like with Javascript, we've got the built-in =typescript-ts-mode= for Typescript files, and =tsx-ts-mode= for TSX. Setup works just like in JS land.
 #+begin_src emacs-lisp :tangle yes
-  (use-package typescript-mode
-    :mode "\\.ts\\'"
-    :hook (typescript-mode . eglot-ensure)
-    :config
-    <<TS-CONFIG>>)
-#+end_src
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 
-As with Javascript - indent with 2 spaces, not 4.
-#+begin_src emacs-lisp :noweb-ref TS-CONFIG
-  (setq typescript-indent-level 2)
-#+end_src
+  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
+  (add-hook 'tsx-ts-mode-hook 'eglot-ensure)
 
-And the brace indent fix.
-#+begin_src emacs-lisp :noweb-ref TS-CONFIG
-  (srxl/fix-brace-indentation 'typescript-mode "{" "(" "[")
-#+end_src
-
-**** JSX/TSX
-=js-mode= and =typescript-mode= don't have JSX/TSX support built in. For that, we'll define modes derived from =web-mode= instead, which has support for them built in, and use it for those files. The derived mode is useful for distinguishing files from other =web-mode= types, like HTML or CSS.
-
-#+begin_src emacs-lisp :tangle yes
-  (define-derived-mode javascript-jsx-mode web-mode "JavaScript (JSX)")
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-jsx-mode))
-
-  (define-derived-mode typescript-tsx-mode web-mode "TypeScript (TSX)")
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-tsx-mode))
-#+end_src
-
-Setup LSP support for these new modes, as well.
-#+begin_src emacs-lisp :tangle yes
-  (add-hook 'javascript-jsx-mode-hook 'eglot-ensure)
-  (add-to-list 'eglot-server-programs '(javascript-jsx-mode . ("typescript-language-server" "--stdio")))
-
-  (add-hook 'typescript-tsx-mode-hook 'eglot-ensure)
-  (add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
-#+end_src
-
-And fix their curly braces.
-#+begin_src emacs-lisp :tangle yes
-  (srxl/fix-brace-indentation 'javascript-jsx-mode "{" "(" "[")
-  (srxl/fix-brace-indentation 'typescript-tsx-mode "{" "(" "[")
+  (srxl/fix-brace-indentation 'typescript-ts-mode "{" "(" "[")
+  (srxl/fix-brace-indentation 'tsx-ts-mode "{" "(" "[")
 #+end_src
 
 **** JS Frameworks
@@ -1093,16 +1063,22 @@ The land of just letting it fail.
 Erlang with a modern flair.
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package elixir-mode
-    :mode "\\.exs?\\'"
-    :hook (elixir-mode . eglot-ensure)
-    :config
-    <<ELIXIR-CONFIG>>)
+  (add-to-list 'auto-mode-alist '("\\.exs?\\'" . elixir-ts-mode))
+  (add-to-list 'auto-mode-alist '("mix\\.lock\\'" . elixir-ts-mode))
+
+  (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
 #+end_src
 
 Nix's packaged Elixir language server renames the binary to a much more sane =elixir-ls= instead of the weird =language-server.sh=. We'll need to let Eglot know about that difference though.
-#+begin_src emacs-lisp :noweb-ref ELIXIR-CONFIG
-    (add-to-list 'eglot-server-programs '(elixir-mode "elixir-ls"))
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'eglot-server-programs '(elixir-ts-mode "elixir-ls"))
+#+end_src
+
+A few Elixir frameworks like Phoenix use HEEx, an Elixir-based HTML templating language. There's a mode for that, so we'll make sure it's setup.
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-ts-mode))
+  (add-hook 'heex-ts-mode-hook 'eglot-ensure)
+  (add-to-list 'eglot-server-programs '(heex-ts-mode "elixir-ls"))
 #+end_src
 
 *** Terraform/HCL
@@ -1123,14 +1099,11 @@ A lot of people write Markdown. I don't know why they would do that when org-mod
 *** Data
 JSON.
 #+begin_src emacs-lisp :tangle yes
-  (use-package json-mode
-    :mode "\\.json\\'"
-    :config
-    (srxl/fix-brace-indentation 'json-mode "{" "["))
+  (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
+  (srxl/fix-brace-indentation 'json-ts-mode "{" "[")
 #+end_src
 
 YAML.
 #+begin_src emacs-lisp :tangle yes
-  (use-package yaml-mode
-    :mode "\\.ya?ml\\'")
+  (add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-ts-mode))
 #+end_src
