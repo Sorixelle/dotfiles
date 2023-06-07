@@ -627,12 +627,13 @@ Much more reasonable, yeah? Luckily, we can write a function to fix this for us.
     (indent-according-to-mode))
 #+end_src
 
-Now, we can add another function to fixup this indentation behaviour for the modes we want it in. It'll fire that function we just called after hitting =RET=.
+Now, we can add another function to fixup this indentation behaviour for the modes and characters we want it in. It'll fire that function we just called after hitting =RET=.
 
 #+begin_src emacs-lisp :tangle yes
-  (defun srxl/fix-brace-indentation (mode)
-    "Adjust Smartparens brace insertion hook for MODE."
-    (sp-local-pair mode "{" nil :post-handlers '((srxl/newline-indent "RET"))))
+  (defun srxl/fix-brace-indentation (mode &rest chars)
+    "Adjust Smartparens brace insertion hook for CHARS in MODE."
+    (dolist (char chars)
+      (sp-local-pair mode char nil :post-handlers '((srxl/newline-indent "RET")))))
 #+end_src
 
 ** Autocomplete
@@ -927,7 +928,7 @@ I use [[https://nixos.org/][Nix]] and NixOS extensively. Being able to declarati
     :mode "\\.nix\\'"
     :hook (nix-mode . eglot-ensure)
     :config
-    (srxl/fix-brace-indentation 'nix-mode))
+    (srxl/fix-brace-indentation 'nix-mode "{" "(" "["))
 #+end_src
 
 *** Web Markup
@@ -976,7 +977,7 @@ Make sure LSP is running is JS buffers.
 
 Add that Smartparens brace fix we defined earlier.
 #+begin_src emacs-lisp :tangle yes
-  (srxl/fix-brace-indentation 'js-mode)
+  (srxl/fix-brace-indentation 'js-mode "{" "(" "[")
 #+end_src
 
 **** Typescript
@@ -996,7 +997,7 @@ As with Javascript - indent with 2 spaces, not 4.
 
 And the brace indent fix.
 #+begin_src emacs-lisp :noweb-ref TS-CONFIG
-  (srxl/fix-brace-indentation 'typescript-mode)
+  (srxl/fix-brace-indentation 'typescript-mode "{" "(" "[")
 #+end_src
 
 **** JSX/TSX
@@ -1020,9 +1021,9 @@ Setup LSP support for these new modes, as well.
 #+end_src
 
 And fix their curly braces.
-#+begin_src emacs-lisp
-  (srxl/fix-brace-indentation 'javascript-jsx-mode)
-  (srxl/fix-brace-indentation 'typescript-tsx-mode)
+#+begin_src emacs-lisp :tangle yes
+  (srxl/fix-brace-indentation 'javascript-jsx-mode "{" "(" "[")
+  (srxl/fix-brace-indentation 'typescript-tsx-mode "{" "(" "[")
 #+end_src
 
 **** JS Frameworks
@@ -1125,7 +1126,7 @@ JSON.
   (use-package json-mode
     :mode "\\.json\\'"
     :config
-    (srxl/fix-brace-indentation 'json-mode))
+    (srxl/fix-brace-indentation 'json-mode "{" "["))
 #+end_src
 
 YAML.
