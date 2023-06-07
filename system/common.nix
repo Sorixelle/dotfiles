@@ -27,6 +27,12 @@
     # Use a flakes-enabled version of Nix
     package = pkgs.nixUnstable;
 
+    # Run automatic garbage collection at 4pm every Sunday
+    gc = {
+      automatic = true;
+      dates = "Sun 16:00";
+    };
+
     settings = {
       # Additional binary caches
       substituters = [ "https://cache.nixos.org" "https://hydra.iohk.io" ];
