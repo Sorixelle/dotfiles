@@ -652,11 +652,11 @@ First off, let's get some autocomplete capability in here. We gotta have that - 
     <<CORFU-CONFIG>>)
 #+end_src
 
-Like most editors, we want the autocomplete options to appear right after we've finished typing, without a delay.
+Like most editors, we want the autocomplete options to appear right after we've finished typing, without a delay. We don't want it to appear until we've typed at least 1 character though, otherwise it'll pop up at some points where we want to use =RET= to insert a newline. And that's no fun.
 #+begin_src emacs-lisp :noweb-ref CORFU-CONFIG
   (setq corfu-auto t
         corfu-auto-delay 0
-        corfu-auto-prefix 0)
+        corfu-auto-prefix 1)
 #+end_src
 
 We also want to cycle back to the top of the list if we try to go past the end.
