@@ -195,11 +195,6 @@
 
     dconf.enable = true;
 
-    gnupg.agent = {
-      enable = true;
-      pinentryFlavor = "gtk2";
-    };
-
     gphoto2.enable = true;
 
     hyprland.enable = true;
@@ -211,6 +206,8 @@
 
   services = {
     blueman.enable = true;
+
+    dbus.packages = [ pkgs.gcr ];
 
     geoclue2.enable = true;
 
