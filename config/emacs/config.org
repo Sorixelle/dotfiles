@@ -921,6 +921,14 @@ If Eglot started successfully, enable flymake for the buffer.
   (add-hook 'eglot-server-initialized-hook 'flymake-mode)
 #+end_src
 
+Some language servers (particularly ones built on Volar) are too silly to find their own copy of Typescript. No matter - shouldn't be too hard to find one, it's usually in =node_modules=. We'll write a function we can use to get a path to Typescript for the current project.
+#+begin_src emacs-lisp :tangle yes
+  (defun srxl/get-typescript-path ()
+    "Returns the path to the Typescript install in the current project."
+    (expand-file-name
+     (concat (project-root (project-current)) "node_modules/typescript/")))
+#+end_src
+
 ** Direnv integration
 [[https://direnv.net/][Direnv]] is a really useful tool for setting environments per directory. It's a total godsend when working with Nix projects, since it means I can just =cd= into a directory and get that shell right away. =direnv-mode= provides that functionality for Emacs itself, so that it can call out to programs in a Nix shell. As a heavy Nix user, I can't live without it.
 #+begin_src emacs-lisp :tangle yes
@@ -1065,6 +1073,27 @@ And LSP setup.
   (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
 #+end_src
 
+***** Astro
+Astro is pretty simple - [[https://github.com/Sorixelle/astro-mode][astro-mode]]. Fun fact - I wrote this package :3
+#+begin_src emacs-lisp :tangle yes
+  (use-package astro-mode
+    :straight (astro-mode :host github :repo "Sorixelle/astro-mode")
+    :mode "\\.astro\\'"
+    :config
+    <<ASTRO-CONFIG>>)
+#+end_src
+
+LSP setup. This is one of the language servers that needs that Typescript path locating function we wrote earlier.
+#+begin_src emacs-lisp :noweb-ref ASTRO-CONFIG
+  (add-hook 'astro-mode-hook 'eglot-ensure)
+
+  (let ((opts (lambda (_) `(:typescript
+                            (:tsdk ,(concat
+                                     (srxl/get-typescript-path) "lib"))))))
+    (add-to-list
+     'eglot-server-programs
+     `(astro-mode . ("astro-ls" "--stdio" :initializationOptions ,opts))))
+#+end_src
 *** BEAM (Erlang/Elixir)
 The land of just letting it fail.
 
