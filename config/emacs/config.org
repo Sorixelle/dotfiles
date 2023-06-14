@@ -1094,6 +1094,21 @@ LSP setup. This is one of the language servers that needs that Typescript path l
      'eglot-server-programs
      `(astro-mode . ("astro-ls" "--stdio" :initializationOptions ,opts))))
 #+end_src
+
+Apheleia tries to format Astro files with Prettier in HTML mode by default, which mangles the crap out of Astro templates. Let's make it use the correct Astro parser instead.
+#+begin_src emacs-lisp :noweb-ref ASTRO-CONFIG
+  (add-to-list
+   'apheleia-formatters
+   '(prettier-astro npx "prettier" "--stdin-filepath" filepath "--parser=astro"
+                    (apheleia-formatters-indent "--use-tabs" "--tab-width" 'astro-mode-indent-offset)))
+
+  (add-to-list 'apheleia-mode-alist '(astro-mode . prettier-astro))
+#+end_src
+
+Same brace indentation fix as per usual.
+#+begin_src emacs-lisp :noweb-ref ASTRO-CONFIG
+  (srxl/fix-brace-indentation 'astro-mode "{" "(" "[")
+#+end_src
 *** BEAM (Erlang/Elixir)
 The land of just letting it fail.
 
