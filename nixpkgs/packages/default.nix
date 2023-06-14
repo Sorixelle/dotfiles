@@ -73,4 +73,10 @@ in {
   schemer2 = prev.callPackage ./schemer2.nix { };
 
   scr = prev.callPackage ./scr.nix { };
+
+  tree-sitter = prev.tree-sitter.override {
+    extraGrammars = {
+      tree-sitter-astro = prev.callPackage ./tree-sitter-astro.nix { };
+    };
+  };
 }
