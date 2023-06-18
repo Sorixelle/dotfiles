@@ -969,6 +969,11 @@ Emacs ships some basic tree-sitter powered modes for HTML and CSS. We'll make su
   (srxl/fix-brace-indentation 'css-ts-mode "{")
 #+end_src
 
+Make sure CSS files use 2 space indentation.
+#+begin_src emacs-lisp :tangle yes
+  (setq css-indent-offset 2)
+#+end_src
+
 That's the basics covered, but there's a lot of languages used on the web. Less, Sass, the infinite amount of templating frameworks every server-side MVC framework they just had to have their own one for... Surely we can't support them all, right? Maybe not all, but [[https://web-mode.org/][web-mode]] supports a hell of a lot of them.
 #+begin_src emacs-lisp :tangle yes
   (use-package web-mode
@@ -983,8 +988,7 @@ Make sure they use 2 space indentation.
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
         web-mode-style-padding 2
-        web-mode-script-padding 2
-        css-indent-offset 2)
+        web-mode-script-padding 2)
 #+end_src
 
 *** Javascript and Typescript
@@ -999,6 +1003,11 @@ For Javascript: js-ts-mode. It's built-in, and has everything we need for both p
 Make sure LSP is running is JS buffers.
 #+begin_src emacs-lisp :tangle yes
   (add-hook 'js-ts-mode-hook 'eglot-ensure)
+#+end_src
+
+2 space indentation, not 4.
+#+begin_src emacs-lisp :tangle yes
+  (setq js-indent-level 2)
 #+end_src
 
 Add that Smartparens brace fix we defined earlier.
