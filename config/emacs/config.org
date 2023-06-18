@@ -554,9 +554,10 @@ We've got =:straight nil= in this one because mu4e comes with the mu package, no
     <<MU4E-CONFIG>>)
 #+end_src
 
-We'll set =user-mail-address= so things know to use the right email. That email comes from my NixOS configuration.
+We'll set =user-mail-address= and =user-full-name= so things know to use the right email. That email comes from my NixOS configuration.
 #+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
-  (setq user-mail-address srxl/email)
+  (setq user-mail-address srxl/email
+        user-full-name "Ruby Iris Juric")
 #+end_src
 
 I use =mbsync= to copy my emails from IMAP to a Maildir directory, so we'll setup mu4e to use that.
@@ -576,6 +577,11 @@ Make sure mu4e points itself at the right folder names for standard email folder
 Synchronize my emails automatically every 5 minutes.
 #+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
   (setq mu4e-update-interval (* 5 60))
+#+end_src
+
+Use SMTP sendmail for sending emails.
+#+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
+  (setq send-mail-function 'sendmail-send-it)
 #+end_src
 
 And a keybind to quickly pop open the client.
