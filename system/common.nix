@@ -16,9 +16,6 @@
     pkgs = flakePkgs;
   };
 
-  # Add nixpkgs to NIX_PATH, by linking it to /etc/nixpkgs
-  environment.etc.nixpkgs.source = inputs.nixpkgs;
-
   # Configure Nix
   nix = {
     # Use a flakes-enabled version of Nix
@@ -50,7 +47,7 @@
     '';
 
     # NIX_PATH entries
-    nixPath = [ "nixpkgs=/etc/nixpkgs" "nur=${inputs.nur}" ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nur=${inputs.nur}" ];
 
     # Expose nixpkgs and this flake in the flake registry
     registry = {
