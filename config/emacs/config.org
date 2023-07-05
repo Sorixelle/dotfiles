@@ -1089,10 +1089,9 @@ And LSP setup.
 #+end_src
 
 ***** Astro
-Astro is pretty simple - [[https://github.com/Sorixelle/astro-mode][astro-mode]]. Fun fact - I wrote this package :3
+Astro is pretty simple - [[https://github.com/Sorixelle/astro-ts-mode][astro-ts-mode]]. Fun fact - I wrote this package :3
 #+begin_src emacs-lisp :tangle yes
-  (use-package astro-mode
-    :straight (astro-mode :host github :repo "Sorixelle/astro-mode")
+  (use-package astro-ts-mode
     :mode "\\.astro\\'"
     :config
     <<ASTRO-CONFIG>>)
@@ -1100,14 +1099,14 @@ Astro is pretty simple - [[https://github.com/Sorixelle/astro-mode][astro-mode]]
 
 LSP setup. This is one of the language servers that needs that Typescript path locating function we wrote earlier.
 #+begin_src emacs-lisp :noweb-ref ASTRO-CONFIG
-  (add-hook 'astro-mode-hook 'eglot-ensure)
+  (add-hook 'astro-ts-mode-hook 'eglot-ensure)
 
   (let ((opts (lambda (_) `(:typescript
                             (:tsdk ,(concat
                                      (srxl/get-typescript-path) "lib"))))))
     (add-to-list
      'eglot-server-programs
-     `(astro-mode . ("astro-ls" "--stdio" :initializationOptions ,opts))))
+     `(astro-ts-mode . ("astro-ls" "--stdio" :initializationOptions ,opts))))
 #+end_src
 
 Apheleia tries to format Astro files with Prettier in HTML mode by default, which mangles the crap out of Astro templates. Let's make it use the correct Astro parser instead.
@@ -1115,14 +1114,14 @@ Apheleia tries to format Astro files with Prettier in HTML mode by default, whic
   (add-to-list
    'apheleia-formatters
    '(prettier-astro npx "prettier" "--stdin-filepath" filepath "--parser=astro"
-                    (apheleia-formatters-indent "--use-tabs" "--tab-width" 'astro-mode-indent-offset)))
+                    (apheleia-formatters-indent "--use-tabs" "--tab-width" 'astro-ts-mode-indent-offset)))
 
-  (add-to-list 'apheleia-mode-alist '(astro-mode . prettier-astro))
+  (add-to-list 'apheleia-mode-alist '(astro-ts-mode . prettier-astro))
 #+end_src
 
 Same brace indentation fix as per usual.
 #+begin_src emacs-lisp :noweb-ref ASTRO-CONFIG
-  (srxl/fix-brace-indentation 'astro-mode "{" "(" "[")
+  (srxl/fix-brace-indentation 'astro-ts-mode "{" "(" "[")
 #+end_src
 *** BEAM (Erlang/Elixir)
 The land of just letting it fail.
