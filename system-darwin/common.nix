@@ -62,8 +62,8 @@
     file
     htop
     ncdu
+    neovim
     ripgrep
-    vim
     wget
     zip
     unzip

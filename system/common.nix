@@ -70,9 +70,9 @@
     file
     htop
     ncdu
+    neovim
     psmisc
     ripgrep
-    vim
     wget
     zip
     unzip
