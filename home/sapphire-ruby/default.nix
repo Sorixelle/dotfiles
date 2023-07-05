@@ -46,6 +46,7 @@
     mtr
     neofetch
     nheko
+    nil
     nix-prefetch-scripts
     nmap
     pavucontrol
@@ -57,7 +58,6 @@
     qbittorrent
     ranger
     remmina
-    rnix-lsp
     scr
     steam
     steam-run
