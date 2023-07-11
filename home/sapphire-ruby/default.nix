@@ -59,6 +59,7 @@
     ranger
     remmina
     scr
+    solaar
     steam
     steam-run
     spek

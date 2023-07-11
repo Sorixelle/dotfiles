@@ -75,6 +75,8 @@
 
     enableRedistributableFirmware = true;
 
+    logitech.wireless.enable = true;
+
     opengl = {
       enable = true;
       driSupport32Bit = true;
