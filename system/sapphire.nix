@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   time = {
@@ -43,27 +43,14 @@
       options = [ "defaults" "umask=000" ];
     };
     "/home/ruby/usr/media" = {
-      device = "//fluorite.ad.ongemst.one/media";
-      fsType = "smb3";
-      options = [
-        "sec=krb5"
-        "multiuser"
-        "domain=GEM"
-        "x-systemd.automount"
-        "x-systemd.requires=k5start-root.service"
-      ];
+      device = "fluorite.dhcp.ongemst.one:/mnt/hdd/Data/Media";
+      fsType = "nfs";
+      options = [ "x-systemd.automount" ];
     };
     "/home/ruby/.local/share/backup" = {
-      device = "//fluorite.ad.ongemst.one/sapphire-backup";
-      fsType = "smb3";
-      options = [
-        "sec=krb5"
-        "multiuser"
-        "domain=GEM"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=600"
-        "x-systemd.requires=k5start-root.service"
-      ];
+      device = "fluorite.dhcp.ongemst.one:/mnt/hdd/Machine-Backups/Sapphire";
+      fsType = "nfs";
+      options = [ "x-systemd.automount" "x-systemd.idle-timeout=600" ];
     };
   };
 
@@ -94,30 +81,12 @@
     };
   };
 
-  krb5 = {
-    enable = true;
-    libdefaults = {
-      default_realm = "AD.ONGEMST.ONE";
-      forwardable = true;
-    };
-
-    # Special Secret Sauce that makes sshd not get confused about what principals map to which users
-    # eg. without this, a principal for "ruby@AD.ONGEMST.ONE" will map to the user "ruby" (wrong) and not
-    # "ruby@ad.ongemst.one" (correct)
-    extraConfig = ''
-      includedir /var/lib/sss/pubconf/krb5.include.d
-    '';
-  };
-
   nix.settings = {
     max-jobs = 24;
     trusted-users = [ "ruby" ];
   };
 
-  environment.systemPackages = with pkgs; [ adcli ntfs3g pciutils usbutils ];
-
-  environment.etc."cifs-utils/idmap-plugin".source =
-    "${pkgs.sssd}/lib/cifs-utils/cifs_idmap_sss.so";
+  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
 
   fonts = {
     enableDefaultFonts = true;
@@ -165,8 +134,6 @@
   location.provider = "geoclue2";
 
   networking = {
-    domain = "ad.ongemst.one";
-
     firewall.enable = false;
 
     wireguard.enable = true;
@@ -189,11 +156,6 @@
 
   programs = {
     adb.enable = true;
-
-    cifs-utils = {
-      enable = true;
-      idmapPlugin = "${pkgs.sssd}/lib/cifs-utils/cifs_idmap_sss.so";
-    };
 
     dconf.enable = true;
 
@@ -249,33 +211,6 @@
 
     srxl.qmk.enable = true;
 
-    sssd = {
-      enable = true;
-      config = ''
-        [sssd]
-        config_file_version = 2
-        domains = ad.ongemst.one
-        services = nss, pam
-
-        [domain/ad.ongemst.one]
-        access_provider = ad
-        auth_provider = ad
-        ad_domain = ad.ongemst.one
-        cache_credentials = True
-        default_shell = ${pkgs.bashInteractive}/bin/bash
-        fallback_homedir = /home/%u@%d
-        id_provider = proxy
-        krb5_map_user = ruby:ruby
-        krb5_realm = AD.ONGEMST.ONE
-        krb5_renewable_lifetime = 6h
-        krb5_renew_interval = 1h
-        krb5_store_password_if_offline = True
-        ldap_id_mapping = True
-        proxy_lib_name = files
-        use_fully_qualified_names = True
-      '';
-    };
-
     trezord.enable = true;
 
     tumbler.enable = true;
@@ -300,20 +235,6 @@
   };
 
   sound.enable = true;
-
-  systemd.services = {
-    k5start-root = {
-      description = "Obtain and renew Kerberos ticket for machine account";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.kstart}/bin/k5start -f /etc/krb5.keytab -K 60 -v ${
-            lib.toUpper config.networking.hostName
-          }$";
-      };
-    };
-  };
 
   home-manager.users.ruby = import ../home/sapphire-ruby;
 
