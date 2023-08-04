@@ -230,6 +230,14 @@
         };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
+      solaar = {
+        Unit = { Description = "Control software for Logitech devices"; };
+        Service = {
+          ExecStart = "${pkgs.solaar}/bin/solaar -w hide";
+          Restart = "on-failure";
+        };
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
     };
 
     timers = {
