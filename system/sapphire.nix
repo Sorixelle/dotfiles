@@ -89,8 +89,8 @@
   environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
 
   fonts = {
-    enableDefaultFonts = true;
-    fonts = with pkgs; [ corefonts ibm-plex inter roboto ];
+    enableDefaultPackages = true;
+    packages = with pkgs; [ corefonts ibm-plex inter roboto ];
     fontconfig = {
       defaultFonts = {
         sansSerif = [ "Inter" ];

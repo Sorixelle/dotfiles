@@ -49,7 +49,6 @@ in {
               "nofail"
             ]
           },
-          { "name": "libpipewire-module-protocol-native" },
           { "name": "libpipewire-module-profiler" },
           { "name": "libpipewire-module-spa-device-factory" },
           { "name": "libpipewire-module-spa-node-factory" },
