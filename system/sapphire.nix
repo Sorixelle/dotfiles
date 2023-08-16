@@ -60,6 +60,8 @@
   hardware = {
     bluetooth.enable = true;
 
+    cpu.amd.updateMicrocode = true;
+
     enableRedistributableFirmware = true;
 
     logitech.wireless.enable = true;
