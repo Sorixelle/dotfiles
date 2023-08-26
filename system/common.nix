@@ -57,8 +57,10 @@
   environment.systemPackages = with pkgs; [
     bat
     dnsutils
+    exa
     fd
     file
+    fzf
     htop
     ncdu
     neovim

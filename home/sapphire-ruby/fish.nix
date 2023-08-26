@@ -29,7 +29,24 @@
       };
     };
 
-    shellAliases = { vim = "nvim"; };
+    shellAliases = {
+      l = "exa --icons -bhl";
+      la = "exa --icons -bhla";
+      lt = "exa --icons -bhlT";
+      lat = "exa --icons -bhlaT";
+      vim = "nvim";
+    };
+
+    plugins = [
+      {
+        name = "fzf";
+        src = pkgs.fishPlugins.fzf.src;
+      }
+      {
+        name = "plugin-git";
+        src = pkgs.fishPlugins.plugin-git.src;
+      }
+    ];
 
     interactiveShellInit = ''
       set -g fish_color_command blue
@@ -39,11 +56,24 @@
       set -g fish_color_quote yellow
       set -g fish_color_error red
 
+      # Vim keybindings
+      fish_vi_key_bindings
+
+      # Bind H and L in normal mode to move back/forward in directory history
+      bind \eh prevd-or-backward-word
+      bind \el nextd-or-forward-word
+
       # Stop virtualenv from modifiying prompt
       set -g VIRTUAL_ENV_DISABLE_PROMPT 1
 
       # No help message
       set -U fish_greeting
+
+      # Setup jump
+      ${pkgs.jump}/bin/jump shell fish | source
+
+      # Set fzf completion style
+      set -U FZF_COMPLETE 2
 
       # Pokemon :3
       ${pkgs.krabby}/bin/krabby random --no-title

@@ -34,6 +34,7 @@
     gnome.file-roller
     igir
     insomnia
+    jump
     libreoffice-fresh
     liquidctl
     lm_sensors
@@ -94,8 +95,6 @@
   manual.html.enable = true;
 
   programs = {
-    autojump.enable = true;
-
     bash.enable = true;
 
     chromium = {
