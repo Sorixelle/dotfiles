@@ -54,6 +54,7 @@
     perlPackages.ArchiveZip # crc32 command-line utility
     picard
     plexamp
+    plex-media-player
     prismlauncher
     python3
     qbittorrent
