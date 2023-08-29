@@ -3,31 +3,6 @@
 {
   programs.waybar = {
     enable = true;
-    package = pkgs.waybar-hyprland.overrideAttrs (old:
-      let
-        libcava = pkgs.cava.overrideAttrs (cavaOld: rec {
-          pname = "libcava";
-          version = "0.8.4";
-          src = pkgs.fetchFromGitHub {
-            owner = "LukashonakV";
-            repo = "cava";
-            rev = version;
-            hash = "sha256-66uc0CEriV9XOjSjFTt+bxghEXY1OGrpjd+7d6piJUI=";
-          };
-          nativeBuildInputs = with pkgs; [ meson ninja pkg-config ];
-          buildInputs = cavaOld.buildInputs ++ [ pkgs.pipewire pkgs.SDL2 ];
-          mesonFlags =
-            [ "-Dinput_portaudio=disabled" "-Dinput_sndio=disabled" ];
-        });
-      in {
-        src = pkgs.fetchFromGitHub {
-          owner = "Alexays";
-          repo = "waybar";
-          rev = "7b0d2e80434523eb22cf3bb5bdc41d590304a113";
-          hash = "sha256-0QIKuFhOgclW3sxnmgbDAg7tGBg5YSKziLza/eqsaJ8=";
-        };
-        buildInputs = old.buildInputs ++ [ libcava pkgs.fftw ];
-      });
 
     systemd = {
       enable = true;
