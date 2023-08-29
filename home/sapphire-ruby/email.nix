@@ -26,13 +26,7 @@
 
         imapnotify = {
           enable = true;
-          boxes = [
-            "Inbox"
-            "emacs-orgmode"
-            "help-gnu-emacs"
-            "info-gnu-emacs"
-            "mu-discuss"
-          ];
+          boxes = [ "Inbox" "info-gnu-emacs" "qubes-announce" ];
           onNotify = "${pkgs.isync}/bin/mbsync ruby-srxl";
           onNotifyPost = "${pkgs.mu}/bin/mu index";
         };
@@ -60,9 +54,10 @@
 
     extraConfig = let smtp = config.accounts.email.accounts.ruby-srxl.smtp;
     in ''
-      (setq mu4e-maildir-shortcuts
-            '((:maildir "/Inbox" :key ?i :name "Inbox"
-              (:maildir "/Receipts" :key ?r :name "Receipts" :hide-unread))))
+      (setq mu4e-maildir-shortcuts '((:maildir "/Inbox" :key ?i :name "Inbox")
+                                     (:maildir "/info-gnu-emacs" :key ?e :name "Emacs Info")
+                                     (:maildir "/qubes-announce" :key ?q :name "Qubes Info")
+                                     (:maildir "/Receipts" :key ?r :name "Receipts" :hide t)))
 
       (setq smtpmail-smtp-server "${smtp.host}"
             smtpmail-smtp-service ${toString smtp.port}
