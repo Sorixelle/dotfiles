@@ -154,6 +154,11 @@
   services = {
     udiskie.enable = true;
 
+    gammastep = {
+      enable = true;
+      provider = "geoclue2";
+    };
+
     gpg-agent = {
       enable = true;
       pinentryFlavor = "gnome3";
