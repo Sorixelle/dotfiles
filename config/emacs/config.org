@@ -534,6 +534,26 @@ There's some periodic jobs that need to be run to ensure the org-roam database i
   (org-roam-db-autosync-mode)
 #+end_src
 
+We can setup capture templates in Org-Roam to file notes into specific directories, define initial content - a bunch of stuff. I've got a few templates I want to use when capturing a new note:
+- General :: Unspecific, general-purpose notes that don't have any particular reference, other than the notes they link to.
+- Reference :: Notes taken from some reference material, such as a website or a textbook.
+- Private :: Like General, but PGP-encrypted, for storing any notes with sensitive information.
+
+#+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
+  (setq org-roam-capture-templates '(("g" "General" plain "%?"
+                                      :target (file+head "general/${slug}.org"
+                                                         "#+title: ${title}\n\n")
+                                      :unnarrowed t)
+                                     ("r" "Reference" plain "%?"
+                                      :target (file+head "reference/${slug}.org"
+                                                         "#+title: ${title}\n\n")
+                                      :unnarrowed t)
+                                     ("p" "Private" plain "%?"
+                                      :target (file+head "private/${slug}.org.gpg"
+                                                         "#+title: ${title}\n\n")
+                                      :unnarrowed t)))
+#+end_src
+
 There's no keybindings by default. We probably want some.
 #+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
   (srxl/def-leader-key
