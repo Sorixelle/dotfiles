@@ -278,67 +278,64 @@ For most window operations, Evil already has us covered, with a bunch of useful 
       "w" '(ace-window :wk "Switch window")))
 #+end_src
 
-And now that we have window management down, we also should have a good way to change their buffers. =SPC b= will do just fine for that - we'll even use the Counsel-enhanced version (we'll get to what Counsel is in a moment...) which previews the buffer as we flip through the list.
+And now that we have window management down, we also should have a good way to change their buffers. =SPC b= will do just fine for that - we'll even use the Consult-enhanced version (we'll get to what Consult is in a moment...) which previews the buffer as we flip through the list.
 #+begin_src emacs-lisp :tangle yes
   (srxl/def-leader-key
-    "b" '(counsel-switch-buffer :wk "Switch buffer"))
+    "b" '(consult-buffer :wk "Switch buffer"))
 #+end_src
 
 ** Searching and completing and filtering and
 So, you expect me to just hit =M-x=, and know the exact name of the thing I'm looking for? Yeah, alright. I'm clueless. I don't know what things are called. Besides, even if I did, that's way too much typing. If only there was an autocompletion framework out there to make this easier...
 
-Ok, ok. It's called [[https://github.com/abo-abo/swiper#ivy][Ivy]]. And [[https://github.com/abo-abo/swiper#counsel][Counsel]]. These two packages together give me a really nice, simple and lightweight autocompletion system for any =completing-read= task I may need.
+Ok, ok. It's called [[https://github.com/minad/vertico][Vertico]]. It gives me a really nice, simple and lightweight autocompletion system for any =completing-read= task I may need.
 #+begin_src emacs-lisp :tangle yes
-  (use-package ivy
-    :after flx
-    :config
-    (ivy-mode 1)
-    <<IVY-CONFIG>>)
-
-  (use-package counsel
-    :after ivy
-    :config
-    (counsel-mode 1)
-    <<COUNSEL-CONFIG>>)
+  (use-package vertico
+    :init
+    (vertico-mode 1)
+    <<VERTICO_CONF>>
+    (setq enable-recursive-minibuffers t))
 #+end_src
 
-Include recently accessed files in =ivy-switch-buffer= results.
-#+begin_src emacs-lisp :noweb-ref IVY-CONFIG
-  (setq ivy-use-virtual-buffers t)
+Pretty good out of the box - we'll just chuck in some more keybinds for moving up and down the list with =M-k= and =M-j= respectively.
+#+begin_src emacs-lisp :noweb-ref VERTICO_CONF
+  (general-def 'vertico-map
+    "M-k" 'vertico-previous
+    "M-j" 'vertico-next)
 #+end_src
 
-Show the amount of avaliable completions in [square braces], because I like the look of it.
-#+begin_src emacs-lisp :noweb-ref IVY-CONFIG
-  (setq ivy-count-format "[%d] ")
-#+end_src
-
-Fuzzy search! Ivy leverages [[https://github.com/lewang/flx][flx]] to help sort the results in a meaningful way. Don't fuzzy search in =swiper= though, that gets really unusable.
-#+begin_src emacs-lisp :noweb-ref IVY-CONFIG
-  (setq ivy-re-builders-alist '((swiper . ivy--regex-plus)
-                                (t . ivy--regex-fuzzy)))
-#+end_src
+For some extra fancy minibuffer action, [[https://github.com/minad/consult][Consult]] gives some extra commands with souped-up versions of default stuff.
 #+begin_src emacs-lisp :tangle yes
-  (use-package flx)
+  (use-package consult
+    :config
+    <<CONSULT_CONF>>)
 #+end_src
 
-No initial search value - I don't always want ^ at the start of my searches.
-#+begin_src emacs-lisp :noweb-ref IVY-CONFIG
-  (setq ivy-initial-inputs-alist nil)
-#+end_src
-
-Rebind a couple of keys I think are pretty clunky in Ivy:
-- =ivy-immediate-done= :: from =C-M-j= to =S-RET=
-- =ivy-dispatching-done= :: from =M-o= to =C-RET=
-#+begin_src emacs-lisp :noweb-ref IVY-CONFIG
-  (general-def 'ivy-minibuffer-map
-    "S-<return>" 'ivy-immediate-done
-    "C-<return>" 'ivy-dispatching-done)
-#+end_src
-
-Also rebind =/= to =counsel-grep-or-swiper=. It's a really nice interface for searching files.
-#+begin_src emacs-lisp :noweb-ref COUNSEL-CONFIG
+=consult-line= gives a really nice way to search text in files. We'll override Evil's default =/= binding with it.
+#+begin_src emacs-lisp :noweb-ref CONSULT_CONF
   (general-def '(normal motion)
-    "/" 'counsel-grep-or-swiper)
+    "/" 'consult-line)
+#+end_src
+
+[[https://github.com/oantolin/orderless][Orderless]] is a really neat and unique way to manage completions - it's like regex, initialisms, literals, and inverted matches all in one! Dunno how they did that, but I'm a fan.
+#+begin_src emacs-lisp :tangle yes
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '(file (styles basic partial-completion))))
+#+end_src
+
+And for some extra info in completions (when there is info, of course) - [[https://github.com/minad/marginalia][Marginalia]] provides completions with some extra info, like function documentations, to help quickly grok your options.
+#+begin_src emacs-lisp :tangle yes
+    (use-package marginalia
+      :init
+      (marginalia-mode 1)
+      <<MARGINALIA_CONF>>)
+#+end_src
+
+Sometimes, there's multiple things Marginalia can display - we can cycle between them with a keybind. We'll use =M-a=.
+#+begin_src emacs-lisp :noweb-ref MARGINALIA_CONF
+  (general-def 'minibuffer-local-map
+    "M-a" 'marginalia-cycle)
 #+end_src
 
 * ✨aesthetics✨
@@ -534,6 +531,11 @@ There's some periodic jobs that need to be run to ensure the org-roam database i
   (org-roam-db-autosync-mode)
 #+end_src
 
+We can leverage the built-in Emacs SQLite support, if we configure it correctly.
+#+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
+  (setq org-roam-database-connector 'sqlite-builtin)
+#+end_src
+
 We can setup capture templates in Org-Roam to file notes into specific directories, define initial content - a bunch of stuff. I've got a few templates I want to use when capturing a new note:
 - General :: Unspecific, general-purpose notes that don't have any particular reference, other than the notes they link to.
 - Reference :: Notes taken from some reference material, such as a website or a textbook.
@@ -545,7 +547,7 @@ We can setup capture templates in Org-Roam to file notes into specific directori
                                                          "#+title: ${title}\n\n")
                                       :unnarrowed t)
                                      ("r" "Reference" plain "%?"
-                                      :target (file+head "reference/${slug}.org"
+                                      :target (file+head "references/${slug}.org"
                                                          "#+title: ${title}\n\n")
                                       :unnarrowed t)
                                      ("p" "Private" plain "%?"
@@ -557,9 +559,11 @@ We can setup capture templates in Org-Roam to file notes into specific directori
 There's no keybindings by default. We probably want some.
 #+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
   (srxl/def-leader-key
-    "n f" '(org-roam-node-find :wk "Find node")
-    "n l" '(org-roam-node-insert :wk "Insert link to node")
-    "n c" '(org-roam-capture :wk "Capture node"))
+    "n"   '(:ignore t :wk "Notes")
+    "n f" '(org-roam-node-find :wk "Find note")
+    "n l" '(org-roam-node-insert :wk "Insert link to note")
+    "n c" '(org-roam-capture :wk "Capture note")
+    "n r" '(org-roam-ref-add :wk "Add reference"))
 #+end_src
 
 * Emacs, my favourite email client
@@ -702,11 +706,6 @@ Don't select any completion by default...
     [tab] 'corfu-next
     "S-TAB" 'corfu-previous
     [backtab] 'corfu-previous)
-#+end_src
-
-Use fuzzy searching in completions.
-#+begin_src emacs-lisp :noweb-ref CORFU-CONFIG
-  (add-to-list 'completion-styles 'flex)
 #+end_src
 
 Being able to see the documentation of items I've selected is nice. Corfu's built-in popupinfo extension can do that for us.
