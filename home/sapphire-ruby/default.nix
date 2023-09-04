@@ -75,6 +75,7 @@
     xfce.thunar
     xfce.xfconf
     yubikey-manager
+    zotero
   ];
 
   gtk = with pkgs; {
