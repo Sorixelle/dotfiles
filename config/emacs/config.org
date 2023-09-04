@@ -559,6 +559,16 @@ We can setup capture templates in Org-Roam to file notes into specific directori
                                       :unnarrowed t)))
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package citar
+    :custom
+    (org-cite-global-bibliography `(,(expand-file-name "~/usr/notes/references/citations.bib")))
+    (org-cite-insert-processor 'citar)
+    (org-cite-follow-processor 'citar)
+    (org-cite-activate-processor 'citar)
+    (citar-bibliography org-cite-global-bibliography))
+#+end_src
+
 There's no keybindings by default. We probably want some.
 #+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
   (srxl/def-leader-key
@@ -566,7 +576,8 @@ There's no keybindings by default. We probably want some.
     "n f" '(org-roam-node-find :wk "Find note")
     "n l" '(org-roam-node-insert :wk "Insert link to note")
     "n c" '(org-roam-capture :wk "Capture note")
-    "n r" '(org-roam-ref-add :wk "Add reference"))
+    "n r" '(org-roam-ref-add :wk "Add reference")
+    "n C" '(org-cite-insert :wk "Insert citation"))
 #+end_src
 
 * Emacs, my favourite email client
