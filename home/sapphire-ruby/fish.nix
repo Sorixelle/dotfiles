@@ -72,9 +72,6 @@
       # Setup jump
       ${pkgs.jump}/bin/jump shell fish | source
 
-      # Set fzf completion style
-      set -U FZF_COMPLETE 2
-
       # Pokemon :3
       ${pkgs.krabby}/bin/krabby random --no-title
     '';
