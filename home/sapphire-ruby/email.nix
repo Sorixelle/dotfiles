@@ -14,7 +14,7 @@
 
         userName = address;
         passwordCommand =
-          "${pkgs.gnupg}/bin/gpg --quiet --decrypt --armor /home/ruby/.email-password";
+          "${config.programs.gpg.package}/bin/gpg --quiet --decrypt --armor /home/ruby/.email-password";
         imap = {
           host = "imap.migadu.com";
           port = 993;
