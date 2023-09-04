@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   programs.waybar = {
@@ -15,7 +15,7 @@
         margin = "16 16 0 16";
         name = "topbar";
         modules-left = [ "hyprland/window" ];
-        modules-center = [ "wlr/workspaces" ];
+        modules-center = [ "hyprland/workspaces" ];
         modules-right = [ "cava" "mpris" "custom/mediaedge" "clock" ];
 
         "cava" = {
@@ -50,7 +50,7 @@
           };
         };
 
-        "wlr/workspaces" = { on-click = "activate"; };
+        "hyprland/workspaces" = { };
       };
     };
 
