@@ -7,7 +7,7 @@
 
     directory = mkOption {
       type = types.str;
-      default = "~/usr/img/papes";
+      default = "~/img/papes";
       description = ''
         The path where wallapers are stored.
       '';

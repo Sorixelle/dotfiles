@@ -4,7 +4,7 @@
   programs.mbsync.enable = true;
 
   accounts.email = {
-    maildirBasePath = "usr/mail";
+    maildirBasePath = "mail";
     accounts = {
       ruby-srxl = rec {
         address = "ruby@srxl.me";

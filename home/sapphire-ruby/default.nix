@@ -218,13 +218,13 @@
 
   systemd.user = {
     services = {
-      nightly-backup = {
-        Unit = { Description = "Backup user data directory to local NAS"; };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.kopia}/bin/kopia snapshot create /home/ruby/usr";
-        };
-      };
+      # nightly-backup = {
+      #   Unit = { Description = "Backup user data directory to local NAS"; };
+      #   Service = {
+      #     Type = "oneshot";
+      #     ExecStart = "${pkgs.kopia}/bin/kopia snapshot create /home/ruby/usr";
+      #   };
+      # };
       weekly-backup = {
         Unit = {
           Description = "Backup user data directory to offsite storage";
@@ -232,7 +232,7 @@
         Service = {
           Type = "oneshot";
           ExecStart =
-            "${pkgs.kopia}/bin/kopia --config-file /home/ruby/.config/kopia/remote.config snapshot create /home/ruby/usr";
+            "${pkgs.kopia}/bin/kopia --config-file /home/ruby/.config/kopia/remote.config snapshot create /home/ruby";
         };
       };
 
@@ -339,10 +339,11 @@
     };
     userDirs = {
       enable = true;
-      documents = "$HOME/usr/misc";
-      download = "$HOME/usr/download";
-      music = "$HOME/usr/music";
-      pictures = "$HOME/usr/img";
+      desktop = "$HOME/.desktop";
+      documents = "$HOME/misc";
+      download = "$HOME/download";
+      music = "$HOME/media/Library/Music";
+      pictures = "$HOME/img";
     };
   };
 

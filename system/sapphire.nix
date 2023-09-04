@@ -13,6 +13,26 @@
       availableKernelModules =
         [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
       kernelModules = [ "kvm-amd" ];
+
+      luks.devices = {
+        Encrypt-Key.device =
+          "/dev/disk/by-uuid/5bc957cf-200a-4921-a624-04e147d8942a";
+
+        Encrypted-Swap = {
+          device = "/dev/disk/by-uuid/40a0f85c-380b-416b-8889-0e461441b564";
+          keyFile = "/dev/mapper/Encrypt-Key";
+          keyFileSize = 8192;
+          bypassWorkqueues = true;
+        };
+
+        Encrypted-Root = {
+          device = "/dev/disk/by-uuid/c3a5eb7c-f67f-4d97-89d7-5261b1931977";
+          keyFile = "/dev/mapper/Encrypt-Key";
+          keyFileSize = 8192;
+          bypassWorkqueues = true;
+          allowDiscards = true;
+        };
+      };
     };
 
     loader = {
@@ -30,19 +50,33 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/058c81bf-408d-4425-9ca5-0d790ec1c12d";
-      fsType = "ext4";
+      device = "Sapphire/System/Root";
+      fsType = "zfs";
     };
+    "/nix" = {
+      device = "Sapphire/Nix-Store";
+      fsType = "zfs";
+    };
+    "/var" = {
+      device = "Sapphire/System/var";
+      fsType = "zfs";
+    };
+    "/home/ruby" = {
+      device = "Sapphire/Ruby/Home";
+      fsType = "zfs";
+    };
+
     "/boot" = {
-      device = "/dev/disk/by-uuid/06D4-6CD6";
+      device = "/dev/disk/by-uuid/29D4-5A41";
       fsType = "vfat";
     };
+
     "/vault" = {
       device = "/dev/disk/by-uuid/F279-E82B";
       fsType = "exfat";
       options = [ "defaults" "umask=000" ];
     };
-    "/home/ruby/usr/media" = {
+    "/home/ruby/media" = {
       device = "fluorite.dhcp.ongemst.one:/mnt/hdd/Data/Media";
       fsType = "nfs";
       options = [ "x-systemd.automount" ];
@@ -54,8 +88,7 @@
     };
   };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/06764441-8c0d-4e61-a105-f1fab1c66149"; }];
+  swapDevices = [{ device = "/dev/mapper/Encrypted-Swap"; }];
 
   hardware = {
     bluetooth.enable = true;
@@ -76,7 +109,7 @@
 
   users = {
     users.ruby = {
-      description = "Ruby";
+      description = "Ruby Iris Juric";
       extraGroups = [ "adbusers" "audio" "camera" "docker" "libvirtd" "wheel" ];
       isNormalUser = true;
       uid = 1000;
@@ -136,6 +169,8 @@
   location.provider = "geoclue2";
 
   networking = {
+    hostId = "676cd442";
+
     firewall.enable = false;
 
     wireguard.enable = true;
@@ -188,9 +223,6 @@
 
     mullvad-vpn.enable = true;
 
-    # https://github.com/NixOS/nixpkgs/issues/196934
-    nscd.enableNsncd = false;
-
     pcscd.enable = true;
 
     pipewire = {
@@ -202,14 +234,6 @@
       jack.enable = true;
       pulse.enable = true;
     };
-
-    # redshift = {
-    #   enable = true;
-    #   temperature = {
-    #     day = 6500;
-    #     night = 4000;
-    #   };
-    # };
 
     srxl.qmk.enable = true;
 

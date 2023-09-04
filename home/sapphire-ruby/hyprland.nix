@@ -95,7 +95,7 @@
 
   xdg.configFile."wpaperd/wallpaper.toml".text = ''
     [default]
-    path = "/home/ruby/usr/img/papes"
+    path = "/home/ruby/img/papes"
     duration = "1h"
   '';
 }

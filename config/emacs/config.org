@@ -562,7 +562,7 @@ We can setup capture templates in Org-Roam to file notes into specific directori
 #+begin_src emacs-lisp
   (use-package citar
     :custom
-    (org-cite-global-bibliography `(,(expand-file-name "~/usr/notes/references/citations.bib")))
+    (org-cite-global-bibliography `(,(expand-file-name "~/notes/references/citations.bib")))
     (org-cite-insert-processor 'citar)
     (org-cite-follow-processor 'citar)
     (org-cite-activate-processor 'citar)

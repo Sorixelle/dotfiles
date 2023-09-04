@@ -115,11 +115,11 @@ in with lib; {
            srxl/font-family-serif "${config.srxl.fonts.serif.name}"
            srxl/font-size-serif ${toString (config.srxl.fonts.serif.size * 10)}
            srxl/theme-name '${conf.theme}
-           srxl/project-dir "~/usr/devel"
+           srxl/project-dir "~/devel"
            srxl/shell-executable "${shell}"
            srxl/use-mu4e ${toBool conf.mu4e.enable}
            srxl/email "${conf.mu4e.address}"
-           srxl/roam-dir "~/usr/notes")
+           srxl/roam-dir "~/notes")
 
           ${conf.extraConfig}
         '';
