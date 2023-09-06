@@ -13,6 +13,7 @@
     ./rofi.nix
     ./starship.nix
     ./waybar.nix
+    ./xdg.nix
   ];
 
   home.packages = with pkgs; [
@@ -33,6 +34,7 @@
     gnome.eog
     gnome.file-roller
     igir
+    imv
     insomnia
     jump
     libreoffice-fresh
@@ -43,6 +45,7 @@
     magic-wormhole
     makerom
     moserial
+    mpv
     mullvad-vpn
     mtr
     neofetch
@@ -75,6 +78,7 @@
     xfce.thunar
     xfce.xfconf
     yubikey-manager
+    zathura
     zotero
   ];
 
@@ -323,27 +327,6 @@
 
         label trash = ${pkgs.trash-cli}/bin/trash-put "$@"
       '';
-    };
-
-    mimeApps = {
-      enable = true;
-      defaultApplications = {
-        "x-scheme-handler/http" = [ "firefox.desktop" ];
-        "x-scheme-handler/https" = [ "firefox.desktop" ];
-
-        "application/pdf" = [ "org.gnome.Evince.desktop" ];
-        "application/zip" = [ "org.gnome.FileRoller.desktop" ];
-        "image/jpeg" = [ "org.gnome.eog.desktop" ];
-        "image/png" = [ "org.gnome.eog.desktop" ];
-      };
-    };
-    userDirs = {
-      enable = true;
-      desktop = "$HOME/.desktop";
-      documents = "$HOME/misc";
-      download = "$HOME/download";
-      music = "$HOME/media/Library/Music";
-      pictures = "$HOME/img";
     };
   };
 
