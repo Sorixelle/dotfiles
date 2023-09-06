@@ -338,6 +338,16 @@ Sometimes, there's multiple things Marginalia can display - we can cycle between
     "M-a" 'marginalia-cycle)
 #+end_src
 
+[[https://github.com/oantolin/embark][Embark]] compliments this setup nicely by giving us a way to perform actions on a completion target, among other things. We'll bind it to =C-SPC=, and setup it's integration with Consult.
+#+begin_src emacs-lisp :tangle yes
+  (use-package embark
+    :bind
+    (("C-SPC" . embark-act)))
+
+  (use-package embark-consult
+    :ensure t)
+#+end_src
+
 * ✨aesthetics✨
 If I'm going to use Emacs as much as I do, I want to use something that's actually nice to look at. Default Emacs might be nice to some people... but not to me. Time to fix that up.
 
@@ -559,25 +569,54 @@ We can setup capture templates in Org-Roam to file notes into specific directori
                                       :unnarrowed t)))
 #+end_src
 
-#+begin_src emacs-lisp
+For my reference notes, those should have some sort of reference backing them. Obviously. [[https://github.com/emacs-citar/citar][Citar]] provides a good interface for managing citations, as well as solid integration with Org-roam, as we'll see later.
+#+begin_src emacs-lisp :tangle yes
   (use-package citar
-    :custom
-    (org-cite-global-bibliography `(,(expand-file-name "~/notes/references/citations.bib")))
-    (org-cite-insert-processor 'citar)
-    (org-cite-follow-processor 'citar)
-    (org-cite-activate-processor 'citar)
-    (citar-bibliography org-cite-global-bibliography))
+    :hook
+    (org-mode . citar-capf-setup)
+    :config
+    <<CITAR_CONF>>)
+#+end_src
+
+I use [[https://www.zotero.org/][Zotero]] with the [[https://retorque.re/zotero-better-bibtex/][Better BibTeX]] plugin to store all my references, so we'll make sure Org-cite and Citar are both pointed at the BibTeX export that system creates.
+#+begin_src emacs-lisp :noweb-ref CITAR_CONF
+  (let ((bib-file (list (expand-file-name (concat srxl/roam-dir "references/citations.bib")))))
+    (setq org-cite-global-bibliography bib-file
+          citar-bibliography bib-file))
+#+end_src
+
+Tell Org-cite that it should be calling out to Citar to handle adding, opening, displaying citations in Org documents.
+#+begin_src emacs-lisp :noweb-ref CITAR_CONF
+  (setq org-cite-insert-processor 'citar
+        org-cite-follow-processor 'citar
+        org-cite-activate-processor 'citar)
+#+end_src
+
+And now we get to the Org-roam integration - this allows us (among a few other things) to quickly create a note from a reference in Zotero. Neat!
+#+begin_src emacs-lisp :tangle yes
+  (use-package citar-org-roam
+    :config
+    (citar-org-roam-mode)
+    (setq citar-org-roam-capture-template-key "r"))
+#+end_src
+
+Oh, and remember Embark from earlier? There's integration with that too, allowing us to perform a bunch of actions on a citation really easily, like opening the file or URL that it points to.
+#+begin_src emacs-lisp :tangle yes
+  (use-package citar-embark
+    :config
+    (citar-embark-mode))
 #+end_src
 
 There's no keybindings by default. We probably want some.
 #+begin_src emacs-lisp :noweb-ref ORG-ROAM-CONFIG
   (srxl/def-leader-key
     "n"   '(:ignore t :wk "Notes")
+    "n c" '(org-cite-insert :wk "Insert citation")
     "n f" '(org-roam-node-find :wk "Find note")
     "n l" '(org-roam-node-insert :wk "Insert link to note")
-    "n c" '(org-roam-capture :wk "Capture note")
-    "n r" '(org-roam-ref-add :wk "Add reference")
-    "n C" '(org-cite-insert :wk "Insert citation"))
+    "n n" '(org-roam-capture :wk "New note")
+    "n r" '(citar-open :wk "Open reference")
+    "n R" '(org-roam-ref-add :wk "Add reference"))
 #+end_src
 
 * Emacs, my favourite email client
