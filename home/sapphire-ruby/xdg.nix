@@ -7,7 +7,7 @@
 
       script = pkgs.writeShellScript "telnet-url-handler" ''
         IFS=":" read -ra host <<< $(${pkgs.coreutils}/bin/basename $@)
-        ${kitty}/bin/kitty nix-shell -p inetutils --run "telnet ''${host[0]} ''${host[1]}"
+        ${kitty}/bin/kitty --class=kitty-telnet-handler nix-shell -p inetutils --run "telnet ''${host[0]} ''${host[1]}"
       '';
     in {
       telnet-handler = {
