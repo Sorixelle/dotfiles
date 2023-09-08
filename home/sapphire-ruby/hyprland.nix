@@ -41,6 +41,7 @@
 
       windowrulev2 = float,class:^(kitty-telnet-handler)$
       windowrulev2 = size 1155 632,class:^(kitty-telnet-handler)$
+      windowrulev2 = tile,class:(winbox64\.exe)$
 
       bind = SUPER, Q, killactive,
       bind = SUPER SHIFT, Q, exit,
