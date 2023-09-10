@@ -30,10 +30,10 @@
     };
 
     shellAliases = {
-      l = "exa --icons -bhl";
-      la = "exa --icons -bhla";
-      lt = "exa --icons -bhlT";
-      lat = "exa --icons -bhlaT";
+      l = "eza --icons -bhl";
+      la = "eza --icons -bhla";
+      lt = "eza --icons -bhlT";
+      lat = "eza --icons -bhlaT";
       vim = "nvim";
     };
 

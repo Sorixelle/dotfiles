@@ -57,7 +57,7 @@
   environment.systemPackages = with pkgs; [
     bat
     dnsutils
-    exa
+    eza
     fd
     file
     fzf
