@@ -35,7 +35,7 @@ switch $argv[1]
   case search
     nix search nixpkgs $argv[2..]
   case update
-    nix flake update ~/etc
+    nix flake update ~/nixos
   case upgrade
     pls update && pls build
   case '*'
