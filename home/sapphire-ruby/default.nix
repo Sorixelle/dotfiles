@@ -20,6 +20,8 @@
     _3dsconv
     audacity
     betterdiscordctl
+    bitwarden
+    bitwarden-cli
     bless
     cachix
     ctrtool
@@ -36,7 +38,6 @@
     libreoffice-fresh
     liquidctl
     lm_sensors
-    keepassxc
     kopia
     magic-wormhole
     makerom
@@ -102,9 +103,9 @@
       enable = true;
       package = pkgs.chromium;
       extensions = [
+        { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
         { id = "cmpdlhmnmjhihmcfnigoememnffkimlk"; } # Catppuccin Theme
         { id = "ldpochfccmkkmhdbclfhpagapcfdljkj"; } # Decentraleyes
-        { id = "oboonakemofpalcgghocfoadofidjkkk"; } # KeePassXC Browser
         { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # Privacy Badger
         { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # uBlock Origin
       ];

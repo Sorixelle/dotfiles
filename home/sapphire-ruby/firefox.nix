@@ -15,10 +15,10 @@
       path = "default";
       extensions = with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs; [
+          bitwarden
           decentraleyes
           firefox-color
           frankerfacez
-          keepassxc-browser
           multi-account-containers
           old-reddit-redirect
           privacy-badger
