@@ -884,6 +884,11 @@ doom-themes has some nice icon themes for Treemacs. We'll use those icons.
   (doom-themes-treemacs-config)
 #+end_src
 
+Treemacs /claims/ it won't use a child frame to read input if we're in Wayland, since there's issues focusing child frames there. That doesn't seem to be the case though, so we'll force it to use the minibuffer anyway
+#+begin_src emacs-lisp :noweb-ref TREEMACS-CONFIG
+  (setq treemacs-read-string-input 'from-minibuffer)
+#+end_src
+
 Bind =SPC .= to toggle Treemacs on and off.
 #+begin_src emacs-lisp :noweb-ref TREEMACS-CONFIG
   (srxl/def-leader-key
