@@ -7,6 +7,8 @@
   };
 
   boot = {
+    kernelParams = [ "quiet" ];
+    consoleLogLevel = 3;
     kernelPackages = pkgs.linuxPackages-rt_latest;
 
     initrd = {
@@ -33,6 +35,8 @@
           allowDiscards = true;
         };
       };
+
+      systemd.enable = true;
     };
 
     loader = {
@@ -44,7 +48,14 @@
         efiSupport = true;
         gfxmodeEfi = "2560x1440";
         useOSProber = true;
+        splashImage = null;
+        timeoutStyle = "hidden";
       };
+    };
+
+    plymouth = {
+      enable = true;
+      font = "${pkgs.inter}/share/fonts/opentype/Inter-Regular.otf";
     };
   };
 
