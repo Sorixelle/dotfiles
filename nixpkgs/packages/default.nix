@@ -53,6 +53,9 @@ in {
 
   moserial = prev.callPackage ./moserial.nix { };
 
+  # TODO: msmtp-scripts broke, but I don't need those so this works fine for now. remove when fixed
+  msmtp = prev.msmtp.binaries;
+
   pmbootstrap = prev.callPackage ./pmbootstrap.nix { };
 
   pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
