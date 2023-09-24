@@ -31,12 +31,6 @@ in with lib; {
       };
     };
 
-    useMu4e = mkOption {
-      type = bool;
-      default = false;
-      description = "Whether to use the mu4e email client.";
-    };
-
     extraConfig = mkOption {
       type = lines;
       default = "";
@@ -48,7 +42,7 @@ in with lib; {
     emacsPkgs = pkgs.emacsPackagesFor conf.package;
     emacsPackage = emacsPkgs.emacsWithPackages (e:
       [ e.org-roam e.treesit-grammars.with-all-grammars e.vterm ]
-      ++ (lib.optional conf.useMu4e pkgs.mu));
+      ++ (lib.optional conf.mu4e.enable e.mu4e));
 
     tangledConfig = pkgs.stdenv.mkDerivation {
       name = "hm-emacs-tangled-config";
