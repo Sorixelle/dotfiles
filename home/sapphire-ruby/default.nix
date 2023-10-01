@@ -173,8 +173,6 @@
       enable = true;
       pinentryFlavor = "gnome3";
     };
-
-    syncthing.enable = true;
   };
 
   srxl = {
