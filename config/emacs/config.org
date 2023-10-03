@@ -661,6 +661,13 @@ Use SMTP sendmail for sending emails.
   (setq send-mail-function 'sendmail-send-it)
 #+end_src
 
+Mu4e's default "delete email" behaviour marks a message as Trashed, which mbsync interprets as "mark for expunge", and results in mail being permanently deleted, instead of moved to the trash folder. That's no good. We should fix that up so it just moves mail to the trash, without marking it as trashed.
+#+begin_src emacs-lisp
+  (setf (plist-get (alist-get 'trash mu4e-marks) :action)
+        (lambda (docid msg target)
+          (mu4e--server-move docid (mu4e--mark-check-target target) "-N")))
+#+end_src
+
 And a keybind to quickly pop open the client.
 #+begin_src emacs-lisp :noweb-ref MU4E-CONFIG
   (srxl/def-leader-key
