@@ -255,7 +255,13 @@
     xserver = {
       enable = true;
 
-      displayManager.sddm.enable = true;
+      displayManager = {
+        autoLogin.user = "ruby";
+        lightdm = {
+          enable = true;
+          greeter.enable = false;
+        };
+      };
 
       videoDrivers = [ "amdgpu" "qxl" ];
 
