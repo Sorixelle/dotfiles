@@ -35,6 +35,8 @@
       lt = "eza --icons -bhlT";
       lat = "eza --icons -bhlaT";
       vim = "nvim";
+
+      bbsys = "${pkgs.cp437}/bin/cp437 telnet bigbeautifulsystem.ddns.net 2323";
     };
 
     plugins = [

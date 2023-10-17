@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -34,6 +34,7 @@
     gnome.file-roller
     igir
     imv
+    inetutils
     jump
     libreoffice-fresh
     liquidctl
