@@ -21,13 +21,10 @@
           frankerfacez
           multi-account-containers
           old-reddit-redirect
-          privacy-badger
           react-devtools
           reddit-enhancement-suite
           return-youtube-dislikes
-          # TODO: some weirdness going on with the 5.0.0 update right now, we'll
-          # manage sidebery outside of home-manager until that clears up
-          # sidebery
+          sidebery
           sponsorblock
           stylus
           tridactyl
