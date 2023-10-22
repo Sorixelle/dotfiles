@@ -50,6 +50,9 @@
     nil
     nix-prefetch-scripts
     nmap
+    nodePackages.typescript-language-server
+    nodePackages.vscode-css-languageserver-bin
+    nodePackages.vscode-html-languageserver-bin
     pavucontrol
     perlPackages.ArchiveZip # crc32 command-line utility
     picard
