@@ -1112,6 +1112,45 @@ Just like with Javascript, we've got the built-in =typescript-ts-mode= for Types
   (srxl/fix-brace-indentation 'tsx-ts-mode "{" "(" "[")
 #+end_src
 
+Looks like there's a bug in tsx-ts-mode at the moment. Somehow, a broken treesit query managed to slip through the cracks, breaking a lot of font locking for TSX buffers, especially around JSX tags. Annoying. I'll have to redefine the function with the fixed query for now. Looks like it's [[https://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-29&id=ee043a2703d3175a7745c111146aa19a13f8e0ba][fixed upstream]] though, so I guess we just wait.
+
+#+begin_src emacs-lisp :tangle yes
+  (require 'typescript-ts-mode)
+  (defun tsx-ts-mode--font-lock-compatibility-bb1f97b (language)
+    "Font lock rules helper, to handle different releases of tree-sitter-tsx.
+  Check if a node type is available, then return the right font lock rules.
+  Argument LANGUAGE is either `typescript' or `tsx'."
+    ;; handle commit bb1f97b
+    ;; Warning: treesitter-query-capture says both node types are valid,
+    ;; but then raises an error if the wrong node type is used. So it is
+    ;; important to check with the new node type (member_expression)
+    (condition-case nil
+        (progn (treesit-query-capture language '((jsx_opening_element (member_expression) @capture)))
+         '((jsx_opening_element
+      [(member_expression (identifier)) (identifier)]
+      @typescript-ts-jsx-tag-face)
+
+           (jsx_closing_element
+      [(member_expression (identifier)) (identifier)]
+      @typescript-ts-jsx-tag-face)
+
+           (jsx_self_closing_element
+      [(member_expression (identifier)) (identifier)]
+      @typescript-ts-jsx-tag-face)))
+      (treesit-query-error
+             '((jsx_opening_element
+          [(nested_identifier (identifier)) (identifier)]
+          @typescript-ts-jsx-tag-face)
+
+         (jsx_closing_element
+          [(nested_identifier (identifier)) (identifier)]
+          @typescript-ts-jsx-tag-face)
+
+         (jsx_self_closing_element
+          [(nested_identifier (identifier)) (identifier)]
+          @typescript-ts-jsx-tag-face)))))
+#+end_src
+
 **** JS Frameworks
 Some JS frameworks are special and have their own file types. Time to get those set up as well, I guess.
 
