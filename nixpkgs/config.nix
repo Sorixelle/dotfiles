@@ -1,8 +1,7 @@
 {
-  allowBroken = true;
   allowUnfree = true;
 
-  permittedInsecurePackages = [ "openssl-1.1.1t" ];
+  permittedInsecurePackages = [ "zotero-6.0.27" ];
 
   packageOverrides = pkgs: { nur = import <nur> { inherit pkgs; }; };
 }

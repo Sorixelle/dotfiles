@@ -49,10 +49,6 @@
         flake-utils.follows = "flake-utils";
       };
     };
-    musnix = {
-      url = "github:musnix/musnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -109,7 +105,6 @@
         modules = [
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
-          inputs.musnix.nixosModules.musnix
           inputs.hyprland.nixosModules.default
 
           (import ./system/common.nix)

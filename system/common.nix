@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./modules/audioprod.nix
+    # ./modules/audioprod.nix
     ./modules/cifs-utils.nix
     ./modules/keyutils.nix
     ./modules/qmk.nix

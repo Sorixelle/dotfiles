@@ -9,7 +9,6 @@
   boot = {
     kernelParams = [ "quiet" ];
     consoleLogLevel = 3;
-    kernelPackages = pkgs.linuxPackages-rt_latest;
 
     initrd = {
       availableKernelModules =
@@ -214,7 +213,7 @@
     ssh.startAgent = true;
   };
 
-  srxl.audioprod.enable = true;
+  # srxl.audioprod.enable = true;
 
   services = {
     blueman.enable = true;
@@ -248,7 +247,6 @@
 
     srxl.qmk.enable = true;
 
-    trezord.enable = true;
 
     tumbler.enable = true;
 
