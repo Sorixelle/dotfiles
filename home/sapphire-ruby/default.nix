@@ -62,6 +62,7 @@
     python3
     qbittorrent
     remmina
+    rs-git-fsmonitor
     scr
     solaar
     steam
@@ -130,6 +131,8 @@
         key = "B6D7116C451A5B41";
         signByDefault = true;
       };
+      extraConfig.core.fsmonitor =
+        "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
     };
 
     gpg = {
