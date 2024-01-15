@@ -54,7 +54,7 @@
 
     plymouth = {
       enable = true;
-      font = "${pkgs.inter}/share/fonts/opentype/Inter-Regular.otf";
+      font = "${pkgs.inter}/share/fonts/truetype/InterVariable.ttf";
     };
   };
 
@@ -131,7 +131,14 @@
     trusted-users = [ "ruby" ];
   };
 
-  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
+  environment.systemPackages = with pkgs; [
+    ntfs3g
+    pciutils
+    usbutils
+    # Required to workaround regression in pcsclite
+    # https://github.com/NixOS/nixpkgs/issues/280826
+    pcscliteWithPolkit.out
+  ];
 
   fonts = {
     enableDefaultPackages = true;

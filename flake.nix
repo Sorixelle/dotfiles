@@ -35,7 +35,7 @@
       url = "github:Toqozz/wired-notify";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        utils.follows = "flake-utils";
+        rust-overlay.follows = "rust-overlay";
       };
     };
     eww = {

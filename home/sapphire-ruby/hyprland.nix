@@ -3,7 +3,6 @@
 {
   wayland.windowManager.hyprland = {
     enable = true;
-    recommendedEnvironment = true;
 
     extraConfig = ''
       monitor = DP-1, highrr, 1920x0, 1

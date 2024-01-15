@@ -29,9 +29,12 @@ in writeScriptBin "scr" ''
             $Date = Get-Date -Format "o"
             "$env:XDG_PICTURES_DIR/$Date\.png"
         }
-        $Args = If ($Clipboard) {"| ${wl-copy}"} Else {"-o $OutPath"}
+        # shadower currently broken
+        # $Args = If ($Clipboard) {"| ${wl-copy}"} Else {"-o $OutPath"}
+        $Args = If ($Clipboard) {"- | ${wl-copy}"} Else {"$OutPath"}
 
-        bash -c "${grimblast-cmd} save active - | ${shadower-cmd} -r $Radius -c 0x00000070 $Args"
+        # bash -c "${grimblast-cmd} save active - | {shadower-cmd} -r $Radius -c 0x00000070 $Args"
+        bash -c "${grimblast-cmd} save active $Args"
     } Else {
         $Action = If ($Clipboard) {"copy"} Else {"save"}
         $Target = If ($Mode -eq "Screen") {"output"} Else {"area"}
