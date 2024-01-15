@@ -29,6 +29,7 @@
           sponsorblock
           stylus
           tridactyl
+          tubearchivist-companion
           ublock-origin
           violentmonkey
         ];
