@@ -19,6 +19,10 @@
         flake-utils.follows = "flake-utils";
       };
     };
+    musnix = {
+      url = "github:musnix/musnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland = {
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -106,6 +110,7 @@
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
           inputs.hyprland.nixosModules.default
+          inputs.musnix.nixosModules.default
 
           (import ./system/common.nix)
 
