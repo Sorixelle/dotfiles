@@ -269,8 +269,19 @@
       pulse.enable = true;
     };
 
-    srxl.qmk.enable = true;
+    sanoid = {
+      enable = true;
+      datasets."Sapphire/Ruby/Home" = {
+        autosnap = true;
+        autoprune = true;
+        hourly = 48;
+        daily = 14;
+        monthly = 12;
+        yearly = 3;
+      };
+    };
 
+    srxl.qmk.enable = true;
 
     tumbler.enable = true;
 
