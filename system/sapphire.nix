@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   time = {
@@ -237,6 +237,20 @@
       gnome-keyring.enable = true;
     };
 
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command =
+            "${pkgs.cage}/bin/cage -s -- ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
+        };
+        initial_session = {
+          command = "${config.programs.hyprland.package}/bin/Hyprland";
+          user = "ruby";
+        };
+      };
+    };
+
     gvfs.enable = true;
 
     joycond.enable = true;
@@ -263,13 +277,7 @@
     xserver = {
       enable = true;
 
-      displayManager = {
-        autoLogin.user = "ruby";
-        lightdm = {
-          enable = true;
-          greeter.enable = false;
-        };
-      };
+      displayManager.autoLogin.user = "ruby";
 
       videoDrivers = [ "amdgpu" "qxl" ];
 
