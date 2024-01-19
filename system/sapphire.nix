@@ -225,6 +225,8 @@
     ssh.startAgent = true;
   };
 
+  security.rtkit.enable = true;
+
   services = {
     blueman.enable = true;
 
