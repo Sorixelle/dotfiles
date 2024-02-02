@@ -135,7 +135,7 @@
     ntfs3g
     pciutils
     usbutils
-    # Required to workaround regression in pcsclite
+    # BUG: Required to workaround regression in pcsclite
     # https://github.com/NixOS/nixpkgs/issues/280826
     pcscliteWithPolkit.out
   ];

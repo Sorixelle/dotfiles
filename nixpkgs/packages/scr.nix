@@ -29,7 +29,7 @@ in writeScriptBin "scr" ''
             $Date = Get-Date -Format "o"
             "$env:XDG_PICTURES_DIR/$Date\.png"
         }
-        # shadower currently broken
+        # BUG: shadower currently broken
         # $Args = If ($Clipboard) {"| ${wl-copy}"} Else {"-o $OutPath"}
         $Args = If ($Clipboard) {"- | ${wl-copy}"} Else {"$OutPath"}
 
