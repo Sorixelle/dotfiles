@@ -91,6 +91,10 @@
       fsType = "nfs";
       options = [ "x-systemd.automount" ];
     };
+    "/home/ruby/download" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+    };
     "/home/ruby/.local/share/backup" = {
       device = "fluorite.dhcp.ongemst.one:/mnt/hdd/Machine-Backups/Sapphire";
       fsType = "nfs";
