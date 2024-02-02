@@ -137,13 +137,13 @@
 
     gpg = {
       enable = true;
-      # 2.4.1 seems to cause hangs in Emacs EasyPG
-      # https://git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-29&id=1b9812af80b6ceec8418636dbf84c0fbcd3ab694
+      # BUG: GnuPG 2.4.4 fixes some important bugs
+      # https://github.com/NixOS/nixpkgs/pull/284778
       package = pkgs.gnupg24.overrideAttrs (old: {
-        version = "2.4.0";
+        version = "2.4.4";
         src = pkgs.fetchurl {
-          url = "mirror://gnupg/gnupg/gnupg-2.4.0.tar.bz2";
-          hash = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
+          url = "mirror://gnupg/gnupg/gnupg-2.4.4.tar.bz2";
+          hash = "sha256-Z+vgFsqQ+naIzmejh+vYLGJh6ViX23sj3yT/M1voW8Y=";
         };
       });
       settings = { keyserver = "hkps://keys.openpgp.org"; };
