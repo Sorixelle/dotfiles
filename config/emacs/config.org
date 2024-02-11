@@ -1274,7 +1274,7 @@ A few Elixir frameworks like Phoenix use HEEx, an Elixir-based HTML templating l
 *** Terraform/HCL
 HCL (Hashicorp Configuration Language) is a config format used by a couple of Hashicorp's tools, notably [[http://www.terraform.io/][Terraform]].
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package terraform-mode
     :mode "\\.tf\\'")
 #+end_src
