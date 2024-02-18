@@ -28,6 +28,7 @@
     cutentr
     darktable
     discord
+    element-desktop
     fbi-servefiles
     ffmpeg-full
     gimp
