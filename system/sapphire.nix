@@ -87,18 +87,14 @@
       options = [ "defaults" "umask=000" ];
     };
     "/home/ruby/media" = {
-      device = "fluorite.dhcp.ongemst.one:/mnt/hdd/Data/Media";
+      device = "fluorite:/mnt/hdd/Data/Media";
       fsType = "nfs";
-      options = [ "x-systemd.automount" ];
+      options =
+        [ "x-systemd.automount" "x-systemd.requires=tailscaled.service" ];
     };
     "/home/ruby/download" = {
       device = "tmpfs";
       fsType = "tmpfs";
-    };
-    "/home/ruby/.local/share/backup" = {
-      device = "fluorite.dhcp.ongemst.one:/mnt/hdd/Machine-Backups/Sapphire";
-      fsType = "nfs";
-      options = [ "x-systemd.automount" "x-systemd.idle-timeout=600" ];
     };
   };
 
@@ -288,6 +284,8 @@
     };
 
     srxl.qmk.enable = true;
+
+    tailscale.enable = true;
 
     tumbler.enable = true;
 
