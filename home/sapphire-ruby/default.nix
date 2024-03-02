@@ -251,6 +251,14 @@
         };
         Install = { WantedBy = [ "graphical-session.target" ]; };
       };
+      rescrobbled = {
+        Unit = { Description = "An MPRIS scrobbler"; };
+        Service = {
+          ExecStart = "${pkgs.rescrobbled}/bin/rescrobbled";
+          Restart = "on-failure";
+        };
+        Install = { WantedBy = [ "graphical-session.target" ]; };
+      };
       solaar = {
         Unit = { Description = "Control software for Logitech devices"; };
         Service = {
