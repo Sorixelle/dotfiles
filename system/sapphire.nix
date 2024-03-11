@@ -54,7 +54,7 @@
 
     plymouth = {
       enable = true;
-      font = "${pkgs.inter}/share/fonts/truetype/InterVariable.ttf";
+      font = "${pkgs.inter-patched}/share/fonts/truetype/InturVariable.ttf";
     };
   };
 
@@ -142,10 +142,10 @@
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [ corefonts ibm-plex inter roboto ];
+    packages = with pkgs; [ corefonts ibm-plex inter-patched roboto ];
     fontconfig = {
       defaultFonts = {
-        sansSerif = [ "Inter" ];
+        sansSerif = [ "Intur" ];
         serif = [ "IBM Plex Serif" ];
         monospace = [ "IBM Plex Mono" ];
       };
@@ -153,19 +153,6 @@
         <?xml version="1.0"?>
         <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
         <fontconfig>
-          <match target="font">
-            <test name="fontformat" compare="not_eq">
-              <string />
-            </test>
-            <test name="family">
-              <string>Inter</string>
-            </test>
-            <edit name="fontfeatures" mode="append">
-              <string>ss01 on</string>
-              <string>ss02 on</string>
-            </edit>
-          </match>
-
           <match target="font">
             <test name="fontformat" compare="not_eq">
               <string />

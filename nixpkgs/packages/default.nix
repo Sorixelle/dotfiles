@@ -47,6 +47,8 @@ in {
 
   igir = prev.callPackage ./igir.nix { };
 
+  inter-patched = prev.callPackage ./inter-patched.nix { };
+
   kstart = prev.callPackage ./kstart.nix { };
 
   makerom = prev.callPackage ./makerom.nix { };
@@ -56,6 +58,8 @@ in {
   pmbootstrap = prev.callPackage ./pmbootstrap.nix { };
 
   pywal = prev.callPackage ./pywal { inherit (final) schemer2; };
+
+  pyftfeatfreeze = prev.callPackage ./pyftfeatfreeze.nix { };
 
   rescrobbled = prev.callPackage ./rescrobbled.nix { };
 

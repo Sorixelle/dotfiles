@@ -36,13 +36,13 @@
 
       prompt = {
         background-color = lit bg-light;
-        font = "Inter 24";
+        font = "Intur 24";
         text-color = lit fg;
       };
 
       entry = {
         background-color = lit bg-light;
-        font = "Inter Bold Italic 24";
+        font = "Intur Bold Italic 24";
         text-color = lit fg;
       };
 
@@ -71,7 +71,7 @@
       element-icon = { size = lit "64px"; };
 
       element-text = {
-        font = "Inter 18";
+        font = "Intur 18";
         vertical-align = lit "0.5";
         highlight = lit "bold italic ${highlight}";
       };

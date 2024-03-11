@@ -206,9 +206,9 @@
         package = pkgs.ibm-plex;
       };
       ui = {
-        name = "Inter";
+        name = "Intur";
         size = 12;
-        package = pkgs.inter;
+        package = pkgs.inter-patched;
       };
       serif = {
         name = "IBM Plex Serif";

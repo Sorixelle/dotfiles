@@ -56,7 +56,7 @@
 
     style = ''
       * {
-        font-family: Inter;
+        font-family: Intur;
         font-size: 16px;
       }
 
