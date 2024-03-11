@@ -196,14 +196,13 @@
     };
 
     fonts = let
-      nerdfonts = pkgs.nerdfonts.override {
-        fonts = [ "IBMPlexMono" "NerdFontsSymbolsOnly" ];
-      };
+      nerdfonts =
+        pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; };
     in {
       monospace = {
-        name = "IBM Plex Mono";
+        name = "Iosevka";
         size = 12;
-        package = pkgs.ibm-plex;
+        package = pkgs.iosevka-bin;
       };
       ui = {
         name = "Intur";
@@ -211,9 +210,9 @@
         package = pkgs.inter-patched;
       };
       serif = {
-        name = "IBM Plex Serif";
+        name = "ETBembo";
         size = 12;
-        package = pkgs.ibm-plex;
+        package = pkgs.etBook;
       };
       extraFonts = with pkgs; [
         emacs-all-the-icons-fonts

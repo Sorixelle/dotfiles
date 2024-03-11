@@ -142,31 +142,13 @@
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [ corefonts ibm-plex inter-patched roboto ];
+    packages = with pkgs; [ corefonts etBook iosevka-bin inter-patched roboto ];
     fontconfig = {
       defaultFonts = {
         sansSerif = [ "Intur" ];
-        serif = [ "IBM Plex Serif" ];
-        monospace = [ "IBM Plex Mono" ];
+        serif = [ "ETBembo" ];
+        monospace = [ "Iosevka" ];
       };
-      localConf = ''
-        <?xml version="1.0"?>
-        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-        <fontconfig>
-          <match target="font">
-            <test name="fontformat" compare="not_eq">
-              <string />
-            </test>
-            <test name="family">
-              <string>IBM Plex Mono</string>
-            </test>
-            <edit name="fontfeatures" mode="append">
-              <string>ss02 on</string>
-              <string>ss03 on</string>
-            </edit>
-          </match>
-        </fontconfig>
-      '';
     };
   };
 

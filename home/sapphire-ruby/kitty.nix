@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   programs.kitty = {
@@ -6,7 +6,7 @@
 
     theme = "Catppuccin-Macchiato";
     font = {
-      name = "IBM Plex Mono";
+      name = "Iosevka Term";
       size = 12;
     };
 
@@ -16,12 +16,5 @@
       window_padding_width = 16;
       tab_bar_margin_height = "8 0";
     };
-
-    extraConfig = ''
-      font_features IBMPlexMono +ss02 +ss03
-      font_features IBMPlexMono-Italic +ss02 +ss03
-      font_features IBMPlexMono-Bold +ss02 +ss03
-      font_features IBMPlexMono-BoldItalic +ss02 +ss03
-    '';
   };
 }
