@@ -24,6 +24,7 @@
     bitwarden-cli
     bless
     cachix
+    calibre
     ctrtool
     cutentr
     darktable
