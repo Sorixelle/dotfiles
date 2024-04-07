@@ -258,6 +258,11 @@
 
     tumbler.enable = true;
 
+    udev.extraRules = ''
+      # Nintendo Switch - Goldleaf over USB
+      SUBSYSTEMS=="usb", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="3000", GROUP="wheel", MODE="0660"
+    '';
+
     xserver = {
       enable = true;
 
