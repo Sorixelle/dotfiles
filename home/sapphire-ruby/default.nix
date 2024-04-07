@@ -140,15 +140,6 @@
 
     gpg = {
       enable = true;
-      # BUG: GnuPG 2.4.4 fixes some important bugs
-      # https://github.com/NixOS/nixpkgs/pull/284778
-      package = pkgs.gnupg24.overrideAttrs (old: {
-        version = "2.4.4";
-        src = pkgs.fetchurl {
-          url = "mirror://gnupg/gnupg/gnupg-2.4.4.tar.bz2";
-          hash = "sha256-Z+vgFsqQ+naIzmejh+vYLGJh6ViX23sj3yT/M1voW8Y=";
-        };
-      });
       settings = { keyserver = "hkps://keys.openpgp.org"; };
       scdaemonSettings = { disable-ccid = true; };
     };

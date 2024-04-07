@@ -131,14 +131,7 @@
     trusted-users = [ "ruby" ];
   };
 
-  environment.systemPackages = with pkgs; [
-    ntfs3g
-    pciutils
-    usbutils
-    # BUG: Required to workaround regression in pcsclite
-    # https://github.com/NixOS/nixpkgs/issues/280826
-    pcscliteWithPolkit.out
-  ];
+  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
 
   fonts = {
     enableDefaultPackages = true;
