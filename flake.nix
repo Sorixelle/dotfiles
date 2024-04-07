@@ -165,10 +165,9 @@
           name = "srxl-dotfiles";
 
           nativeBuildInputs = [
-            # nix-linter
-            nixfmt
+            nil
+            nixfmt-classic
             (nixos-generators.override { nix = nixUnstable; })
-            rnix-lsp
           ];
 
           shellHook = ''
