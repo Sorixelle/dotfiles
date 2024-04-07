@@ -19,6 +19,7 @@
   home.packages = with pkgs; [
     _3dsconv
     audacity
+    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
     betterdiscordctl
     bitwarden
     bitwarden-cli
