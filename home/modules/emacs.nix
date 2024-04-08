@@ -47,7 +47,7 @@ in with lib; {
     tangledConfig = pkgs.stdenv.mkDerivation {
       name = "hm-emacs-tangled-config";
 
-      src = ../../config/emacs/config.org;
+      src = ../../config/emacs-config.org;
       phases = "buildPhase installPhase";
 
       buildPhase = ''
@@ -56,7 +56,7 @@ in with lib; {
       '';
 
       installPhase = ''
-        cp config.el $out
+        cp -a out $out
       '';
     };
   in mkIf conf.enable {
@@ -85,9 +85,10 @@ in with lib; {
     };
 
     home.file = {
-      "init.el" = {
+      ".emacs.d" = {
         source = tangledConfig;
-        target = ".emacs.d/init.el";
+        recursive = true;
+        target = ".emacs.d/";
       };
 
       "config-vars.el" = {
