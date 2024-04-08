@@ -259,7 +259,6 @@ Before I wrap up Evil setup, though, I'm gonna get [[https://github.com/emacs-ev
 #+begin_src emacs-lisp
   (use-package evil-collection
     :config
-    <<evil-collection-config>>
     (evil-collection-init))
 #+end_src
 
@@ -886,7 +885,7 @@ One little bit of editor smarts that Eglot doesn't handle, though, is code forma
 #+begin_src emacs-lisp
   (use-package apheleia
     :config
-    <<apheleia-mode>>
+    <<apheleia-config>>
     (apheleia-global-mode))
 #+end_src
 
@@ -1062,7 +1061,7 @@ Eglot also doesn't have associations for this one built in, so I'll define them 
 
 By default, [[*Oh yeah its language server time][Apheleia]] tries to format Astro files with Prettier in HTML mode by default, which mangles the crap out of Astro templates. Gotta make sure it uses the correct Astro parser instead.
 
-#+begin_src emacs-lisp :noweb-ref apheleia-config
+#+begin_src emacs-lisp :tangle no :noweb-ref apheleia-config
   (add-to-list
    'apheleia-formatters
    '(prettier-astro npx "prettier" "--stdin-filepath" filepath "--parser=astro"
