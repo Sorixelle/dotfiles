@@ -140,10 +140,6 @@
         });
     in {
       nixosConfigurations = mapAttrs' defineSystem {
-        obsidian = {
-          system = "x86_64-linux";
-          config = ./system/obsidian.nix;
-        };
         sapphire = {
           system = "x86_64-linux";
           config = ./system/sapphire.nix;
