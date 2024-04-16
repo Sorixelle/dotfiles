@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 {
+  imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
+
   time.timeZone = "Australia/Melbourne";
 
   boot = {
@@ -32,13 +34,15 @@
       systemd.enable = true;
     };
 
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/etc/secureboot";
+      configurationLimit = 25;
+    };
+
     loader = {
       efi.canTouchEfiVariables = true;
-      systemd-boot = {
-        enable = true;
-        memtest86.enable = true;
-        configurationLimit = 25;
-      };
+      systemd-boot.enable = lib.mkForce false;
     };
 
     plymouth = {
@@ -101,6 +105,8 @@
     isNormalUser = true;
     uid = 1000;
   };
+
+  environment.systemPackages = with pkgs; [ sbctl ];
 
   nix.settings = {
     max-jobs = 16;
