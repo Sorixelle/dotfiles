@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   wayland.windowManager.hyprland = {
@@ -33,9 +33,12 @@
         }
       }
 
-      misc {
-        vrr = 2
+      dwindle {
+        preserve_split = true;
       }
+
+      env = XCURSOR_THEME, ${config.gtk.cursorTheme.name}
+      env = XCURSOR_SIZE, 24
 
       bezier = smoothPopIn, 0.22, 0.17, 0, 1
       animation = windowsIn, 1, 7, smoothPopIn, popin
@@ -45,19 +48,46 @@
       windowrulev2 = size 1155 632,class:^(kitty-telnet-handler)$
       windowrulev2 = tile,class:(winbox64\.exe)$
 
+      # Quitting things
       bind = SUPER, Q, killactive,
       bind = SUPER SHIFT, Q, exit,
 
+      # Focus windows
       bind = SUPER, H, movefocus, l
       bind = SUPER, J, movefocus, d
       bind = SUPER, K, movefocus, u
       bind = SUPER, L, movefocus, r
 
+      # Swapping windows
       bind = SUPER SHIFT, H, swapwindow, l
       bind = SUPER SHIFT, J, swapwindow, d
       bind = SUPER SHIFT, K, swapwindow, u
       bind = SUPER SHIFT, L, swapwindow, r
 
+      # Preselect direction for next window
+      bind = SUPER ALT, H, layoutmsg, preselect l
+      bind = SUPER ALT, J, layoutmsg, preselect d
+      bind = SUPER ALT, K, layoutmsg, preselect u
+      bind = SUPER ALT, L, layoutmsg, preselect r
+
+      # Rotate window split
+      bind = SUPER, R, layoutmsg, togglesplit
+
+      # Resizing and moving windows
+      bind = SUPER, M, submap, windowmanip
+      submap = windowmanip
+      binde = , H, moveactive, -25 0
+      binde = , J, moveactive, 0 25
+      binde = , K, moveactive, 0 -25
+      binde = , L, moveactive, 25 0
+      binde = SHIFT, H, resizeactive, -25 0
+      binde = SHIFT, J, resizeactive, 0 25
+      binde = SHIFT, K, resizeactive, 0 -25
+      binde = SHIFT, L, resizeactive, 25 0
+      bind  = , escape, submap, reset
+      submap = reset
+
+      # Switch to workspace
       bind = SUPER, 1, workspace, 1
       bind = SUPER, 2, workspace, 2
       bind = SUPER, 3, workspace, 3
@@ -69,6 +99,7 @@
       bind = SUPER, 9, workspace, 9
       bind = SUPER, 0, workspace, 10
 
+      # Move window to workspace
       bind = SUPER SHIFT, 1, movetoworkspace, 1
       bind = SUPER SHIFT, 2, movetoworkspace, 2
       bind = SUPER SHIFT, 3, movetoworkspace, 3
@@ -80,17 +111,20 @@
       bind = SUPER SHIFT, 9, movetoworkspace, 9
       bind = SUPER SHIFT, 0, movetoworkspace, 10
 
+      # Change window state
       bind = SUPER, T, togglefloating, active
       bind = SUPER, F, fullscreen, 0
 
-      bind = SUPER, E, exec, ${pkgs.kitty}/bin/kitty ${pkgs.ranger}/bin/ranger
+      # Launch apps
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty
       bind = SUPER, space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun
 
+      # Screenshot
       bind = SUPER, S, exec, ${pkgs.scr}/bin/scr -Mode Active -Clipboard
       bind = SUPER SHIFT, S, exec, ${pkgs.scr}/bin/scr -Mode Selection -Clipboard
       bind = SUPER ALT, S, exec, ${pkgs.scr}/bin/scr -Mode Screen -Clipboard
 
+      # Move and resize windows with the mouse
       bindm = SUPER, mouse:272, movewindow
       bindm = SUPER, mouse:273, resizewindow
 

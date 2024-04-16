@@ -47,6 +47,10 @@
 
   gtk = with pkgs; {
     enable = true;
+    cursorTheme = {
+      name = "Catppuccin-Frappe-Mauve-Cursors";
+      package = pkgs.catppuccin-cursors.frappeMauve;
+    };
     iconTheme = {
       name = "Arc";
       package = arc-icon-theme;
