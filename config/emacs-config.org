@@ -381,6 +381,13 @@ Cool, now I can load the theme.
   (load-theme srxl/theme-name t)
 #+end_src
 
+If Catppucin is the selected theme, for some reason that one needs a reload when new Emacs client frames are created, otherwise some of the colours are all wrong. Not really sure why. It's weird.
+
+#+begin_src emacs-lisp
+  (when (eq srxl/theme-name 'catppuccin)
+    (add-hook 'server-after-make-frame-hook #'catppuccin-reload))
+#+end_src
+
 *** Typography
 OK, next on the list - fonts. Again, that's a system thing - all I need to do is take those variables and modify the basic faces to use them, as well as the default frame parameters, so new frames start with those fonts too.
 
