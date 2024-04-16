@@ -136,6 +136,8 @@
   };
 
   services = {
+    dbus.packages = [ pkgs.gcr ];
+
     fprintd.enable = true;
 
     greetd = {
