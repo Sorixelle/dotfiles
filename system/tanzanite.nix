@@ -107,7 +107,14 @@
   };
 
   environment = {
+    etc = {
+      "greetd/environments".text = ''
+        Hyprland
+      '';
+    };
+
     sessionVariables = { NIXOS_OZONE_WL = "1"; };
+
     systemPackages = with pkgs; [ sbctl ];
   };
 
@@ -142,6 +149,17 @@
     dconf.enable = true;
 
     hyprland.enable = true;
+
+    regreet = {
+      enable = true;
+      settings = {
+        GTK = {
+          font_name = "${
+              builtins.head config.fonts.fontconfig.defaultFonts.sansSerif
+            } 12";
+        };
+      };
+    };
   };
 
   services = {
@@ -152,10 +170,6 @@
     greetd = {
       enable = true;
       settings = {
-        default_session = {
-          command =
-            "${pkgs.cage}/bin/cage -s -- ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
-        };
         initial_session = {
           command = "${config.programs.hyprland.package}/bin/Hyprland";
           user = "ruby";
