@@ -106,7 +106,10 @@
     uid = 1000;
   };
 
-  environment.systemPackages = with pkgs; [ sbctl ];
+  environment = {
+    sessionVariables = { NIXOS_OZONE_WL = "1"; };
+    systemPackages = with pkgs; [ sbctl ];
+  };
 
   nix.settings = {
     max-jobs = 16;
