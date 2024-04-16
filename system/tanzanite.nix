@@ -34,13 +34,10 @@
 
     loader = {
       efi.canTouchEfiVariables = true;
-      grub = {
+      systemd-boot = {
         enable = true;
-        device = "nodev";
-        efiSupport = true;
-        gfxmodeEfi = "2560x1600";
-        splashImage = null;
-        timeoutStyle = "hidden";
+        memtest86.enable = true;
+        configurationLimit = 25;
       };
     };
 
