@@ -47,6 +47,9 @@
     plymouth = {
       enable = true;
       font = "${pkgs.inter-patched}/share/fonts/truetype/InturVariable.ttf";
+      extraConfig = ''
+        DeviceScale=2
+      '';
     };
   };
 
