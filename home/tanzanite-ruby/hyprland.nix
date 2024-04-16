@@ -40,9 +40,8 @@
       env = XCURSOR_THEME, ${config.gtk.cursorTheme.name}
       env = XCURSOR_SIZE, 24
 
-      bezier = smoothPopIn, 0.22, 0.17, 0, 1
-      animation = windowsIn, 1, 7, smoothPopIn, popin
-      animation = windowsOut, 1, 7, smoothPopIn, popin
+      bezier = quickSnap, 0, 1, 0.7, 1
+      animation = specialWorkspace, 1, 5, quickSnap, slidevert
 
       windowrulev2 = float,class:^(kitty-telnet-handler)$
       windowrulev2 = size 1155 632,class:^(kitty-telnet-handler)$
@@ -110,6 +109,14 @@
       bind = SUPER SHIFT, 8, movetoworkspace, 8
       bind = SUPER SHIFT, 9, movetoworkspace, 9
       bind = SUPER SHIFT, 0, movetoworkspace, 10
+
+      # Special popup terminal workspace
+      bind = SUPER, grave, togglespecialworkspace, terminal
+      windowrulev2 = workspace special:terminal, class:^(kitty-special-terminal)$
+      windowrulev2 = float, class:^(kitty-special-terminal)$
+      windowrulev2 = size 75% 60%, class:^(kitty-special-terminal)$
+      windowrulev2 = center, class:^(kitty-special-terminal)$
+      workspace = special:terminal, on-created-empty:${pkgs.kitty}/bin/kitty --class=kitty-special-terminal
 
       # Change window state
       bind = SUPER, T, togglefloating, active
