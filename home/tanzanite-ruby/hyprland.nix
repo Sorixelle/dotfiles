@@ -5,16 +5,18 @@
     enable = true;
 
     extraConfig = ''
+      monitor = eDP-1, 2560x1600@165, 0x0, 1.25
+
       general {
         border_size = 0
-        gaps_in = 16
-        gaps_out = 32
+        gaps_in = 4
+        gaps_out = 8
         cursor_inactive_timeout = 5
       }
 
       decoration {
-        rounding = 16
-        shadow_range = 4
+        rounding = 8
+        shadow_range = 8
         shadow_render_power = 1
         shadow_offset = 2 2
         col.shadow = 0x70000000
@@ -25,6 +27,10 @@
       input {
         repeat_delay = 500
         follow_mouse = 1
+
+        touchpad {
+          scroll_factor = 0.8
+        }
       }
 
       misc {
