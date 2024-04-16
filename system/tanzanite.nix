@@ -181,6 +181,12 @@
 
     pcscd.enable = true;
 
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      pulse.enable = true;
+    };
+
     power-profiles-daemon.enable = true;
   };
 
