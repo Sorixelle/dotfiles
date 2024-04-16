@@ -52,11 +52,11 @@
       package = arc-icon-theme;
     };
     theme = {
-      name = "Catppuccin-Macchiato-Standard-Teal-Dark";
+      name = "Catppuccin-Frappe-Standard-Mauve-Dark";
       package = pkgs.catppuccin-gtk.override {
-        variant = "macchiato";
+        variant = "frappe";
         tweaks = [ "rimless" ];
-        accents = [ "teal" ];
+        accents = [ "mauve" ];
       };
     };
   };
@@ -125,7 +125,7 @@
       package = pkgs.emacs-pgtk;
       theme = "catppuccin";
       extraConfig = ''
-        (setq catppuccin-flavor 'macchiato)
+        (setq catppuccin-flavor 'frappe)
       '';
     };
 

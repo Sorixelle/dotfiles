@@ -13,10 +13,10 @@
     theme = let
       lit = config.lib.formats.rasi.mkLiteral;
 
-      bg = "#24273a";
-      bg-light = "#363a4f";
-      fg = "#cad3f5";
-      highlight = "#8bd5ca";
+      bg = "#303446";
+      bg-light = "#414559";
+      fg = "#c6d0f5";
+      highlight = "#ca9ee6";
     in {
       window = {
         padding = lit "16px";
