@@ -22,6 +22,12 @@
         col.shadow = 0x70000000
         dim_inactive = true
         dim_strength = 0.2
+
+        blur {
+          size = 2
+          passes = 3
+          noise = 0.05
+        }
       }
 
       input {
