@@ -35,7 +35,7 @@
         follow_mouse = 1
 
         touchpad {
-          scroll_factor = 0.8
+          scroll_factor = 0.25
         }
       }
 
