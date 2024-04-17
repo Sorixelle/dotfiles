@@ -35,20 +35,8 @@
       keep-outputs = true
     '';
 
-    # NIX_PATH entries
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" "nur=${inputs.nur}" ];
-
-    # Expose nixpkgs and this flake in the flake registry
-    registry = {
-      srxl-dotfiles.flake = inputs.self;
-      nixpkgs = {
-        from = {
-          id = "nixpkgs";
-          type = "indirect";
-        };
-        flake = inputs.nixpkgs;
-      };
-    };
+    # Expose this flake in the flake registry
+    registry.srxl-dotfiles.flake = inputs.self;
   };
 
   # Common packages
