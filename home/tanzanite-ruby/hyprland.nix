@@ -30,6 +30,18 @@
         }
       }
 
+      group {
+        groupbar {
+          font_family = Intur
+          font_size = 12
+          height = 24
+          col.active = rgb(626880)
+          col.inactive = rgb(303446)
+          col.locked_active = rgb(51576d)
+          col.locked_inactive = rgb(292c3c)
+        }
+      }
+
       input {
         repeat_delay = 500
         follow_mouse = 1
@@ -91,6 +103,13 @@
       binde = SHIFT, L, resizeactive, 25 0
       bind  = , escape, submap, reset
       submap = reset
+
+      # Grouping windows
+      bind = SUPER, G, togglegroup
+      bind = SUPER SHIFT, G, lockactivegroup, toggle
+      bind = SUPER ALT, G, moveoutofgroup, active
+      binde = SUPER, TAB, changegroupactive
+      binde = SUPER SHIFT, TAB, movegroupwindow
 
       # Switch to workspace
       bind = SUPER, 1, workspace, 1
