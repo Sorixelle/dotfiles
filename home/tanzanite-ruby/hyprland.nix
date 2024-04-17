@@ -112,9 +112,9 @@
       binde = SUPER SHIFT, TAB, movegroupwindow
 
       # Switch to workspace
-      bind = SUPER, 1, workspace, 1
-      bind = SUPER, 2, workspace, 2
-      bind = SUPER, 3, workspace, 3
+      bind = SUPER, 1, workspace, name:Web
+      bind = SUPER, 2, workspace, name:Chat
+      bind = SUPER, 3, workspace, name:Code
       bind = SUPER, 4, workspace, 4
       bind = SUPER, 5, workspace, 5
       bind = SUPER, 6, workspace, 6
@@ -124,9 +124,9 @@
       bind = SUPER, 0, workspace, 10
 
       # Move window to workspace
-      bind = SUPER SHIFT, 1, movetoworkspace, 1
-      bind = SUPER SHIFT, 2, movetoworkspace, 2
-      bind = SUPER SHIFT, 3, movetoworkspace, 3
+      bind = SUPER SHIFT, 1, movetoworkspace, name:Web
+      bind = SUPER SHIFT, 2, movetoworkspace, name:Chat
+      bind = SUPER SHIFT, 3, movetoworkspace, name:Code
       bind = SUPER SHIFT, 4, movetoworkspace, 4
       bind = SUPER SHIFT, 5, movetoworkspace, 5
       bind = SUPER SHIFT, 6, movetoworkspace, 6
@@ -160,8 +160,18 @@
       bindm = SUPER, mouse:272, movewindow
       bindm = SUPER, mouse:273, resizewindow
 
+      # Startup apps and rules
+      windowrulev2 = workspace name:Web,class:^(firefox)$
+      windowrulev2 = workspace name:Chat,class:^(discord)$
+      windowrulev2 = group set,class:^(discord)$
+      windowrulev2 = group set,class:^(Element)$
+      windowrulev2 = workspace name:Code,class:^(emacs)$
+
+      exec-once = firefox
+      exec-once = Discord
+      exec-once = element-desktop
+      exec-once = emacsclient -c
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
-      exec-once = ${pkgs.systemd}/bin/systemctl --user import-environment KRB5CCNAME
     '';
   };
 
