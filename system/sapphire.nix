@@ -131,7 +131,10 @@
     trusted-users = [ "ruby" ];
   };
 
-  environment.systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
+  environment = {
+    sessionVariables = { NIXOS_OZONE_WL = "1"; };
+    systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
+  };
 
   fonts = {
     enableDefaultPackages = true;

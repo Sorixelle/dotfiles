@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   wayland.windowManager.hyprland = {
@@ -23,6 +23,24 @@
         col.shadow = 0x70000000
         dim_inactive = true
         dim_strength = 0.2
+
+        blur {
+          size = 2
+          passes = 3
+          noise = 0.05
+        }
+      }
+
+      group {
+        groupbar {
+          font_family = Intur
+          font_size = 12
+          height = 24
+          col.active = rgb(5b6078)
+          col.inactive = rgb(24273a)
+          col.locked_active = rgb(1e2030)
+          col.locked_inactive = rgb(494d64)
+        }
       }
 
       input {
@@ -34,27 +52,67 @@
         vrr = 2
       }
 
-      bezier = smoothPopIn, 0.22, 0.17, 0, 1
-      animation = windowsIn, 1, 7, smoothPopIn, popin
-      animation = windowsOut, 1, 7, smoothPopIn, popin
+      dwindle {
+        preserve_split = true;
+      }
+
+      env = XCURSOR_THEME, ${config.gtk.cursorTheme.name}
+      env = XCURSOR_SIZE, 24
+
+      bezier = quickSnap, 0, 1, 0.7, 1
+      animation = specialWorkspace, 1, 5, quickSnap, slidevert
 
       windowrulev2 = float,class:^(kitty-telnet-handler)$
       windowrulev2 = size 1155 632,class:^(kitty-telnet-handler)$
       windowrulev2 = tile,class:(winbox64\.exe)$
 
+      # Quitting things
       bind = SUPER, Q, killactive,
       bind = SUPER SHIFT, Q, exit,
 
+      # Focus windows
       bind = SUPER, H, movefocus, l
       bind = SUPER, J, movefocus, d
       bind = SUPER, K, movefocus, u
       bind = SUPER, L, movefocus, r
 
+      # Swapping windows
       bind = SUPER SHIFT, H, swapwindow, l
       bind = SUPER SHIFT, J, swapwindow, d
       bind = SUPER SHIFT, K, swapwindow, u
       bind = SUPER SHIFT, L, swapwindow, r
 
+      # Preselect direction for next window
+      bind = SUPER ALT, H, layoutmsg, preselect l
+      bind = SUPER ALT, J, layoutmsg, preselect d
+      bind = SUPER ALT, K, layoutmsg, preselect u
+      bind = SUPER ALT, L, layoutmsg, preselect r
+
+      # Rotate window split
+      bind = SUPER, R, layoutmsg, togglesplit
+
+      # Resizing and moving windows
+      bind = SUPER, M, submap, windowmanip
+      submap = windowmanip
+      binde = , H, moveactive, -25 0
+      binde = , J, moveactive, 0 25
+      binde = , K, moveactive, 0 -25
+      binde = , L, moveactive, 25 0
+      binde = SHIFT, H, resizeactive, -25 0
+      binde = SHIFT, J, resizeactive, 0 25
+      binde = SHIFT, K, resizeactive, 0 -25
+      binde = SHIFT, L, resizeactive, 25 0
+      bind  = , escape, submap, reset
+      submap = reset
+
+      # Grouping windows
+      bind = SUPER, G, togglegroup
+      bind = SUPER SHIFT, G, lockactivegroup, toggle
+      bind = SUPER ALT, G, moveoutofgroup, active
+      binde = SUPER, TAB, changegroupactive
+      binde = SUPER SHIFT, TAB, movegroupwindow
+
+      # Switch to workspace
       bind = SUPER, 1, workspace, 1
       bind = SUPER, 2, workspace, 2
       bind = SUPER, 3, workspace, 3
@@ -66,6 +124,7 @@
       bind = SUPER, 9, workspace, 9
       bind = SUPER, 0, workspace, 10
 
+      # Move window to workspace
       bind = SUPER SHIFT, 1, movetoworkspace, 1
       bind = SUPER SHIFT, 2, movetoworkspace, 2
       bind = SUPER SHIFT, 3, movetoworkspace, 3
@@ -77,22 +136,40 @@
       bind = SUPER SHIFT, 9, movetoworkspace, 9
       bind = SUPER SHIFT, 0, movetoworkspace, 10
 
+      # Special popup terminal workspace
+      bind = SUPER, grave, togglespecialworkspace, terminal
+      windowrulev2 = workspace special:terminal, class:^(kitty-special-terminal)$
+      windowrulev2 = float, class:^(kitty-special-terminal)$
+      windowrulev2 = size 75% 60%, class:^(kitty-special-terminal)$
+      windowrulev2 = center, class:^(kitty-special-terminal)$
+      workspace = special:terminal, on-created-empty:${pkgs.kitty}/bin/kitty --class=kitty-special-terminal
+
+      # Change window state
       bind = SUPER, T, togglefloating, active
       bind = SUPER, F, fullscreen, 0
 
+      # Launch apps
       bind = SUPER, E, exec, ${pkgs.kitty}/bin/kitty ${pkgs.ranger}/bin/ranger
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty
       bind = SUPER, space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun
 
+      # Screenshot
       bind = SUPER, S, exec, ${pkgs.scr}/bin/scr -Mode Active -Clipboard
       bind = SUPER SHIFT, S, exec, ${pkgs.scr}/bin/scr -Mode Selection -Clipboard
       bind = SUPER ALT, S, exec, ${pkgs.scr}/bin/scr -Mode Screen -Clipboard
 
+      # Move and resize windows with the mouse
       bindm = SUPER, mouse:272, movewindow
       bindm = SUPER, mouse:273, resizewindow
 
+      # App rules
+      windowrulev2 = workspace name:Web,class:^(firefox)$
+      windowrulev2 = workspace name:Chat,class:^(discord)$
+      windowrulev2 = group set,class:^(discord)$
+      windowrulev2 = group set,class:^(Element)$
+      windowrulev2 = workspace name:Code,class:^(emacs)$
+
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
-      exec-once = ${pkgs.systemd}/bin/systemctl --user import-environment KRB5CCNAME
     '';
   };
 

@@ -88,6 +88,10 @@
 
   gtk = with pkgs; {
     enable = true;
+    cursorTheme = {
+      name = "Catppuccin-Macchiato-Teal-Cursors";
+      package = pkgs.catppuccin-cursors.macchiatoTeal;
+    };
     iconTheme = {
       name = "Arc";
       package = arc-icon-theme;
