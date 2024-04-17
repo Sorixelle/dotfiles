@@ -9,8 +9,8 @@
 
       general {
         border_size = 0
-        gaps_in = 4
-        gaps_out = 8
+        gaps_in = 16
+        gaps_out = 32
         cursor_inactive_timeout = 5
       }
 
