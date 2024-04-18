@@ -7,6 +7,7 @@
     ./firefox.nix
     ./fish.nix
     ./hyprland.nix
+    ./hyprlock.nix
     ./kitty.nix
     ./rofi.nix
     ./starship.nix

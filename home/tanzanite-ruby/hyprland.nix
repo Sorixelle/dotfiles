@@ -147,6 +147,9 @@
       bind = SUPER, T, togglefloating, active
       bind = SUPER, F, fullscreen, 0
 
+      # Lock screen
+      bind = SUPER, Escape, exec, ${pkgs.hyprlock}/bin/hyprlock
+
       # Launch apps
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty
       bind = SUPER, space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun

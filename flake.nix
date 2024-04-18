@@ -31,6 +31,10 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprlock = {
+      url = "github:hyprwm/hyprlock";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     shadower = {
       url = "github:n3oney/shadower";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -90,6 +94,7 @@
           inputs.emacs.overlay
           inputs.eww.overlays.default
           inputs.hyprland.overlays.default
+          inputs.hyprlock.overlays.default
           inputs.hyprland-contrib.overlays.default
           inputs.nixmox.overlay
           inputs.nur.overlay
