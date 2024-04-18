@@ -188,6 +188,11 @@
     };
 
     power-profiles-daemon.enable = true;
+
+    tailscale = {
+      enable = true;
+      openFirewall = true;
+    };
   };
 
   sound.enable = true;
