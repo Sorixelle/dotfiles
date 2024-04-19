@@ -148,7 +148,7 @@
       bind = SUPER, F, fullscreen, 0
 
       # Lock screen
-      bind = SUPER, Escape, exec, ${pkgs.hyprlock}/bin/hyprlock
+      bind = SUPER, Escape, exec, ${config.programs.hyprlock.package}/bin/hyprlock
 
       # Launch apps
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty

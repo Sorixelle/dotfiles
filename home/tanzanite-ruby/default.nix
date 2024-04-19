@@ -7,8 +7,8 @@
     ./firefox.nix
     ./fish.nix
     ./hyprland.nix
-    ./hyprlock.nix
     ./kitty.nix
+    ./locking.nix
     ./rofi.nix
     ./starship.nix
     ./xdg.nix

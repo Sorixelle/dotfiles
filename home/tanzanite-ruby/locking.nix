@@ -1,4 +1,4 @@
-{ ... }:
+{ config, pkgs, ... }:
 
 {
   programs.hyprlock = {
@@ -61,4 +61,30 @@
       }
     ];
   };
+
+  services.hypridle = let
+    hyprland = config.wayland.windowManager.hyprland.package;
+    hyprlock = config.programs.hyprlock.package;
+  in {
+    enable = true;
+    lockCmd = "${pkgs.procps}/bin/pidof hyprlock || ${hyprlock}/bin/hyprlock";
+    afterSleepCmd = "${hyprland}/bin/hyprctl dispatch dpms on";
+
+    listeners = [
+      {
+        timeout = 300;
+        onTimeout = "loginctl lock-session";
+      }
+      {
+        timeout = 330;
+        onTimeout = "${hyprland}/bin/hyprctl dispatch dpms off";
+        onResume = "${hyprland}/bin/hyprctl dispatch dpms on";
+      }
+      {
+        timeout = 600;
+        onTimeout = "systemctl suspend";
+      }
+    ];
+  };
+
 }

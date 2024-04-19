@@ -23,6 +23,10 @@
       url = "github:musnix/musnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hypridle = {
+      url = "github:hyprwm/hypridle";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland = {
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -93,6 +97,7 @@
         overlays = [
           inputs.emacs.overlay
           inputs.eww.overlays.default
+          inputs.hypridle.overlays.default
           inputs.hyprland.overlays.default
           inputs.hyprlock.overlays.default
           inputs.hyprland-contrib.overlays.default
