@@ -119,7 +119,7 @@
       enable = true;
       provider = "geoclue2";
       temperature = {
-        day = 5500;
+        day = 6500;
         night = 2500;
       };
     };
