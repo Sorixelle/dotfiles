@@ -150,6 +150,10 @@
       # Lock screen
       bind = SUPER, Escape, exec, ${config.programs.hyprlock.package}/bin/hyprlock
 
+      # Disable display on lid close
+      bindl = ,switch:on:Lid Switch, exec, hyprctl keyword monitor "eDP-1, disable"
+      bindl = ,switch:off:Lid Switch, exec, hyprctl keyword monitor "eDP-1, 2560x1600@165, 0x0, 1.25"
+
       # Launch apps
       bind = SUPER, return, exec, ${pkgs.kitty}/bin/kitty
       bind = SUPER, space, exec, ${pkgs.rofi-wayland}/bin/rofi -show drun
