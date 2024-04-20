@@ -197,6 +197,26 @@
 
     power-profiles-daemon.enable = true;
 
+    sanoid = {
+      enable = true;
+      datasets."Tanzanite/Ruby/Home" = {
+        autosnap = true;
+        autoprune = true;
+        hourly = 48;
+        daily = 14;
+        monthly = 12;
+        yearly = 3;
+      };
+    };
+
+    syncoid = {
+      enable = true;
+      sshKey = "/etc/backup_key";
+      commonArgs = [ "--no-privilege-elevation" ];
+      commands."Tanzanite/Ruby/Home".target =
+        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Tanzanite/Ruby/Home";
+    };
+
     tailscale = {
       enable = true;
       openFirewall = true;
