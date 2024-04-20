@@ -18,6 +18,9 @@
 
   # Configure Nix
   nix = {
+    # Disable channels
+    channel.enable = false;
+
     # Use a flakes-enabled version of Nix
     package = pkgs.nixUnstable;
 
