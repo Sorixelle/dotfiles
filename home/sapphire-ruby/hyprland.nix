@@ -38,8 +38,8 @@
           height = 24
           col.active = rgb(5b6078)
           col.inactive = rgb(24273a)
-          col.locked_active = rgb(1e2030)
-          col.locked_inactive = rgb(494d64)
+          col.locked_active = rgb(494d64)
+          col.locked_inactive = rgb(1e2030)
         }
       }
 
