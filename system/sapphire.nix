@@ -127,7 +127,7 @@
   };
 
   nix.settings = {
-    max-jobs = 24;
+    max-jobs = 20;
     trusted-users = [ "ruby" ];
   };
 
