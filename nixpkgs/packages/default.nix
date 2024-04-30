@@ -12,9 +12,6 @@ in {
 
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
 
-  cifs-utils = prev.cifs-utils.overrideAttrs
-    (old: { buildInputs = old.buildInputs ++ [ prev.samba ]; });
-
   ctrtool = prev.ctrtool.overrideAttrs (_: rec {
     version = "1.2.0";
 
