@@ -248,6 +248,14 @@
       };
     };
 
+    syncoid = {
+      enable = true;
+      sshKey = "/etc/backup_key";
+      commonArgs = [ "--no-privilege-elevation" ];
+      commands."Sapphire/Ruby/Home".target =
+        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
+    };
+
     srxl.qmk.enable = true;
 
     tailscale.enable = true;
