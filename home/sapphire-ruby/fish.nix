@@ -11,7 +11,7 @@
           if [ -n "$pnpx_command" ]
             $pnpx_command $argv
           else
-            nix-shell -p nodePackages.pnpm --run "pnpx $argv"
+            nix shell nixpkgs#nodePackages.pnpm --command pnpx $argv
           end
         '';
       };
@@ -23,13 +23,13 @@
           if [ -n "$pnpm_command" ]
             $pnpm_command create $argv
           else
-            nix-shell -p nodePackages.pnpm --run "pnpm create $argv"
+            nix run nixpkgs#nodePackages.pnpm create $argv
           end
         '';
       };
     };
 
-    shellAliases = {
+    shellAbbrs = {
       l = "eza --icons -bhl";
       la = "eza --icons -bhla";
       lt = "eza --icons -bhlT";
@@ -37,6 +37,20 @@
       vim = "nvim";
 
       bbsys = "${pkgs.cp437}/bin/cp437 telnet bigbeautifulsystem.ddns.net 2323";
+
+      rebuild = "sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
+      search = "nix search nixpkgs";
+      upgrade =
+        "nix flake update --flake ~/nixos && sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      shell = {
+        expansion = "nix shell nixpkgs#%";
+        setCursor = true;
+      };
+      run = {
+        expansion = "nix run nixpkgs#%";
+        setCursor = true;
+      };
     };
 
     plugins = [
