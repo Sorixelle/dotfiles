@@ -48,6 +48,11 @@
         follow_mouse = 1
       }
 
+      device {
+        name = wacom-intuos-bt-s-pen
+        output = DP-1
+      }
+
       misc {
         vrr = 2
       }
