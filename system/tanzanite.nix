@@ -92,6 +92,8 @@
 
     enableRedistributableFirmware = true;
 
+    keyboard.qmk.enable = true;
+
     logitech.wireless.enable = true;
 
     opengl.enable = true;
@@ -221,6 +223,11 @@
       enable = true;
       openFirewall = true;
     };
+
+    udev.extraRules = ''
+      # Serial to USB converter for Fluorite
+      SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="wheel", MODE="0660"
+    '';
   };
 
   sound.enable = true;
