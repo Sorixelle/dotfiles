@@ -2,7 +2,7 @@
   description = "My NixOS configuration for all of my systems.";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:auxolotl/nixpkgs/nixos-unstable";
 
     emacs = {
       url = "github:nix-community/emacs-overlay";
@@ -181,7 +181,7 @@
           nativeBuildInputs = [
             nil
             nixfmt-classic
-            (nixos-generators.override { nix = nixUnstable; })
+            (nixos-generators.override { nix = nixVersions.latest; })
           ];
 
           shellHook = ''
