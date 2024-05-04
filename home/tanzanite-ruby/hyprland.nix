@@ -167,6 +167,20 @@
       bindm = SUPER, mouse:272, movewindow
       bindm = SUPER, mouse:273, resizewindow
 
+      # Volume control
+      binde = , XF86AudioLowerVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_SINK@ 3%-
+      binde = , XF86AudioRaiseVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_SINK@ 3%+
+      binde = , XF86AudioMute, exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_SINK@ toggle
+
+      # Media control
+      bind = , XF86AudioPrev, exec, ${pkgs.playerctl}/bin/playerctl previous
+      bind = , XF86AudioNext, exec, ${pkgs.playerctl}/bin/playerctl next
+      bind = , XF86AudioPlay, exec, ${pkgs.playerctl}/bin/playerctl play-pause
+
+      # Brightness control
+      binde = , XF86MonBrightnessUp, exec, ${pkgs.brightnessctl}/bin/brightnessctl s 5%+
+      binde = , XF86MonBrightnessDown, exec, ${pkgs.brightnessctl}/bin/brightnessctl s 5%-
+
       # Startup apps and rules
       windowrulev2 = workspace name:Web,class:^(firefox)$
       windowrulev2 = workspace name:Chat,class:^(discord)$
