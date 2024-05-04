@@ -4,6 +4,7 @@
   imports = [
     ../modules/common-linux.nix
 
+    ./email.nix
     ./firefox.nix
     ./fish.nix
     ./hyprland.nix
