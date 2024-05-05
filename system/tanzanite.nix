@@ -173,6 +173,8 @@
   };
 
   services = {
+    blueman.enable = true;
+
     dbus.packages = [ pkgs.gcr ];
 
     fprintd.enable = true;

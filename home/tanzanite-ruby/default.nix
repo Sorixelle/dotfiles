@@ -125,12 +125,14 @@
       };
     };
 
-    udiskie.enable = true;
-
     gpg-agent = {
       enable = true;
       pinentryPackage = pkgs.pinentry-gnome3;
     };
+
+    mpris-proxy.enable = true;
+
+    udiskie.enable = true;
   };
 
   srxl = {
