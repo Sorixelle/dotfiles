@@ -21,9 +21,6 @@
     # Disable channels
     channel.enable = false;
 
-    # Use a flakes-enabled version of Nix
-    package = pkgs.nixVersions.latest;
-
     # Run automatic garbage collection at 4pm every Sunday
     gc = {
       automatic = true;

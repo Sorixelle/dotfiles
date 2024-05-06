@@ -3,6 +3,16 @@
 
   inputs = {
     nixpkgs.url = "github:auxolotl/nixpkgs/nixos-unstable";
+    lix = {
+      url =
+        "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
+      flake = false;
+    };
+    lix-module = {
+      url = "git+https://git.lix.systems/lix-project/nixos-module";
+      inputs.lix.follows = "lix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     emacs = {
       url = "github:nix-community/emacs-overlay";
@@ -124,6 +134,7 @@
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
           inputs.hyprland.nixosModules.default
+          inputs.lix-module.nixosModules.default
           inputs.musnix.nixosModules.default
 
           (import ./system/common.nix)
