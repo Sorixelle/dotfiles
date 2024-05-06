@@ -197,6 +197,8 @@
 
     dbus.packages = [ pkgs.gcr ];
 
+    displayManager.autoLogin.user = "ruby";
+
     geoclue2.enable = true;
 
     gnome = {
@@ -269,8 +271,6 @@
 
     xserver = {
       enable = true;
-
-      displayManager.autoLogin.user = "ruby";
 
       videoDrivers = [ "amdgpu" "qxl" ];
 
