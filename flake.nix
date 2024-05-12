@@ -2,7 +2,7 @@
   description = "My NixOS configuration for all of my systems.";
 
   inputs = {
-    nixpkgs.url = "github:auxolotl/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     lix = {
       url =
         "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
