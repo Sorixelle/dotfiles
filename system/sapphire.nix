@@ -126,10 +126,7 @@
     };
   };
 
-  nix.settings = {
-    max-jobs = 20;
-    trusted-users = [ "ruby" ];
-  };
+  nix.settings.trusted-users = [ "ruby" ];
 
   environment = {
     sessionVariables = { NIXOS_OZONE_WL = "1"; };

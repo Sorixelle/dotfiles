@@ -120,10 +120,7 @@
     systemPackages = with pkgs; [ sbctl ];
   };
 
-  nix.settings = {
-    max-jobs = 16;
-    trusted-users = [ "ruby" ];
-  };
+  nix.settings.trusted-users = [ "ruby" ];
 
   fonts = {
     enableDefaultPackages = true;

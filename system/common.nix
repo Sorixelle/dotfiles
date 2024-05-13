@@ -35,6 +35,9 @@
       keep-outputs = true
     '';
 
+    # Build up to 4 derivations in parallel
+    settings.max-jobs = 4;
+
     # Expose this flake in the flake registry
     registry.srxl-dotfiles.flake = inputs.self;
   };
