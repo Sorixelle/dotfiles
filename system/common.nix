@@ -35,8 +35,13 @@
       keep-outputs = true
     '';
 
-    # Build up to 4 derivations in parallel
-    settings.max-jobs = 4;
+    settings = {
+      # Build up to 4 derivations in parallel
+      max-jobs = 4;
+
+      # https://github.com/NixOS/nix/issues/9574
+      nix-path = lib.mkForce "nixpkgs=flake:nixpkgs";
+    };
 
     # Expose this flake in the flake registry
     registry.srxl-dotfiles.flake = inputs.self;
