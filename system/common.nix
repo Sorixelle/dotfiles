@@ -84,9 +84,7 @@
     useGlobalPkgs = true;
     # Add some home-manager modules from flakes to all users
     sharedModules = [
-      inputs.hypridle.homeManagerModules.default
       inputs.hyprland.homeManagerModules.default
-      inputs.hyprlock.homeManagerModules.default
       inputs.wired-notify.homeManagerModules.default
     ];
   };
