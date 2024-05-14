@@ -28,6 +28,9 @@
         "application/json" = [ "emacsclient.desktop" ];
         "application/pdf" = [ "org.pwmt.zathura.desktop" ];
         "application/vnd.microsoft.portable-executable" = [ "wine.desktop" ];
+        "application/vnd.oasis.opendocument.text" = [ "writer.desktop" ];
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" =
+          [ "writer.desktop" ];
         "application/x-xz" = [ "org.gnome.FileRoller.desktop" ];
         "application/zip" = [ "org.gnome.FileRoller.desktop" ];
 
