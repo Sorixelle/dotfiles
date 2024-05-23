@@ -55,6 +55,10 @@
         preserve_split = true;
       }
 
+      xwayland {
+        force_zero_scaling = true;
+      }
+
       env = XCURSOR_THEME, ${config.gtk.cursorTheme.name}
       env = XCURSOR_SIZE, 24
 
