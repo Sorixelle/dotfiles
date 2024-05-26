@@ -11,7 +11,6 @@
         border_size = 0
         gaps_in = 16
         gaps_out = 32
-        cursor_inactive_timeout = 5
       }
 
       decoration {
@@ -57,6 +56,10 @@
 
       xwayland {
         force_zero_scaling = true;
+      }
+
+      cursor {
+        inactive_timeout = 5
       }
 
       env = XCURSOR_THEME, ${config.gtk.cursorTheme.name}
