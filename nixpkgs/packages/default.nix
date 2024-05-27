@@ -69,4 +69,9 @@ in {
       tree-sitter-astro = prev.callPackage ./tree-sitter-astro.nix { };
     };
   };
+
+  wineasio = prev.wineasio.overrideAttrs (old: {
+    nativeBuildInputs = [ prev.pkg-config prev.wineWowPackages.staging ];
+    makeFlags = [ "PREFIX=${prev.wineWowPackages.staging}" ];
+  });
 }

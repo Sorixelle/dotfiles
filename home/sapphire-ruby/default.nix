@@ -75,6 +75,7 @@
     virt-manager
     vlc
     winbox
+    wineasio
     wineWowPackages.staging
     winetricks
     wireshark
