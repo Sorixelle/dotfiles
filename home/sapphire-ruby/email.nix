@@ -55,6 +55,7 @@
     extraConfig = let smtp = config.accounts.email.accounts.ruby-srxl.smtp;
     in ''
       (setq mu4e-maildir-shortcuts '((:maildir "/Inbox" :key ?i :name "Inbox")
+                                     (:maildir "/auxolotl" :key ?a :name "Auxolotl")
                                      (:maildir "/info-gnu-emacs" :key ?e :name "Emacs Info")
                                      (:maildir "/qubes-announce" :key ?q :name "Qubes Info")
                                      (:maildir "/Receipts" :key ?r :name "Receipts" :hide t)))
