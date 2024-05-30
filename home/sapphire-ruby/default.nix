@@ -71,6 +71,7 @@
     steam
     steam-run
     spek
+    tinfoil-nut
     trash-cli
     virt-manager
     vlc

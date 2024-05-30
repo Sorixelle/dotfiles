@@ -64,6 +64,8 @@ in {
 
   scr = prev.callPackage ./scr.nix { };
 
+  tinfoil-nut = prev.callPackage ./tinfoil-nut.nix { };
+
   tree-sitter = prev.tree-sitter.override {
     extraGrammars = {
       tree-sitter-astro = prev.callPackage ./tree-sitter-astro.nix { };
