@@ -21,14 +21,10 @@ in with lib; {
       description = "The name of the Emacs theme to use.";
     };
 
-    mu4e = {
-      enable = mkEnableOption "the mu4e email client.";
-
-      address = mkOption {
-        type = str;
-        default = "";
-        description = "The email to use in Emacs.";
-      };
+    emailAddress = mkOption {
+      type = str;
+      default = "";
+      description = "The email to use in Emacs.";
     };
 
     extraConfig = mkOption {
@@ -42,7 +38,7 @@ in with lib; {
     emacsPkgs = pkgs.emacsPackagesFor conf.package;
     emacsPackage = emacsPkgs.emacsWithPackages (e:
       [ e.org-roam e.treesit-grammars.with-all-grammars e.vterm ]
-      ++ (lib.optional conf.mu4e.enable e.mu4e));
+      ++ (lib.optional config.srxl.email.enable e.mu4e));
 
     tangledConfig = pkgs.stdenv.mkDerivation {
       name = "hm-emacs-tangled-config";
@@ -112,8 +108,8 @@ in with lib; {
            srxl/theme-name '${conf.theme}
            srxl/project-dir "~/devel/"
            srxl/shell-executable "${shell}"
-           srxl/use-mu4e ${toBool conf.mu4e.enable}
-           srxl/email "${conf.mu4e.address}"
+           srxl/use-mu4e ${toBool config.srxl.email.enable}
+           srxl/email "${conf.emailAddress}"
            srxl/roam-dir "~/notes/")
 
           ${conf.extraConfig}

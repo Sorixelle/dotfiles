@@ -5,7 +5,6 @@
     ../modules/common-linux.nix
 
     ./dunst.nix
-    ./email.nix
     ./firefox.nix
     ./fish.nix
     ./hyprland.nix
@@ -195,6 +194,33 @@
       extraConfig = ''
         (setq catppuccin-flavor 'macchiato)
       '';
+    };
+
+    email = {
+      enable = true;
+      watchFolders = [ "auxolotl" "qubes-announce" ];
+      mu4eShortcuts = [
+        {
+          name = "Auxolotl";
+          folder = "/auxolotl";
+          key = "a";
+        }
+        {
+          name = "Emacs Announcements";
+          folder = "/info-gnu-emacs";
+          key = "e";
+        }
+        {
+          name = "mu4e Mailing List";
+          folder = "/mu-discuss";
+          key = "m";
+        }
+        {
+          name = "Qubes Announcements";
+          folder = "/qubes-announce";
+          key = "q";
+        }
+      ];
     };
 
     fonts = let

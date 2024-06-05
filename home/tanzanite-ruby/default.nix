@@ -4,7 +4,6 @@
   imports = [
     ../modules/common-linux.nix
 
-    ./email.nix
     ./firefox.nix
     ./fish.nix
     ./hyprland.nix
@@ -144,6 +143,16 @@
       extraConfig = ''
         (setq catppuccin-flavor 'frappe)
       '';
+    };
+
+    email = {
+      enable = true;
+      watchFolders = [ "auxolotl" ];
+      mu4eShortcuts = [{
+        name = "Auxolotl";
+        folder = "/auxolotl";
+        key = "a";
+      }];
     };
 
     fonts = let
