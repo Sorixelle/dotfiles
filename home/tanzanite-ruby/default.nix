@@ -18,8 +18,8 @@
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
     betterdiscordctl
     bitwarden
+    cinny-desktop
     discord
-    element-desktop
     ffmpeg-full
     gimp
     gnome.file-roller

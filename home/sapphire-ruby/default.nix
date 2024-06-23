@@ -25,11 +25,11 @@
     bless
     cachix
     calibre
+    cinny-desktop
     ctrtool
     cutentr
     darktable
     discord
-    element-desktop
     fbi-servefiles
     ffmpeg-full
     gimp
