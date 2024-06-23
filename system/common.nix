@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./modules/315574-workaround.nix
     # ./modules/audioprod.nix
     ./modules/cifs-utils.nix
     ./modules/keyutils.nix
