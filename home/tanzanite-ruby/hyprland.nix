@@ -191,13 +191,14 @@
       # Startup apps and rules
       windowrulev2 = workspace name:Web,class:^(firefox)$
       windowrulev2 = workspace name:Chat,class:^(discord)$
+      windowrulev2 = workspace name:Chat,class:^(cinny)$
       windowrulev2 = group set,class:^(discord)$
-      windowrulev2 = group set,class:^(Element)$
+      windowrulev2 = group set,class:^(cinny)$
       windowrulev2 = workspace name:Code,class:^(emacs)$
 
       exec-once = firefox
       exec-once = Discord
-      exec-once = element-desktop
+      exec-once = cinny
       exec-once = emacsclient -c
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
     '';

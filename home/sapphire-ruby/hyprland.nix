@@ -173,8 +173,9 @@
       # App rules
       windowrulev2 = workspace 1,class:^(firefox)$
       windowrulev2 = workspace 2,class:^(discord)$
+      windowrulev2 = workspace 2,class:^(cinny)$
       windowrulev2 = group set,class:^(discord)$
-      windowrulev2 = group set,class:^(Element)$
+      windowrulev2 = group set,class:^(cinny)$
       windowrulev2 = workspace 3,class:^(emacs)$
 
       exec-once = ${pkgs.wpaperd}/bin/wpaperd
