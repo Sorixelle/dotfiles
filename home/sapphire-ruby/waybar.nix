@@ -16,17 +16,18 @@
         name = "topbar";
         modules-left = [ "hyprland/window" ];
         modules-center = [ "hyprland/workspaces" ];
-        modules-right = [ "cava" "mpris" "custom/mediaedge" "clock" ];
+        modules-right = [ "mpris" "custom/mediaedge" "clock" ];
 
-        "cava" = {
-          framerate = 170;
-          bars = 12;
-          method = "pipewire";
-          stereo = false;
-          monstercat = true;
-          bar_delimiter = 0;
-          format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
-        };
+        # TODO: why did this break?
+        # "cava" = {
+        #   framerate = 170;
+        #   bars = 12;
+        #   method = "pipewire";
+        #   stereo = false;
+        #   monstercat = true;
+        #   bar_delimiter = 0;
+        #   format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+        # };
 
         "clock" = {
           interval = 1;
@@ -99,6 +100,10 @@
       #mpris {
         padding-left: 8px;
         background-color: #24273a;
+
+        /* TODO: remove when cava fixed */
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
       }
 
       #cava {

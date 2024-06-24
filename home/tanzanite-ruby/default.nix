@@ -49,7 +49,7 @@
   gtk = with pkgs; {
     enable = true;
     cursorTheme = {
-      name = "Catppuccin-Frappe-Mauve-Cursors";
+      name = "catppuccin-frappe-mauve-cursors";
       package = pkgs.catppuccin-cursors.frappeMauve;
     };
     iconTheme = {
@@ -57,7 +57,7 @@
       package = arc-icon-theme;
     };
     theme = {
-      name = "Catppuccin-Frappe-Standard-Mauve-Dark";
+      name = "catppuccin-frappe-mauve-standard+rimless";
       package = pkgs.catppuccin-gtk.override {
         variant = "frappe";
         tweaks = [ "rimless" ];

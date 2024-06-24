@@ -92,11 +92,11 @@
 
     enableRedistributableFirmware = true;
 
+    graphics.enable = true;
+
     keyboard.qmk.enable = true;
 
     logitech.wireless.enable = true;
-
-    opengl.enable = true;
 
     sensor.iio.enable = true;
   };

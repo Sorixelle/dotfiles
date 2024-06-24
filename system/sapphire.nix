@@ -107,12 +107,12 @@
 
     enableRedistributableFirmware = true;
 
-    logitech.wireless.enable = true;
-
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
     };
+
+    logitech.wireless.enable = true;
 
     steam-hardware.enable = true;
   };

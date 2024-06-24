@@ -90,7 +90,7 @@
   gtk = with pkgs; {
     enable = true;
     cursorTheme = {
-      name = "Catppuccin-Macchiato-Teal-Cursors";
+      name = "catppuccin-macchiato-teal-cursors";
       package = pkgs.catppuccin-cursors.macchiatoTeal;
     };
     iconTheme = {
@@ -98,7 +98,7 @@
       package = arc-icon-theme;
     };
     theme = {
-      name = "Catppuccin-Macchiato-Standard-Teal-Dark";
+      name = "catppuccin-macchiato-teal-standard+rimless";
       package = pkgs.catppuccin-gtk.override {
         variant = "macchiato";
         tweaks = [ "rimless" ];

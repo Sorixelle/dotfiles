@@ -5,12 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     lix = {
       url =
-        "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
-      flake = false;
-    };
-    lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module";
-      inputs.lix.follows = "lix";
+        "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0-rc1.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -66,10 +61,7 @@
     };
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.3.0";
@@ -105,7 +97,6 @@
           inputs.emacs.overlay
           inputs.eww.overlays.default
           inputs.hypridle.overlays.default
-          inputs.hyprland.overlays.default
           inputs.hyprlock.overlays.default
           inputs.hyprland-contrib.overlays.default
           inputs.nixmox.overlay
@@ -113,6 +104,7 @@
           inputs.rust-overlay.overlays.default
           inputs.shadower.overlay
           inputs.wired-notify.overlays.default
+          inputs.hyprland.overlays.default
           self.overlay
         ];
       };
@@ -131,7 +123,7 @@
           nixpkgs.nixosModules.notDetected
           inputs.home-manager.nixosModules.home-manager
           inputs.hyprland.nixosModules.default
-          inputs.lix-module.nixosModules.default
+          inputs.lix.nixosModules.default
           inputs.musnix.nixosModules.default
 
           (import ./system/common.nix)
