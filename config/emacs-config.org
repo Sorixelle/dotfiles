@@ -1111,6 +1111,21 @@ For some ungodly reason, Elixir's default language server binary is called =lang
   (add-to-list 'eglot-server-programs '(heex-ts-mode "elixir-ls"))
 #+end_src
 
+*** Shell Scripts
+Sometimes you just gotta write 'em. It sucks, but what can you do. There's a couple other shell scripting languages I use sometimes so that I'm at least not dealing with the awfulness of Bash, so I wouldn't mind having syntax highlighting support for them - namely, [[https://fishshell.com/][Fish]] and [[https://learn.microsoft.com/en-us/powershell/][PowerShell]].
+
+#+begin_src emacs-lisp
+  (use-package emacs-fish
+    :mode ("\\.fish\\'" . fish-mode)
+    :interpreter ("fish" . fish-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package powershell
+    :mode ("\\.ps1\\'" . powershell-mode)
+    :interpreter ("pwsh" . powershell-mode))
+#+end_src
+
 *** OpenTofu
 [[https://opentofu.org/][OpenTofu]] is a infrastructure-as-code tool that I use to manage my homelab infra - VMs, cloud resources, that sorta thing. It takes declarations specified in a language called HCL, which stands for... something Configuration Language? Not sure what the H is. Also, the major mode for it is called [[https://github.com/hcl-emacs/terraform-mode][terraform-mode]], which is strange to me. What's "terraform" got to do with it? A mystery for the ages, I guess.
 
