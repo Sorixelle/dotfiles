@@ -18,7 +18,7 @@
     };
     nur.url = "github:nix-community/NUR";
     nixmox = {
-      url = "github:Sorixelle/nixmox";
+      url = "git+https://git.isincredibly.gay/srxl/nixmox";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";

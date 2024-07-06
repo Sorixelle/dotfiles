@@ -12,7 +12,7 @@ of my systems that run NixOS (so, basically all of them).
      install disk. [[https://nixos.org/manual/nixos/stable/index.html#sec-installation-partitioning][Chapter 2.2 of the NixOS manual]] might be able to give you a
      hand with that.
   4. Next, mount your filesystems at =/mnt= and clone the configuration with
-     =git clone https://github.com/Sorixelle/dotfiles /mnt/etc/dotfiles=.
+     =git clone https://git.isincredibly.gay/srxl/dotfiles.git /mnt/etc/dotfiles=.
   5. Finally, kick off the installation with
      =nixos-install --root /mnt --flake /mnt/etc/dotfiles#<hostname>=, where
      =<hostname>= is the name of the system you want to install. Check

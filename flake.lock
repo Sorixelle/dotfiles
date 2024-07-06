@@ -774,15 +774,15 @@
       "locked": {
         "lastModified": 1657119193,
         "narHash": "sha256-kAKKojLeUO8BKzH6ZGGhPc44ShZRd7Kh8ig7ppm11ac=",
-        "owner": "Sorixelle",
-        "repo": "nixmox",
+        "ref": "refs/heads/master",
         "rev": "1e9b569308efbbf61bd4f471803620715eac53cc",
-        "type": "github"
+        "revCount": 33,
+        "type": "git",
+        "url": "https://git.isincredibly.gay/srxl/nixmox"
       },
       "original": {
-        "owner": "Sorixelle",
-        "repo": "nixmox",
-        "type": "github"
+        "type": "git",
+        "url": "https://git.isincredibly.gay/srxl/nixmox"
       }
     },
     "nixpkgs": {
