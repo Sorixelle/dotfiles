@@ -233,6 +233,22 @@
       };
       jack.enable = true;
       pulse.enable = true;
+
+      wireplumber.extraConfig = {
+        # There seems to be a few ms delay between opening audio device -> hearing sound come out, which drops the start
+        # of the sound until the device is "ready". Or something like that. Either way, the delay is long enough to
+        # completely drop things like notification sounds, so I disable the session timeout in Wireplumber so that the
+        # audio interface never gets closed.
+        disable-session-timeout = {
+          "monitor.alsa.rules" = [{
+            matches = [
+              { "node.name" = "~alsa_input.*"; }
+              { "node.name" = "~alsa_output.*"; }
+            ];
+            actions.update-props."session.suspend-timeout-seconds" = 0;
+          }];
+        };
+      };
     };
 
     sanoid = {
