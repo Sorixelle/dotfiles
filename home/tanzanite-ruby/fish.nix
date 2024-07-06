@@ -29,26 +29,25 @@
       };
     };
 
-    shellAliases = {
+    shellAbbrs = {
       l = "eza --icons -bhl";
       la = "eza --icons -bhla";
       lt = "eza --icons -bhlT";
       lat = "eza --icons -bhlaT";
       vim = "nvim";
 
-      bbsys = "${pkgs.cp437}/bin/cp437 telnet bigbeautifulsystem.ddns.net 2323";
+      sys-rebuild = "sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      sys-test = "sudo nixos-rebuild -L --show-trace --flake ~/nixos test";
+      sys-upgrade =
+        "nix flake update --flake ~/nixos && sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
+      nix-search = "nix search nixpkgs";
     };
 
-    plugins = [
-      {
-        name = "fzf";
-        src = pkgs.fishPlugins.fzf.src;
-      }
-      {
-        name = "plugin-git";
-        src = pkgs.fishPlugins.plugin-git.src;
-      }
-    ];
+    plugins = [{
+      name = "plugin-git";
+      src = pkgs.fishPlugins.plugin-git.src;
+    }];
 
     interactiveShellInit = ''
       set -g fish_color_command blue
