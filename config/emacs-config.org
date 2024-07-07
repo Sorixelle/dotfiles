@@ -375,17 +375,16 @@ First of all: colour themes. There's a lot of good colour themes out there. I te
   (use-package catppuccin-theme)
 #+end_src
 
-Cool, now I can load the theme.
+Cool, now I can load the theme. I've noticed that some themes don't quite get loaded correctly if it's set before there's a frame open (looking at you, Catppuccin). To fix that, I'll add it to =server-after-make-frame-hook= to ensure it's only run once a frame exists if Emacs is in daemon mode. That theme shouldn't get loaded multiple times though, so I'll remove it from the hook right after it runs once. And if I'm not in daemon mode - just run it right away, since there's already a frame.
 
 #+begin_src emacs-lisp
-  (load-theme srxl/theme-name t)
-#+end_src
-
-If Catppucin is the selected theme, for some reason that one needs a reload when new Emacs client frames are created, otherwise some of the colours are all wrong. Not really sure why. It's weird.
-
-#+begin_src emacs-lisp
-  (when (eq srxl/theme-name 'catppuccin)
-    (add-hook 'server-after-make-frame-hook #'catppuccin-reload))
+  (defun srxl/load-theme ()
+    "Load theme specified in NixOS config."
+    (load-theme srxl/theme-name t)
+    (remove-hook 'server-after-make-frame-hook #'srxl/load-theme))
+  (add-hook 'server-after-make-frame-hook #'srxl/load-theme)
+  (unless (daemonp)
+    (srxl/load-theme))
 #+end_src
 
 *** Typography
@@ -511,17 +510,28 @@ Finally, I just need to add that function to =org-mode-hook= so it gets run when
 
 Some parts of Org documents should still be displayed with a fixed pitch face, though, like tables and code blocks. So I should make sure those elements still display correctly, no matter what.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref org-config
-  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-checkbox nil :inherit '(bold fixed-pitch))
-  (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-verbatim nil :inherit '(org-quote fixed-pitch))
+#+begin_src emacs-lisp :tangle no :noweb-ref org-pre
+  (defun srxl/setup-org-mode-faces ()
+    "Correctly setup fixed-pitch fallbacks for some Org-mode faces."
+    (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-checkbox nil :inherit '(bold fixed-pitch))
+    (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-verbatim nil :inherit '(org-quote fixed-pitch))
+    (remove-hook 'server-after-make-frame-hook #'srxl/setup-org-mode-faces))
 #+end_src
 
-The =org-indent= face is in a separate package from the main Org one, so it gets it's own =use-package= declaration.
+This needs to be run directly after the code to [[*Colours][set the theme]], since the theme might override these faces. Adding a positive depth should ensure it runs after the hook specified there. Same strategy as before, other than that.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref org-config
+  (add-hook 'server-after-make-frame-hook #'srxl/setup-org-mode-faces 20)
+  (unless (daemonp)
+    (srxl/setup-org-mode-faces))
+#+end_src
+
+The =org-indent= face is in a separate package from the main Org one, so it gets it's own =use-package= declaration. =:defer t= will ensure it gets set only once an Org file is opened for the first time - ie. when a frame already exists.
 
 #+begin_src emacs-lisp
   (use-package org-indent
