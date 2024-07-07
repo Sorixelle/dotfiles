@@ -38,19 +38,12 @@
 
       bbsys = "${pkgs.cp437}/bin/cp437 telnet bigbeautifulsystem.ddns.net 2323";
 
-      rebuild = "sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
-      nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
-      search = "nix search nixpkgs";
-      upgrade =
+      sys-rebuild = "sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      sys-test = "sudo nixos-rebuild -L --show-trace --flake ~/nixos test";
+      sys-upgrade =
         "nix flake update --flake ~/nixos && sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
-      shell = {
-        expansion = "nix shell nixpkgs#%";
-        setCursor = true;
-      };
-      run = {
-        expansion = "nix run nixpkgs#%";
-        setCursor = true;
-      };
+      nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
+      nix-search = "nix search nixpkgs";
     };
 
     plugins = [
