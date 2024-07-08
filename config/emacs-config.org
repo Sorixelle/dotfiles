@@ -535,7 +535,7 @@ The =org-indent= face is in a separate package from the main Org one, so it gets
 
 That should do it for fonts. But, while I'm here - I'm also gonna adjust the sizes of headings a little bit. Just to make the heading level distinctions stand out a bit more.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref org-config
+#+begin_src emacs-lisp :tangle no :noweb-ref post-load-theme
   (set-face-attribute 'org-document-title nil :height 1.5)
   (set-face-attribute 'org-level-1 nil :height 1.5)
   (set-face-attribute 'org-level-2 nil :height 1.25)
