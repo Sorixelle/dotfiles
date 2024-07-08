@@ -464,6 +464,18 @@ I do want to customise a little bit of what we're displaying:
 
 Ahhhh. Now /this/ is home. I love Emacs.
 
+** Spaces for working
+TODO: write some shit lamo
+
+#+begin_src emacs-lisp
+  (tab-bar-mode 1)
+  (srxl/def-leader-key "t" #'tab-switch "Switch tab") ;; maybe replace SPC s?
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref post-load-theme
+  (set-face-attribute 'tab-bar nil :family srxl/font-family-ui)
+#+end_src
+
 * Emacs, my favourite word processor
 #+begin_src emacs-lisp
   <<org-pre>>
@@ -677,12 +689,6 @@ Now, the config for mu4e is very dependent on the system configuration and setup
     <<mu4e-config>>)
 #+end_src
 
-Starting mu4e is as simple as calling the =mu4e= function. I'll chuck that on a leader key definition for easy access.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
-  (srxl/def-leader-key "e" #'mu4e "View emails")
-#+end_src
-
 Alright - setup time.
 
 ** Account setup
@@ -741,6 +747,34 @@ There's a background server that handles the automatic maildir sync, among other
 
 #+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
   (mu4e t)
+#+end_src
+
+TODO: uhh dedicated tab for mu4e. every frame. wait no not every frame that fucks with magit for some reason. why is it triggering server-after-make-frame-hook when its not making a new frame wtf. fine ok on first frame and then keybind can open it if its not there
+
+#+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
+  (defun srxl/init-email-tab ()
+    "Rename the current tab to \"Email\", and open mu4e."
+    (tab-rename "Email")
+    (mu4e)
+    (remove-hook 'server-after-make-frame-hook #'srxl/init-email-tab))
+
+  (add-hook 'server-after-make-frame-hook #'srxl/init-email-tab)
+  (unless (daemonp)
+    (srxl/init-email-tab))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun srxl/view-email ()
+    "Switch to \"Email\" tab.
+
+  If the tab doesn't exist, rename the current tab and open mu4e."
+    (interactive)
+    (let ((tabs ))
+      (if (member "Email" (mapcar (lambda (tab) (alist-get 'name tab)) (tab-bar-tabs)))
+          (tab-switch "Email")
+        (srxl/init-email-tab))))
+
+  (srxl/def-leader-key "e" #'srxl/view-email "View emails")
 #+end_src
 
 * Emacs, my favourite IDE
@@ -904,10 +938,8 @@ I don't know about you, but when I edit code, I do it in the context of projects
 By default, all of those commands are bound under =C-x p=, which is a touch awkward. Good thing I defined [[*Making keyboard buttons do things][that leader key thingy]] earlier - I can make some much more convenient bindings with that.
 
 #+begin_src emacs-lisp
-  (srxl/def-leader-key "s" #'project-switch-project "Open project")
   (srxl/def-leader-key "b" #'project-switch-to-buffer "Switch buffer")
   (srxl/def-leader-key "f" #'project-find-file "Open file in project")
-  (srxl/def-leader-key "x" #'project-kill-buffers "Close project")
 #+end_src
 
 project.el also has commands to grep projects, but I have [[https://github.com/BurntSushi/ripgrep][ripgrep]] installed on my system, which is a much faster grep replacement. Unfortunately, there's no way to make it use ripgrep, but [[https://github.com/dajva/rg.el][rg.el]] has project searching included, so I can use that instead.
@@ -924,6 +956,42 @@ And while I'm on the topic of project management - [[https://direnv.net/][Direnv
   (use-package direnv
     :config
     (direnv-mode))
+#+end_src
+
+*** Switching projects
+
+#+begin_src emacs-lisp
+  (defun srxl/switch-or-open-project (project)
+    "Switches to PROJECT, and opens it's tab.
+
+  If PROJECT doesn't have an open tab, create a new tab for the project and switch
+  to it.
+
+  When called interactively, prompts the user for a project."
+    (interactive (list (funcall project-prompter)))
+    (let ((tab-names (mapcar (lambda (tab) (alist-get 'name tab)) (tab-bar-tabs)))
+          (selected-tab-name (file-name-nondirectory (directory-file-name project))))
+      (if (member selected-tab-name tab-names)
+          (tab-switch selected-tab-name)
+        (tab-new)
+        (tab-rename selected-tab-name)
+        (project-switch-project project))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun srxl/close-project (project)
+    "Closes all buffers and the associated tab for PROJECT.
+
+  When called interactively, close the currently open project."
+    (interactive (list (project-root (project-current))))
+    (srxl/switch-or-open-project project)
+    (project-kill-buffers)
+    (tab-close))
+#+end_src
+
+#+begin_src emacs-lisp
+  (srxl/def-leader-key "s" #'srxl/switch-or-open-project "Open project")
+  (srxl/def-leader-key "x" #'srxl/close-project "Close project")
 #+end_src
 
 ** Working with Git
