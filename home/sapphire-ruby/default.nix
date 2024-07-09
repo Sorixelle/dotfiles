@@ -17,6 +17,8 @@
 
   home.packages = with pkgs; [
     _3dsconv
+    affinity-designer
+    affinity-photo
     audacity
     (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
     betterdiscordctl

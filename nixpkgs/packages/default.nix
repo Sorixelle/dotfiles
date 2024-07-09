@@ -1,6 +1,8 @@
 final: prev:
 
 let
+  affinityPackages = prev.callPackage ./affinity { };
+
   gcc-cortex-a-9 = target:
     prev.callPackage ./gcc-cortex-a.nix { inherit target; };
 in {
@@ -11,6 +13,8 @@ in {
   _3dsconv = prev.callPackage ./3dsconv { };
 
   acousticbrainz-gui = prev.callPackage ./acousticbrainz-gui.nix { };
+
+  inherit (affinityPackages) affinity-designer affinity-photo;
 
   ctrtool = prev.ctrtool.overrideAttrs (_: rec {
     version = "1.2.0";
