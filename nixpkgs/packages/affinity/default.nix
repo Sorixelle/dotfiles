@@ -4,16 +4,8 @@
 { fetchFromGitLab, wineWowPackages, makeDesktopItem, writeShellScript }:
 
 let
-  wineAffinity = wineWowPackages.full.overrideAttrs (_: {
-    version = "8.14";
-    src = fetchFromGitLab {
-      domain = "gitlab.winehq.org";
-      owner = "ElementalWarrior";
-      repo = "wine";
-      rev = "affinity-photo2-wine8.14";
-      hash = "sha256-eMN4SN8980yteYODN2DQIVNEJMsGQE8OIdPs/7DbvqQ=";
-    };
-  });
+  wineAffinity =
+    wineWowPackages.staging.overrideAttrs (_: { patches = [ ./wine.patch ]; });
 
   launchScript = writeShellScript "affinity-app" ''
     export WINEPREFIX=$HOME/wineprefixes/affinity
