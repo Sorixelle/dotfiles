@@ -34,8 +34,8 @@
     discord
     fbi-servefiles
     ffmpeg-full
+    file-roller
     gimp
-    gnome.file-roller
     igir
     imv
     inetutils
@@ -44,7 +44,8 @@
     liquidctl
     lm_sensors
     kopia
-    magic-wormhole
+    # TODO: https://github.com/NixOS/nixpkgs/pull/325951
+    # magic-wormhole
     makerom
     moserial
     mpv
@@ -55,11 +56,11 @@
     nix-prefetch-scripts
     nmap
     nodePackages.typescript-language-server
-    nodePackages.vscode-css-languageserver-bin
-    nodePackages.vscode-html-languageserver-bin
+    nodePackages.vscode-langservers-extracted
     pavucontrol
     perlPackages.ArchiveZip # crc32 command-line utility
-    picard
+    # TODO: Fix merged, currently in staging
+    # picard
     plexamp
     plex-media-player
     prismlauncher

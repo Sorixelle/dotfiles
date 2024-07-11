@@ -21,12 +21,12 @@
     cinny-desktop
     discord
     ffmpeg-full
+    file-roller
     gimp
-    gnome.file-roller
     imv
     jump
     libreoffice-fresh
-    magic-wormhole
+    # magic-wormhole
     mpv
     mtr
     nix-prefetch-scripts
