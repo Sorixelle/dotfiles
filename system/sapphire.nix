@@ -256,10 +256,8 @@
       datasets."Sapphire/Ruby/Home" = {
         autosnap = true;
         autoprune = true;
-        hourly = 48;
-        daily = 14;
-        monthly = 12;
-        yearly = 3;
+        hourly = 10;
+        daily = 7;
       };
     };
 
@@ -300,6 +298,25 @@
   };
 
   sound.enable = true;
+
+  systemd.services = {
+    syncoid-Sapphire-Ruby-Home.onFailure = [ "backup-fail-notify.service" ];
+    backup-fail-notify = {
+      description = "Send notification when Syncoid job fails";
+      path = [ pkgs.curl pkgs.systemd ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        RUN_ID=$(systemctl show --value -p InvocationID syncoid-Sapphire-Ruby-Home.service)
+        LOG=$(journalctl _SYSTEMD_INVOCATION_ID=$RUN_ID)
+
+        curl -L \
+          -H "X-Priority: 4" \
+          -H "X-Title: Sapphire backup sync to Fluorite failed!" \
+          -d "$LOG" \
+          ntfy.isincredibly.gay/backup-status
+      '';
+    };
+  };
 
   home-manager.users.ruby = import ../home/sapphire-ruby;
 
