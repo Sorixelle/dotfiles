@@ -52,6 +52,16 @@ in {
 
   kstart = prev.callPackage ./kstart.nix { };
 
+  liquidctl = prev.liquidctl.overrideAttrs (_: {
+    src = prev.fetchFromGitHub {
+      owner = "liquidctl";
+      repo = "liquidctl";
+      rev = "256311b99053cba69fe9d5d6fe86e9ebb1849206";
+      hash = "sha256-vwNjOVPrHsUxjxPOzQ3Wbxt293bmCPfiqgX5RkLupXM=";
+    };
+    patches = [ ];
+  });
+
   makerom = prev.callPackage ./makerom.nix { };
 
   moserial = prev.callPackage ./moserial.nix { };

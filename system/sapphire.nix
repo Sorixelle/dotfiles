@@ -10,6 +10,23 @@
     kernelParams = [ "quiet" ];
     consoleLogLevel = 3;
 
+    extraModulePackages = [
+      (config.boot.kernelPackages.liquidtux.overrideAttrs (_: {
+        src = pkgs.fetchFromGitHub {
+          owner = "liquidctl";
+          repo = "liquidtux";
+          rev = "b2545177be1d0f8c0eed0da4a2e0e487f708fc16";
+          hash = "sha256-ByrUNTDMXACchpNiLFNuz3rnPBqoZLEYtGNRArjjqec=";
+        };
+        installPhase = ''
+          cd drivers/hwmon
+          install nzxt-grid3.ko nzxt-kraken2.ko nzxt-kraken3.ko nzxt-smart2.ko -Dm444 -t ${
+            placeholder "out"
+          }/lib/modules/${config.boot.kernelPackages.kernel.modDirVersion}/kernel/drivers/hwmon
+        '';
+      }))
+    ];
+
     initrd = {
       availableKernelModules =
         [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
@@ -130,7 +147,7 @@
 
   environment = {
     sessionVariables = { NIXOS_OZONE_WL = "1"; };
-    systemPackages = with pkgs; [ ntfs3g pciutils usbutils ];
+    systemPackages = with pkgs; [ liquidctl ntfs3g pciutils usbutils ];
   };
 
   fonts = {
@@ -218,6 +235,11 @@
     };
 
     gvfs.enable = true;
+
+    hardware.openrgb = {
+      enable = true;
+      package = pkgs.openrgb-with-all-plugins;
+    };
 
     joycond.enable = true;
 
