@@ -526,6 +526,7 @@ Finally, I just need to add that function to =org-mode-hook= so it gets run when
 Some parts of Org documents should still be displayed with a fixed pitch face, though, like tables and code blocks. So I should make sure those elements still display correctly, no matter what. This will end up in the [[*Colours][load theme function]] I defined earlier, since the theme might override these faces.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref post-load-theme
+  (require 'org-faces)
   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-checkbox nil :inherit '(bold fixed-pitch))
   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
