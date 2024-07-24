@@ -7,7 +7,7 @@ tree-sitter.buildGrammar rec {
   src = fetchFromGitHub {
     owner = "virchau13";
     repo = language;
-    rev = "a4535d1530558866a543c1660c90c57fbf2fd709";
-    hash = "sha256-ZWpxKAyja6bW2kNxalHOL2E+WFbEKc40dMGrB1Ihs6I=";
+    rev = "4be180759ec13651f72bacee65fa477c64222a1a";
+    hash = "sha256-qc9InFEQgeFfFReJuQd8WjTNK4fFMEaWcqQUcGxxuBI=";
   };
 }
