@@ -319,8 +319,6 @@
     };
   };
 
-  sound.enable = true;
-
   systemd.services = {
     syncoid-Sapphire-Ruby-Home.onFailure = [ "backup-fail-notify.service" ];
     backup-fail-notify = {

@@ -231,8 +231,6 @@
     '';
   };
 
-  sound.enable = true;
-
   home-manager.users.ruby = import ../home/tanzanite-ruby;
 
   system.stateVersion = "23.11";
