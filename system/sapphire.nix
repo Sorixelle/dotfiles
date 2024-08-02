@@ -131,6 +131,8 @@
 
     logitech.wireless.enable = true;
 
+    opentabletdriver.enable = true;
+
     steam-hardware.enable = true;
   };
 
@@ -146,6 +148,12 @@
   nix.settings.trusted-users = [ "ruby" ];
 
   environment = {
+    etc."libinput/local-overrides.quirks".text = ''
+      [OpenTabletDriver Virtual Tablet]
+      MatchName=OpenTabletDriver*
+      AttrTabletSmoothing=0
+    '';
+
     sessionVariables = { NIXOS_OZONE_WL = "1"; };
     systemPackages = with pkgs; [ liquidctl ntfs3g pciutils usbutils ];
   };
