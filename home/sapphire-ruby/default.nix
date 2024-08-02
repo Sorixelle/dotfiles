@@ -56,6 +56,7 @@
     nmap
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
+    osu-lazer-bin
     pavucontrol
     perlPackages.ArchiveZip # crc32 command-line utility
     picard
