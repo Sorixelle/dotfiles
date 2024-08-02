@@ -44,8 +44,7 @@
     liquidctl
     lm_sensors
     kopia
-    # TODO: https://github.com/NixOS/nixpkgs/pull/325951
-    # magic-wormhole
+    magic-wormhole
     makerom
     moserial
     mpv
@@ -59,8 +58,7 @@
     nodePackages.vscode-langservers-extracted
     pavucontrol
     perlPackages.ArchiveZip # crc32 command-line utility
-    # TODO: Fix merged, currently in staging
-    # picard
+    picard
     plexamp
     plex-media-player
     prismlauncher
