@@ -86,8 +86,10 @@ in {
     };
   };
 
-  wineasio = prev.wineasio.overrideAttrs (old: {
-    nativeBuildInputs = [ prev.pkg-config prev.wineWowPackages.staging ];
-    makeFlags = [ "PREFIX=${prev.wineWowPackages.staging}" ];
-  });
+  # TODO: why broke
+  # /bin/ld: cannot find -lodbc32: No such file or directory
+  # wineasio = prev.wineasio.overrideAttrs (old: {
+  #   nativeBuildInputs = [ prev.pkg-config prev.wineWowPackages.staging ];
+  #   makeFlags = [ "PREFIX=${prev.wineWowPackages.staging}" ];
+  # });
 }
