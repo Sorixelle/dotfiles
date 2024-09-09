@@ -172,9 +172,11 @@
   services = {
     udiskie.enable = true;
 
-    gammastep = {
+    wlsunset = {
       enable = true;
-      provider = "geoclue2";
+      latitude = -37.8;
+      longitude = 145;
+      systemdTarget = "hyprland-session.target";
       temperature = {
         day = 6500;
         night = 3000;
