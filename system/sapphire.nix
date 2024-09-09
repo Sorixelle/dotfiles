@@ -251,8 +251,6 @@
 
     joycond.enable = true;
 
-    mullvad-vpn.enable = true;
-
     pcscd.enable = true;
 
     pipewire = {
