@@ -1132,7 +1132,7 @@ Okay, one more web templating language, then I'm done. Promise. This one is for 
 
 Eglot also doesn't have associations for this one built in, so I'll define them here.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref eglot-mode
+#+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
   (add-hook 'astro-ts-mode-hook 'eglot-ensure)
   (add-to-list 'eglot-server-programs '(astro-ts-mode . ("astro-ls" "--stdio")))
 #+end_src
