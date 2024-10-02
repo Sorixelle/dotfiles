@@ -4,7 +4,7 @@
   programs.kitty = {
     enable = true;
 
-    theme = "Catppuccin-Macchiato";
+    themeFile = "Catppuccin-Macchiato";
     font = {
       name = "Iosevka Term";
       size = 12;

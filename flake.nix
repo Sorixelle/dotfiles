@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     lix = {
       url =
-        "https://git.lix.systems/lix-project/nixos-module/archive/2.90.0-rc1.tar.gz";
+        "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -99,11 +99,11 @@
           inputs.hypridle.overlays.default
           inputs.hyprlock.overlays.default
           inputs.hyprland-contrib.overlays.default
-          inputs.nixmox.overlay
+          #inputs.nixmox.overlay
           inputs.nur.overlay
-          inputs.rust-overlay.overlays.default
-          inputs.shadower.overlay
-          inputs.wired-notify.overlays.default
+          #inputs.rust-overlay.overlays.default
+          #inputs.shadower.overlay
+          #inputs.wired-notify.overlays.default
           inputs.hyprland.overlays.default
           self.overlay
         ];

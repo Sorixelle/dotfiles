@@ -24,7 +24,6 @@
     betterdiscordctl
     bitwarden
     bitwarden-cli
-    bless
     cachix
     calibre
     cinny-desktop
@@ -37,6 +36,7 @@
     file-roller
     gimp
     igir
+    imhex
     imv
     inetutils
     jump
