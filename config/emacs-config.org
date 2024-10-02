@@ -1130,11 +1130,20 @@ Okay, one more web templating language, then I'm done. Promise. This one is for 
     <<astro-config>>)
 #+end_src
 
-Eglot also doesn't have associations for this one built in, so I'll define them here.
+Eglot also doesn't have associations for this one built in, so I'll define them here. I also need to pass some configuration options to the language server, particularly =typescript.tsdk=, which tells it where it should look for the Typescript SDK. That's in a pretty predictable path in 99.99% of all Astro projects, so I can set it up to pull that path out of =node_modules= in the current project.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
+  (defclass eglot-astro (eglot-lsp-server) ()
+    :documentation "Astro language server")
+
+  (cl-defmethod eglot-initialization-options ((server eglot-astro))
+    "Required initialization options for Astro language server."
+    `(:typescript
+      (:tsdk
+       ,(expand-file-name (concat (project-root (project-current)) "node_modules/typescript/lib")))))
+
   (add-hook 'astro-ts-mode-hook 'eglot-ensure)
-  (add-to-list 'eglot-server-programs '(astro-ts-mode . ("astro-ls" "--stdio")))
+  (add-to-list 'eglot-server-programs '(astro-ts-mode . (eglot-astro "astro-ls" "--stdio")))
 #+end_src
 
 By default, [[*Oh yeah its language server time][Apheleia]] tries to format Astro files with Prettier in HTML mode by default, which mangles the crap out of Astro templates. Gotta make sure it uses the correct Astro parser instead.
