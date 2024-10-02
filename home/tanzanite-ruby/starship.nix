@@ -17,8 +17,7 @@
         fish_style_pwd_dir_length = 1;
       };
       elixir = {
-        format =
-          "[$symbol](fg:purple)[ $version (\\(OTP $otp_version\\))]($style)";
+        format = "[$symbol](fg:purple)[ $version (\\(OTP $otp_version\\))]($style)";
         symbol = "";
         style = "fg:bright-black";
       };

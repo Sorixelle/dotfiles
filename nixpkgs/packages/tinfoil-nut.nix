@@ -1,8 +1,15 @@
-{ lib, fetchFromGitHub, fetchurl
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
 
-, makeDesktopItem, symlinkJoin, writeShellScriptBin
+  makeDesktopItem,
+  symlinkJoin,
+  writeShellScriptBin,
 
-, python3, qt5 }:
+  python3,
+  qt5,
+}:
 
 let
   pname = "tinfoil-nut";
@@ -34,8 +41,8 @@ let
     };
     doCheck = false;
   };
-  pythonEnv = python3.withPackages (ps:
-    with ps; [
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
       asn1
       beautifulsoup4
       certifi
@@ -61,9 +68,11 @@ let
       urllib3
       watchdog
       zstandard
-    ]);
+    ]
+  );
 
-  makeWrapper = outname: scriptname:
+  makeWrapper =
+    outname: scriptname:
     writeShellScriptBin outname ''
       export APPDIR="''${XDG_DATA_HOME:-"''${HOME}/.local/share"}/nut"
       mkdir -p $APPDIR
@@ -83,7 +92,10 @@ let
     comment = "Nintendo Switch title manager";
     exec = "nut-gui";
     icon = "nut-gui";
-    categories = [ "Network" "Utility" ];
+    categories = [
+      "Network"
+      "Utility"
+    ];
     startupWMClass = "python3";
   };
 
@@ -92,9 +104,14 @@ let
     url = "https://tinfoil.io/images/release.png";
     hash = "sha256-VLzMZK3e+9qDOcbmfc8URaGU57t34D1OsdiUz8NYxGQ=";
   };
-in symlinkJoin {
+in
+symlinkJoin {
   name = "${pname}-${version}";
-  paths = [ nut nutGui nutGuiDesktop ];
+  paths = [
+    nut
+    nutGui
+    nutGuiDesktop
+  ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   buildInputs = [ qt5.qtbase ];

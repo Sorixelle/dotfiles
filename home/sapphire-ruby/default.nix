@@ -20,7 +20,13 @@
     affinity-designer
     affinity-photo
     audacity
-    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
+    (aspellWithDicts (
+      dicts: with dicts; [
+        en
+        en-computers
+        en-science
+      ]
+    ))
     betterdiscordctl
     bitwarden
     bitwarden-cli
@@ -141,14 +147,17 @@
         key = "B6D7116C451A5B41";
         signByDefault = true;
       };
-      extraConfig.core.fsmonitor =
-        "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
+      extraConfig.core.fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
     };
 
     gpg = {
       enable = true;
-      settings = { keyserver = "hkps://keys.openpgp.org"; };
-      scdaemonSettings = { disable-ccid = true; };
+      settings = {
+        keyserver = "hkps://keys.openpgp.org";
+      };
+      scdaemonSettings = {
+        disable-ccid = true;
+      };
     };
 
     mbsync.enable = true;
@@ -202,7 +211,10 @@
 
     email = {
       enable = true;
-      watchFolders = [ "auxolotl" "qubes-announce" ];
+      watchFolders = [
+        "auxolotl"
+        "qubes-announce"
+      ];
       mu4eShortcuts = [
         {
           name = "Auxolotl";
@@ -227,31 +239,32 @@
       ];
     };
 
-    fonts = let
-      nerdfonts =
-        pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; };
-    in {
-      monospace = {
-        name = "Iosevka";
-        size = 12;
-        package = pkgs.iosevka-bin;
+    fonts =
+      let
+        nerdfonts = pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; };
+      in
+      {
+        monospace = {
+          name = "Iosevka";
+          size = 12;
+          package = pkgs.iosevka-bin;
+        };
+        ui = {
+          name = "Intur";
+          size = 12;
+          package = pkgs.inter-patched;
+        };
+        serif = {
+          name = "ETBembo";
+          size = 12;
+          package = pkgs.etBook;
+        };
+        extraFonts = with pkgs; [
+          emacs-all-the-icons-fonts
+          nerdfonts
+          noto-fonts-cjk
+        ];
       };
-      ui = {
-        name = "Intur";
-        size = 12;
-        package = pkgs.inter-patched;
-      };
-      serif = {
-        name = "ETBembo";
-        size = 12;
-        package = pkgs.etBook;
-      };
-      extraFonts = with pkgs; [
-        emacs-all-the-icons-fonts
-        nerdfonts
-        noto-fonts-cjk
-      ];
-    };
   };
 
   systemd.user = {
@@ -269,54 +282,70 @@
         };
         Service = {
           Type = "oneshot";
-          ExecStart =
-            "${pkgs.kopia}/bin/kopia --config-file /home/ruby/.config/kopia/remote.config snapshot create /home/ruby";
+          ExecStart = "${pkgs.kopia}/bin/kopia --config-file /home/ruby/.config/kopia/remote.config snapshot create /home/ruby";
         };
       };
 
       polkit-gnome = {
-        Unit = { Description = "GNOME Polkit authentication agent"; };
+        Unit = {
+          Description = "GNOME Polkit authentication agent";
+        };
         Service = {
-          ExecStart =
-            "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
           Restart = "on-failure";
         };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
       rescrobbled = {
-        Unit = { Description = "An MPRIS scrobbler"; };
+        Unit = {
+          Description = "An MPRIS scrobbler";
+        };
         Service = {
           ExecStart = "${pkgs.rescrobbled}/bin/rescrobbled";
           Restart = "on-failure";
         };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
       solaar = {
-        Unit = { Description = "Control software for Logitech devices"; };
+        Unit = {
+          Description = "Control software for Logitech devices";
+        };
         Service = {
           ExecStart = "${pkgs.solaar}/bin/solaar -w hide";
           Restart = "on-failure";
         };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
     };
 
     timers = {
       nightly-backup = {
         Unit = {
-          Description =
-            "Backup user data directory to local NAS every night at 6pm";
+          Description = "Backup user data directory to local NAS every night at 6pm";
         };
-        Timer = { OnCalendar = "18:00:00"; };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Timer = {
+          OnCalendar = "18:00:00";
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
       weekly-backup = {
         Unit = {
-          Description =
-            "Backup user data directory to offsite storage every Saturday at 12pm";
+          Description = "Backup user data directory to offsite storage every Saturday at 12pm";
         };
-        Timer = { OnCalendar = "Sat *-*-* 12:00:00"; };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Timer = {
+          OnCalendar = "Sat *-*-* 12:00:00";
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
     };
   };

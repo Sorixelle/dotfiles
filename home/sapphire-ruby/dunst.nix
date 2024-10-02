@@ -22,8 +22,7 @@
         corner_radius = 16;
         separator_color = "frame";
         separator_height = 4;
-        font =
-          "${config.srxl.fonts.ui.name} ${toString config.srxl.fonts.ui.size}";
+        font = "${config.srxl.fonts.ui.name} ${toString config.srxl.fonts.ui.size}";
         markup = "full";
         format = "<small><i>%a</i></small>\\n<b><i>%s</i></b>\\n%b";
         alignment = "right";

@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.programs.cifs-utils;
-in {
+let
+  cfg = config.programs.cifs-utils;
+in
+{
   options.programs.cifs-utils = with lib; {
     enable = mkEnableOption "the cifs-utils packages for mounting SMB shares.";
 
@@ -28,8 +35,9 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc."cifs-utils/idmap-plugin".source =
-      lib.mkIf (cfg.idmapPlugin != null) cfg.idmapPlugin;
+    environment.etc."cifs-utils/idmap-plugin".source = lib.mkIf (
+      cfg.idmapPlugin != null
+    ) cfg.idmapPlugin;
 
     programs.keyutils = {
       enable = true;

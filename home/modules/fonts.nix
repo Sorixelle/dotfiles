@@ -3,7 +3,8 @@
 let
   conf = config.srxl.fonts;
 
-  fontSpecType = with lib;
+  fontSpecType =
+    with lib;
     types.submodule {
       options = {
         name = mkOption {
@@ -21,7 +22,9 @@ let
         };
       };
     };
-in with lib; {
+in
+with lib;
+{
   options.srxl.fonts = {
     monospace = mkOption {
       type = fontSpecType;
@@ -38,7 +41,8 @@ in with lib; {
       description = "The serif font to use in the system.";
     };
 
-    extraFonts = with types;
+    extraFonts =
+      with types;
       mkOption {
         type = listOf package;
         default = [ ];
@@ -51,8 +55,10 @@ in with lib; {
 
     gtk.font.name = conf.ui.name;
 
-    home.packages =
-      [ conf.monospace.package conf.ui.package conf.serif.package ]
-      ++ conf.extraFonts;
+    home.packages = [
+      conf.monospace.package
+      conf.ui.package
+      conf.serif.package
+    ] ++ conf.extraFonts;
   };
 }

@@ -1,4 +1,11 @@
-{ writeScriptBin, powershell, bash, libnotify, grimblast, hyprland, wl-clipboard
+{
+  writeScriptBin,
+  powershell,
+  bash,
+  libnotify,
+  grimblast,
+  hyprland,
+  wl-clipboard,
 }:
 
 let
@@ -7,7 +14,8 @@ let
   notify-send = "${libnotify}/bin/notify-send";
   # shadower-cmd = "${shadower}/bin/shadower";
   wl-copy = "${wl-clipboard}/bin/wl-copy";
-in writeScriptBin "scr" ''
+in
+writeScriptBin "scr" ''
   #!${powershell}/bin/pwsh
 
   Param(

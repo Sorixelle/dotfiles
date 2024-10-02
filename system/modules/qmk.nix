@@ -1,8 +1,10 @@
 { config, lib, ... }:
 
 with lib;
-let conf = config.services.srxl.qmk;
-in {
+let
+  conf = config.services.srxl.qmk;
+in
+{
   options.services.srxl.qmk = {
     enable = mkEnableOption "udev rules for flashing QMK-based keyboards";
   };

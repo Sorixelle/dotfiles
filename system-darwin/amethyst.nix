@@ -1,7 +1,12 @@
 { ... }:
 
 {
-  homebrew = { casks = [ "macfuse" "veracrypt" ]; };
+  homebrew = {
+    casks = [
+      "macfuse"
+      "veracrypt"
+    ];
+  };
 
   networking.computerName = "Amethyst";
 
@@ -19,11 +24,17 @@
       "com.apple.swipescrolldirection" = false;
     };
 
-    dock = { show-recents = false; };
+    dock = {
+      show-recents = false;
+    };
 
-    finder = { CreateDesktop = false; };
+    finder = {
+      CreateDesktop = false;
+    };
 
-    loginwindow = { GuestEnabled = false; };
+    loginwindow = {
+      GuestEnabled = false;
+    };
   };
 
   home-manager.users.ruby = import ../home/amethyst-ruby-darwin.nix;

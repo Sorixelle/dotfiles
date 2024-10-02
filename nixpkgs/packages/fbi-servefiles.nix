@@ -1,4 +1,8 @@
-{ stdenv, python3, fetchFromGitHub }:
+{
+  stdenv,
+  python3,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "fbi-servefiles";

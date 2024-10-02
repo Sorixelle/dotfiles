@@ -15,7 +15,13 @@
   ];
 
   home.packages = with pkgs; [
-    (aspellWithDicts (dicts: with dicts; [ en en-computers en-science ]))
+    (aspellWithDicts (
+      dicts: with dicts; [
+        en
+        en-computers
+        en-science
+      ]
+    ))
     betterdiscordctl
     bitwarden
     cinny-desktop
@@ -98,14 +104,17 @@
         key = "B6D7116C451A5B41";
         signByDefault = true;
       };
-      extraConfig.core.fsmonitor =
-        "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
+      extraConfig.core.fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
     };
 
     gpg = {
       enable = true;
-      settings = { keyserver = "hkps://keys.openpgp.org"; };
-      scdaemonSettings = { disable-ccid = true; };
+      settings = {
+        keyserver = "hkps://keys.openpgp.org";
+      };
+      scdaemonSettings = {
+        disable-ccid = true;
+      };
     };
   };
 
@@ -148,50 +157,56 @@
     email = {
       enable = true;
       watchFolders = [ "auxolotl" ];
-      mu4eShortcuts = [{
-        name = "Auxolotl";
-        folder = "/auxolotl";
-        key = "a";
-      }];
-    };
-
-    fonts = let
-      nerdfonts =
-        pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; };
-    in {
-      monospace = {
-        name = "Iosevka";
-        size = 12;
-        package = pkgs.iosevka-bin;
-      };
-      ui = {
-        name = "Intur";
-        size = 12;
-        package = pkgs.inter-patched;
-      };
-      serif = {
-        name = "ETBembo";
-        size = 12;
-        package = pkgs.etBook;
-      };
-      extraFonts = with pkgs; [
-        emacs-all-the-icons-fonts
-        nerdfonts
-        noto-fonts-cjk
+      mu4eShortcuts = [
+        {
+          name = "Auxolotl";
+          folder = "/auxolotl";
+          key = "a";
+        }
       ];
     };
+
+    fonts =
+      let
+        nerdfonts = pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; };
+      in
+      {
+        monospace = {
+          name = "Iosevka";
+          size = 12;
+          package = pkgs.iosevka-bin;
+        };
+        ui = {
+          name = "Intur";
+          size = 12;
+          package = pkgs.inter-patched;
+        };
+        serif = {
+          name = "ETBembo";
+          size = 12;
+          package = pkgs.etBook;
+        };
+        extraFonts = with pkgs; [
+          emacs-all-the-icons-fonts
+          nerdfonts
+          noto-fonts-cjk
+        ];
+      };
   };
 
   systemd.user = {
     services = {
       polkit-gnome = {
-        Unit = { Description = "GNOME Polkit authentication agent"; };
+        Unit = {
+          Description = "GNOME Polkit authentication agent";
+        };
         Service = {
-          ExecStart =
-            "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
           Restart = "on-failure";
         };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
     };
   };

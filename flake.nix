@@ -4,14 +4,12 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     lix = {
-      url =
-        "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     emacs = {
-      url =
-        "github:nix-community/emacs-overlay/6560f39fd828385e72a931e0d567d97e203781d8";
+      url = "github:nix-community/emacs-overlay/6560f39fd828385e72a931e0d567d97e203781d8";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
@@ -86,7 +84,14 @@
   };
 
   outputs =
-    { self, flake-utils, nixpkgs, darwin, pre-commit-hooks, ... }@inputs:
+    {
+      self,
+      flake-utils,
+      nixpkgs,
+      darwin,
+      pre-commit-hooks,
+      ...
+    }@inputs:
     with nixpkgs.lib;
     let
       genSystems = genAttrs flake-utils.lib.defaultSystems;
@@ -110,50 +115,56 @@
         ];
       };
 
-      pkgsBySystem =
-        genSystems (system: import nixpkgs (genNixpkgsConfig system));
+      pkgsBySystem = genSystems (system: import nixpkgs (genNixpkgsConfig system));
 
       # Generate a boilerplate system with a machine specific config.
-      defineSystem = let mkSystem = makeOverridable nixosSystem;
-      in name:
-      { system, config }:
-      nameValuePair name (mkSystem {
-        inherit system;
-
-        modules = [
-          nixpkgs.nixosModules.notDetected
-          inputs.home-manager.nixosModules.home-manager
-          inputs.hyprland.nixosModules.default
-          inputs.lix.nixosModules.default
-          inputs.musnix.nixosModules.default
-
-          (import ./system/common.nix)
-
-          (import config)
-        ];
-
-        specialArgs = {
-          inherit inputs name;
-          flakePkgs = pkgsBySystem."${system}";
-        };
-      });
-
-      # Like defineSystem above, but for nix-darwin (macOS) configurations
-      defineDarwin = name:
+      defineSystem =
+        let
+          mkSystem = makeOverridable nixosSystem;
+        in
+        name:
         { system, config }:
-        nameValuePair name (darwin.lib.darwinSystem {
-          modules = [
-            inputs.home-manager.darwinModule
+        nameValuePair name (mkSystem {
+          inherit system;
 
-            (import ./system-darwin/common.nix {
-              inherit name inputs;
-              nixpkgsConf = genNixpkgsConfig system;
-            })
+          modules = [
+            nixpkgs.nixosModules.notDetected
+            inputs.home-manager.nixosModules.home-manager
+            inputs.hyprland.nixosModules.default
+            inputs.lix.nixosModules.default
+            inputs.musnix.nixosModules.default
+
+            (import ./system/common.nix)
 
             (import config)
           ];
+
+          specialArgs = {
+            inherit inputs name;
+            flakePkgs = pkgsBySystem."${system}";
+          };
         });
-    in {
+
+      # Like defineSystem above, but for nix-darwin (macOS) configurations
+      defineDarwin =
+        name:
+        { system, config }:
+        nameValuePair name (
+          darwin.lib.darwinSystem {
+            modules = [
+              inputs.home-manager.darwinModule
+
+              (import ./system-darwin/common.nix {
+                inherit name inputs;
+                nixpkgsConf = genNixpkgsConfig system;
+              })
+
+              (import config)
+            ];
+          }
+        );
+    in
+    {
       nixosConfigurations = mapAttrs' defineSystem {
         sapphire = {
           system = "x86_64-linux";
@@ -174,21 +185,24 @@
 
       overlay = import ./nixpkgs/packages;
 
-      devShell = genSystems (s:
+      devShell = genSystems (
+        s:
         with pkgsBySystem."${s}";
         mkShell {
           name = "srxl-dotfiles";
 
           nativeBuildInputs = [
             nil
-            nixfmt-classic
+            nixfmt-rfc-style
+
             (nixos-generators.override { nix = nixVersions.latest; })
           ];
 
           shellHook = ''
             ${self.checks.${s}.pre-commit-check.shellHook}
           '';
-        });
+        }
+      );
 
       checks = genSystems (s: {
         pre-commit-check = pre-commit-hooks.lib.${s}.run {
@@ -197,7 +211,7 @@
             name = "dotfiles";
           };
           hooks = {
-            nixfmt.enable = true;
+            nixfmt-rfc-style.enable = true;
             # nix-linter.enable = true;
           };
         };

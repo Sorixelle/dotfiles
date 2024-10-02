@@ -2,22 +2,24 @@
 
 {
   xdg = {
-    desktopEntries = let
-      kitty = config.programs.kitty.package;
+    desktopEntries =
+      let
+        kitty = config.programs.kitty.package;
 
-      script = pkgs.writeShellScript "telnet-url-handler" ''
-        IFS=":" read -ra host <<< $(${pkgs.coreutils}/bin/basename $@)
-        ${kitty}/bin/kitty --class=kitty-telnet-handler nix-shell -p inetutils --run "telnet ''${host[0]} ''${host[1]}"
-      '';
-    in {
-      telnet-handler = {
-        name = "Telnet URL Handler";
-        type = "Application";
-        noDisplay = true;
-        mimeType = [ "x-scheme-handler/telnet" ];
-        exec = "${script} %u";
+        script = pkgs.writeShellScript "telnet-url-handler" ''
+          IFS=":" read -ra host <<< $(${pkgs.coreutils}/bin/basename $@)
+          ${kitty}/bin/kitty --class=kitty-telnet-handler nix-shell -p inetutils --run "telnet ''${host[0]} ''${host[1]}"
+        '';
+      in
+      {
+        telnet-handler = {
+          name = "Telnet URL Handler";
+          type = "Application";
+          noDisplay = true;
+          mimeType = [ "x-scheme-handler/telnet" ];
+          exec = "${script} %u";
+        };
       };
-    };
 
     mimeApps = {
       enable = true;

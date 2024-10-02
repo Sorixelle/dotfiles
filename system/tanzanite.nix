@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
@@ -6,13 +12,25 @@
   time.timeZone = "Australia/Melbourne";
 
   boot = {
-    kernelParams = [ "quiet" "amd_pstate=active" ];
+    kernelParams = [
+      "quiet"
+      "amd_pstate=active"
+    ];
     consoleLogLevel = 3;
 
     initrd = {
-      availableKernelModules =
-        [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [ "amdgpu" "kvm-amd" ];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "thunderbolt"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
+      kernelModules = [
+        "amdgpu"
+        "kvm-amd"
+      ];
 
       luks.devices = {
         Encrypt-Key.device = "/dev/disk/by-partlabel/Key";
@@ -83,7 +101,7 @@
     };
   };
 
-  swapDevices = [{ device = "/dev/mapper/Encrypted-Swap"; }];
+  swapDevices = [ { device = "/dev/mapper/Encrypted-Swap"; } ];
 
   hardware = {
     bluetooth.enable = true;
@@ -103,7 +121,10 @@
 
   users.users.ruby = {
     description = "Ruby Iris Juric";
-    extraGroups = [ "audio" "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "audio"
+      "wheel"
+    ]; # Enable ‘sudo’ for the user.
     isNormalUser = true;
     uid = 1000;
   };
@@ -115,7 +136,9 @@
       '';
     };
 
-    sessionVariables = { NIXOS_OZONE_WL = "1"; };
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
 
     systemPackages = with pkgs; [ sbctl ];
   };
@@ -124,7 +147,12 @@
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [ corefonts etBook iosevka-bin inter-patched ];
+    packages = with pkgs; [
+      corefonts
+      etBook
+      iosevka-bin
+      inter-patched
+    ];
     fontconfig = {
       defaultFonts = {
         sansSerif = [ "Intur" ];
@@ -153,9 +181,7 @@
       enable = true;
       settings = {
         GTK = {
-          font_name = "${
-              builtins.head config.fonts.fontconfig.defaultFonts.sansSerif
-            } 12";
+          font_name = "${builtins.head config.fonts.fontconfig.defaultFonts.sansSerif} 12";
         };
       };
     };
@@ -216,8 +242,7 @@
       enable = true;
       sshKey = "/etc/backup_key";
       commonArgs = [ "--no-privilege-elevation" ];
-      commands."Tanzanite/Ruby/Home".target =
-        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Tanzanite/Ruby/Home";
+      commands."Tanzanite/Ruby/Home".target = "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Tanzanite/Ruby/Home";
     };
 
     tailscale = {

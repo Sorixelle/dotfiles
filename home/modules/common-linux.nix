@@ -1,5 +1,8 @@
 { ... }:
 
 {
-  imports = [ ./common.nix ./random-wallpaper.nix ];
+  imports = [
+    ./common.nix
+    ./random-wallpaper.nix
+  ];
 }

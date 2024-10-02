@@ -1,7 +1,11 @@
 { ... }:
 
 {
-  imports = [ ./emacs.nix ./email.nix ./fonts.nix ];
+  imports = [
+    ./emacs.nix
+    ./email.nix
+    ./fonts.nix
+  ];
 
   config = {
     home = {

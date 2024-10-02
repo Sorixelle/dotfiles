@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, essentia-extractor, qt5 }:
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  essentia-extractor,
+  qt5,
+}:
 
 stdenv.mkDerivation rec {
   name = "acousticbrainz-gui";
@@ -11,8 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "1aq9xa2s11p2v9s2y6830ck040xivb22rwfw02h0phbyg5k4pg6x";
   };
 
-  nativeBuildInputs = [ cmake qt5.wrapQtAppsHook ];
-  buildInputs = [ essentia-extractor qt5.qtbase ];
+  nativeBuildInputs = [
+    cmake
+    qt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    essentia-extractor
+    qt5.qtbase
+  ];
 
   postInstall = ''
     ln -s ${essentia-extractor}/bin/streaming_extractor_music $out/bin/streaming_extractor_music

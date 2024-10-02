@@ -1,4 +1,10 @@
-{ rustPlatform, fetchFromGitHub, pkg-config, dbus, openssl }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  dbus,
+  openssl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rescrobbled";
@@ -16,7 +22,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus openssl ];
+  buildInputs = [
+    dbus
+    openssl
+  ];
 
   cargoHash = "sha256-ZJbyYFvGTuXt1aqhGOATcDRrkTk7SorWXkN81sUoDdo=";
 }

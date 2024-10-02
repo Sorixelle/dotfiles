@@ -38,16 +38,17 @@
 
       sys-rebuild = "sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
       sys-test = "sudo nixos-rebuild -L --show-trace --flake ~/nixos test";
-      sys-upgrade =
-        "nix flake update --flake ~/nixos && sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      sys-upgrade = "nix flake update --flake ~/nixos && sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
       nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
       nix-search = "nix search nixpkgs";
     };
 
-    plugins = [{
-      name = "plugin-git";
-      src = pkgs.fishPlugins.plugin-git.src;
-    }];
+    plugins = [
+      {
+        name = "plugin-git";
+        src = pkgs.fishPlugins.plugin-git.src;
+      }
+    ];
 
     interactiveShellInit = ''
       set -g fish_color_command blue

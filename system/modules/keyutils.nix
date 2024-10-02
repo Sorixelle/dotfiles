@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.keyutils;
 
-  keyProgram = with lib;
+  keyProgram =
+    with lib;
     types.submodule {
       options = {
         op = mkOption {
@@ -40,10 +46,10 @@ let
         };
       };
     };
-in {
+in
+{
   options.programs.keyutils = with lib; {
-    enable = mkEnableOption
-      "configuration of userspace utilities for Linux keyring management.";
+    enable = mkEnableOption "configuration of userspace utilities for Linux keyring management.";
 
     package = mkOption {
       type = types.package;
@@ -67,20 +73,22 @@ in {
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc."request-key.conf".text = let
-      configLines = lib.concatStringsSep "\n" (builtins.map
-        (p: "${p.op} ${p.type} ${p.description} ${p.calloutInfo} ${p.command}")
-        cfg.keyPrograms);
-    in ''
-      create user         debug:loop:* *        |${pkgs.coreutils}/bin/cat
-      create user         debug:*      negate   ${cfg.package}/bin/keyctl negate %k 30 %S
-      create user         debug:*      rejected ${cfg.package}/bin/keyctl reject %k 30 %c %S
-      create user         debug:*      expired  ${cfg.package}/bin/keyctl reject %k 30 %c %S
-      create user         debug:*      revoked  ${cfg.package}/bin/keyctl reject %k 30 %c %S
-      create user         debug:*      *        ${cfg.package}/share/keyutils/request-key-debug.sh %k %d %c %S
-      create dns_resolver *            *        ${cfg.package}/bin/key.dns_resolver %k
+    environment.etc."request-key.conf".text =
+      let
+        configLines = lib.concatStringsSep "\n" (
+          builtins.map (p: "${p.op} ${p.type} ${p.description} ${p.calloutInfo} ${p.command}") cfg.keyPrograms
+        );
+      in
+      ''
+        create user         debug:loop:* *        |${pkgs.coreutils}/bin/cat
+        create user         debug:*      negate   ${cfg.package}/bin/keyctl negate %k 30 %S
+        create user         debug:*      rejected ${cfg.package}/bin/keyctl reject %k 30 %c %S
+        create user         debug:*      expired  ${cfg.package}/bin/keyctl reject %k 30 %c %S
+        create user         debug:*      revoked  ${cfg.package}/bin/keyctl reject %k 30 %c %S
+        create user         debug:*      *        ${cfg.package}/share/keyutils/request-key-debug.sh %k %d %c %S
+        create dns_resolver *            *        ${cfg.package}/bin/key.dns_resolver %k
 
-      ${configLines}
-    '';
+        ${configLines}
+      '';
   };
 }

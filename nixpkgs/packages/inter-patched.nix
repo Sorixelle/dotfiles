@@ -1,4 +1,9 @@
-{ stdenv, inter, pyftfeatfreeze, python3Packages }:
+{
+  stdenv,
+  inter,
+  pyftfeatfreeze,
+  python3Packages,
+}:
 
 stdenv.mkDerivation {
   pname = "inter-patched";
@@ -6,7 +11,10 @@ stdenv.mkDerivation {
 
   src = inter;
 
-  nativeBuildInputs = [ pyftfeatfreeze python3Packages.fonttools ];
+  nativeBuildInputs = [
+    pyftfeatfreeze
+    python3Packages.fonttools
+  ];
 
   buildPhase = ''
     cd /build

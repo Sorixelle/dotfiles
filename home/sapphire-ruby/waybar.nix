@@ -16,7 +16,11 @@
         name = "topbar";
         modules-left = [ "hyprland/window" ];
         modules-center = [ "hyprland/workspaces" ];
-        modules-right = [ "mpris" "custom/mediaedge" "clock" ];
+        modules-right = [
+          "mpris"
+          "custom/mediaedge"
+          "clock"
+        ];
 
         # TODO: why did this break?
         # "cava" = {
@@ -34,7 +38,9 @@
           format = "{:%I:%M %p}";
         };
 
-        "custom/mediaedge" = { format = " "; };
+        "custom/mediaedge" = {
+          format = " ";
+        };
 
         "hyprland/window" = {
           separate-outputs = true;

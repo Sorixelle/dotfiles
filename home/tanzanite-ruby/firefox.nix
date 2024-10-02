@@ -1,8 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  home.sessionVariables.BROWSER =
-    "${config.programs.firefox.package}/bin/firefox";
+  home.sessionVariables.BROWSER = "${config.programs.firefox.package}/bin/firefox";
 
   programs.firefox = {
     enable = true;
@@ -14,8 +13,10 @@
       isDefault = true;
       name = "Default";
       path = "default";
-      extensions = with pkgs.nur.repos.rycee.firefox-addons;
-        with pkgs; [
+      extensions =
+        with pkgs.nur.repos.rycee.firefox-addons;
+        with pkgs;
+        [
           bitwarden
           decentraleyes
           firefox-color

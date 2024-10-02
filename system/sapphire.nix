@@ -20,21 +20,24 @@
         };
         installPhase = ''
           cd drivers/hwmon
-          install nzxt-grid3.ko nzxt-kraken2.ko nzxt-kraken3.ko nzxt-smart2.ko -Dm444 -t ${
-            placeholder "out"
-          }/lib/modules/${config.boot.kernelPackages.kernel.modDirVersion}/kernel/drivers/hwmon
+          install nzxt-grid3.ko nzxt-kraken2.ko nzxt-kraken3.ko nzxt-smart2.ko -Dm444 -t ${placeholder "out"}/lib/modules/${config.boot.kernelPackages.kernel.modDirVersion}/kernel/drivers/hwmon
         '';
       }))
     ];
 
     initrd = {
-      availableKernelModules =
-        [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
       kernelModules = [ "kvm-amd" ];
 
       luks.devices = {
-        Encrypt-Key.device =
-          "/dev/disk/by-uuid/5bc957cf-200a-4921-a624-04e147d8942a";
+        Encrypt-Key.device = "/dev/disk/by-uuid/5bc957cf-200a-4921-a624-04e147d8942a";
 
         Encrypted-Swap = {
           device = "/dev/disk/by-uuid/40a0f85c-380b-416b-8889-0e461441b564";
@@ -101,13 +104,18 @@
     "/vault" = {
       device = "/dev/disk/by-uuid/F279-E82B";
       fsType = "exfat";
-      options = [ "defaults" "umask=000" ];
+      options = [
+        "defaults"
+        "umask=000"
+      ];
     };
     "/home/ruby/media" = {
       device = "fluorite:/mnt/hdd/Data/Media";
       fsType = "nfs";
-      options =
-        [ "x-systemd.automount" "x-systemd.requires=tailscaled.service" ];
+      options = [
+        "x-systemd.automount"
+        "x-systemd.requires=tailscaled.service"
+      ];
     };
     "/home/ruby/download" = {
       device = "tmpfs";
@@ -115,7 +123,7 @@
     };
   };
 
-  swapDevices = [{ device = "/dev/mapper/Encrypted-Swap"; }];
+  swapDevices = [ { device = "/dev/mapper/Encrypted-Swap"; } ];
 
   hardware = {
     bluetooth.enable = true;
@@ -139,7 +147,14 @@
   users = {
     users.ruby = {
       description = "Ruby Iris Juric";
-      extraGroups = [ "adbusers" "audio" "camera" "docker" "libvirtd" "wheel" ];
+      extraGroups = [
+        "adbusers"
+        "audio"
+        "camera"
+        "docker"
+        "libvirtd"
+        "wheel"
+      ];
       isNormalUser = true;
       uid = 1000;
     };
@@ -154,13 +169,26 @@
       AttrTabletSmoothing=0
     '';
 
-    sessionVariables = { NIXOS_OZONE_WL = "1"; };
-    systemPackages = with pkgs; [ liquidctl ntfs3g pciutils usbutils ];
+    sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+    };
+    systemPackages = with pkgs; [
+      liquidctl
+      ntfs3g
+      pciutils
+      usbutils
+    ];
   };
 
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [ corefonts etBook iosevka-bin inter-patched roboto ];
+    packages = with pkgs; [
+      corefonts
+      etBook
+      iosevka-bin
+      inter-patched
+      roboto
+    ];
     fontconfig = {
       defaultFonts = {
         sansSerif = [ "Intur" ];
@@ -232,8 +260,7 @@
       enable = true;
       settings = {
         default_session = {
-          command =
-            "${pkgs.cage}/bin/cage -s -- ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
+          command = "${pkgs.cage}/bin/cage -s -- ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
         };
         initial_session = {
           command = "${config.programs.hyprland.package}/bin/Hyprland";
@@ -268,13 +295,15 @@
         # completely drop things like notification sounds, so I disable the session timeout in Wireplumber so that the
         # audio interface never gets closed.
         disable-session-timeout = {
-          "monitor.alsa.rules" = [{
-            matches = [
-              { "node.name" = "~alsa_input.*"; }
-              { "node.name" = "~alsa_output.*"; }
-            ];
-            actions.update-props."session.suspend-timeout-seconds" = 0;
-          }];
+          "monitor.alsa.rules" = [
+            {
+              matches = [
+                { "node.name" = "~alsa_input.*"; }
+                { "node.name" = "~alsa_output.*"; }
+              ];
+              actions.update-props."session.suspend-timeout-seconds" = 0;
+            }
+          ];
         };
       };
     };
@@ -293,8 +322,7 @@
       enable = true;
       sshKey = "/etc/backup_key";
       commonArgs = [ "--no-privilege-elevation" ];
-      commands."Sapphire/Ruby/Home".target =
-        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
+      commands."Sapphire/Ruby/Home".target = "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
     };
 
     srxl.qmk.enable = true;
@@ -311,17 +339,22 @@
     xserver = {
       enable = true;
 
-      videoDrivers = [ "amdgpu" "qxl" ];
+      videoDrivers = [
+        "amdgpu"
+        "qxl"
+      ];
 
       wacom.enable = true;
 
-      windowManager.session = [{
-        name = "home-manager";
-        start = ''
-          ${pkgs.runtimeShell} $HOME/.xsession-hm &
-          waitPID=$!
-        '';
-      }];
+      windowManager.session = [
+        {
+          name = "home-manager";
+          start = ''
+            ${pkgs.runtimeShell} $HOME/.xsession-hm &
+            waitPID=$!
+          '';
+        }
+      ];
     };
   };
 
@@ -329,7 +362,10 @@
     syncoid-Sapphire-Ruby-Home.onFailure = [ "backup-fail-notify.service" ];
     backup-fail-notify = {
       description = "Send notification when Syncoid job fails";
-      path = [ pkgs.curl pkgs.systemd ];
+      path = [
+        pkgs.curl
+        pkgs.systemd
+      ];
       serviceConfig.Type = "oneshot";
       script = ''
         RUN_ID=$(systemctl show --value -p InvocationID syncoid-Sapphire-Ruby-Home.service)

@@ -1,10 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-let conf = config.srxl.audioprod;
-in {
+let
+  conf = config.srxl.audioprod;
+in
+{
   options.srxl.audioprod = {
-    enable = lib.mkEnableOption
-      "tools and other configuration for audio production/editing";
+    enable = lib.mkEnableOption "tools and other configuration for audio production/editing";
 
     user = lib.mkOption {
       type = lib.types.str;

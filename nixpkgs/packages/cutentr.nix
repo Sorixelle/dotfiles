@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitLab, qt5 }:
+{
+  stdenv,
+  fetchFromGitLab,
+  qt5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cutentr";

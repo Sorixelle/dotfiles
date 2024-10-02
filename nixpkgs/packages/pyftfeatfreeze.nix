@@ -12,7 +12,10 @@ python3Packages.buildPythonApplication {
     hash = "sha256-mIWQF9LTVKxIkwHLCTVK1cOuiaduJyX8pyBZ/0RKIVE=";
   };
 
-  nativeBuildInputs = with python3Packages; [ poetry-core configparser ];
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+    configparser
+  ];
 
   propagatedBuildInputs = with python3Packages; [ fonttools ];
 

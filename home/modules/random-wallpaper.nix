@@ -1,9 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.srxl.randomWallpaper = with lib; {
-    enable = mkEnableOption
-      "a service for periodically switching to random wallpapers.";
+    enable = mkEnableOption "a service for periodically switching to random wallpapers.";
 
     directory = mkOption {
       type = types.str;
@@ -24,30 +28,38 @@
     };
   };
 
-  config = let
-    conf = config.srxl.randomWallpaper;
+  config =
+    let
+      conf = config.srxl.randomWallpaper;
 
-    switcherScript = pkgs.writeShellScript "wallpaper-switch" ''
-      ${pkgs.feh}/bin/feh --randomize --bg-fill ${conf.directory}/*
-    '';
-  in lib.mkIf conf.enable {
-    systemd.user = {
-      services.switch-wallpaper = {
-        Unit = { Description = "Switch wallpaper to a random image"; };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${switcherScript}";
+      switcherScript = pkgs.writeShellScript "wallpaper-switch" ''
+        ${pkgs.feh}/bin/feh --randomize --bg-fill ${conf.directory}/*
+      '';
+    in
+    lib.mkIf conf.enable {
+      systemd.user = {
+        services.switch-wallpaper = {
+          Unit = {
+            Description = "Switch wallpaper to a random image";
+          };
+          Service = {
+            Type = "oneshot";
+            ExecStart = "${switcherScript}";
+          };
         };
-      };
 
-      timers.switch-wallpaper = {
-        Unit = { Description = "Periodically switch wallpapers"; };
-        Timer = {
-          OnCalendar = conf.duration;
-          OnStartupSec = "0";
+        timers.switch-wallpaper = {
+          Unit = {
+            Description = "Periodically switch wallpapers";
+          };
+          Timer = {
+            OnCalendar = conf.duration;
+            OnStartupSec = "0";
+          };
+          Install = {
+            WantedBy = [ "graphical-session.target" ];
+          };
         };
-        Install = { WantedBy = [ "graphical-session.target" ]; };
       };
     };
-  };
 }

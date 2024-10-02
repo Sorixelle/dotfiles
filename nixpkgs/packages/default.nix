@@ -3,9 +3,9 @@ final: prev:
 let
   affinityPackages = prev.callPackage ./affinity { };
 
-  gcc-cortex-a-9 = target:
-    prev.callPackage ./gcc-cortex-a.nix { inherit target; };
-in {
+  gcc-cortex-a-9 = target: prev.callPackage ./gcc-cortex-a.nix { inherit target; };
+in
+{
   alter = prev.callPackage ./ff-exts/alter.nix { };
   frankerfacez = prev.callPackage ./ff-exts/frankerfacez.nix { };
   ff-stylish = prev.callPackage ./ff-exts/stylish.nix { };

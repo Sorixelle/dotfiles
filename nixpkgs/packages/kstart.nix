@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, perl, krb5 }:
+{
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  perl,
+  krb5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kstart";
@@ -12,7 +19,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ krb5 ];
-  nativeBuildInputs = [ autoreconfHook pkg-config perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    perl
+  ];
 
   preConfigure = ''
     pod2man --release="$version" --center="kstart" docs/k5start.pod > docs/k5start.1
