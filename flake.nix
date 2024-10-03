@@ -9,7 +9,7 @@
     };
 
     emacs = {
-      url = "github:nix-community/emacs-overlay/6560f39fd828385e72a931e0d567d97e203781d8";
+      url = "github:nix-community/emacs-overlay";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "flake-utils";
