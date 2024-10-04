@@ -942,6 +942,7 @@ By default, all of those commands are bound under =C-x p=, which is a touch awkw
 #+begin_src emacs-lisp
   (srxl/def-leader-key "b" #'project-switch-to-buffer "Switch buffer")
   (srxl/def-leader-key "f" #'project-find-file "Open file in project")
+  (srxl/def-leader-key "d" #'project-dired "Open project directory")
 #+end_src
 
 project.el also has commands to grep projects, but I have [[https://github.com/BurntSushi/ripgrep][ripgrep]] installed on my system, which is a much faster grep replacement. Unfortunately, there's no way to make it use ripgrep, but [[https://github.com/dajva/rg.el][rg.el]] has project searching included, so I can use that instead.
