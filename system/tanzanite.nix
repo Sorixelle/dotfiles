@@ -175,13 +175,15 @@
   programs = {
     dconf.enable = true;
 
+    gphoto2.enable = true;
+
     hyprland.enable = true;
 
     regreet = {
       enable = true;
       settings = {
         GTK = {
-          font_name = "${builtins.head config.fonts.fontconfig.defaultFonts.sansSerif} 12";
+          font_name = lib.mkForce "${builtins.head config.fonts.fontconfig.defaultFonts.sansSerif} 12";
         };
       };
     };
@@ -215,6 +217,8 @@
         };
       };
     };
+
+    gvfs.enable = true;
 
     pcscd.enable = true;
 
