@@ -93,6 +93,7 @@
     yubikey-manager
     zathura
     zotero
+    zulip
   ];
 
   gtk = with pkgs; {

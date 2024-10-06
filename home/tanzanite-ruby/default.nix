@@ -50,6 +50,7 @@
     yt-dlp
     yubikey-manager
     zathura
+    zulip
   ];
 
   gtk = with pkgs; {
