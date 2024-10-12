@@ -118,4 +118,6 @@ in
   #   nativeBuildInputs = [ prev.pkg-config prev.wineWowPackages.staging ];
   #   makeFlags = [ "PREFIX=${prev.wineWowPackages.staging}" ];
   # });
+
+  xsane = prev.xsane.override { gimpSupport = true; };
 }

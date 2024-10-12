@@ -1,6 +1,15 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
+  imports = [
+    "${modulesPath}/services/hardware/sane_extra_backends/brscan5.nix"
+  ];
+
   time = {
     hardwareClockInLocalTime = true;
     timeZone = "Australia/Melbourne";
@@ -141,6 +150,19 @@
 
     opentabletdriver.enable = true;
 
+    sane = {
+      enable = true;
+      brscan5 = {
+        enable = true;
+        netDevices = {
+          home = {
+            model = "MFC-L2800DW";
+            ip = "10.0.3.251";
+          };
+        };
+      };
+    };
+
     steam-hardware.enable = true;
   };
 
@@ -153,6 +175,8 @@
         "camera"
         "docker"
         "libvirtd"
+        "lp"
+        "scanner"
         "wheel"
       ];
       isNormalUser = true;
@@ -307,6 +331,8 @@
         };
       };
     };
+
+    printing.enable = true;
 
     sanoid = {
       enable = true;

@@ -91,6 +91,7 @@
     xfce.xfconf
     yt-dlp
     yubikey-manager
+    xsane
     zathura
     zotero
     zulip
