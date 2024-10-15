@@ -1165,6 +1165,34 @@ Smartparens fix.
   (srxl/fix-brace-indentation 'astro-ts-mode "{" "(" "[")
 #+end_src
 
+*** Scala
+Ahhh, [[https://scala-lang.org/][Scala]]. If she didn't live on the JVM, I'd marry her. Alas, I shall have to learn with my #1 favourite programming language being tied to the legacy of crusty old Java. Such is life, I guess.
+
+...what's that? [[https://scala-native.org/en/stable/index.html][scala-native]]? Oooooh. Now we're talking.
+
+Aaaanyways, language setup. [[https://github.com/KaranAhlawat/scala-ts-mode][scala-ts-mode]] will do the trick for syntax highlighting.
+
+#+begin_src emacs-lisp
+  (use-package scala-ts-mode
+    :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
+    :config <<scala-config>>)
+#+end_src
+
+Eglot doesn't recognise that mode out of the box, so I'll give it a little nudge to use the existing definition for =scala-mode=.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref scala-config
+  (add-to-list 'eglot-server-programs
+               `((scala-mode scala-ts-mode)
+                 . ,(alist-get 'scala-mode eglot-server-programs)))
+  (add-hook 'scala-ts-mode-hook 'eglot-ensure)
+#+end_src
+
+Smartparens fix. The usual.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref astro-config
+  (srxl/fix-brace-indentation 'scala-ts-mode "{" "(" "[")
+#+end_src
+
 *** Elixir
 [[https://elixir-lang.org/][Elixir]] is a pretty niche thingy, but oooooh boy I like it. It's a Erlang/BEAM based language, which is really funky - don't see a lot of those very often. The BEAM model is absolutely fascinating to me, and I think it lends itself incredibly well to building reliable, self-healing apps that fail often, fail fast, and recover quickly. Definitely a lot of fun for backend apps. There's a built-in Tree-sitter mode for it, so I'll use that.
 
