@@ -38,9 +38,9 @@
 
       bbsys = "${pkgs.cp437}/bin/cp437 telnet bigbeautifulsystem.ddns.net 2323";
 
-      sys-rebuild = "sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
-      sys-test = "sudo nixos-rebuild -L --show-trace --flake ~/nixos test";
-      sys-upgrade = "nix flake update --flake ~/nixos && sudo nixos-rebuild -L --show-trace --flake ~/nixos switch";
+      sys-rebuild = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
+      sys-test = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos test &| nom --json";
+      sys-upgrade = "nix flake update --flake ~/nixos && sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
       nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
       nix-search = "nix search nixpkgs";
     };

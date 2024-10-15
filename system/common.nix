@@ -65,6 +65,7 @@
     htop
     ncdu
     neovim
+    nix-output-monitor
     psmisc
     ripgrep
     wget
