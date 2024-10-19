@@ -390,6 +390,12 @@ I'll also leave a little spot in this function, to do some theme overrides later
     (srxl/load-theme))
 #+end_src
 
+Tree-sitter based modes have a variable, =treesit-font-lock-level= that controls, generally, how much colour is used when highlighting syntax. I like colours. Pretty. So I'll crank that one up to max, thank you.
+
+#+begin_src emacs-lisp
+  (setopt treesit-font-lock-level 4)
+#+end_src
+
 *** Typography
 OK, next on the list - fonts. Again, that's a system thing - all I need to do is take those variables and modify the basic faces to use them, as well as the default frame parameters, so new frames start with those fonts too.
 
