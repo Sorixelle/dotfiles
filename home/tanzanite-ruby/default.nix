@@ -35,6 +35,7 @@
     # magic-wormhole
     mpv
     mtr
+    nheko
     nix-prefetch-scripts
     nmap
     pavucontrol
