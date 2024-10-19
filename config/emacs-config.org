@@ -1181,7 +1181,8 @@ Aaaanyways, language setup. [[https://github.com/KaranAhlawat/scala-ts-mode][sca
 #+begin_src emacs-lisp
   (use-package scala-ts-mode
     :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
-    :config <<scala-config>>)
+    :config
+    <<scala-config>>)
 #+end_src
 
 Eglot doesn't recognise that mode out of the box, so I'll give it a little nudge to use the existing definition for =scala-mode=.
