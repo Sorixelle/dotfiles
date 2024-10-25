@@ -9,7 +9,7 @@
 {
   imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
 
-  time.timeZone = "Australia/Perth";
+  time.timeZone = "Australia/Melbourne";
 
   boot = {
     kernelParams = [
