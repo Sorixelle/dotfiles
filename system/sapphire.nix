@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   modulesPath,
   ...
@@ -184,7 +185,10 @@
     };
   };
 
-  nix.settings.trusted-users = [ "ruby" ];
+  nix = {
+    gc.automatic = lib.mkForce false;
+    settings.trusted-users = [ "ruby" ];
+  };
 
   environment = {
     etc."libinput/local-overrides.quirks".text = ''
