@@ -126,15 +126,6 @@
   };
 
   services = {
-    gammastep = {
-      enable = true;
-      provider = "geoclue2";
-      temperature = {
-        day = 6500;
-        night = 2500;
-      };
-    };
-
     gpg-agent = {
       enable = true;
       pinentryPackage = pkgs.pinentry-gnome3;
@@ -143,6 +134,17 @@
     mpris-proxy.enable = true;
 
     udiskie.enable = true;
+
+    wlsunset = {
+      enable = true;
+      latitude = -37.8;
+      longitude = 145;
+      systemdTarget = "sway-session.target";
+      temperature = {
+        day = 6500;
+        night = 3000;
+      };
+    };
   };
 
   srxl = {
