@@ -20,14 +20,8 @@
 
       input-field = [
         {
-          size = {
-            width = 750;
-            height = 125;
-          };
-          position = {
-            x = 0;
-            y = 0;
-          };
+          size = "750 125";
+          position = "0 0";
           halign = "center";
           valign = "center";
 
@@ -48,10 +42,7 @@
           text = "<i>locked</i>";
           color = "rgb(198, 208, 245)";
           font_size = 40;
-          position = {
-            x = 32;
-            y = 32;
-          };
+          position = "32 32";
           valign = "bottom";
           halign = "left";
         }
@@ -59,10 +50,7 @@
           text = "<i>$TIME</i>";
           color = "rgb(198, 208, 245)";
           font_size = 32;
-          position = {
-            x = -32;
-            y = 32;
-          };
+          position = "-32 32";
           valign = "bottom";
           halign = "right";
         }
