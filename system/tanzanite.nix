@@ -132,7 +132,7 @@
   environment = {
     etc = {
       "greetd/environments".text = ''
-        Hyprland
+        sway
       '';
     };
 
@@ -177,8 +177,6 @@
 
     gphoto2.enable = true;
 
-    hyprland.enable = true;
-
     regreet = {
       enable = true;
       settings = {
@@ -187,6 +185,8 @@
         };
       };
     };
+
+    sway.enable = true;
   };
 
   security = {
@@ -212,7 +212,7 @@
       enable = true;
       settings = {
         initial_session = {
-          command = "${config.programs.hyprland.package}/bin/Hyprland";
+          command = "${pkgs.sway}/bin/sway";
           user = "ruby";
         };
       };
