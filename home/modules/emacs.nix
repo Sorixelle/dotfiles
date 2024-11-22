@@ -94,6 +94,7 @@ with lib;
         enable = true;
         client.enable = true;
         defaultEditor = true;
+        startWithUserSession = "graphical";
       };
 
       home.file = {
