@@ -4,6 +4,7 @@
   imports = [
     ../modules/common-linux.nix
 
+    ./dunst.nix
     ./firefox.nix
     ./fish.nix
     ./kitty.nix
