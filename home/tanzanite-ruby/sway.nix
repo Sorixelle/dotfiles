@@ -67,7 +67,7 @@ in
       # Keybindings
       modifier = "Mod4";
       workspaceAutoBackAndForth = true;
-      defaultWorkspace = "1:web";
+      defaultWorkspace = "workspace 1:web";
       keybindings =
         let
           mod = config.wayland.windowManager.sway.config.modifier;
