@@ -1189,15 +1189,30 @@ Eglot doesn't recognise that mode out of the box, so I'll give it a little nudge
 
 #+begin_src emacs-lisp :tangle no :noweb-ref scala-config
   (add-to-list 'eglot-server-programs
-               `((scala-mode scala-ts-mode)
-                 . ,(alist-get 'scala-mode eglot-server-programs)))
+               '((scala-mode scala-ts-mode)
+                 . ("metals" "-Dmetals.client=emacs")))
   (add-hook 'scala-ts-mode-hook 'eglot-ensure)
 #+end_src
 
 Smartparens fix. The usual.
 
-#+begin_src emacs-lisp :tangle no :noweb-ref astro-config
+#+begin_src emacs-lisp :tangle no :noweb-ref scala-config
   (srxl/fix-brace-indentation 'scala-ts-mode "{" "(" "[")
+#+end_src
+
+*** Java
+Speaking of the JVM... Java. I don't like Java, but sometimes I gotta touch it. And I may as well have my editor all nice and configured for it for those times. Bweh.
+
+Requiring =java-ts-mode= should be enough to get everything setup properly.
+
+#+begin_src emacs-lisp
+  (require 'java-ts-mode)
+#+end_src
+
+And the Smartparens fix, of course.
+
+#+begin_src emacs-lisp
+  (srxl/fix-brace-indentation 'java-ts-mode "{" "(" "[")
 #+end_src
 
 *** Elixir
