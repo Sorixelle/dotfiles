@@ -21,6 +21,7 @@
           decentraleyes
           firefox-color
           frankerfacez
+          kagi-search
           multi-account-containers
           old-reddit-redirect
           react-devtools
