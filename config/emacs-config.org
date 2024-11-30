@@ -1194,6 +1194,13 @@ Eglot doesn't recognise that mode out of the box, so I'll give it a little nudge
   (add-hook 'scala-ts-mode-hook 'eglot-ensure)
 #+end_src
 
+[[https://scalameta.org/scalafmt/][Scalafmt]] is probably the most well known formatter for Scala. Aphelia doesn't have it setup in it's own list of formatters, so I'll just pop that in manually here.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref scala-config
+  (add-to-list 'apheleia-formatters '(scalafmt . ("scalafmt" "--stdin" "--stdout" "--quiet")))
+  (add-to-list 'apheleia-mode-alist '(scala-ts-mode . scalafmt))
+#+end_src
+
 Smartparens fix. The usual.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref scala-config
