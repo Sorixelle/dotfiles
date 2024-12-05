@@ -241,32 +241,28 @@
       ];
     };
 
-    fonts =
-      let
-        nerdfonts = pkgs.nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; };
-      in
-      {
-        monospace = {
-          name = "Iosevka";
-          size = 12;
-          package = pkgs.iosevka-bin;
-        };
-        ui = {
-          name = "Intur";
-          size = 12;
-          package = pkgs.inter-patched;
-        };
-        serif = {
-          name = "ETBembo";
-          size = 12;
-          package = pkgs.etBook;
-        };
-        extraFonts = with pkgs; [
-          emacs-all-the-icons-fonts
-          nerdfonts
-          noto-fonts-cjk
-        ];
+    fonts = {
+      monospace = {
+        name = "Iosevka";
+        size = 12;
+        package = pkgs.iosevka-bin;
       };
+      ui = {
+        name = "Intur";
+        size = 12;
+        package = pkgs.inter-patched;
+      };
+      serif = {
+        name = "ETBembo";
+        size = 12;
+        package = pkgs.etBook;
+      };
+      extraFonts = with pkgs; [
+        emacs-all-the-icons-fonts
+        nerd-fonts.symbols-only
+        noto-fonts-cjk-sans
+      ];
+    };
   };
 
   systemd.user = {

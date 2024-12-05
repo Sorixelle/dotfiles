@@ -80,37 +80,11 @@ in
 
   tinfoil-nut = prev.callPackage ./tinfoil-nut.nix { };
 
-  tree-sitter =
-    (prev.tree-sitter.overrideAttrs (old: rec {
-      version = "0.23.0";
-      src = prev.fetchFromGitHub {
-        owner = "tree-sitter";
-        repo = "tree-sitter";
-        rev = "v${version}";
-        hash = "sha256-QNi2u6/jtiMo1dLYoA8Ev1OvZfa8mXCMibSD70J4vVI=";
-        fetchSubmodules = true;
-      };
-      cargoDeps = old.cargoDeps.overrideAttrs (_: {
-        inherit src version;
-        outputHash = "sha256-QvxH5uukaCmpHkWMle1klR5/rA2/HgNehmYIaESNpxc=";
-      });
-    })).override
-      {
-        extraGrammars = {
-          tree-sitter-astro = prev.callPackage ./tree-sitter-astro.nix { };
-          tree-sitter-html = prev.tree-sitter.buildGrammar rec {
-            language = "tree-sitter-html";
-            version = "0.23.0";
-
-            src = prev.fetchFromGitHub {
-              owner = "tree-sitter";
-              repo = language;
-              rev = "v${version}";
-              hash = "sha256-vSiIabzhhTpvt+1Zh+tCad2TR5hG572hRmX2fTjfC7s=";
-            };
-          };
-        };
-      };
+  tree-sitter = prev.tree-sitter.override {
+    extraGrammars = {
+      tree-sitter-astro = prev.callPackage ./tree-sitter-astro.nix { };
+    };
+  };
 
   # TODO: why broke
   # /bin/ld: cannot find -lodbc32: No such file or directory

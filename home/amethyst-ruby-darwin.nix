@@ -30,7 +30,7 @@
     fonts = {
       monospace = {
         name = "BlexMono Nerd Font";
-        package = pkgs.nerdfonts.override { fonts = [ "IBMPlexMono" ]; };
+        package = pkgs.nerd-fonts.blex-mono;
         size = 12;
       };
       ui = {
