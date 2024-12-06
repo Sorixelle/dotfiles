@@ -191,11 +191,16 @@
   };
 
   environment = {
-    etc."libinput/local-overrides.quirks".text = ''
-      [OpenTabletDriver Virtual Tablet]
-      MatchName=OpenTabletDriver*
-      AttrTabletSmoothing=0
-    '';
+    etc = {
+      "greetd/environments".text = ''
+        sway
+      '';
+      "libinput/local-overrides.quirks".text = ''
+        [OpenTabletDriver Virtual Tablet]
+        MatchName=OpenTabletDriver*
+        AttrTabletSmoothing=0
+      '';
+    };
 
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
@@ -263,9 +268,9 @@
 
     gphoto2.enable = true;
 
-    hyprland.enable = true;
-
     ssh.startAgent = true;
+
+    sway.enable = true;
   };
 
   security.rtkit.enable = true;
@@ -291,7 +296,7 @@
           command = "${pkgs.cage}/bin/cage -s -- ${pkgs.greetd.gtkgreet}/bin/gtkgreet";
         };
         initial_session = {
-          command = "${config.programs.hyprland.package}/bin/Hyprland";
+          command = "${config.programs.sway.package}/bin/sway";
           user = "ruby";
         };
       };

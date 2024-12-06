@@ -7,10 +7,10 @@
     ./dunst.nix
     ./firefox.nix
     ./fish.nix
-    ./hyprland.nix
     ./kitty.nix
     ./rofi.nix
     ./starship.nix
+    ./sway.nix
     ./waybar.nix
     ./xdg.nix
   ];
