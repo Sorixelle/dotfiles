@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, ... }:
 
 {
   services.dunst = {
@@ -13,13 +13,12 @@
         width = "(200, 512)";
         height = 128;
         origin = "top-right";
-        offset = "16x16";
+        offset = "0x0";
         notification_limit = 6;
         padding = 8;
         horizontal_padding = 8;
         text_icon_padding = 8;
         frame_width = 4;
-        corner_radius = 16;
         separator_color = "frame";
         separator_height = 4;
         font = "${config.srxl.fonts.ui.name} ${toString config.srxl.fonts.ui.size}";
@@ -29,7 +28,8 @@
         show_age_threshold = "1m";
         word_wrap = true;
         icon_position = "right";
-        browser = "${pkgs.firefox-bin}/bin/firefox";
+        max_icon_size = 256;
+        browser = lib.getExe config.programs.firefox.package;
       };
       urgency_low = {
         background = "#24273a";
