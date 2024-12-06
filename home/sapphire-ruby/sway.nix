@@ -164,7 +164,7 @@ in
             urgentWorkspace = {
               background = "#ed8796";
               border = "#ed8796";
-              text = "#cad3f5";
+              text = "#494d64";
             };
           };
           fonts = {
