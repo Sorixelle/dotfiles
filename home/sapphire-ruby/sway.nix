@@ -168,15 +168,17 @@ in
             };
           };
           fonts = {
-            names = [ "Intur" ];
+            names = [
+              "Intur"
+              "Symbols Nerd Font"
+            ];
             size = 12.0;
           };
 
           trayOutput = "*";
           trayPadding = 4;
 
-          # TODO: better status command
-          statusCommand = lib.getExe pkgs.i3status;
+          statusCommand = "${lib.getExe config.programs.i3status-rust.package} config-default.toml";
         }
       ];
     };
@@ -189,6 +191,55 @@ in
         [app_id=discord] layout tabbed
       }
     '';
+  };
+
+  programs.i3status-rust = {
+    enable = true;
+    bars = {
+      default = {
+        icons = "awesome6";
+        settings.theme = {
+          theme = "ctp-macchiato";
+          overrides = {
+            separator = "";
+            info_bg = "#8bd5ca";
+          };
+        };
+
+        blocks = [
+          {
+            block = "focused_window";
+            format = " $title |";
+          }
+          {
+            block = "cpu";
+            format = " cpu: $utilization.eng(w:1) |";
+            theme_overrides.idle_bg = "#494d64";
+          }
+          {
+            block = "memory";
+            format = " mem: $mem_used_percents.eng(w:1) |";
+            format_alt = " mem: $mem_used / $mem_total |";
+            theme_overrides.idle_bg = "#494d64";
+          }
+          {
+            block = "music";
+            format = " Now Playing: $artist - $title $prev $play $next |";
+            click = [
+              {
+                button = "left";
+                action = "play_pause";
+              }
+            ];
+          }
+          {
+            block = "time";
+            interval = 1;
+            format = " $timestamp.datetime(f:'%a %d/%m %I:%M %P') ";
+          }
+        ];
+      };
+    };
   };
 
   # Wallpaper rotation units
