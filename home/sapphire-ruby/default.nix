@@ -57,7 +57,6 @@
     mtr
     neofetch
     nheko
-    nil
     nix-prefetch-scripts
     nmap
     nodePackages.typescript-language-server

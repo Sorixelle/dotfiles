@@ -189,7 +189,7 @@
           name = "srxl-dotfiles";
 
           nativeBuildInputs = [
-            nil
+            nixd
             nixfmt-rfc-style
 
             (nixos-generators.override { nix = nixVersions.latest; })
