@@ -41,6 +41,7 @@
     ffmpeg-full
     file-roller
     gimp
+    git-diffie
     igir
     imhex
     imv

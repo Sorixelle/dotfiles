@@ -30,6 +30,7 @@
     ffmpeg-full
     file-roller
     gimp
+    git-diffie
     imv
     jump
     libreoffice-fresh
