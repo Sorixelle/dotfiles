@@ -1231,6 +1231,7 @@
         "pre-commit-hooks": "pre-commit-hooks_3",
         "rust-overlay": "rust-overlay_3",
         "shadower": "shadower",
+        "tree-sitter-astro": "tree-sitter-astro",
         "wired-notify": "wired-notify"
       }
     },
@@ -1408,6 +1409,29 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tree-sitter-astro": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1733680234,
+        "narHash": "sha256-ZsItSpYeSPnHn4avpHS54P4J069X9cW8VCRTM9Gfefg=",
+        "owner": "virchau13",
+        "repo": "tree-sitter-astro",
+        "rev": "6e3bad36a8c12d579e73ed4f05676141a4ccf68d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "virchau13",
+        "repo": "tree-sitter-astro",
         "type": "github"
       }
     },

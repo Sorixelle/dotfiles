@@ -63,6 +63,13 @@
       url = "github:nix-community/lanzaboote/v0.3.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    tree-sitter-astro = {
+      url = "github:virchau13/tree-sitter-astro";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
 
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -108,6 +115,13 @@
           #inputs.shadower.overlay
           #inputs.wired-notify.overlays.default
           inputs.hyprland.overlays.default
+          (final: prev: {
+            tree-sitter = prev.tree-sitter.override {
+              extraGrammars = {
+                tree-sitter-astro = inputs.tree-sitter-astro.packages.${system}.default;
+              };
+            };
+          })
           self.overlay
         ];
       };
