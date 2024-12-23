@@ -181,6 +181,11 @@
   };
 
   services = {
+    easyeffects = {
+      enable = true;
+      preset = "DT880";
+    };
+
     udiskie.enable = true;
 
     wlsunset = {
