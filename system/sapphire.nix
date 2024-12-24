@@ -353,11 +353,35 @@
       };
     };
 
+    sunshine = {
+      enable = true;
+      autoStart = true;
+      capSysAdmin = true;
+
+      settings = {
+        locale = "en_GB";
+        sunshine_name = "Sapphire";
+        adapter_name = "/dev/dri/renderD128";
+        output_name = 2;
+      };
+      applications = {
+        apps = [
+          {
+            name = "Steam Big Picture";
+            detached = [
+              "systemctl --user start steam-big-picture"
+            ];
+          }
+        ];
+      };
+    };
+
     syncoid = {
       enable = true;
       sshKey = "/etc/backup_key";
       commonArgs = [ "--no-privilege-elevation" ];
-      commands."Sapphire/Ruby/Home".target = "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
+      commands."Sapphire/Ruby/Home".target =
+        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
     };
 
     srxl.qmk.enable = true;

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   imports = [
@@ -323,6 +323,14 @@
         };
         Install = {
           WantedBy = [ "graphical-session.target" ];
+        };
+      };
+
+      steam-big-picture = {
+        Unit.Description = "Start Steam Big Picture Mode for Sunshine";
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${lib.getExe pkgs.steam} steam://open/bigpicture";
         };
       };
     };
