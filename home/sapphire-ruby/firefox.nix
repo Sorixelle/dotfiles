@@ -26,6 +26,7 @@
           old-reddit-redirect
           react-devtools
           reddit-enhancement-suite
+          redirector
           return-youtube-dislikes
           sidebery
           sponsorblock
