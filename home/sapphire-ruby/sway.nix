@@ -54,7 +54,10 @@ in
         size = 12.0;
       };
       window.border = 4;
-      seat.seat0.xcursor_theme = "${config.gtk.cursorTheme.name} 24";
+      seat.seat0 = {
+        xcursor_theme = "${config.gtk.cursorTheme.name} 24";
+        hide_cursor = "5000";
+      };
 
       # Hardware
       output = {
