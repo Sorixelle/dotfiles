@@ -362,15 +362,13 @@
         locale = "en_GB";
         sunshine_name = "Sapphire";
         adapter_name = "/dev/dri/renderD128";
-        output_name = 2;
+        output_name = 1;
       };
       applications = {
         apps = [
           {
             name = "Steam Big Picture";
-            detached = [
-              "systemctl --user start steam-big-picture"
-            ];
+            cmd = "systemctl --user start steam-big-picture";
           }
         ];
       };

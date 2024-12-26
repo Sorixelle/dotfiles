@@ -65,11 +65,6 @@ in
           mode = "2560x1440@164.958Hz";
           render_bit_depth = "10";
         };
-
-        HEADLESS-1 = {
-          mode = "3840x2160";
-          position = "5000,5000";
-        };
       };
 
       # Keybindings
@@ -119,10 +114,6 @@ in
           workspace = "3:dev";
           output = "DP-1";
         }
-        {
-          workspace = "20:sunshine";
-          output = "HEADLESS-1";
-        }
       ];
 
       startup = [
@@ -147,12 +138,6 @@ in
           { app_id = "Zulip"; }
         ];
         "3:dev" = [ { app_id = "emacs"; } ];
-        "20:sunshine" = [
-          {
-            class = "steam";
-            title = "Steam Big Picture Mode";
-          }
-        ];
       };
 
       bars = [
@@ -212,8 +197,6 @@ in
         # Scratchpad
         [app_id=scratchpad_term] floating enable; resize set 1600 850; move position center; move to scratchpad; scratchpad show
         [app_id=discord] layout tabbed
-
-        [class=steam title="Steam Big Picture Mode"] fullscreen enable;
       }
     '';
   };
