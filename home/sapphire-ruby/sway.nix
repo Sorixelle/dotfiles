@@ -135,7 +135,7 @@ in
         # Other startup apps
         { command = "${lib.getExe config.programs.firefox.package}"; }
         { command = "discord"; }
-        { command = "nheko"; }
+        { command = "cinny"; }
         { command = "zulip"; }
       ];
 
@@ -143,7 +143,7 @@ in
         "1:web" = [ { app_id = "firefox"; } ];
         "2:chat" = [
           { app_id = "discord"; }
-          { app_id = "nheko"; }
+          { app_id = "cinny"; }
           { app_id = "Zulip"; }
         ];
         "3:dev" = [ { app_id = "emacs"; } ];
