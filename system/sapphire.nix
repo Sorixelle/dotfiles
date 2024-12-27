@@ -158,7 +158,7 @@
         netDevices = {
           home = {
             model = "MFC-L2800DW";
-            ip = "10.0.3.251";
+            ip = "10.0.3.25";
           };
         };
       };
