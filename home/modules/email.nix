@@ -69,11 +69,11 @@
             userName = address;
             passwordCommand = "${pkgs.libsecret}/bin/secret-tool lookup email ruby@srxl.me";
             imap = {
-              host = "imap.migadu.com";
+              host = "shadow.mxrouting.net";
               port = 993;
             };
             smtp = {
-              host = "smtp.migadu.com";
+              host = "shadow.mxrouting.net";
               port = 465;
             };
 
