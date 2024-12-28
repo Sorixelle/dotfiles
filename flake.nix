@@ -7,29 +7,13 @@
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.1-2.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     emacs = {
       url = "github:nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nur.url = "github:nix-community/NUR";
-    nixmox = {
-      url = "git+https://git.isincredibly.gay/srxl/nixmox";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
-    musnix = {
-      url = "github:musnix/musnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hypridle = {
-      url = "github:hyprwm/hypridle";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hyprland = {
-      url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland-contrib = {
@@ -40,29 +24,21 @@
       url = "github:hyprwm/hyprlock";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    shadower = {
-      url = "github:n3oney/shadower";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    wired-notify = {
-      url = "github:Toqozz/wired-notify";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        rust-overlay.follows = "rust-overlay";
-      };
-    };
-    eww = {
-      url = "github:elkowar/eww";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.3.0";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        # TODO: https://github.com/nix-community/lanzaboote/issues/411
+        crane.url = "github:ipetkov/crane/f2926e34a1599837f3256c701739529d772e36e7";
+      };
+    };
+    musnix = {
+      url = "github:musnix/musnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nur.url = "github:nix-community/NUR";
+    shadower.url = "github:n3oney/shadower";
     tree-sitter-astro = {
       url = "github:virchau13/tree-sitter-astro";
       inputs = {
@@ -71,18 +47,9 @@
       };
     };
 
+    flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    flake-utils.url = "github:numtide/flake-utils";
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    darwin = {
-      url = "github:LnL7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -92,7 +59,6 @@
       self,
       flake-utils,
       nixpkgs,
-      darwin,
       pre-commit-hooks,
       ...
     }@inputs:
@@ -105,16 +71,9 @@
         config = import ./nixpkgs/config.nix;
         overlays = [
           inputs.emacs.overlay
-          inputs.eww.overlays.default
-          inputs.hypridle.overlays.default
           inputs.hyprlock.overlays.default
-          inputs.hyprland-contrib.overlays.default
-          #inputs.nixmox.overlay
           inputs.nur.overlays.default
-          #inputs.rust-overlay.overlays.default
-          #inputs.shadower.overlay
-          #inputs.wired-notify.overlays.default
-          inputs.hyprland.overlays.default
+          # inputs.shadower.overlay
           (final: prev: {
             tree-sitter = prev.tree-sitter.override {
               extraGrammars = {
@@ -141,7 +100,6 @@
           modules = [
             nixpkgs.nixosModules.notDetected
             inputs.home-manager.nixosModules.home-manager
-            inputs.hyprland.nixosModules.default
             inputs.lix.nixosModules.default
             inputs.musnix.nixosModules.default
 
@@ -155,25 +113,6 @@
             flakePkgs = pkgsBySystem."${system}";
           };
         });
-
-      # Like defineSystem above, but for nix-darwin (macOS) configurations
-      defineDarwin =
-        name:
-        { system, config }:
-        nameValuePair name (
-          darwin.lib.darwinSystem {
-            modules = [
-              inputs.home-manager.darwinModule
-
-              (import ./system-darwin/common.nix {
-                inherit name inputs;
-                nixpkgsConf = genNixpkgsConfig system;
-              })
-
-              (import config)
-            ];
-          }
-        );
     in
     {
       nixosConfigurations = mapAttrs' defineSystem {
@@ -184,13 +123,6 @@
         tanzanite = {
           system = "x86_64-linux";
           config = ./system/tanzanite.nix;
-        };
-      };
-
-      darwinConfigurations = mapAttrs' defineDarwin {
-        amethyst = {
-          system = "x86_64-darwin";
-          config = ./system-darwin/amethyst.nix;
         };
       };
 
@@ -205,8 +137,6 @@
           nativeBuildInputs = [
             nixd
             nixfmt-rfc-style
-
-            (nixos-generators.override { nix = nixVersions.latest; })
           ];
 
           shellHook = ''
@@ -223,7 +153,6 @@
           };
           hooks = {
             nixfmt-rfc-style.enable = true;
-            # nix-linter.enable = true;
           };
         };
       });

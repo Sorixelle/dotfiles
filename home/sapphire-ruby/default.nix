@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../modules/common-linux.nix
+    ../modules/common.nix
 
     ./dunst.nix
     ./firefox.nix
@@ -11,14 +11,10 @@
     ./rofi.nix
     ./starship.nix
     ./sway.nix
-    ./waybar.nix
     ./xdg.nix
   ];
 
   home.packages = with pkgs; [
-    _3dsconv
-    affinity-designer
-    affinity-photo
     audacity
     (aspellWithDicts (
       dicts: with dicts; [
@@ -30,74 +26,47 @@
     betterdiscordctl
     bitwarden
     bitwarden-cli
-    cachix
     calibre
     cinny-desktop
-    ctrtool
-    cutentr
     darktable
     discord
-    fbi-servefiles
     ffmpeg-full
     file-roller
     gimp
     git-diffie
-    igir
-    imhex
     imv
     inetutils
     jump
     libreoffice-fresh
-    liquidctl
-    lm_sensors
-    kopia
-    magic-wormhole
-    makerom
-    moserial
     mpv
-    mtr
-    neofetch
-    nheko
     nix-prefetch-scripts
-    nmap
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
     osu-lazer-bin
     pavucontrol
-    perlPackages.ArchiveZip # crc32 command-line utility
     picard
     plexamp
-    plex-media-player
     prismlauncher
     python3
     qbittorrent
-    remmina
     rs-git-fsmonitor
     scr
     solaar
     steam
-    steam-run
-    spek
-    tinfoil-nut
-    trash-cli
     virt-manager
     vlc
     winbox
-    wineasio
     wineWowPackages.staging
     winetricks
     wireshark
     xfce.thunar
     xfce.xfconf
-    yt-dlp
-    yubikey-manager
     xsane
     zathura
-    zotero
     zulip
   ];
 
-  gtk = with pkgs; {
+  gtk = {
     enable = true;
     cursorTheme = {
       name = "catppuccin-macchiato-teal-cursors";
@@ -105,7 +74,7 @@
     };
     iconTheme = {
       name = "Arc";
-      package = arc-icon-theme;
+      package = pkgs.arc-icon-theme;
     };
     theme = {
       name = "catppuccin-macchiato-teal-standard+rimless";
@@ -192,7 +161,7 @@
       enable = true;
       latitude = -37.8;
       longitude = 145;
-      systemdTarget = "hyprland-session.target";
+      systemdTarget = "sway-session.target";
       temperature = {
         day = 6500;
         night = 3000;
@@ -218,16 +187,7 @@
 
     email = {
       enable = true;
-      watchFolders = [
-        "auxolotl"
-        "qubes-announce"
-      ];
       mu4eShortcuts = [
-        {
-          name = "Auxolotl";
-          folder = "/auxolotl";
-          key = "a";
-        }
         {
           name = "Emacs Announcements";
           folder = "/info-gnu-emacs";
@@ -272,13 +232,6 @@
 
   systemd.user = {
     services = {
-      # nightly-backup = {
-      #   Unit = { Description = "Backup user data directory to local NAS"; };
-      #   Service = {
-      #     Type = "oneshot";
-      #     ExecStart = "${pkgs.kopia}/bin/kopia snapshot create /home/ruby/usr";
-      #   };
-      # };
       weekly-backup = {
         Unit = {
           Description = "Backup user data directory to offsite storage";
@@ -336,17 +289,6 @@
     };
 
     timers = {
-      nightly-backup = {
-        Unit = {
-          Description = "Backup user data directory to local NAS every night at 6pm";
-        };
-        Timer = {
-          OnCalendar = "18:00:00";
-        };
-        Install = {
-          WantedBy = [ "graphical-session.target" ];
-        };
-      };
       weekly-backup = {
         Unit = {
           Description = "Backup user data directory to offsite storage every Saturday at 12pm";
@@ -358,36 +300,6 @@
           WantedBy = [ "graphical-session.target" ];
         };
       };
-    };
-  };
-
-  xdg = {
-    configFile = {
-      "neofetch/config.conf".text = ''
-        print_info() {
-          info "" distro
-          info "󰍹" de
-          info "󰉼" theme
-          info "" term
-          info "" cpu
-          info "󰘚" memory
-          info cols
-        }
-
-        distro_shorthand="on"
-        os_arch="off"
-        memory_unit="gib"
-        shell_version="off"
-        cpu_speed="off"
-        cpu_cores="off"
-        gpu_type="dedicated"
-        gtk_shorthand="on"
-        separator=" "
-        block_width=3
-        image_backend="kitty"
-        image_source="${./img/fetch.png}"
-        image_size="15%"
-      '';
     };
   };
 

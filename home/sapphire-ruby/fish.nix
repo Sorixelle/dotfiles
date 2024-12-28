@@ -11,7 +11,7 @@
           if [ -n "$pnpx_command" ]
             $pnpx_command $argv
           else
-            nix shell nixpkgs#nodePackages.pnpm --command pnpx $argv
+            nix shell nixpkgs#pnpm --command pnpx $argv
           end
         '';
       };
@@ -23,7 +23,7 @@
           if [ -n "$pnpm_command" ]
             $pnpm_command create $argv
           else
-            nix run nixpkgs#nodePackages.pnpm create $argv
+            nix run nixpkgs#pnpm create $argv
           end
         '';
       };
@@ -36,8 +36,6 @@
       lat = "eza --icons -bhlaT";
       vim = "nvim";
 
-      bbsys = "${pkgs.cp437}/bin/cp437 telnet bigbeautifulsystem.ddns.net 2323";
-
       sys-rebuild = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
       sys-test = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos test &| nom --json";
       sys-upgrade = "nix flake update --flake ~/nixos && sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
@@ -46,10 +44,6 @@
     };
 
     plugins = [
-      {
-        name = "fzf";
-        src = pkgs.fishPlugins.fzf.src;
-      }
       {
         name = "plugin-git";
         src = pkgs.fishPlugins.plugin-git.src;

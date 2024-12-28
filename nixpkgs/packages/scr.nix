@@ -1,22 +1,16 @@
 {
+  lib,
   writeScriptBin,
+
   powershell,
-  bash,
+
   libnotify,
-  grimblast,
-  hyprland,
+  sway-contrib,
   wl-clipboard,
 }:
 
-let
-  grimblast-cmd = "${grimblast}/bin/grimblast";
-  hyprctl = "${hyprland}/bin/hyprctl";
-  notify-send = "${libnotify}/bin/notify-send";
-  # shadower-cmd = "${shadower}/bin/shadower";
-  wl-copy = "${wl-clipboard}/bin/wl-copy";
-in
 writeScriptBin "scr" ''
-  #!${powershell}/bin/pwsh
+  #!${lib.getExe powershell}
 
   Param(
       [Parameter(Mandatory, HelpMessage="What region of the screen to capture. Valid options are Screen, Active and Selection.")]
@@ -31,24 +25,23 @@ writeScriptBin "scr" ''
     $OutPath = ""
 
     If ($Mode -eq "Active") {
-        $Radius = (${hyprctl} -j getoption decoration:rounding | ConvertFrom-Json).int
-
         $OutPath = If ($Clipboard) {""} Else {
             $Date = Get-Date -Format "o"
             "$env:XDG_PICTURES_DIR/$Date\.png"
         }
-        # BUG: shadower currently broken
-        # $Args = If ($Clipboard) {"| ${wl-copy}"} Else {"-o $OutPath"}
-        $Args = If ($Clipboard) {"- | ${wl-copy}"} Else {"$OutPath"}
 
-        # bash -c "${grimblast-cmd} save active - | {shadower-cmd} -r $Radius -c 0x00000070 $Args"
-        bash -c "${grimblast-cmd} save active $Args"
+        # TODO: figure out why the shadower build is completely busted
+        # $Args = If ($Clipboard) {"| ${wl-clipboard}/bin/wl-copy"} Else {"-o $OutPath"}
+        # bash -c "${lib.getExe sway-contrib.grimshot} save active - | {lib.getExe shadower} -c 0x00000070 $Args"
+
+        $Args = If ($Clipboard) {"- | ${wl-clipboard}/bin/wl-copy"} Else {"$OutPath"}
+        bash -c "${lib.getExe sway-contrib.grimshot} save active $Args"
     } Else {
         $Action = If ($Clipboard) {"copy"} Else {"save"}
         $Target = If ($Mode -eq "Screen") {"output"} Else {"area"}
 
-        $OutPath = ${grimblast-cmd} $Action $Target
+        $OutPath = ${lib.getExe sway-contrib.grimshot} $Action $Target
     }
 
-    ${notify-send} -a "Screenshot" "$ActionName!" $OutPath
+    ${lib.getExe libnotify} -a "Screenshot" "$ActionName!" $OutPath
 ''

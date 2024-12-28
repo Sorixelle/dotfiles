@@ -7,15 +7,15 @@
 }:
 
 {
-  imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
+  imports = [
+    inputs.nixos-hardware.nixosModules.framework-16-7040-amd
+    inputs.lanzaboote.nixosModules.lanzaboote
+  ];
 
   time.timeZone = "Australia/Melbourne";
 
   boot = {
-    kernelParams = [
-      "quiet"
-      "amd_pstate=active"
-    ];
+    kernelParams = [ "quiet" ];
     consoleLogLevel = 3;
 
     initrd = {
@@ -106,17 +106,9 @@
   hardware = {
     bluetooth.enable = true;
 
-    cpu.amd.updateMicrocode = true;
-
     enableRedistributableFirmware = true;
 
-    graphics.enable = true;
-
-    keyboard.qmk.enable = true;
-
     logitech.wireless.enable = true;
-
-    sensor.iio.enable = true;
   };
 
   users.users.ruby = {
@@ -124,7 +116,7 @@
     extraGroups = [
       "audio"
       "wheel"
-    ]; # Enable ‘sudo’ for the user.
+    ];
     isNormalUser = true;
     uid = 1000;
   };
@@ -202,8 +194,6 @@
 
     dbus.packages = [ pkgs.gcr ];
 
-    fprintd.enable = true;
-
     fwupd.enable = true;
 
     gnome.gnome-keyring.enable = true;
@@ -228,8 +218,6 @@
       pulse.enable = true;
     };
 
-    power-profiles-daemon.enable = true;
-
     sanoid = {
       enable = true;
       datasets."Tanzanite/Ruby/Home" = {
@@ -246,7 +234,8 @@
       enable = true;
       sshKey = "/etc/backup_key";
       commonArgs = [ "--no-privilege-elevation" ];
-      commands."Tanzanite/Ruby/Home".target = "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Tanzanite/Ruby/Home";
+      commands."Tanzanite/Ruby/Home".target =
+        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Tanzanite/Ruby/Home";
     };
 
     tailscale = {

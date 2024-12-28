@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../modules/common-linux.nix
+    ../modules/common.nix
 
     ./dunst.nix
     ./firefox.nix
@@ -34,15 +34,10 @@
     imv
     jump
     libreoffice-fresh
-    # magic-wormhole
     mpv
-    mtr
-    nheko
     nix-prefetch-scripts
-    nmap
     pavucontrol
     plexamp
-    plex-media-player
     python3
     solaar
     vlc
@@ -50,8 +45,6 @@
     winetricks
     xfce.thunar
     xfce.xfconf
-    yt-dlp
-    yubikey-manager
     zathura
     zulip
   ];

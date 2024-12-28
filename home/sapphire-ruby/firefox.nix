@@ -23,7 +23,6 @@
           frankerfacez
           multi-account-containers
           kagi-search
-          old-reddit-redirect
           react-devtools
           reddit-enhancement-suite
           redirector

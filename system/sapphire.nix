@@ -20,21 +20,6 @@
     kernelParams = [ "quiet" ];
     consoleLogLevel = 3;
 
-    extraModulePackages = [
-      (config.boot.kernelPackages.liquidtux.overrideAttrs (_: {
-        src = pkgs.fetchFromGitHub {
-          owner = "liquidctl";
-          repo = "liquidtux";
-          rev = "b2545177be1d0f8c0eed0da4a2e0e487f708fc16";
-          hash = "sha256-ByrUNTDMXACchpNiLFNuz3rnPBqoZLEYtGNRArjjqec=";
-        };
-        installPhase = ''
-          cd drivers/hwmon
-          install nzxt-grid3.ko nzxt-kraken2.ko nzxt-kraken3.ko nzxt-smart2.ko -Dm444 -t ${placeholder "out"}/lib/modules/${config.boot.kernelPackages.kernel.modDirVersion}/kernel/drivers/hwmon
-        '';
-      }))
-    ];
-
     initrd = {
       availableKernelModules = [
         "nvme"
@@ -147,6 +132,8 @@
       enable32Bit = true;
     };
 
+    keyboard.qmk.enable = true;
+
     logitech.wireless.enable = true;
 
     opentabletdriver.enable = true;
@@ -185,10 +172,7 @@
     };
   };
 
-  nix = {
-    gc.automatic = lib.mkForce false;
-    settings.trusted-users = [ "ruby" ];
-  };
+  nix.settings.trusted-users = [ "ruby" ];
 
   environment = {
     etc = {
@@ -206,8 +190,6 @@
       NIXOS_OZONE_WL = "1";
     };
     systemPackages = with pkgs; [
-      liquidctl
-      ntfs3g
       pciutils
       usbutils
     ];
@@ -267,8 +249,6 @@
     dconf.enable = true;
 
     gphoto2.enable = true;
-
-    ssh.startAgent = true;
 
     sway.enable = true;
   };
@@ -382,8 +362,6 @@
         "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
     };
 
-    srxl.qmk.enable = true;
-
     tailscale.enable = true;
 
     tumbler.enable = true;
@@ -399,18 +377,6 @@
       videoDrivers = [
         "amdgpu"
         "qxl"
-      ];
-
-      wacom.enable = true;
-
-      windowManager.session = [
-        {
-          name = "home-manager";
-          start = ''
-            ${pkgs.runtimeShell} $HOME/.xsession-hm &
-            waitPID=$!
-          '';
-        }
       ];
     };
   };

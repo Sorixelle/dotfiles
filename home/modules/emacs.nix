@@ -46,13 +46,7 @@ with lib;
     let
       emacsPkgs = pkgs.emacsPackagesFor conf.package;
       emacsPackage = emacsPkgs.emacsWithPackages (
-        e:
-        [
-          e.org-roam
-          e.treesit-grammars.with-all-grammars
-          e.vterm
-        ]
-        ++ (lib.optional config.srxl.email.enable e.mu4e)
+        e: [ e.treesit-grammars.with-all-grammars ] ++ (lib.optional config.srxl.email.enable e.mu4e)
       );
 
       tangledConfig = pkgs.stdenv.mkDerivation {
@@ -77,19 +71,6 @@ with lib;
         package = emacsPackage;
       };
 
-      # Vterm shell hooks
-      programs = {
-        fish.interactiveShellInit = ''
-          source ${emacsPkgs.vterm.src}/etc/emacs-vterm.fish
-        '';
-        bash.initExtra = ''
-          source ${emacsPkgs.vterm.src}/etc/emacs-vterm-bash.sh
-        '';
-        zsh.initExtra = ''
-          source ${emacsPkgs.vterm.src}/etc/emacs-vterm-zsh.sh
-        '';
-      };
-
       services.emacs = mkIf conf.server.enable {
         enable = true;
         client.enable = true;
@@ -109,7 +90,6 @@ with lib;
           text =
             let
               toBool = b: if b then "t" else "nil";
-              shell = if config.programs.fish.enable then "/run/current-system/sw/bin/fish" else "/bin/sh";
             in
             ''
               (setq
@@ -117,14 +97,9 @@ with lib;
                srxl/font-size-monospace "${toString config.srxl.fonts.monospace.size}"
                srxl/font-family-ui "${config.srxl.fonts.ui.name}"
                srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
-               srxl/font-family-serif "${config.srxl.fonts.serif.name}"
-               srxl/font-size-serif ${toString (config.srxl.fonts.serif.size * 10)}
                srxl/theme-name '${conf.theme}
-               srxl/project-dir "~/devel/"
-               srxl/shell-executable "${shell}"
                srxl/use-mu4e ${toBool config.srxl.email.enable}
-               srxl/email "${conf.emailAddress}"
-               srxl/roam-dir "~/notes/")
+               srxl/email "${conf.emailAddress}")
 
               ${conf.extraConfig}
             '';

@@ -11,7 +11,7 @@
           if [ -n "$pnpx_command" ]
             $pnpx_command $argv
           else
-            nix-shell -p nodePackages.pnpm --run "pnpx $argv"
+            nix-shell -p pnpm --run "pnpx $argv"
           end
         '';
       };
@@ -23,7 +23,7 @@
           if [ -n "$pnpm_command" ]
             $pnpm_command create $argv
           else
-            nix-shell -p nodePackages.pnpm --run "pnpm create $argv"
+            nix-shell -p pnpm --run "pnpm create $argv"
           end
         '';
       };

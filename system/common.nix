@@ -8,34 +8,18 @@
 }:
 
 {
-  imports = [
-    # ./modules/audioprod.nix
-    ./modules/cifs-utils.nix
-    ./modules/keyutils.nix
-    ./modules/qmk.nix
-  ];
-
   # Set the hostname
   networking.hostName = name;
 
-  nixpkgs = {
-    # Use flake's nixpkgs
-    pkgs = flakePkgs;
-  };
+  # Use flake's nixpkgs
+  nixpkgs.pkgs = flakePkgs;
 
   # Configure Nix
   nix = {
     # Disable channels
     channel.enable = false;
 
-    # Run automatic garbage collection at 4pm every Sunday
-    gc = {
-      automatic = true;
-      dates = "Sun 16:00";
-    };
-
-    # Enable nix-command and flakes, and persist derivations/outputs
-    # for nix-direnv
+    # Enable nix-command and flakes, and persist derivations/outputs for nix-direnv
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-derivations = true
@@ -88,21 +72,14 @@
   # Disable command not found handler since it's broken with flakes
   programs.command-not-found.enable = false;
 
-  boot = {
-    # Clean /tmp on startup
-    tmp.cleanOnBoot = true;
-  };
+  # Clean /tmp on startup
+  boot.tmp.cleanOnBoot = true;
 
   home-manager = {
     # Install home-manager packages to /etc/profiles
     useUserPackages = true;
-    # Use globally configures Nixpkgs set
+    # Use globally configured Nixpkgs set
     useGlobalPkgs = true;
-    # Add some home-manager modules from flakes to all users
-    sharedModules = [
-      inputs.hyprland.homeManagerModules.default
-      inputs.wired-notify.homeManagerModules.default
-    ];
   };
 
   # Set flake revision
