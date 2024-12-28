@@ -1250,6 +1250,38 @@ For some ungodly reason, Elixir's default language server binary is called =lang
   (add-to-list 'eglot-server-programs '(heex-ts-mode "elixir-ls"))
 #+end_src
 
+*** Rust
+All the girlthings love Rust. Putting on their fuckin. Striped socks and cat ears and shit like that. Unfortunately, the cat ears won't fit over my fox ears, so hopefully that'll be okay with them.
+
+Anyways, where's my estradiol?
+
+#+begin_src emacs-lisp
+  (use-package rust-mode
+    :mode "\\.rs\\'"
+    :init
+    <<rust-init>>
+    :config
+    <<rust-config>>)
+#+end_src
+
+=rust-mode= needs to be told to use the treesit-based mode, instead of it's own custom old school mode. Gotta set that during the package init, since it reads that option at load time, not mode activation time.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref rust-init
+  (setq rust-mode-treesitter-derive t)
+#+end_src
+
+Eglot. Get that LSP in there.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref rust-config
+  (add-hook 'rust-mode-hook 'eglot-ensure)
+#+end_src
+
+Smartparens hfrelgvbllebvuil;ethj
+
+#+begin_src emacs-lisp :tangle no :noweb-ref rust-config
+  (srxl/fix-brace-indentation 'rust-mode "{" "(" "[")
+#+end_src
+
 *** Shell Scripts
 Sometimes you just gotta write 'em. It sucks, but what can you do. There's a couple other shell scripting languages I use sometimes so that I'm at least not dealing with the awfulness of Bash, so I wouldn't mind having syntax highlighting support for them - namely, [[https://fishshell.com/][Fish]] and [[https://learn.microsoft.com/en-us/powershell/][PowerShell]].
 
