@@ -48,6 +48,14 @@
 
       # https://github.com/NixOS/nix/issues/9574
       nix-path = lib.mkForce "nixpkgs=flake:nixpkgs";
+
+      # Include binary caches for some projects
+      substituters = [
+        "https://autost.cachix.org"
+      ];
+      trusted-public-keys = [
+        "autost.cachix.org-1:zl/QINkEtBrk/TVeogtROIpQwQH6QjQWTPkbPNNsgpk="
+      ];
     };
 
     # Expose this flake in the flake registry
