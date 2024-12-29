@@ -1276,6 +1276,14 @@ Eglot. Get that LSP in there.
   (add-hook 'rust-mode-hook 'eglot-ensure)
 #+end_src
 
+Apheleia seems to call out directly to =rustfmt=, which doesn't seem to support things like =async= functions by default - it needs an extra flag. I'll add that.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref rust-config
+  (setf
+   (alist-get 'rustfmt apheleia-formatters)
+   '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2021"))
+#+end_src
+
 Smartparens hfrelgvbllebvuil;ethj
 
 #+begin_src emacs-lisp :tangle no :noweb-ref rust-config
