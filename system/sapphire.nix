@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   modulesPath,
   ...
@@ -11,10 +10,7 @@
     "${modulesPath}/services/hardware/sane_extra_backends/brscan5.nix"
   ];
 
-  time = {
-    hardwareClockInLocalTime = true;
-    timeZone = "Australia/Melbourne";
-  };
+  time.timeZone = "Australia/Melbourne";
 
   boot = {
     kernelParams = [ "quiet" ];
