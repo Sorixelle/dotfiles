@@ -221,7 +221,20 @@
 
     firewall.enable = false;
 
+    useNetworkd = true;
+
     wireguard.enable = true;
+  };
+
+  systemd.network = {
+    enable = true;
+
+    networks."10-enp10s0" = {
+      matchConfig.Name = "enp10s0";
+      networkConfig.DHCP = "ipv4";
+      ipv6AcceptRAConfig.Token = "prefixstable";
+      linkConfig.RequiredForOnline = "routable";
+    };
   };
 
   virtualisation = {
