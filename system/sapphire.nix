@@ -92,14 +92,15 @@
       fsType = "vfat";
     };
 
-    "/vault" = {
-      device = "/dev/disk/by-uuid/F279-E82B";
-      fsType = "exfat";
-      options = [
-        "defaults"
-        "umask=000"
-      ];
-    };
+    # TODO: reformat drive and uncomment
+    # "/vault" = {
+    #   device = "/dev/disk/by-uuid/F279-E82B";
+    #   fsType = "exfat";
+    #   options = [
+    #     "defaults"
+    #     "umask=000"
+    #   ];
+    # };
     "/home/ruby/media" = {
       device = "fluorite:/mnt/hdd/Data/Media";
       fsType = "nfs";
