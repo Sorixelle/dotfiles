@@ -701,9 +701,23 @@ Alright - setup time.
 ** Account setup
 First things first - mu4e needs to know who I am. Can't really send email if I don't know who I'm sending it as. The email address comes from the system config, but my name doesn't really change (well, it did once, but that's besides the point), so I'll just hardcode it here.
 
+Since I have a couple of email addresses that I send from, I want to be able to switch between them when needed. Contexts is how you do this in mu4e - create a context for each "identity", and switch between them based on where the email is located. Simple. =match-func= will do a check on the message to see which context should be used - most of the time, it'll just check what mail folder the email is in.
+
 #+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
-  (setq user-mail-address srxl/email
-        user-full-name "Ruby Iris Juric")
+  (setq mu4e-contexts
+        `( ,(make-mu4e-context
+             :name "ruby@srxl.me"
+             :match-func (lambda (msg)
+                           (when msg
+                             (string-match-p "^/ruby-srxl" (mu4e-message-field msg :maildir))))
+             :vars '((user-mail-address . "ruby@srxl.me")
+                     (user-full-name . "Ruby Iris Juric")))))
+#+end_src
+
+By default, I want the first context (ie. my main account) to be selected. If I don't specify that, it'll ask me which context to use at mu4e startup. Because I autostart muu4e along with Emacs, that means the Emacs daemon blocks until a context is selected, which is uh. Less than ideal. I would like Emacs to be able to actually start, yknow.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
+  (setq mu4e-context-policy 'pick-first)
 #+end_src
 
 Next, I'll make sure that mu4e knows I'm using mbsync for fetching emails. mbsync runs pretty much anywhere I'd be running this config, so it's pretty safe to assume that's what I'm using. =mu4e-change-filenames-when-moving= is set since that behaviour of moving the actual mail file instead of just setting flags works better with mbsync.

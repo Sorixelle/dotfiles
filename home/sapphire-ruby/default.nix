@@ -191,17 +191,17 @@
       mu4eShortcuts = [
         {
           name = "Emacs Announcements";
-          folder = "/info-gnu-emacs";
+          folder = "/ruby-srxl/info-gnu-emacs";
           key = "e";
         }
         {
           name = "mu4e Mailing List";
-          folder = "/mu-discuss";
+          folder = "/ruby-srxl/mu-discuss";
           key = "m";
         }
         {
           name = "Qubes Announcements";
-          folder = "/qubes-announce";
+          folder = "/ruby-srxl/qubes-announce";
           key = "q";
         }
       ];

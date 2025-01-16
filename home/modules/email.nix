@@ -114,13 +114,13 @@
             defaultShortcuts = [
               {
                 name = "Inbox";
-                folder = "/Inbox";
+                folder = "/ruby-srxl/Inbox";
                 key = "i";
                 hidden = false;
               }
               {
                 name = "Receipts";
-                folder = "/Receipts";
+                folder = "/ruby-srxl/Receipts";
                 key = "r";
                 hidden = true;
               }
