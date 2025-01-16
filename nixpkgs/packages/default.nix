@@ -24,6 +24,8 @@ final: prev:
 
   rescrobbled = prev.callPackage ./rescrobbled.nix { };
 
+  roon-launcher = prev.callPackage ./roon { };
+
   scr = prev.callPackage ./scr.nix { };
 
   tinfoil-nut = prev.callPackage ./tinfoil-nut.nix { };

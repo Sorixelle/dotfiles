@@ -49,6 +49,7 @@
     prismlauncher
     python3
     qbittorrent
+    roon-launcher
     rs-git-fsmonitor
     scr
     solaar
