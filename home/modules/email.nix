@@ -62,6 +62,7 @@
         accounts = {
           ruby-srxl = rec {
             address = "ruby@srxl.me";
+            aliases = [ "ruby@isincredibly.gay" ];
             realName = "Ruby Iris Juric";
             gpg.key = "B6D7116C451A5B41";
             primary = true;
