@@ -701,17 +701,21 @@ Alright - setup time.
 ** Account setup
 First things first - mu4e needs to know who I am. Can't really send email if I don't know who I'm sending it as. The email address comes from the system config, but my name doesn't really change (well, it did once, but that's besides the point), so I'll just hardcode it here.
 
-Since I have a couple of email addresses that I send from, I want to be able to switch between them when needed. Contexts is how you do this in mu4e - create a context for each "identity", and switch between them based on where the email is located. Simple. =match-func= will do a check on the message to see which context should be used - most of the time, it'll just check what mail folder the email is in.
+Since I have a couple of email addresses that I send from, I want to be able to switch between them when needed. Contexts is how you do this in mu4e - create a context for each "identity", and switch between them based on where the email is located. Simple. =match-func= will do a check on the message to see which context should be used - most of the time, it'll just check what mail folder the email is in. I also need to configure all the mail directories for each context, so that mu4e knows where to put emails that get deleted, archived, etc.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
   (setq mu4e-contexts
-        `( ,(make-mu4e-context
-             :name "ruby@srxl.me"
-             :match-func (lambda (msg)
-                           (when msg
-                             (string-match-p "^/ruby-srxl" (mu4e-message-field msg :maildir))))
-             :vars '((user-mail-address . "ruby@srxl.me")
-                     (user-full-name . "Ruby Iris Juric")))))
+        `(,(make-mu4e-context
+            :name "ruby@srxl.me"
+            :match-func (lambda (msg)
+                          (when msg
+                            (string-match-p "^/ruby-srxl" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "ruby@srxl.me")
+                    (user-full-name . "Ruby Iris Juric")
+                    (mu4e-drafts-folder . "/ruby-srxl/Drafts")
+                    (mu4e-refile-folder . "/ruby-srxl/Archive")
+                    (mu4e-sent-folder . "/ruby-srxl/Sent")
+                    (mu4e-trash-folder . "/ruby-srxl/Trash")))))
 #+end_src
 
 By default, I want the first context (ie. my main account) to be selected. If I don't specify that, it'll ask me which context to use at mu4e startup. Because I autostart muu4e along with Emacs, that means the Emacs daemon blocks until a context is selected, which is uh. Less than ideal. I would like Emacs to be able to actually start, yknow.
@@ -720,6 +724,7 @@ By default, I want the first context (ie. my main account) to be selected. If I 
   (setq mu4e-context-policy 'pick-first)
 #+end_src
 
+** Sending and receiving
 Next, I'll make sure that mu4e knows I'm using mbsync for fetching emails. mbsync runs pretty much anywhere I'd be running this config, so it's pretty safe to assume that's what I'm using. =mu4e-change-filenames-when-moving= is set since that behaviour of moving the actual mail file instead of just setting flags works better with mbsync.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
@@ -737,16 +742,6 @@ When it comes to sending emails, Emacs' built-in Sendmail functionality will do 
 
 #+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
   (setq send-mail-function #'sendmail-send-it)
-#+end_src
-
-** Email folders
-mu4e needs a little handholding when it comes to "standard" email folders, like the "Sent mail" folder or the "Archive" folder. I just need to make sure it uses the right paths for those folders. This is specific to email providers, but since just about every email account I use is with the same provider ([[https://www.migadu.com/][Migadu]] is super cool and dirt cheap if you're willing to bring your own domain), I think can hardcode those in here. These paths are all relative to the base maildir, which gets configured at the system level in the mu command line indexer.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref mu4e-config
-  (setq mu4e-drafts-folder "/Drafts"
-        mu4e-refile-folder "/Archive"
-        mu4e-sent-folder "/Sent"
-        mu4e-trash-folder "/Trash")
 #+end_src
 
 mbsync seems to have some nasty behaviour with messages that get flagged as Trashed. I'm not quite sure what's up, but for some reason, when it comes time to sync the mailboxes, mbsync interprets the Trashed flag as "disappear it". That's... not really what I want to happen. If I delete a message, I just want it to go into the Trash folder. I don't want it to evaporate from my mailbox instantly. What if I didn't mean to delete it? What if I realise I actually need to check that message again a few days later? That behaviour sucks. So instead, I'll change what mu4e does when trashing a message. Instead of setting the Trashed flag, it should mark it as Seen, and unmark the New and Unread flags. Then, just move it to the Trash. Migadu will handle auto deletion after 60 days from there.
