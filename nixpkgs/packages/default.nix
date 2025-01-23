@@ -30,6 +30,13 @@ final: prev:
 
   tinfoil-nut = prev.callPackage ./tinfoil-nut.nix { };
 
+  vlc = prev.vlc.override {
+    libbluray = prev.libbluray.override {
+      withAACS = true;
+      withBDplus = true;
+    };
+  };
+
   # TODO: remove when merged
   # https://github.com/NixOS/nixpkgs/pull/370637
   xsane = (prev.xsane.override { gimpSupport = true; }).overrideAttrs (_: {
