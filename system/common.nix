@@ -36,9 +36,11 @@
       # Include binary caches for some projects
       substituters = [
         "https://autost.cachix.org"
+        "https://cache.lix.systems"
       ];
       trusted-public-keys = [
         "autost.cachix.org-1:zl/QINkEtBrk/TVeogtROIpQwQH6QjQWTPkbPNNsgpk="
+        "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
       ];
     };
 
