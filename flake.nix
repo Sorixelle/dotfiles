@@ -74,13 +74,7 @@
           inputs.hyprlock.overlays.default
           inputs.nur.overlays.default
           # inputs.shadower.overlay
-          (final: prev: {
-            tree-sitter = prev.tree-sitter.override {
-              extraGrammars = {
-                tree-sitter-astro = inputs.tree-sitter-astro.packages.${system}.default;
-              };
-            };
-          })
+          inputs.tree-sitter-astro.overlays.default
           self.overlay
         ];
       };
