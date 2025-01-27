@@ -9,13 +9,6 @@ final: prev:
 
   frankerfacez = prev.callPackage ./frankerfacez.nix { };
 
-  git-diffie = prev.callPackage (prev.fetchFromGitHub {
-    owner = "the6p4c";
-    repo = "git-diffie";
-    rev = "7a3f46d8615ace71467e31827e30da44856c44e1";
-    hash = "sha256-JgQXIUYqO1wPBYxWfyb4ZAxjqX9ykt98grd5SHqEKD8=";
-  }) { };
-
   inter-patched = prev.callPackage ./inter-patched.nix { };
 
   makerom = prev.callPackage ./makerom.nix { };

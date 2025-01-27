@@ -16,6 +16,13 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    git-diffie = {
+      url = "github:the6p4c/git-diffie";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
     hyprland-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -71,6 +78,7 @@
         config = import ./nixpkgs/config.nix;
         overlays = [
           inputs.emacs.overlay
+          inputs.git-diffie.overlays.default
           inputs.hyprlock.overlays.default
           inputs.nur.overlays.default
           # inputs.shadower.overlay
