@@ -17,8 +17,6 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    cd /build
-
     for i in $(seq 0 35); do
       fonttools ttLib -o Inter-$i.ttf -y $i $src/share/fonts/truetype/Inter.ttc
       pyftfeatfreeze -f 'ss01,ss02' -R 'Inter/Intur' Inter-$i.ttf Intur-$i.ttf

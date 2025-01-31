@@ -11,6 +11,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     emacs = {
       url = "github:nix-community/emacs-overlay";
@@ -65,6 +69,7 @@
     {
       self,
       flake-utils,
+      nix-darwin,
       nixpkgs,
       pre-commit-hooks,
       ...
@@ -125,6 +130,18 @@
         tanzanite = {
           system = "x86_64-linux";
           config = ./system/tanzanite.nix;
+        };
+      };
+
+      darwinConfigurations = {
+        bauxite = nix-darwin.lib.darwinSystem {
+          modules = [
+            inputs.lix.nixosModules.default
+            inputs.home-manager.darwinModules.home-manager
+            { nixpkgs.pkgs = pkgsBySystem.aarch64-darwin; }
+
+            ./system-darwin/bauxite.nix
+          ];
         };
       };
 
