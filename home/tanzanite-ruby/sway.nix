@@ -90,7 +90,8 @@ in
           "${mod}+3" = "workspace 3:dev";
 
           # Try to open scratchpad terminal - if none exists, open a new one
-          "${mod}+grave" = "exec (swaymsg \"[app_id=scratchpad_term] scratchpad show\") || ${lib.getExe config.programs.kitty.package} --app-id scratchpad_term";
+          "${mod}+grave" =
+            "exec (swaymsg \"[app_id=scratchpad_term] scratchpad show\") || ${lib.getExe config.programs.kitty.package} --app-id scratchpad_term";
 
           # Volume control
           XF86AudioLowerVolume = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_SINK@ 3%-";
@@ -165,8 +166,7 @@ in
           trayOutput = "*";
           trayPadding = 4;
 
-          # TODO: better status command
-          statusCommand = lib.getExe pkgs.i3status;
+          statusCommand = "${lib.getExe config.programs.i3status-rust.package} config-default.toml";
         }
       ];
     };
@@ -182,6 +182,62 @@ in
         [app_id=discord] layout tabbed
       }
     '';
+  };
+
+  programs.i3status-rust = {
+    enable = true;
+    bars = {
+      default = {
+        icons = "awesome6";
+        settings.theme = {
+          theme = "ctp-frappe";
+          overrides = {
+            separator = "";
+            info_bg = "#8bd5ca";
+          };
+        };
+
+        blocks = [
+          {
+            block = "focused_window";
+            format = " $title |";
+          }
+          {
+            block = "cpu";
+            format = " cpu: $utilization.eng(w:1) |";
+            theme_overrides.idle_bg = "#494d64";
+          }
+          {
+            block = "memory";
+            format = " mem: $mem_used_percents.eng(w:1) |";
+            format_alt = " mem: $mem_used / $mem_total |";
+            theme_overrides.idle_bg = "#494d64";
+          }
+          {
+            block = "battery";
+            device = "BAT1";
+            format = " bat: $percentage.eng(w:1) |";
+            charging_format = " bat: $percentage.eng(w:1) \(charging\) |";
+            theme_overrides.idle_bg = "#494d64";
+          }
+          {
+            block = "music";
+            format = " Now Playing: $artist - $title $prev $play $next |";
+            click = [
+              {
+                button = "left";
+                action = "play_pause";
+              }
+            ];
+          }
+          {
+            block = "time";
+            interval = 1;
+            format = " $timestamp.datetime(f:'%a %d/%m %I:%M %P') ";
+          }
+        ];
+      };
+    };
   };
 
   # Wallpaper rotation units
