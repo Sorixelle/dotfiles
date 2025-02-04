@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -35,6 +40,7 @@
     };
 
     casks = [
+      "alfred"
       "parsec"
     ];
   };
@@ -67,6 +73,20 @@
   environment.shells = [
     config.programs.fish.package
   ];
+  # Workaround for Fish not correctly setting up PATH in non-interactive SSH sessions
+  environment.etc."fish/nixos-env-preinit.fish".text = lib.mkForce ''
+    # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
+    # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
+    set fish_function_path "${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d" $__fish_datadir/functions
+    # source the NixOS environment config
+    if [ -z "$__NIX_DARWIN_SET_ENVIRONMENT_DONE" ]
+      # I added this line to work around a problem where environment wasn't set when running through SSH
+      set -x __NIX_DARWIN_SET_ENVIRONMENT_DONE 1
+      fenv source ${config.system.build.setEnvironment}
+    end
+    # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+    set -e fish_function_path
+  '';
 
   services.openssh.enable = true;
 

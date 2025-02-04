@@ -85,7 +85,7 @@
       package = pkgs.emacs-pgtk;
       theme = "catppuccin";
       extraConfig = ''
-        (setq catppuccin-flavor 'frappe)
+        (setq catppuccin-flavor 'mocha)
       '';
     };
 
