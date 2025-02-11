@@ -49,6 +49,7 @@
     prismlauncher
     python3
     qbittorrent
+    rink
     roon-launcher
     rs-git-fsmonitor
     scr
