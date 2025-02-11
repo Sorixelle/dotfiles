@@ -39,10 +39,18 @@
       cleanup = "zap";
     };
 
+    brews = [
+      "mas"
+    ];
+
     casks = [
       "alfred"
       "parsec"
     ];
+
+    masApps = {
+      Xcode = 497799835;
+    };
   };
 
   nix = {
@@ -53,7 +61,7 @@
     optimise.automatic = true;
 
     # Make sure Nix runs builds in the sandbox
-    settings.sandbox = true;
+    # settings.sandbox = true;
 
     # Ensure flakes work
     extraOptions = ''
