@@ -25,7 +25,8 @@
     ))
     betterdiscordctl
     bitwarden
-    bitwarden-cli
+    # TODO: https://github.com/NixOS/nixpkgs/issues/380227
+    # bitwarden-cli
     calibre
     cinny-desktop
     darktable
