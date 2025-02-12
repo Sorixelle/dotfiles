@@ -44,6 +44,7 @@
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
     osu-lazer-bin
+    parsec-bin
     pavucontrol
     picard
     plexamp
