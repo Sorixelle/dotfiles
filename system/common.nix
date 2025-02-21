@@ -37,10 +37,12 @@
       substituters = [
         "https://autost.cachix.org"
         "https://cache.lix.systems"
+        "https://pebble.cachix.org"
       ];
       trusted-public-keys = [
         "autost.cachix.org-1:zl/QINkEtBrk/TVeogtROIpQwQH6QjQWTPkbPNNsgpk="
         "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o="
+        "pebble.cachix.org-1:aTqwT2hR6lGggw/rPISRcHZctDv2iF7ewsVxf3Hq6ow="
       ];
     };
 
