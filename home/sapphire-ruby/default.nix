@@ -35,9 +35,11 @@
     file-roller
     gimp
     git-diffie
+    ijq
     imv
     inetutils
     jump
+    jq
     libreoffice-fresh
     mpv
     nix-prefetch-scripts
