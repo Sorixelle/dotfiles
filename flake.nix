@@ -36,12 +36,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.3.0";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        # TODO: https://github.com/nix-community/lanzaboote/issues/411
-        crane.url = "github:ipetkov/crane/f2926e34a1599837f3256c701739529d772e36e7";
-      };
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     musnix = {
       url = "github:musnix/musnix";
