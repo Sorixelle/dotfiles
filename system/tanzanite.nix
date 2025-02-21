@@ -61,6 +61,7 @@
     loader = {
       efi.canTouchEfiVariables = true;
       systemd-boot.enable = lib.mkForce false;
+      timeout = 0;
     };
 
     plymouth = {
