@@ -121,7 +121,8 @@
       userEmail = "ruby@srxl.me";
       userName = "Ruby Iris Juric";
       signing = {
-        key = "B6D7116C451A5B41";
+        format = "ssh";
+        key = "~/.ssh/id_ed25519_sk";
         signByDefault = true;
       };
       extraConfig.core.fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
