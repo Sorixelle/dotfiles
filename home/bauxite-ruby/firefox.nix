@@ -11,7 +11,7 @@
       isDefault = true;
       name = "Default";
       path = "default";
-      extensions =
+      extensions.packages =
         with pkgs.nur.repos.rycee.firefox-addons;
         with pkgs;
         [
