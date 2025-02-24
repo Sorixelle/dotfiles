@@ -79,6 +79,9 @@
   # Clean /tmp on startup
   boot.tmp.cleanOnBoot = true;
 
+  # Use nixos-rebuild-ng in place of nixos-rebuild
+  system.rebuild.enableNg = true;
+
   home-manager = {
     # Install home-manager packages to /etc/profiles
     useUserPackages = true;
