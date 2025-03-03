@@ -57,6 +57,7 @@
     roon-launcher
     rs-git-fsmonitor
     scr
+    signal-desktop
     solaar
     steam
     virt-manager
