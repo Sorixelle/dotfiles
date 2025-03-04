@@ -113,4 +113,9 @@ final: prev:
         }
       ];
   });
+
+  zen-browser-unwrapped = prev.callPackage ./zen-browser.nix { };
+  zen-browser = prev.wrapFirefox final.zen-browser-unwrapped {
+    pname = "zen-browser";
+  };
 }
