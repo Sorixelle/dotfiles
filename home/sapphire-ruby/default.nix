@@ -12,6 +12,7 @@
     ./starship.nix
     ./sway.nix
     ./xdg.nix
+    ./zen-browser.nix
   ];
 
   home.packages = with pkgs; [
@@ -70,7 +71,6 @@
     xfce.xfconf
     xsane
     zathura
-    zen-browser
     zulip
   ];
 
