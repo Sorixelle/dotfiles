@@ -70,6 +70,7 @@
     xfce.xfconf
     xsane
     zathura
+    zen-browser
     zulip
   ];
 
