@@ -124,14 +124,14 @@ in
         }
 
         # Other startup apps
-        { command = "${lib.getExe config.programs.firefox.package}"; }
+        { command = "${lib.getExe config.programs.zen-browser.package}"; }
         { command = "discord"; }
         { command = "cinny"; }
         { command = "zulip"; }
       ];
 
       assigns = {
-        "1:web" = [ { app_id = "firefox"; } ];
+        "1:web" = [ { app_id = "zen"; } ];
         "2:chat" = [
           { app_id = "discord"; }
           { app_id = "cinny"; }
