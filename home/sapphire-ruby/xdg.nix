@@ -24,8 +24,8 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "x-scheme-handler/http" = [ "firefox.desktop" ];
-        "x-scheme-handler/https" = [ "firefox.desktop" ];
+        "x-scheme-handler/http" = [ "zen.desktop" ];
+        "x-scheme-handler/https" = [ "zen.desktop" ];
 
         "application/json" = [ "emacsclient.desktop" ];
         "application/pdf" = [ "org.pwmt.zathura.desktop" ];
@@ -47,9 +47,9 @@
         "image/webp" = [ "imv.desktop" ];
         "image/x-xcf" = [ "gimp.desktop" ];
 
-        "text/html" = [ "firefox.desktop" ];
+        "text/html" = [ "zen.desktop" ];
         "text/plain" = [ "emacsclient.desktop" ];
-        "text/x-lisp" = [ "firefox.desktop" ];
+        "text/x-lisp" = [ "zen.desktop" ];
         "text/xml" = [ "emacsclient.desktop" ];
 
         "video/mp4" = [ "mpv.desktop" ];
