@@ -113,6 +113,7 @@ final: prev:
         }
       ];
   });
+  yubikey-touch-alert = prev.callPackage ./yubikey-touch-alert.nix { };
 
   zen-browser-unwrapped = prev.callPackage ./zen-browser.nix { };
   zen-browser = prev.wrapFirefox final.zen-browser-unwrapped {

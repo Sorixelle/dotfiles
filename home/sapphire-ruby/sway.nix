@@ -192,6 +192,21 @@ in
       ];
     };
 
+    swaynag = {
+      enable = true;
+      settings = {
+        yubikey = {
+          font = "Intur 12";
+          background = "24273a";
+          border = "24273a";
+          button-background = "363a4f";
+          text = "cad3f5";
+          border-bottom-size = 0;
+          message-padding = 8;
+        };
+      };
+    };
+
     extraConfig = ''
       for_window {
         # Scratchpad
@@ -252,11 +267,23 @@ in
 
   # Wallpaper rotation units
   systemd.user = {
-    services.change-wp = {
-      Unit.Description = "Change the wallpaper to a random one";
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${changeWpScript}";
+    services = {
+      change-wp = {
+        Unit.Description = "Change the wallpaper to a random one";
+        Service = {
+          Type = "oneshot";
+          ExecStart = "${changeWpScript}";
+        };
+      };
+
+      yubikey-alert = {
+        Unit.Description = "Display alert when Yubikey touch requested";
+        Service.ExecStart = lib.getExe (
+          pkgs.yubikey-touch-alert.override {
+            sway = config.wayland.windowManager.sway.package;
+          }
+        );
+        Install.WantedBy = [ "sway-session.target" ];
       };
     };
     timers.change-wp = {
