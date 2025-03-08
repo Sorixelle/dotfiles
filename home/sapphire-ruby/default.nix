@@ -151,6 +151,8 @@
         wlrobs
       ];
     };
+
+    tealdeer.enable = true;
   };
 
   qt = {

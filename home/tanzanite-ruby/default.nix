@@ -116,6 +116,8 @@
         disable-ccid = true;
       };
     };
+
+    tealdeer.enable = true;
   };
 
   qt = {
