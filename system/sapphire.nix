@@ -265,6 +265,10 @@
 
   security.rtkit.enable = true;
 
+  security.pam = {
+    u2f.enable = true;
+  };
+
   services = {
     blueman.enable = true;
 
