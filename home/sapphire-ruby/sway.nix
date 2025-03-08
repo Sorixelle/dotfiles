@@ -265,7 +265,6 @@ in
     };
   };
 
-  # Wallpaper rotation units
   systemd.user = {
     services = {
       change-wp = {
@@ -288,7 +287,10 @@ in
     };
     timers.change-wp = {
       Unit.Description = "Change wallpaper every hour";
-      Timer.OnStartupSec = "1h";
+      Timer = {
+        OnStartupSec = "1h";
+        OnUnitActiveSec = "1h";
+      };
       Install.WantedBy = [ "sway-session.target" ];
     };
   };
