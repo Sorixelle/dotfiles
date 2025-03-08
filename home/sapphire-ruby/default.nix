@@ -189,7 +189,7 @@
     emacs = {
       enable = true;
       server.enable = true;
-      package = pkgs.emacs-pgtk;
+      package = pkgs.emacs-unstable-pgtk;
       theme = "catppuccin";
       extraConfig = ''
         (setq catppuccin-flavor 'macchiato)
