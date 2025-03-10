@@ -1,30 +1,26 @@
 {
-  stdenv,
   buildMozillaMach,
+  buildNpmPackage,
   lib,
   fetchurl,
   fetchFromGitHub,
 
   git,
-  nodejs,
-  pnpm,
   pkg-config,
   python3,
   vips,
 }:
 
-# notes:
-# - >= 1.8b has a pnpm-lock.yaml out of sync with package.json, can't build
 let
-  zenVersion = "1.7.6b";
-  firefoxVersion = "135.0";
+  zenVersion = "1.9b";
+  firefoxVersion = "136.0";
 
   firefoxSrc = fetchurl {
     url = "https://archive.mozilla.org/pub/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.xz";
-    hash = "sha256-gn4SqWLvR1EQia9EmPZev0L6V8ox23kL/X6agg0WuWA=";
+    hash = "sha256-O+4xTreTRFG+Tix+ysOLOC+EIv7YKH4Fvib+lN0ob1c=";
   };
 
-  patchedSrc = stdenv.mkDerivation rec {
+  patchedSrc = buildNpmPackage {
     pname = "firefox-zen-browser-src-patched";
     version = "${firefoxVersion}-${zenVersion}";
 
@@ -32,7 +28,7 @@ let
       owner = "zen-browser";
       repo = "desktop";
       rev = zenVersion;
-      hash = "sha256-gKma7onLk5XIZARCELVvRUwGXOhwzN1wRDiP3I6mcow=";
+      hash = "sha256-Hi3e3xBqJjeTRuKEFRlI6pMzKWz3mz+i4IW63HpZtY4=";
       fetchSubmodules = true;
     };
     postUnpack = ''
@@ -40,29 +36,22 @@ let
       mv firefox-${firefoxVersion} source/engine
     '';
 
-    pnpmDeps = pnpm.fetchDeps {
-      inherit pname version src;
-      hash = "sha256-+ivPgkcZGAS3mNrYzy91uvgDuQCDTEqKT5mCt9sFWU4=";
-    };
+    npmDepsHash = "sha256-UWmUmq/nc1TP2XnFfk6yuldToUOjenS300eoOmzQjcU=";
+    makeCacheWritable = true;
 
     nativeBuildInputs = [
       git
-      nodejs
-      pnpm.configHook
       pkg-config
       python3
+    ];
+    # TODO: this should be in nativeBuildInputs, since sharp is only used during build, but it doesn't seem to be
+    # visible in there. why not?
+    buildInputs = [
       vips
     ];
 
-    SURFER_MOZCONFIG_ONLY = 1;
-
     buildPhase = ''
-      export npm_config_nodedir=${nodejs}
-      (
-        cd node_modules/.pnpm/node_modules/sharp
-        pnpm run install
-      )
-      pnpm run import
+      npm run import
       python ./scripts/update_en_US_packs.py
     '';
 
