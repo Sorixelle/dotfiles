@@ -1397,11 +1397,13 @@ Sometimes you just gotta write 'em. It sucks, but what can you do. There's a cou
 *** Markdown
 I think everyone knows Markdown. I do wish everyone knew [[*Emacs, my favourite word processor][org-mode]] instead, though. It's so much better. But Markdown is kinda the de facto standard, so you gotta do what you gotta do, I guess.
 
-The GFM in =gfm-mode= below refers to [[https://github.github.com/gfm/][GitHub Flavored Markdown]], which is a superset of CommonMark. It's pretty widely adopted though, and since it's a superset, it's pretty safe to apply it to just about everything.
+The GFM in =gfm-mode= below refers to [[https://github.github.com/gfm/][GitHub Flavored Markdown]], which is a superset of CommonMark. It's pretty widely adopted though, and since it's a superset, it's pretty safe to apply it to just about everything. =olivetti-mode= [[*Margins][from earlier]] will make files nicer to read, like Org-mode ones. Still not as cool as Org, though.
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :mode ("\\.md\\'" . gfm-mode))
+    :mode ("\\.md\\'" . gfm-mode)
+    :config
+    (add-hook 'markdown-mode-hook #'olivetti-mode))
 #+end_src
 
 *** JSON and YAML
