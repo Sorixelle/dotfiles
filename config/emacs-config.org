@@ -167,6 +167,13 @@ Just like with the [[*Redirect =custom-file=][custom file]] work earlier, I've g
   (setq create-lockfiles nil)
 #+end_src
 
+** Smooth scrolling
+Wheeeeeeeeeee
+
+#+begin_src emacs-lisp
+  (pixel-scroll-precision-mode)
+#+end_src
+
 * Standing on the shoulders of giants
 OK, I think that's most of base Emacs tamed. Now it's time to get to the job of tailoring everything to my workflows. And... gonna be honest, that's quite the undertaking. Like, there's a /lot/ of code to write here. I can't possibly write all of it by myself.
 
