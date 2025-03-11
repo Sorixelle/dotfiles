@@ -923,6 +923,33 @@ Nice. Now Corfu can be enabled everywhere with a global mode.
 
 Alright, now I have completions. Nice. And those completions come from... uh... hmm. Nowhere yet. Where do completions come from?
 
+** Browsing the docs
+Autocomplete is cool and all, but it's only going to get me so far. At some point, I'm going to want to Read The Fucking Manual for the detailed stuff. I've used [[https://devdocs.io][devdocs.io]] in the past before for documentation browsing - check it out if you haven't, it's pretty nice, kinda like [[https://kapeli.com/dash][Dash]] but in your browser (and not macOS only as a result). [[https://github.com/astoff/devdocs.el][devdocs.el]] brings those docs into Emacs, so I can read them without needing to tab over to my browser - even better!
+
+#+begin_src emacs-lisp
+  (use-package devdocs
+    :config
+    <<devdocs-config>>)
+#+end_src
+
+No real configuration needed here, just gotta set up some keybindings. I choose =m= on my leader key, for "manual". That'll let me search for a docs page to open. Capital =M= as well for just opening the front page.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref devdocs-config
+  (srxl/def-leader-key "m" #'devdocs-lookup "Search docs")
+  (srxl/def-leader-key "M" #'devdocs-peruse "Open docs")
+#+end_src
+
+When searching docs, =devdocs-peruse= can default to specific documentation sets. This is useful - if I'm in a Scala buffer for example, it's pretty safe to assume that I want the Scala docs. I can control that default with a hook for each language that buffer-locally sets =devdocs-current-docs= to the docs I want to search by default. If I need something else, a prefix argument (ie. =C-u=) will bring the lookup back again.
+
+To reduce boilerplate, I'll write a macro that sets that hook. Languages will call that function to configure their default docsets.
+
+#+begin_src emacs-lisp
+  (defmacro srxl/set-default-docs (mode-hook docsets)
+    "Adds a function to MODE-HOOK that sets `devdocs-current-docs' to DOCSETS."
+    `(add-hook ,mode-hook
+              (lambda () (setq-local devdocs-current-docs ,docsets))))
+#+end_src
+
 ** Oh yeah its language server time
 A little while back, a pretty small startup called Microsoft wanted to make a code editor. Eventually, they released it under the name "Visual Studio Code", but it never really got mainstream success. Ah well, tough competition, I guess. However, VSCode needed a way to get language smarts into their editor. Code autocomplete, navigation, documentation lookup, quick fix suggestion, error and warning highlights - y'know, all that stuff. The solution they came up with was to run a program in the background that had all those smarts, and communicate with that program over a protocol they designed and standardised called [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]]. It worked pretty well for them - if someone wanted to extend VSCode to support a new language, all they had to do was create a program that could speak LSP for their language, and pack it into an extension for the editor. Not an awful idea, huh? A lot of people agreed - even though VSCode was largely a commercial failure, LSP has become a de facto standard in the editor world, with just about every language having an LSP implementation. I wonder why. Maybe because it got adopted by actually successful editors, like Vim and Emacs.
 
@@ -1043,6 +1070,12 @@ Out of the box though, Evil actions (commands like =dd=) seem to bypass this. Lo
 
 At some point, I should spend some time getting familiar with Smartparens' brace manipulation. It seems like a neat editing experience for Elisp files. I'll probably come back and refine keybindings for that later.
 
+Oh, and remember that [[*Browsing the docs][docs browser from earlier]]? Now's a good time to set the default docset here.
+
+#+begin_src emacs-lisp
+  (srxl/set-default-docs 'emacs-lisp-mode-hook '("elisp"))
+#+end_src
+
 *** Nix
 I'm so normal about [[https://nixos.org/][Nix]]. God. NixOS has ruined me. I assume you're looking at this config from my dotfiles, since that's where this lives - have you seen that shit? I configure fucking everything with this. Even my homelab is mostly composed of NixOS virtual machines. God, I love Nix.
 
@@ -1053,7 +1086,8 @@ Not much I need to do here, just get syntax highlighting going. Eglot will also 
     :mode "\\.nix\\'"
     :hook (nix-mode . eglot-ensure)
     :config
-    (srxl/fix-brace-indentation 'nix-mode "{" "(" "["))
+    (srxl/fix-brace-indentation 'nix-mode "{" "(" "[")
+    (srxl/set-default-docs 'nix-mode-hook '("nix")))
 #+end_src
 
 *** Web Markup
@@ -1069,6 +1103,13 @@ There's also language servers out there for both these languages, so I need to e
 #+begin_src emacs-lisp
   (add-hook 'html-ts-mode-hook 'eglot-ensure)
   (add-hook 'css-ts-mode-hook 'eglot-ensure)
+#+end_src
+
+Gotta set the default docs.
+
+#+begin_src emacs-lisp
+  (srxl/set-default-docs 'html-ts-mode-hook '("html"))
+  (srxl/set-default-docs 'css-ts-mode-hook '("css"))
 #+end_src
 
 CSS also needs a couple tweaks:
@@ -1087,6 +1128,7 @@ Hah, you thought I was done with the web stuff. Nuh uh. It's Javascript time bab
   (add-to-list 'auto-mode-alist '("\\.[mc]?jsx?\\'" . js-ts-mode))
   (add-hook 'js-ts-mode-hook 'eglot-ensure)
   (srxl/fix-brace-indentation 'js-ts-mode "{" "(" "[")
+  (srxl/set-default-docs 'js-ts-mode-hook '("javascript"))
 #+end_src
 
 Everything seems to default to 4 space indents. I prefer 2. I wish this was easier to consistently set everywhere. Oh well.
@@ -1097,6 +1139,8 @@ Everything seems to default to 4 space indents. I prefer 2. I wish this was easi
 
 And now Typescript. Hopefully I never have to write plain Javascript, so this is arguably more important. There's two different modes to use for Typescript - one for plain TS, and another for TSX.
 
+On the docs front, I'll want to lookup both JS and TS docs, so both go in there. I also want React docs for TSX files, since those almost always exist in React projects.
+
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
@@ -1106,6 +1150,9 @@ And now Typescript. Hopefully I never have to write plain Javascript, so this is
 
   (srxl/fix-brace-indentation 'typescript-ts-mode "{" "(" "[")
   (srxl/fix-brace-indentation 'tsx-ts-mode "{" "(" "[")
+
+  (srxl/set-default-docs 'typescript-ts-mode-hook '("typescript" "javascript"))
+  (srxl/set-default-docs 'tsx-ts-mode-hook '("typescript" "react" "javascript"))
 #+end_src
 
 *** Svelte
@@ -1129,6 +1176,12 @@ Eglot doesn't come with a built-in association for Svelte files, so I'll also ma
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
   (add-to-list 'eglot-server-programs '(svelte-mode . ("svelteserver" "--stdio")))
+#+end_src
+
+Svelte's a mashup of a bunch of web markup, so I'll want all of those docs, plus the Svelte-specific ones.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref web-mode-config
+  (srxl/set-default-docs 'svelte-mode-hook '("svelte" "typescript" "javascript" "html" "css"))
 #+end_src
 
 Oh, and I shouldn't forget the Smartparens fix.
@@ -1174,6 +1227,12 @@ By default, [[*Oh yeah its language server time][Apheleia]] tries to format Astr
   (add-to-list 'apheleia-mode-alist '(astro-ts-mode . prettier-astro))
 #+end_src
 
+Like Svelte, I'll want all the docs here.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref astro-config
+  (srxl/set-default-docs 'astro-ts-mode-hook '("astro" "typescript" "javascript" "html" "css"))
+#+end_src
+
 Smartparens fix.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref astro-config
@@ -1191,6 +1250,7 @@ Aaaanyways, language setup. [[https://github.com/KaranAhlawat/scala-ts-mode][sca
   (use-package scala-ts-mode
     :mode ("\\.scala\\'" "\\.sc\\'" "\\.sbt\\'")
     :config
+    (srxl/set-default-docs 'scala-ts-mode-hook '("scala~3.2"))
     <<scala-config>>)
 #+end_src
 
@@ -1225,6 +1285,12 @@ Requiring =java-ts-mode= should be enough to get everything setup properly.
   (require 'java-ts-mode)
 #+end_src
 
+Oh, and docs.
+
+#+begin_src emacs-lisp
+  (srxl/set-default-docs 'java-ts-mode-hook '("openjdk~21"))
+#+end_src
+
 And the Smartparens fix, of course.
 
 #+begin_src emacs-lisp
@@ -1237,6 +1303,7 @@ And the Smartparens fix, of course.
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.exs?\\'" . elixir-ts-mode))
   (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
+  (srxl/set-default-docs 'elixir-ts-mode-hook '("elixir~1.18"))
 #+end_src
 
 Mix, the build tool for Elixir, generates lockfiles that are actually Elixir source files, so I should make sure the mode activates on those, too.
@@ -1270,6 +1337,7 @@ Anyways, where's my estradiol?
     :init
     <<rust-init>>
     :config
+    (srxl/set-default-docs 'rust-mode-hook '("rust"))
     <<rust-config>>)
 #+end_src
 
@@ -1305,7 +1373,9 @@ Sometimes you just gotta write 'em. It sucks, but what can you do. There's a cou
 #+begin_src emacs-lisp
   (use-package emacs-fish
     :mode ("\\.fish\\'" . fish-mode)
-    :interpreter ("fish" . fish-mode))
+    :interpreter ("fish" . fish-mode)
+    :config
+    (srxl/set-default-docs 'fish-mode-hook '("fish~3.7")))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1319,7 +1389,9 @@ Sometimes you just gotta write 'em. It sucks, but what can you do. There's a cou
 
 #+begin_src emacs-lisp
   (use-package terraform-mode
-    :mode "\\.tf\\'")
+    :mode "\\.tf\\'"
+    :config
+    (srxl/set-default-docs 'terraform-mode-hook '("terraform")))
 #+end_src
 
 *** Markdown
