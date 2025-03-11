@@ -18,7 +18,7 @@
       };
       elixir = {
         format = "[$symbol](fg:purple)[ $version (\\(OTP $otp_version\\))]($style)";
-        symbol = "";
+        symbol = "";
         style = "fg:bright-black";
       };
       git_branch = {
