@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  home.sessionVariables.BROWSER = "${config.programs.firefox.package}/bin/firefox";
-
   programs.firefox = {
     enable = true;
     package = pkgs.firefox.override {

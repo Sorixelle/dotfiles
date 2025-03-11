@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   modulesPath,
   pkgs,
@@ -26,6 +27,8 @@ in
       };
     })
   ];
+
+  home.sessionVariables.BROWSER = lib.getExe config.programs.zen-browser.package;
 
   programs.zen-browser = {
     enable = true;
