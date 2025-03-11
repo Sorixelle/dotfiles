@@ -1403,7 +1403,14 @@ The GFM in =gfm-mode= below refers to [[https://github.github.com/gfm/][GitHub F
   (use-package markdown-mode
     :mode ("\\.md\\'" . gfm-mode)
     :config
-    (add-hook 'markdown-mode-hook #'olivetti-mode))
+    (add-hook 'markdown-mode-hook #'olivetti-mode)
+    <<markdown-config>>)
+#+end_src
+
+I'd like headers to show up as larger text than the body - like how Org-mode headers do. Makes it easier to distinguish headings from text.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref markdown-config
+  (setopt markdown-header-scaling t)
 #+end_src
 
 *** JSON and YAML
