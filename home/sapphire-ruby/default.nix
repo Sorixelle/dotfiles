@@ -71,6 +71,7 @@
     xfce.xfconf
     xsane
     zathura
+    zeal
     zulip
   ];
 
