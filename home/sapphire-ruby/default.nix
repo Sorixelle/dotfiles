@@ -128,7 +128,10 @@
         key = "~/.ssh/id_ed25519_sk";
         signByDefault = true;
       };
-      extraConfig.core.fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
+      extraConfig = {
+        core.fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
+        init.defaultBranch = "main";
+      };
     };
 
     gpg = {
