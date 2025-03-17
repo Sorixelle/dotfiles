@@ -78,4 +78,9 @@
       ${pkgs.krabby}/bin/krabby random --no-title
     '';
   };
+
+  programs.thefuck = {
+    enable = true;
+    enableFishIntegration = true;
+  };
 }
