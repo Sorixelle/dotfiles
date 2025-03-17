@@ -1333,6 +1333,16 @@ For some ungodly reason, Elixir's default language server binary is called =lang
   (add-to-list 'eglot-server-programs '(heex-ts-mode "elixir-ls"))
 #+end_src
 
+elixir-ls has a thing where if you have an unterminated =do= block and you insert a newline after it, it'll helpfully add an =end= if it's not there. Very helpful! Unfortunately, Smartparens already does this for me, so those two end up stepping on each others' toes and making a mess of my function definitions. I'll turn that off on the elixir-ls side, and leave Smartparens to handle my "brace" insertion instead.
+
+#+begin_src emacs-lisp
+  (add-hook 'elixir-ts-mode-hook
+            (lambda () (setq-local
+                        eglot-ignored-server-capabilities
+                        '(:documentOnTypeFormattingProvider))))
+#+end_src
+
+
 *** Rust
 All the girlthings love Rust. Putting on their fuckin. Striped socks and cat ears and shit like that. Unfortunately, the cat ears won't fit over my fox ears, so hopefully that'll be okay with them.
 
