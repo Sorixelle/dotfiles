@@ -305,6 +305,8 @@
 
     joycond.enable = true;
 
+    orca.enable = true;
+
     pcscd.enable = true;
 
     pipewire = {
