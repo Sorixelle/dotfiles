@@ -33,6 +33,7 @@
     darktable
     discord
     ffmpeg-full
+    figma-linux
     file-roller
     gimp
     git-diffie
