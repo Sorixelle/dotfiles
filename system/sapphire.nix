@@ -344,8 +344,8 @@
       datasets."Sapphire/Ruby/Home" = {
         autosnap = true;
         autoprune = true;
-        hourly = 10;
-        daily = 7;
+        hourly = 3;
+        daily = 1;
       };
     };
 
