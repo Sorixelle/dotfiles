@@ -1,18 +1,49 @@
-{
-  pkgs,
-  lib,
-  inputs,
-  name,
-  flakePkgs,
-  ...
-}:
+let
+  sources = import ../npins;
+
+  # Construct a nixpkgs set, from version pinned in npins
+  pkgs = import sources.nixpkgs {
+    # Use common nixpkgs configuration
+    config = import ../nixpkgs/config.nix;
+
+    overlays = [
+      (import sources.emacs-overlay)
+      (import "${sources.git-diffie}/overlay.nix")
+      (final: prev: {
+        # NUR doesn't expose an overlay by default, but it's trivial to add it to one
+        nur = import sources.nur { inherit pkgs; };
+
+        # tree-sitter-astro doesn't provide an overlay outside of the flake, so we'll reconstruct it here
+        tree-sitter = prev.tree-sitter.override {
+          extraGrammars.tree-sitter-astro = prev.tree-sitter.buildGrammar {
+            language = "astro";
+            version = builtins.substring 0 7 sources.tree-sitter-astro.revision;
+            src = sources.tree-sitter-astro.outPath;
+          };
+        };
+      })
+
+      # Also include all of our custom definitions
+      (import ../nixpkgs/packages)
+    ];
+  };
+in
+
+{ lib, ... }:
 
 {
-  # Set the hostname
-  # networking.hostName = name;
+  # Import NixOS modules from npins
+  imports = [
+    (import "${sources.home-manager}/nixos")
+    (import "${sources.lix-module}/module.nix" {
+      lix = import sources.lix;
+      # Include short hash of Lix commit in the version
+      versionSuffix = "-${builtins.substring 0 7 sources.lix.revision}";
+    })
+  ];
 
-  # Use flake's nixpkgs
-  #nixpkgs.pkgs = flakePkgs;
+  # Use the nixpkgs set we just defined
+  nixpkgs.pkgs = pkgs;
 
   # Configure Nix
   nix = {
@@ -45,9 +76,6 @@
         "pebble.cachix.org-1:aTqwT2hR6lGggw/rPISRcHZctDv2iF7ewsVxf3Hq6ow="
       ];
     };
-
-    # Expose this flake in the flake registry
-    #registry.srxl-dotfiles.flake = inputs.self;
   };
 
   # Common packages
@@ -88,7 +116,4 @@
     # Use globally configured Nixpkgs set
     useGlobalPkgs = true;
   };
-
-  # Set flake revision
-  #system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
 }

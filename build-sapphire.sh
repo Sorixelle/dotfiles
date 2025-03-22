@@ -12,6 +12,6 @@ nixpkgs_pin=$(nix eval --raw -f npins/default.nix nixpkgs)
 # evaluate the config, wasting several seconds
 sudo env NIX_PATH="${nix_path}" nixos-rebuild "$cmd" \
      --log-format internal-json -v \
-     -I "nixos-config=${PWD}/non-flake-entrypoints/sapphire.nix" \
+     -I "nixos-config=${PWD}/system/sapphire.nix" \
      -I "nixpkgs=${nixpkgs_pin}" \
      --no-reexec "$@" |& nom --json

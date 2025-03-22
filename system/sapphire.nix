@@ -7,6 +7,7 @@
 
 {
   imports = [
+    ./common.nix
     "${modulesPath}/services/hardware/sane_extra_backends/brscan5.nix"
   ];
 
