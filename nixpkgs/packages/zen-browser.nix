@@ -12,12 +12,12 @@
 }:
 
 let
-  zenVersion = "1.9b";
-  firefoxVersion = "136.0";
+  zenVersion = "1.10.1b";
+  firefoxVersion = "136.0.2";
 
   firefoxSrc = fetchurl {
     url = "https://archive.mozilla.org/pub/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.xz";
-    hash = "sha256-O+4xTreTRFG+Tix+ysOLOC+EIv7YKH4Fvib+lN0ob1c=";
+    hash = "sha256-Uxh8noRUP3eDblV8Kin5UjixEed5FUIX3y7ZtQ3b8gA=";
   };
 
   patchedSrc = buildNpmPackage {
@@ -28,7 +28,7 @@ let
       owner = "zen-browser";
       repo = "desktop";
       rev = zenVersion;
-      hash = "sha256-Hi3e3xBqJjeTRuKEFRlI6pMzKWz3mz+i4IW63HpZtY4=";
+      hash = "sha256-gBkLK0Mg1HnkmAkrOp61S1QQVlXg5L/n0/O+92ja1z0=";
       fetchSubmodules = true;
     };
     postUnpack = ''
@@ -36,7 +36,7 @@ let
       mv firefox-${firefoxVersion} source/engine
     '';
 
-    npmDepsHash = "sha256-UWmUmq/nc1TP2XnFfk6yuldToUOjenS300eoOmzQjcU=";
+    npmDepsHash = "sha256-qIXoI/8mXpLYUa6H7mF4UN42FmKl9GPWsb1vO0Wcitg=";
     makeCacheWritable = true;
 
     nativeBuildInputs = [
