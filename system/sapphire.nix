@@ -212,11 +212,6 @@
 
   location.provider = "geoclue2";
 
-  musnix = {
-    enable = true;
-    kernel.realtime = true;
-  };
-
   networking = {
     hostId = "676cd442";
 

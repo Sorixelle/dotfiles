@@ -157,6 +157,10 @@
           nativeBuildInputs = [
             nixd
             nixfmt-rfc-style
+            (import (fetchzip {
+              url = "https://github.com/andir/npins/archive/refs/heads/master.tar.gz";
+              hash = "sha256-/FTE/lDICJnXr4JbxaA+9mwM0sSF5++/XaYR+S2pFdA=";
+            }) { system = s; })
           ];
 
           shellHook = ''

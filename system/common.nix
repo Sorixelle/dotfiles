@@ -9,10 +9,10 @@
 
 {
   # Set the hostname
-  networking.hostName = name;
+  # networking.hostName = name;
 
   # Use flake's nixpkgs
-  nixpkgs.pkgs = flakePkgs;
+  #nixpkgs.pkgs = flakePkgs;
 
   # Configure Nix
   nix = {
@@ -47,7 +47,7 @@
     };
 
     # Expose this flake in the flake registry
-    registry.srxl-dotfiles.flake = inputs.self;
+    #registry.srxl-dotfiles.flake = inputs.self;
   };
 
   # Common packages
@@ -90,5 +90,5 @@
   };
 
   # Set flake revision
-  system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
+  #system.configurationRevision = lib.mkIf (inputs.self ? rev) inputs.self.rev;
 }

@@ -1,0 +1,117 @@
+{
+  "pins": {
+    "emacs-overlay": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "emacs-overlay"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "31ee8006935d8c3ce678854d8e46d74915a16960",
+      "url": "https://github.com/nix-community/emacs-overlay/archive/31ee8006935d8c3ce678854d8e46d74915a16960.tar.gz",
+      "hash": "16xj8nnl3ns6sb565c9c8a14dyaxsd2n2ndpzdvbs3aqdba8jqfr"
+    },
+    "git-diffie": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "the6p4c",
+        "repo": "git-diffie"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "c544b5c71106a863d5c90ab6ab73db757944f991",
+      "url": "https://github.com/the6p4c/git-diffie/archive/c544b5c71106a863d5c90ab6ab73db757944f991.tar.gz",
+      "hash": "0hg5jay4s78pd6p5g538qp3nxxzkwi3rr4axc2g3i8v33xy8d6gy"
+    },
+    "home-manager": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "home-manager"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "296ddc64627f4a6a4eb447852d7346b9dd16197d",
+      "url": "https://github.com/nix-community/home-manager/archive/296ddc64627f4a6a4eb447852d7346b9dd16197d.tar.gz",
+      "hash": "141y7qzvg3r7jbj8d3bkv85zwjqv1yl579igmf8w8p25gvq60bhn"
+    },
+    "hyprlock": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hyprwm",
+        "repo": "hyprlock"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "f883e669d147ac189b64ce403300a5a3e4de2c66",
+      "url": "https://github.com/hyprwm/hyprlock/archive/f883e669d147ac189b64ce403300a5a3e4de2c66.tar.gz",
+      "hash": "1kwn5h2sf3ngljpwa2vd73i3y48a3b8i5czdkksfrjbnfg6wsvdv"
+    },
+    "lix": {
+      "type": "Git",
+      "repository": {
+        "type": "Forgejo",
+        "server": "https://git.lix.systems/",
+        "owner": "lix-project",
+        "repo": "lix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "6059cbb031e49e05dd5d16208e2e50d3ab2611db",
+      "url": "https://git.lix.systems/lix-project/lix/archive/6059cbb031e49e05dd5d16208e2e50d3ab2611db.tar.gz",
+      "hash": "1kdggi2cxbay11fx93ry39hi3c9rslyf1ahp2rwzyws5sy07dbng"
+    },
+    "lix-module": {
+      "type": "Git",
+      "repository": {
+        "type": "Forgejo",
+        "server": "https://git.lix.systems/",
+        "owner": "lix-project",
+        "repo": "nixos-module"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "a6da43f8193d9e329bba1795c42590c27966082e",
+      "url": "https://git.lix.systems/lix-project/nixos-module/archive/a6da43f8193d9e329bba1795c42590c27966082e.tar.gz",
+      "hash": "09vglsb2n67xfc1g9dpmr0ka56dk4r1b8sw5jq3ka4jv68sg8l6q"
+    },
+    "nixpkgs": {
+      "type": "Channel",
+      "name": "nixpkgs-unstable",
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre771533.94c4dbe77c07/nixexprs.tar.xz",
+      "hash": "1nwh04drfjp7cfj4xk6mc3ikabrp0rnl8dzf3n1nj8566yn6nrn4"
+    },
+    "nur": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "nur"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "0eadb44f48ae149536423ebf1c976a328e585a0d",
+      "url": "https://github.com/nix-community/nur/archive/0eadb44f48ae149536423ebf1c976a328e585a0d.tar.gz",
+      "hash": "09sbbypaapyvv3pfmn31vv4plrvkz452lwxaqbvxbcv1grws7zp9"
+    },
+    "tree-sitter-astro": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "virchau13",
+        "repo": "tree-sitter-astro"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "0ad33e32ae9726e151d16ca20ba3e507ff65e01f",
+      "url": "https://github.com/virchau13/tree-sitter-astro/archive/0ad33e32ae9726e151d16ca20ba3e507ff65e01f.tar.gz",
+      "hash": "1238n529jipzrchkd1z8y3rn9qcascykl8h128qz2322x0la25rf"
+    }
+  },
+  "version": 5
+}
