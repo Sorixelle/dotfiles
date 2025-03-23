@@ -45,37 +45,41 @@ in
   # Use the nixpkgs set we just defined
   nixpkgs.pkgs = pkgs;
 
-  # Configure Nix
-  nix = {
-    # Disable channels
-    channel.enable = false;
+  # Disable channels
+  nix.channel.enable = false;
+  # Pin nixpkgs in the flake registry to our nixpkgs checkout in npins
+  nix.registry.nixpkgs.to = {
+    type = "path";
+    path = sources.nixpkgs;
+  };
+  # Include it in the nix path too, for compatibility with older CLI tools and <nixpkgs> references
+  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
 
-    # Enable nix-command and flakes, and persist derivations/outputs for nix-direnv
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-derivations = true
-      keep-outputs = true
-    '';
+  # Enable nix-command and flakes, and persist derivations/outputs for nix-direnv
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+    keep-derivations = true
+    keep-outputs = true
+  '';
 
-    settings = {
-      # Build up to 4 derivations in parallel
-      max-jobs = 4;
+  nix.settings = {
+    # Build up to 4 derivations in parallel
+    max-jobs = 4;
 
-      # https://github.com/NixOS/nix/issues/9574
-      nix-path = lib.mkForce "nixpkgs=flake:nixpkgs";
+    # https://github.com/NixOS/nix/issues/9574
+    nix-path = lib.mkForce "nixpkgs=flake:nixpkgs";
 
-      # Include binary caches for some projects
-      substituters = [
-        "https://autost.cachix.org"
-        "https://nix-community.cachix.org"
-        "https://pebble.cachix.org"
-      ];
-      trusted-public-keys = [
-        "autost.cachix.org-1:zl/QINkEtBrk/TVeogtROIpQwQH6QjQWTPkbPNNsgpk="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "pebble.cachix.org-1:aTqwT2hR6lGggw/rPISRcHZctDv2iF7ewsVxf3Hq6ow="
-      ];
-    };
+    # Include binary caches for some projects
+    substituters = [
+      "https://autost.cachix.org"
+      "https://nix-community.cachix.org"
+      "https://pebble.cachix.org"
+    ];
+    trusted-public-keys = [
+      "autost.cachix.org-1:zl/QINkEtBrk/TVeogtROIpQwQH6QjQWTPkbPNNsgpk="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "pebble.cachix.org-1:aTqwT2hR6lGggw/rPISRcHZctDv2iF7ewsVxf3Hq6ow="
+    ];
   };
 
   # Common packages
