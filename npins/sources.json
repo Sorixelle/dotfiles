@@ -109,6 +109,19 @@
       "url": "https://git.lix.systems/lix-project/nixos-module/archive/a6da43f8193d9e329bba1795c42590c27966082e.tar.gz",
       "hash": "09vglsb2n67xfc1g9dpmr0ka56dk4r1b8sw5jq3ka4jv68sg8l6q"
     },
+    "nix-darwin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "LnL7",
+        "repo": "nix-darwin"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "e9f41de2a81f04390afd106959adf352a207628f",
+      "url": "https://github.com/LnL7/nix-darwin/archive/e9f41de2a81f04390afd106959adf352a207628f.tar.gz",
+      "hash": "014whbpfsms7lps63n1jizzaq0mg70brkqc4bdyb3s5bnw6ssivh"
+    },
     "nixos-hardware": {
       "type": "Git",
       "repository": {
