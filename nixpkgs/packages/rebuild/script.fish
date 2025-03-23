@@ -44,14 +44,33 @@ end
 # Evaluate path to nixpkgs checkout in npins, to add to NIX_PATH
 set -l pinned_nixpkgs (nix eval --raw -f "$_flag_config/npins" nixpkgs)
 
-sudo nixos-rebuild \
-    # Set log format to feed into nix-output-monitor
-    --log-format internal-json -v \
-    # Don't build nixos-rebuild and re-execute with it to speed up eval
-    --no-reexec \
-    # Tell nixos-rebuild where the system configuration to build lives
-    -I "nixos-config=$_flag_config/system/$_flag_system.nix" \
-    # Tell the build to use the pinned version of nixpkgs from npins
-    -I "nixpkgs=$pinned_nixpkgs" \
-    # Pass any extra arguments given to the rebuild, and show progress with nix-output-monitor
-    $argv &| nom --json
+# If we're on macOS, we'll need to call darwin-rebuild, and nixos-rebuild for NixOS
+switch (uname)
+    case Darwin
+        # Like Nixpkgs, get a path to the pinned nix-darwin
+        set -l pinned_nix_darwin (nix eval --raw -f "$_flag_config/npins" nix-darwin)
+
+        darwin-rebuild \
+            # Show build logs (darwin-rebuild doesn't seem to work with nix-output-monitor, unfortunately)
+            -L \
+            # Tell darwin-rebuild where the system configuration to build lives
+            -I "darwin-config=$_flag_config/system-darwin/$_flag_system.nix" \
+            # Tell the build to use the pinned version of nixpkgs from npins
+            -I "nixpkgs=$pinned_nixpkgs" \
+            # And the pinned nix-darwin
+            -I "darwin=$pinned_nix_darwin" \
+            # Pass any extra arguments given to the rebuild
+            $argv
+    case '*'
+        sudo nixos-rebuild \
+            # Set log format to feed into nix-output-monitor
+            --log-format internal-json -v \
+            # Don't build nixos-rebuild and re-execute with it to speed up eval
+            --no-reexec \
+            # Tell nixos-rebuild where the system configuration to build lives
+            -I "nixos-config=$_flag_config/system/$_flag_system.nix" \
+            # Tell the build to use the pinned version of nixpkgs from npins
+            -I "nixpkgs=$pinned_nixpkgs" \
+            # Pass any extra arguments given to the rebuild, and show progress with nix-output-monitor
+            $argv &| nom --json
+end
