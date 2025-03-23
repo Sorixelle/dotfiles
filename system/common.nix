@@ -90,6 +90,7 @@ in
     neovim
     nix-output-monitor
     psmisc
+    rebuild
     ripgrep
     wget
     zip

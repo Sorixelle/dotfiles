@@ -15,6 +15,8 @@ final: prev:
 
   pyftfeatfreeze = prev.callPackage ./pyftfeatfreeze.nix { };
 
+  rebuild = prev.callPackage ./rebuild { };
+
   rescrobbled = prev.callPackage ./rescrobbled.nix { };
 
   roon-launcher = prev.callPackage ./roon { };
