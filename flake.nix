@@ -93,42 +93,8 @@
       };
 
       pkgsBySystem = genSystems (system: import nixpkgs (genNixpkgsConfig system));
-
-      # Generate a boilerplate system with a machine specific config.
-      defineSystem =
-        let
-          mkSystem = makeOverridable nixosSystem;
-        in
-        name:
-        { system, config }:
-        nameValuePair name (mkSystem {
-          inherit system;
-
-          modules = [
-            nixpkgs.nixosModules.notDetected
-            inputs.home-manager.nixosModules.home-manager
-            inputs.lix-module.nixosModules.default
-            inputs.musnix.nixosModules.default
-
-            (import ./system/common.nix)
-
-            (import config)
-          ];
-
-          specialArgs = {
-            inherit inputs name;
-            flakePkgs = pkgsBySystem."${system}";
-          };
-        });
     in
     {
-      nixosConfigurations = mapAttrs' defineSystem {
-        tanzanite = {
-          system = "x86_64-linux";
-          config = ./system/tanzanite.nix;
-        };
-      };
-
       darwinConfigurations = {
         bauxite = nix-darwin.lib.darwinSystem {
           modules = [

@@ -65,6 +65,22 @@
       "url": "https://github.com/hyprwm/hyprlock/archive/f883e669d147ac189b64ce403300a5a3e4de2c66.tar.gz",
       "hash": "1kwn5h2sf3ngljpwa2vd73i3y48a3b8i5czdkksfrjbnfg6wsvdv"
     },
+    "lanzaboote": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "lanzaboote"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "submodules": false,
+      "version": "v0.4.2",
+      "revision": "f0212638a2ec787a7841882f4477d40ae24f0a5d",
+      "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.4.2",
+      "hash": "0xc1wawnb0297h5khxblmf9pd1fry950xkcm7mwlck19s2906h80"
+    },
     "lix": {
       "type": "Git",
       "repository": {
@@ -92,6 +108,19 @@
       "revision": "a6da43f8193d9e329bba1795c42590c27966082e",
       "url": "https://git.lix.systems/lix-project/nixos-module/archive/a6da43f8193d9e329bba1795c42590c27966082e.tar.gz",
       "hash": "09vglsb2n67xfc1g9dpmr0ka56dk4r1b8sw5jq3ka4jv68sg8l6q"
+    },
+    "nixos-hardware": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nixos",
+        "repo": "nixos-hardware"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "380ed15bcd6440606c6856db44a99140d422b46f",
+      "url": "https://github.com/nixos/nixos-hardware/archive/380ed15bcd6440606c6856db44a99140d422b46f.tar.gz",
+      "hash": "1gry924avdpja2hmxycjsii09ryz56jrils6jx90q65c14wcx7f8"
     },
     "nixpkgs": {
       "type": "Channel",

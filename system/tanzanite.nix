@@ -1,6 +1,9 @@
+let
+  sources = import ../npins;
+in
+
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -8,8 +11,10 @@
 
 {
   imports = [
-    inputs.nixos-hardware.nixosModules.framework-16-7040-amd
-    inputs.lanzaboote.nixosModules.lanzaboote
+    (import "${sources.nixos-hardware}/framework/16-inch/7040-amd")
+    ((import sources.lanzaboote).nixosModules.lanzaboote)
+
+    ./common.nix
   ];
 
   time.timeZone = "Australia/Melbourne";
