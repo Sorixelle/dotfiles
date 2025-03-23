@@ -1,55 +1,33 @@
 #+TITLE: dotfiles
 
-Welcome to my dotfiles. These are the files I use to declare the configuration
-of my systems that run NixOS (so, basically all of them).
+Welcome to my dotfiles. These are the files I use to declare the configuration of my systems that run NixOS (so, basically all of them).
 
 * Setup
-  1. Get yourself a copy of NixOS 20.09. Can't use anything older, since they
-     won't have support for =nixos-install --flake=.
-  2. Write it to a USB, CD, DVD, IDE drive, whatever floats your boat - so long
-     as you can boot into it.
-  3. Now that you're in, use =parted= or whatever tool you prefer to set up your
-     install disk. [[https://nixos.org/manual/nixos/stable/index.html#sec-installation-partitioning][Chapter 2.2 of the NixOS manual]] might be able to give you a
-     hand with that.
-  4. Next, mount your filesystems at =/mnt= and clone the configuration with
-     =git clone https://git.isincredibly.gay/srxl/dotfiles.git /mnt/etc/dotfiles=.
-  5. Finally, kick off the installation with
-     =nixos-install --root /mnt --flake /mnt/etc/dotfiles#<hostname>=, where
-     =<hostname>= is the name of the system you want to install. Check
-     =nixosConfigurations= in flake.nix for avaliable systems.
-  6. Reboot, and enjoy your newly, freshly, declaratively installed system!
+1. Get yourself a copy of NixOS. They got some of those over [[https://nixos.org/download/][here]].
+2. Write it to a USB, CD, DVD, IDE drive, whatever floats your boat - so long as you can boot into it.
+3. Now that you're in, use =parted= or whatever tool you prefer to set up your install disk. [[https://nixos.org/manual/nixos/stable/index.html#sec-installation-partitioning][Chapter 2.2 of the NixOS manual]] might be able to give you a hand with that.
+4. Next, mount your filesystems at =/mnt= and clone this configuration whereever you want it, with =git clone https://git.isincredibly.gay/srxl/dotfiles.git=.
+5. =cd= into the clone and drop into a =nix-shell= - you'll want the rebuild script that's in there to install everything.
+6. Double check the value of =srxl.rebuild.configLocation= - that's where the rebuild script will expect the configuration to live. Change it, or move the config to match.
+5. Finally, kick off the installation with =rebuild -c $(pwd) -s <hostname>=, where =<hostname>= is the name of the file in =systems= you want to build, minus the =.nix= bit.
+6. Reboot, and enjoy your newly, freshly, declaratively installed system! Future rebuilds can be redone by simply running =rebuild=.
 
 * Structure
-  - =config=: Configuration for applications that are common to most setups, and
-    not specific to any theme.
-  - =home=: [[https://github.com/nix-community/home-manager][home-manager]] specific configuration. Contains all the user-specific
-    configuration.
-  - =home/modules=: home-manager modules.
-  - =home/themes=: A set of avaliable system-wide themes. A "theme" consists of
-    a few things, namely a window manager, colour scheme, and other packages
-    that define the look and feel of the system.
-  - =nixpkgs=: Configuration relating to Nixpkgs.
-  - =nixpkgs/packages=: Derivations for packages that aren't in Nixpkgs.
-  - =system=: Main machine-specific NixOS configurations. Typically, each file
-    in this folder maps to an attribute in the flake's =nixosConfigurations=.
-  - =system/hardware=: Hardware-specific configuration options for each machine.
-    These are accurate for my hardware, but if you're not me, you'll probably
-    want to modify these if you intend to use my configurations.
+- =config= :: Configuration for applications that are common to most setups.
+- =home= :: [[https://github.com/nix-community/home-manager][home-manager]] specific configuration. Contains all the user-specific configuration.
+- =home/modules= :: Custom home-manager modules.
+- =nixpkgs= :: Configuration relating to Nixpkgs.
+- =nixpkgs/packages= :: Derivations for packages that aren't in Nixpkgs, or packages I've vendored for whatever reason.
+- =npins= :: Locked versions of all the external repos this config depends on, managed by [[https://github.com/andir/npins][npins]].
+- =system= :: Main machine-specific NixOS configurations.
+- =system-darwin= :: Same as above, but for nix-darwin machines.
 
 * Useful info
-  Looking for some information on how to use NixOS and flakes? Here's some handy
-  learning material.
+Looking for some information on how to use NixOS? Here's some handy learning material.
 
-  - First foray into Nix? The [[https://nixos.org/guides/nix-pills/][Nix Pills]] are a great guide for first-timers.
-  - The [[https://nixos.org/learn.html][Learn page on NixOS' website]] also contains lots of resources for
-    beginners and seasoned Nix veterans alike.
-  - Want to get started with flakes? [[https://www.tweag.io/blog/2020-05-25-flakes/][These]] [[https://www.tweag.io/blog/2020-06-25-eval-cache/][three]] [[https://www.tweag.io/blog/2020-07-31-nixos-flakes/][articles]] are a great intro.
-  - The [[https://nixos.wiki/wiki/Flakes][Flakes page on the NixOS wiki]] has a full flake format specification, as
-    well as some handy recipes. The rest of the wiki is pretty good, too.
-  - [[https://github.com/hlissner/dotfiles][A]] [[https://github.com/davidtwco/veritas][few]] [[https://gitlab.com/felschr/nixos-config/][configs]] from other people that I've +shamelessly stolen+ drawn
-    inspiration from.
+- First foray into Nix? The [[https://nixos.org/guides/nix-pills/][Nix Pills]] are a great guide for first-timers.
+- The [[https://nixos.org/learn.html][Learn page on NixOS' website]] also contains lots of resources for beginners and seasoned Nix veterans alike.
+- [[https://github.com/hlissner/dotfiles][A]] [[https://github.com/davidtwco/veritas][few]] [[https://gitlab.com/felschr/nixos-config/][configs]] from other people that I've +shamelessly stolen+ drawn inspiration from.
 
 * License
-  All material in this configuration is released in the public domain (see the
-  LICENCE file in the repo root). I invite you to pinch parts of this
-  configuration for yourself, and build your own amazing configurations.
+All material in this configuration is released in the public domain (see the LICENCE file in the repo root). I invite you to pinch parts of this configuration for yourself, and build your own amazing configurations.
