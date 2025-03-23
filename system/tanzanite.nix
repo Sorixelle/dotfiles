@@ -12,7 +12,7 @@ in
 {
   imports = [
     (import "${sources.nixos-hardware}/framework/16-inch/7040-amd")
-    ((import sources.lanzaboote).nixosModules.lanzaboote)
+    (import sources.lanzaboote).nixosModules.lanzaboote
 
     ./common.nix
   ];

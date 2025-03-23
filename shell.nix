@@ -7,12 +7,14 @@ in
 pkgs.mkShell {
   name = "srxl-dotfiles";
 
-  packages = with pkgs; [
-    nixd
-    nixfmt-rfc-style
-    npins
-    rebuild
-  ];
+  packages =
+    with pkgs;
+    [
+      nixd
+      npins
+      rebuild
+    ]
+    ++ commit-hooks.enabledPackages;
 
   shellHook = ''
     ${commit-hooks.shellHook}

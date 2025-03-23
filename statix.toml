@@ -1,0 +1,7 @@
+ignore = [
+  '.direnv',
+  'npins/default.nix',
+]
+disabled = [
+  'repeated_keys',
+]

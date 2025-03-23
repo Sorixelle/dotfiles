@@ -13,9 +13,10 @@ git-hooks.run {
 
   hooks = {
     nixfmt-rfc-style.enable = true;
+    statix.enable = true;
   };
 
   tools = {
-    inherit (pkgs) nixfmt-rfc-style;
+    inherit (pkgs) nixfmt-rfc-style statix;
   };
 }

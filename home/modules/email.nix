@@ -109,7 +109,7 @@
 
         extraConfig =
           let
-            smtp = config.accounts.email.accounts.ruby-srxl.smtp;
+            inherit (config.accounts.email.accounts.ruby-srxl) smtp;
 
             defaultShortcuts = [
               {
