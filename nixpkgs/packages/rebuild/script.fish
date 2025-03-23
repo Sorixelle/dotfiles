@@ -5,6 +5,7 @@
 argparse -i h/help 'c/config=' 's/system=' -- $argv
 or return
 
+# If no config repo was passed, default to environment variable defined by system/modules/rebuild.nix
 if test -z $_flag_config
     set _flag_config $REBUILD_CHECKOUT_PATH
 end
@@ -12,11 +13,11 @@ end
 if set -ql _flag_help
     echo "rebuild - Rebuild the NixOS configuration"
     echo ""
-    echo "Usage: rebuild [-h] [-s system] [args]"
+    echo "Usage: rebuild [-h] [-s system] [-c config] [args]"
     echo "Flags:"
     echo "  -h/--help: Display this help message"
     echo "  -c/--config: Path to the NixOS configuration repo (defaults to $REBUILD_CHECKOUT_PATH)"
-    echo "  -s/--system: Name of the file in $nixos_config/system to build (defaults to hostname)"
+    echo "  -s/--system: Name of the file in [config]/system to build (defaults to hostname)"
     echo ""
     echo "Examples:"
     echo "  Switch to the new configuration for this system:"
