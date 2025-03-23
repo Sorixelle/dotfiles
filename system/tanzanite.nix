@@ -164,6 +164,7 @@ in
 
   networking = {
     hostId = "59af9bb4";
+    hostName = "tanzanite";
 
     networkmanager.enable = true;
 
