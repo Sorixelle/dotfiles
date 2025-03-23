@@ -26,6 +26,19 @@
       "url": "https://github.com/the6p4c/git-diffie/archive/c544b5c71106a863d5c90ab6ab73db757944f991.tar.gz",
       "hash": "0hg5jay4s78pd6p5g538qp3nxxzkwi3rr4axc2g3i8v33xy8d6gy"
     },
+    "git-hooks": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "git-hooks.nix"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "dcf5072734cb576d2b0c59b2ac44f5050b5eac82",
+      "url": "https://github.com/cachix/git-hooks.nix/archive/dcf5072734cb576d2b0c59b2ac44f5050b5eac82.tar.gz",
+      "hash": "1jmdxmx29xghjiaks6f5amnxld8w3kmxb2zv8lk2yzpgp6kr60qg"
+    },
     "home-manager": {
       "type": "Git",
       "repository": {

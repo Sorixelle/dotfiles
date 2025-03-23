@@ -72,7 +72,6 @@
       flake-utils,
       nix-darwin,
       nixpkgs,
-      pre-commit-hooks,
       ...
     }@inputs:
     with nixpkgs.lib;
@@ -143,38 +142,5 @@
       };
 
       overlay = import ./nixpkgs/packages;
-
-      devShell = genSystems (
-        s:
-        with pkgsBySystem."${s}";
-        mkShell {
-          name = "srxl-dotfiles";
-
-          nativeBuildInputs = [
-            nixd
-            nixfmt-rfc-style
-            (import (fetchzip {
-              url = "https://github.com/andir/npins/archive/refs/heads/master.tar.gz";
-              hash = "sha256-/FTE/lDICJnXr4JbxaA+9mwM0sSF5++/XaYR+S2pFdA=";
-            }) { system = s; })
-          ];
-
-          shellHook = ''
-            ${self.checks.${s}.pre-commit-check.shellHook}
-          '';
-        }
-      );
-
-      checks = genSystems (s: {
-        pre-commit-check = pre-commit-hooks.lib.${s}.run {
-          src = builtins.path {
-            path = ./.;
-            name = "dotfiles";
-          };
-          hooks = {
-            nixfmt-rfc-style.enable = true;
-          };
-        };
-      });
     };
 }
