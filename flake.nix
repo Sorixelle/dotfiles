@@ -124,10 +124,6 @@
     in
     {
       nixosConfigurations = mapAttrs' defineSystem {
-        sapphire = {
-          system = "x86_64-linux";
-          config = ./system/sapphire.nix;
-        };
         tanzanite = {
           system = "x86_64-linux";
           config = ./system/tanzanite.nix;
