@@ -13,6 +13,11 @@ final: prev:
 
   makerom = prev.callPackage ./makerom.nix { };
 
+  npins = import (prev.fetchzip {
+    url = "https://github.com/andir/npins/archive/refs/heads/master.tar.gz";
+    hash = "sha256-/FTE/lDICJnXr4JbxaA+9mwM0sSF5++/XaYR+S2pFdA=";
+  }) { pkgs = final; };
+
   pyftfeatfreeze = prev.callPackage ./pyftfeatfreeze.nix { };
 
   rebuild = prev.callPackage ./rebuild { };
