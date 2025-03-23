@@ -29,7 +29,7 @@ let
   };
 in
 
-{ lib, ... }:
+{ ... }:
 
 {
   # Import NixOS modules from npins
@@ -55,19 +55,14 @@ in
   # Include it in the nix path too, for compatibility with older CLI tools and <nixpkgs> references
   nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
 
-  # Enable nix-command and flakes, and persist derivations/outputs for nix-direnv
+  # Enable nix-command and flakes
   nix.extraOptions = ''
     experimental-features = nix-command flakes
-    keep-derivations = true
-    keep-outputs = true
   '';
 
   nix.settings = {
     # Build up to 4 derivations in parallel
     max-jobs = 4;
-
-    # https://github.com/NixOS/nix/issues/9574
-    nix-path = lib.mkForce "nixpkgs=flake:nixpkgs";
 
     # Include binary caches for some projects
     substituters = [
