@@ -11,6 +11,7 @@ pkgs.mkShell {
     nixd
     nixfmt-rfc-style
     npins
+    rebuild
   ];
 
   shellHook = ''
