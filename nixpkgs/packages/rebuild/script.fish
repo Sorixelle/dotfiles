@@ -2,11 +2,12 @@
 
 # Parse command-line arguments supported by this script, ignoring unknown ones
 # The unknown arguments just get forwarded to the nixos-rebuild call
-argparse -i h/help 's/system=' -- $argv
+argparse -i h/help 'c/config=' 's/system=' -- $argv
 or return
 
-# TODO: find a good way to not hardcode the config checkout location
-set -l nixos_config /home/ruby/nixos
+if test -z $_flag_config
+    set _flag_config $REBUILD_CHECKOUT_PATH
+end
 
 if set -ql _flag_help
     echo "rebuild - Rebuild the NixOS configuration"
@@ -14,14 +15,15 @@ if set -ql _flag_help
     echo "Usage: rebuild [-h] [-s system] [args]"
     echo "Flags:"
     echo "  -h/--help: Display this help message"
+    echo "  -c/--config: Path to the NixOS configuration repo (defaults to $REBUILD_CHECKOUT_PATH)"
     echo "  -s/--system: Name of the file in $nixos_config/system to build (defaults to hostname)"
     echo ""
     echo "Examples:"
     echo "  Switch to the new configuration for this system:"
     echo "  rebuild"
     echo ""
-    echo "  Test the configuration for this system, without creating a new generation:"
-    echo "  rebuild test"
+    echo "  Test the configuration for this system in /etc/nixos, without creating a new generation:"
+    echo "  rebuild -c /etc/nixos test"
     echo ""
     echo "  Build a virtual machine running the configuration for tanzanite:"
     echo "  rebuild -s tanzanite build-vm"
@@ -39,7 +41,7 @@ if test (count $argv) -eq 0
 end
 
 # Evaluate path to nixpkgs checkout in npins, to add to NIX_PATH
-set -l pinned_nixpkgs (nix eval --raw -f "$nixos_config/npins" nixpkgs)
+set -l pinned_nixpkgs (nix eval --raw -f "$_flag_config/npins" nixpkgs)
 
 sudo nixos-rebuild \
     # Set log format to feed into nix-output-monitor
@@ -47,7 +49,7 @@ sudo nixos-rebuild \
     # Don't build nixos-rebuild and re-execute with it to speed up eval
     --no-reexec \
     # Tell nixos-rebuild where the system configuration to build lives
-    -I "nixos-config=$nixos_config/system/$_flag_system.nix" \
+    -I "nixos-config=$_flag_config/system/$_flag_system.nix" \
     # Tell the build to use the pinned version of nixpkgs from npins
     -I "nixpkgs=$pinned_nixpkgs" \
     # Pass any extra arguments given to the rebuild, and show progress with nix-output-monitor

@@ -40,6 +40,8 @@ in
       # Include short hash of Lix commit in the version
       versionSuffix = "-${builtins.substring 0 7 sources.lix.revision}";
     })
+
+    ./modules/rebuild.nix
   ];
 
   # Use the nixpkgs set we just defined
@@ -90,7 +92,6 @@ in
     neovim
     nix-output-monitor
     psmisc
-    rebuild
     ripgrep
     wget
     zip
