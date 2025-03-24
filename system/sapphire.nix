@@ -215,6 +215,7 @@
 
   networking = {
     hostId = "676cd442";
+    hostName = "sapphire";
 
     firewall.enable = false;
 
