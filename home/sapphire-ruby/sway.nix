@@ -89,6 +89,9 @@ in
           "${mod}+1" = "workspace 1:web";
           "${mod}+2" = "workspace 2:chat";
           "${mod}+3" = "workspace 3:dev";
+          "${mod}+Shift+1" = "move container to workspace 1:web";
+          "${mod}+Shift+2" = "move container to workspace 2:chat";
+          "${mod}+Shift+3" = "move container to workspace 3:dev";
 
           # Monitors
           "${mod}+bracketleft" = "move workspace output left";
