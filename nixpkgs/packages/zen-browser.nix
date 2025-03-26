@@ -12,12 +12,12 @@
 }:
 
 let
-  zenVersion = "1.10.1b";
-  firefoxVersion = "136.0.2";
+  zenVersion = "1.10.2b";
+  firefoxVersion = "136.0.3";
 
   firefoxSrc = fetchurl {
     url = "https://archive.mozilla.org/pub/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.xz";
-    hash = "sha256-Uxh8noRUP3eDblV8Kin5UjixEed5FUIX3y7ZtQ3b8gA=";
+    hash = "sha256-lTBPsBnU1aLd+DjO/Wjgt9HF6wmNODET+1aSZva1wCg=";
   };
 
   patchedSrc = buildNpmPackage {
@@ -28,7 +28,7 @@ let
       owner = "zen-browser";
       repo = "desktop";
       rev = zenVersion;
-      hash = "sha256-gBkLK0Mg1HnkmAkrOp61S1QQVlXg5L/n0/O+92ja1z0=";
+      hash = "sha256-A6bZdHA3PIow0/SOpL5/5cYDqVY/SUbbI2Dd6RR0pR0=";
       fetchSubmodules = true;
     };
     postUnpack = ''
