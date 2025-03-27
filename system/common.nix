@@ -44,11 +44,13 @@ in
     # Include binary caches for some projects
     substituters = [
       "https://autost.cachix.org"
+      "https://canidae-solutions.cachix.org"
       "https://nix-community.cachix.org"
       "https://pebble.cachix.org"
     ];
     trusted-public-keys = [
       "autost.cachix.org-1:zl/QINkEtBrk/TVeogtROIpQwQH6QjQWTPkbPNNsgpk="
+      "canidae-solutions.cachix.org-1:ApBdxwoFhAVozb1wTA9rjgM1RXR10UZPSqE8RszvyK0="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "pebble.cachix.org-1:aTqwT2hR6lGggw/rPISRcHZctDv2iF7ewsVxf3Hq6ow="
     ];
