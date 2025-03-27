@@ -974,6 +974,12 @@ Eglot is so dead simple, there's virtually no configuration to setup - it just w
   (add-hook 'eglot-server-initialized-hook #'flymake-mode)
 #+end_src
 
+"Code actions" are a thing a lot of LSP implementations provide, that allow you to automatically insert, rearrange and recombobulate your code. With Eglot, you can select a code action to run at the current point with =eglot-code-actions=. To make it easier to access, I'll bind it to a key, so I can quickly action my actionable action items.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
+  (srxl/def-leader-key "a" #'eglot-code-actions "Run code action")
+#+end_src
+
 One little bit of editor smarts that Eglot doesn't handle, though, is code formatting. I like nice, consistently formatted code. Keeps it all clean and readable. Mostly. No guarantees that my code is actually sane. Nothing an automated tool can solve anyway (no, for the love of god, Copilot does not do this, don't talk to me about it). [[https://github.com/radian-software/apheleia][Apheleia]] is a package that handles autoformatting files on save with popular languages built in for a bunch of languages, so it'll do wonderfully here. I don't even need to configure it, since it seems like the author and I are mostly on the same page on what formatters are best. Love it when that happens.
 
 #+begin_src emacs-lisp
