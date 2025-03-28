@@ -78,6 +78,9 @@ with lib;
         startWithUserSession = "graphical";
       };
 
+      # For grip-mode (markdown preview)
+      home.packages = [ pkgs.go-grip ];
+
       home.file = {
         ".emacs.d" = {
           source = tangledConfig;

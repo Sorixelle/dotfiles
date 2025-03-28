@@ -1348,7 +1348,6 @@ elixir-ls has a thing where if you have an unterminated =do= block and you inser
                         '(:documentOnTypeFormattingProvider))))
 #+end_src
 
-
 *** Rust
 All the girlthings love Rust. Putting on their fuckin. Striped socks and cat ears and shit like that. Unfortunately, the cat ears won't fit over my fox ears, so hopefully that'll be okay with them.
 
@@ -1435,6 +1434,15 @@ I'd like headers to show up as larger text than the body - like how Org-mode hea
 #+begin_src emacs-lisp :tangle no :noweb-ref markdown-config
   (setopt markdown-header-scaling t)
 #+end_src
+
+Most of the time, if I'm writing Markdown it's either going to be for some documentation thingy (which probably has a live-reload preview thingy already), or for a GitHub readme. Previews for the latter case would be nice so I don't need to make a million tiny commits because I formatted something a little wrong. [[https://github.com/seagle0128/grip-mode][grip-mode]] helps generate some GitHub-style previews from Emacs, with the help of an external tool - I personally like [[https://github.com/chrishrb/go-grip][go-grip]].
+
+#+begin_src emacs-lisp
+  (use-package grip-mode
+    :config
+    (setq grip-command 'go-grip))
+#+end_src
+
 
 *** JSON and YAML
 Two pretty popular data interchange formats. Why YAML is popular, I'll never know, but I get JSON at least. Built-in modes for both, so setup is pretty easy.

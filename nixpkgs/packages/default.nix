@@ -9,6 +9,8 @@ final: prev:
 
   frankerfacez = prev.callPackage ./frankerfacez.nix { };
 
+  go-grip = prev.callPackage ./go-grip.nix { };
+
   inter-patched = prev.callPackage ./inter-patched.nix { };
 
   makerom = prev.callPackage ./makerom.nix { };
