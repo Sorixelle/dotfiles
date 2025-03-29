@@ -4,41 +4,54 @@
     enableFishIntegration = true;
 
     settings = {
-      format = "$shell$directory$character";
-      right_format = "$cmd_duration $nix_shell $git_branch $elixir";
+      format = ''
+        [┌](bold fg:cyan)[ $username@$hostname ](bg:black)[ $directory](bg:bright-black)[ $nix_shell](bg:blue)$fill$status$cmd_duration$git_branch$elixir
+        [└─](bold fg:cyan)$character
+      '';
 
-      cmd_duration = {
-        style = "italic fg:white";
-      };
+      fill.symbol = " ";
+
+      cmd_duration.format = "[took $duration ](italic fg:bright-white)";
+
       directory = {
-        format = "[$path]($style)[ $read_only]($read_only_style)";
-        read_only = "󰌾 ";
-        style = "fg:cyan";
-        read_only_style = "fg:red";
         fish_style_pwd_dir_length = 1;
+        read_only = "󰌾 ";
+        style = "fg:cyan bg:bright-black";
+        read_only_style = "italic fg:red bg:bright-black";
       };
+
       elixir = {
         format = "[$symbol](fg:purple)[ $version (\\(OTP $otp_version\\))]($style)";
         symbol = "";
-        style = "fg:bright-black";
+        style = "fg:bright-white";
       };
+
       git_branch = {
-        format = "[$symbol](fg:green)[$branch(:$remote_branch)]($style)";
-        style = "fg:bright-black";
+        format = "[$symbol](fg:green)[$branch(:$remote_branch) ]($style)";
+        style = "fg:bright-white";
       };
+
+      hostname = {
+        ssh_only = false;
+        format = "[$hostname](fg:purple bg:black)";
+      };
+
       nix_shell = {
-        format = "[$symbol]($style)";
-        style = "fg:cyan";
+        format = "[$symbol ]($style)";
+        style = "fg:white bg:blue";
         symbol = " ";
       };
-      shell = {
+
+      status = {
         disabled = false;
-        format = "[$indicator]($style)";
-        style = "fg:purple";
-        bash_indicator = "\\[bash\\] ";
-        fish_indicator = "";
-        powershell_indicator = "\\[pwsh\\] ";
-        zsh_indicator = "\\[zsh\\] ";
+        symbol = " ";
+      };
+
+      username = {
+        show_always = true;
+        format = "[$user]($style bg:black)";
+        style_user = "fg:green";
+        style_root = "bold fg:yellow";
       };
     };
   };
