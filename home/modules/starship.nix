@@ -5,8 +5,11 @@
 
     settings = {
       format = "$shell$directory$character";
-      right_format = "$nix_shell $git_branch $elixir";
+      right_format = "$cmd_duration $nix_shell $git_branch $elixir";
 
+      cmd_duration = {
+        style = "italic fg:white";
+      };
       directory = {
         format = "[$path]($style)[ $read_only]($read_only_style)";
         read_only = "󰌾 ";
