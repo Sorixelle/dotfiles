@@ -199,6 +199,8 @@ in
     '';
   };
 
+  services.wlsunset.systemdTarget = "sway-session.target";
+
   programs.i3status-rust = {
     enable = true;
     bars = {

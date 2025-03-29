@@ -48,8 +48,6 @@
   srxl.zen-browser.catppuccin.enable = true;
 
   programs = {
-    bash.enable = true;
-
     chromium = {
       enable = true;
       package = pkgs.chromium;
@@ -61,62 +59,10 @@
         { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # uBlock Origin
       ];
     };
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    git = {
-      enable = true;
-      package = pkgs.gitAndTools.gitFull;
-      lfs.enable = true;
-      userEmail = "ruby@srxl.me";
-      userName = "Ruby Iris Juric";
-      signing = {
-        format = "ssh";
-        key = "~/.ssh/id_ed25519_sk";
-        signByDefault = true;
-      };
-      extraConfig = {
-        core.fsmonitor = "${pkgs.rs-git-fsmonitor}/bin/rs-git-fsmonitor";
-        init.defaultBranch = "main";
-      };
-    };
-
-    gpg = {
-      enable = true;
-      settings = {
-        keyserver = "hkps://keys.openpgp.org";
-      };
-      scdaemonSettings = {
-        disable-ccid = true;
-      };
-    };
-
-    tealdeer.enable = true;
   };
 
   services = {
-    gpg-agent = {
-      enable = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
-    };
-
     mpris-proxy.enable = true;
-
-    udiskie.enable = true;
-
-    wlsunset = {
-      enable = true;
-      latitude = -37.8;
-      longitude = 145;
-      systemdTarget = "sway-session.target";
-      temperature = {
-        day = 6500;
-        night = 3000;
-      };
-    };
   };
 
   srxl = {
