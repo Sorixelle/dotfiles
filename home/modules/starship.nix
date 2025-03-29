@@ -11,7 +11,7 @@
 
       fill.symbol = " ";
 
-      cmd_duration.format = "[ took $duration](italic fg:bright-white)";
+      cmd_duration.format = "[took $duration](italic fg:bright-white)";
 
       directory = {
         fish_style_pwd_dir_length = 1;
@@ -62,7 +62,7 @@
 
       status = {
         disabled = false;
-        symbol = "";
+        symbol = " ";
       };
 
       username = {
