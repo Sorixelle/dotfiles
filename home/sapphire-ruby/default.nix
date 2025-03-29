@@ -3,11 +3,11 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/dunst.nix
     ../modules/kitty.nix
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 
-    ./dunst.nix
     ./firefox.nix
     ./rofi.nix
     ./sway.nix

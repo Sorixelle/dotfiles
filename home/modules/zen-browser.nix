@@ -86,6 +86,7 @@ in
       "text/html" = [ "zen.desktop" ];
       "text/x-lisp" = [ "zen.desktop" ];
     };
+    services.dunst.settings.global.browser = lib.getExe config.programs.zen-browser.package;
 
     # Add the icon from the Catppuccin theme if configured
     home.file.zenBrowserThemeIcon = lib.mkIf config.catppuccin.enable {

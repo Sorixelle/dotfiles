@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 {
   services.dunst = {
@@ -19,7 +19,6 @@
         horizontal_padding = 8;
         text_icon_padding = 8;
         frame_width = 4;
-        separator_color = "frame";
         separator_height = 4;
         font = "${config.srxl.fonts.ui.name} ${toString config.srxl.fonts.ui.size}";
         markup = "full";
@@ -29,26 +28,12 @@
         word_wrap = true;
         icon_position = "right";
         max_icon_size = 256;
-        browser = lib.getExe config.programs.firefox.package;
       };
-      urgency_low = {
-        background = "#24273a";
-        foreground = "#cad3f5";
-        frame_color = "#24273a";
-        timeout = 5;
-      };
-      urgency_normal = {
-        background = "#24273a";
-        foreground = "#cad3f5";
-        frame_color = "#363a4f";
-        timeout = 5;
-      };
-      urgency_critical = {
-        background = "#24273a";
-        foreground = "#cad3f5";
-        frame_color = "#ed8796";
-        timeout = 0;
-      };
+      urgency_low.timeout = 5;
+      urgency_normal.timeout = 5;
+      urgency_critical.timeout = 0;
     };
   };
+
+  catppuccin.dunst.enable = true;
 }
