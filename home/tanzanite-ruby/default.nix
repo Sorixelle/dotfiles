@@ -74,6 +74,14 @@
 
   manual.html.enable = true;
 
+  srxl = {
+    zen-browser.catppuccin = {
+      enable = true;
+      variant = "Frappe";
+      accent = "Lavender";
+    };
+  };
+
   programs = {
     bash.enable = true;
 
