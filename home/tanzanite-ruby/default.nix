@@ -11,7 +11,6 @@
     ./kitty.nix
     ./locking.nix
     ./rofi.nix
-    ./starship.nix
     ./sway.nix
   ];
 

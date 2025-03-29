@@ -5,7 +5,6 @@
     ../modules/common.nix
 
     ./firefox.nix
-    ./starship.nix
   ];
 
   home.packages = with pkgs; [

@@ -10,7 +10,6 @@
     ./firefox.nix
     ./kitty.nix
     ./rofi.nix
-    ./starship.nix
     ./sway.nix
   ];
 
