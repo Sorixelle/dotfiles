@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/zen-browser.nix
 
     ./dunst.nix
     ./firefox.nix
@@ -12,7 +13,6 @@
     ./starship.nix
     ./sway.nix
     ./xdg.nix
-    ./zen-browser.nix
   ];
 
   home.packages = with pkgs; [

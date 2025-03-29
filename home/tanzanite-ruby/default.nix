@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/zen-browser.nix
 
     ./dunst.nix
     ./firefox.nix

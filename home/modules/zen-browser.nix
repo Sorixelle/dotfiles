@@ -37,27 +37,22 @@ in
       isDefault = true;
       name = "default";
       path = "default";
-      extensions.packages =
-        with pkgs.nur.repos.rycee.firefox-addons;
-        with pkgs;
-        [
-          bitwarden
-          decentraleyes
-          firefox-color
-          frankerfacez
-          multi-account-containers
-          kagi-search
-          react-devtools
-          reddit-enhancement-suite
-          redirector
-          return-youtube-dislikes
-          sponsorblock
-          stylus
-          tridactyl
-          tubearchivist-companion
-          ublock-origin
-          violentmonkey
-        ];
+      extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+        bitwarden
+        decentraleyes
+        multi-account-containers
+        kagi-search
+        react-devtools
+        reddit-enhancement-suite
+        redirector
+        return-youtube-dislikes
+        sponsorblock
+        stylus
+        tridactyl
+        tubearchivist-companion
+        ublock-origin
+        violentmonkey
+      ];
     };
   };
 
