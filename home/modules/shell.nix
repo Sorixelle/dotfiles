@@ -30,10 +30,7 @@
     };
 
     shellAbbrs = {
-      l = "eza --icons -bhl";
-      la = "eza --icons -bhla";
-      lt = "eza --icons -bhlT";
-      lat = "eza --icons -bhlaT";
+      l = "ll";
       vim = "nvim";
 
       sys-rebuild = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
@@ -77,6 +74,19 @@
       # Pokemon :3
       ${pkgs.krabby}/bin/krabby random --no-title
     '';
+  };
+
+  # Enable eza for a much nicer ls
+  programs.eza = {
+    enable = true;
+    enableFishIntegration = true;
+    colors = "auto";
+    git = true;
+    icons = "auto";
+    extraOptions = [
+      "-b" # Binary size prefixes
+      "-h" # Add a header for each column
+    ];
   };
 
   # Enable `fuck` for correcting commands
