@@ -1,17 +1,32 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
+  # Install some programs for viewing various files
+  home.packages = with pkgs; [
+    file-roller
+    imv
+    mpv
+    vlc
+    zathura
+  ];
+
   xdg = {
     desktopEntries =
       let
-        kitty = config.programs.kitty.package;
-
+        # Script for opening telnet URLs in a terminal window
+        # Only thing I'm aware of that does this is EVE-NG: https://www.eve-ng.net/
         script = pkgs.writeShellScript "telnet-url-handler" ''
           IFS=":" read -ra host <<< $(${pkgs.coreutils}/bin/basename $@)
-          ${kitty}/bin/kitty --class=kitty-telnet-handler nix-shell -p inetutils --run "telnet ''${host[0]} ''${host[1]}"
+          ${lib.getExe config.programs.kitty.package} --class=kitty-telnet-handler "${pkgs.inetutils}/bin/telnet ''${host[0]} ''${host[1]}"
         '';
       in
       {
+        # Register the URL handler
         telnet-handler = {
           name = "Telnet URL Handler";
           type = "Application";
@@ -23,15 +38,11 @@
 
     mimeApps = {
       enable = true;
+      # Default associations for file formats
       defaultApplications = {
-        "x-scheme-handler/http" = [ "zen.desktop" ];
-        "x-scheme-handler/https" = [ "zen.desktop" ];
-
         "application/json" = [ "emacsclient.desktop" ];
         "application/pdf" = [ "org.pwmt.zathura.desktop" ];
         "application/vnd.microsoft.portable-executable" = [ "wine.desktop" ];
-        "application/vnd.oasis.opendocument.text" = [ "writer.desktop" ];
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = [ "writer.desktop" ];
         "application/x-xz" = [ "org.gnome.FileRoller.desktop" ];
         "application/zip" = [ "org.gnome.FileRoller.desktop" ];
 
@@ -47,9 +58,7 @@
         "image/webp" = [ "imv.desktop" ];
         "image/x-xcf" = [ "gimp.desktop" ];
 
-        "text/html" = [ "zen.desktop" ];
         "text/plain" = [ "emacsclient.desktop" ];
-        "text/x-lisp" = [ "zen.desktop" ];
         "text/xml" = [ "emacsclient.desktop" ];
 
         "video/mp4" = [ "mpv.desktop" ];
@@ -58,13 +67,15 @@
         "video/x-matroska" = [ "mpv.desktop" ];
       };
     };
+
+    # Set standard home directory paths
     userDirs = {
       enable = true;
-      desktop = "$HOME/.desktop";
-      documents = "$HOME/misc";
-      download = "$HOME/download";
-      music = "$HOME/media/Library/Music";
-      pictures = "$HOME/img";
+      desktop = "$HOME/.desktop"; # hidden, don't use it
+      documents = lib.mkDefault "$HOME/misc";
+      download = lib.mkDefault "$HOME/download";
+      music = lib.mkDefault "$HOME/music";
+      pictures = lib.mkDefault "$HOME/img";
     };
   };
 }

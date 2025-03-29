@@ -20,6 +20,7 @@ let
 in
 {
   imports = [
+    # Create a programs.zen-browser module, that works like Firefox's but configures Zen instead
     (mkFirefoxModule {
       modulePath = [
         "programs"
@@ -83,8 +84,6 @@ in
     };
 
   config = {
-    home.sessionVariables.BROWSER = lib.getExe config.programs.zen-browser.package;
-
     programs.zen-browser = {
       enable = true;
       profiles.Default = {
@@ -109,6 +108,7 @@ in
           violentmonkey
         ];
 
+        # Install the Catppuccin themes if configured
         userChrome = lib.mkIf conf.catppuccin.enable (
           builtins.readFile "${catppuccinThemes}/themes/${conf.catppuccin.variant}/${conf.catppuccin.accent}/userChrome.css"
         );
@@ -118,6 +118,16 @@ in
       };
     };
 
+    # Set Zen as the default browser
+    home.sessionVariables.BROWSER = lib.getExe config.programs.zen-browser.package;
+    xdg.mimeApps.defaultApplications = {
+      "x-scheme-handler/http" = [ "zen.desktop" ];
+      "x-scheme-handler/https" = [ "zen.desktop" ];
+      "text/html" = [ "zen.desktop" ];
+      "text/x-lisp" = [ "zen.desktop" ];
+    };
+
+    # Add the icon from the Catppuccin theme if configured
     home.file.zenBrowserThemeIcon = lib.mkIf conf.catppuccin.enable (
       let
         variant = lib.toLower conf.catppuccin.variant;
@@ -144,5 +154,4 @@ in
       '';
     };
   };
-
 }

@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/xdg.nix
     ../modules/zen-browser.nix
 
     ./dunst.nix
@@ -13,7 +14,6 @@
     ./rofi.nix
     ./starship.nix
     ./sway.nix
-    ./xdg.nix
   ];
 
   home.packages = with pkgs; [
@@ -29,26 +29,21 @@
     cinny-desktop
     discord
     ffmpeg-full
-    file-roller
     gimp
     git-diffie
     ijq
-    imv
     jump
     jq
     libreoffice-fresh
-    mpv
     nix-prefetch-scripts
     pavucontrol
     plexamp
     python3
     solaar
-    vlc
     wineWowPackages.staging
     winetricks
     xfce.thunar
     xfce.xfconf
-    zathura
     zulip
   ];
 

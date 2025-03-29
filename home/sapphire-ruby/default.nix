@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/xdg.nix
     ../modules/zen-browser.nix
 
     ./dunst.nix
@@ -12,7 +13,6 @@
     ./rofi.nix
     ./starship.nix
     ./sway.nix
-    ./xdg.nix
   ];
 
   home.packages = with pkgs; [
@@ -34,16 +34,13 @@
     discord
     ffmpeg-full
     figma-linux
-    file-roller
     gimp
     git-diffie
     ijq
-    imv
     inetutils
     jump
     jq
     libreoffice-fresh
-    mpv
     nix-prefetch-scripts
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted
@@ -63,7 +60,6 @@
     solaar
     steam
     virt-manager
-    vlc
     winbox
     wineWowPackages.staging
     winetricks
@@ -71,7 +67,6 @@
     xfce.thunar
     xfce.xfconf
     xsane
-    zathura
     zeal
     zulip
   ];
