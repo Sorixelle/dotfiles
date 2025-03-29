@@ -344,33 +344,11 @@ Ok, with that out of the way - time to make keybindings. Since I want all my lea
 #+begin_src emacs-lisp
   (general-create-definer srxl/leader-def
     :prefix "SPC"
+    :prefix-command 'srxl/leader-command
     :states '(normal motion))
-
-  (defvar srxl/leader-keymap (make-sparse-keymap)
-    "The keymap for leader key bindings.")
 #+end_src
 
-And now, I need to bind that keymap to the keys I mentioned earlier, in the right Evil states.
-
-#+begin_src emacs-lisp
-  (evil-global-set-key 'normal (kbd "SPC") srxl/leader-keymap)
-  (evil-global-set-key 'motion (kbd "SPC") srxl/leader-keymap)
-  ; (evil-global-set-key 'insert (kbd "M-SPC") srxl/leader-keymap)
-  ; (evil-global-set-key 'emacs (kbd "M-SPC") srxl/leader-keymap)
-#+end_src
-
-That should do it. Now I have a keymap to start taking all my leader keybindings onto. Nice! Since I'm going to be doing a bit of keybind defining on this keymap, I may as well throw together a helper function to make it easier.
-
-#+begin_src emacs-lisp
-  (defun srxl/def-leader-key (key definition description)
-    "Binds KEY to DEFINITION in `srxl/leader-keymap', with DESCRIPTION as the menu item name.
-
-  The menu item name is used to provide a readable description of the key's functionality in
-  `which-key''s menus."
-    (keymap-set srxl/leader-keymap (kbd key) `(,description . ,definition)))
-#+end_src
-
-Hey, wait - descriptions? Which key? What's all this about? See, normally that description part of keybindings is used to give a menu item name for keybindings that show in the graphical menus. I have no idea how that works though - I never use that. What I do want these for, though, is to provide information to [[https://github.com/justbur/emacs-which-key][which-key]]. It's like a built-in keybinding cheatsheet, showing you what buttons will do when you press them. It's pretty indispensable for my forgetful ass.
+Keybindings in Emacs can have descriptions associated with them. Normally that description part of keybindings is used to give a menu item name for keybindings that show in the graphical menus. I have no idea how that works though - I never use that. What I do want these for, though, is to provide information to [[https://github.com/justbur/emacs-which-key][which-key]]. It's like a built-in keybinding cheatsheet, showing you what buttons will do when you press them. It's pretty indispensable for my forgetful ass.
 
 #+begin_src emacs-lisp
   (use-package which-key
@@ -378,7 +356,7 @@ Hey, wait - descriptions? Which key? What's all this about? See, normally that d
     (which-key-mode 1))
 #+end_src
 
-Sweet! Now defining leader keybindings is as simple as a call to =srxl/def-leader-key=, and I get documentation to reference along with it. That should be keybinding infrastructure sorted for now. Onwards!
+Sweet! Now defining leader keybindings is as simple as a call to =srxl/leader-def=, and I get documentation to reference along with it. That should be keybinding infrastructure sorted for now. Onwards!
 
 ** A fresh coat of paint
 Alright, time to address the elephant in the room. Emacs, by default, is /uuuuu-guhhh-leeee/. The light colour scheme is super mid, the fonts are all wrong, everything is all cramped up against the edges... It's about time I made this house feel like a home.
@@ -492,7 +470,7 @@ TODO: write some shit lamo
 
 #+begin_src emacs-lisp
   (tab-bar-mode 1)
-  (srxl/def-leader-key "t" #'tab-switch "Switch tab") ;; maybe replace SPC s?
+  (srxl/leader-def "t" '("Switch tab" . tab-switch)) ;; maybe replace SPC s?
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref post-load-theme
@@ -807,7 +785,7 @@ TODO: uhh dedicated tab for mu4e. every frame. wait no not every frame that fuck
           (tab-switch "Email")
         (srxl/init-email-tab))))
 
-  (srxl/def-leader-key "e" #'srxl/view-email "View emails")
+  (srxl/leader-def "e" '("View emails" . srxl/view-email))
 #+end_src
 
 * Emacs, my favourite IDE
@@ -952,8 +930,8 @@ Autocomplete is cool and all, but it's only going to get me so far. At some poin
 No real configuration needed here, just gotta set up some keybindings. I choose =m= on my leader key, for "manual". That'll let me search for a docs page to open. Capital =M= as well for just opening the front page.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref devdocs-config
-  (srxl/def-leader-key "m" #'devdocs-lookup "Search docs")
-  (srxl/def-leader-key "M" #'devdocs-peruse "Open docs")
+  (srxl/leader-def "m" '("Search docs" . devdocs-lookup))
+  (srxl/leader-def "M" '("Open docs" . devdocs-peruse))
 #+end_src
 
 When searching docs, =devdocs-peruse= can default to specific documentation sets. This is useful - if I'm in a Scala buffer for example, it's pretty safe to assume that I want the Scala docs. I can control that default with a hook for each language that buffer-locally sets =devdocs-current-docs= to the docs I want to search by default. If I need something else, a prefix argument (ie. =C-u=) will bring the lookup back again.
@@ -987,7 +965,7 @@ Eglot is so dead simple, there's virtually no configuration to setup - it just w
 "Code actions" are a thing a lot of LSP implementations provide, that allow you to automatically insert, rearrange and recombobulate your code. With Eglot, you can select a code action to run at the current point with =eglot-code-actions=. To make it easier to access, I'll bind it to a key, so I can quickly action my actionable action items.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
-  (srxl/def-leader-key "a" #'eglot-code-actions "Run code action")
+  (srxl/leader-def "a" '("Run code action" . eglot-code-actions))
 #+end_src
 
 One little bit of editor smarts that Eglot doesn't handle, though, is code formatting. I like nice, consistently formatted code. Keeps it all clean and readable. Mostly. No guarantees that my code is actually sane. Nothing an automated tool can solve anyway (no, for the love of god, Copilot does not do this, don't talk to me about it). [[https://github.com/radian-software/apheleia][Apheleia]] is a package that handles autoformatting files on save with popular languages built in for a bunch of languages, so it'll do wonderfully here. I don't even need to configure it, since it seems like the author and I are mostly on the same page on what formatters are best. Love it when that happens.
@@ -1005,9 +983,9 @@ I don't know about you, but when I edit code, I do it in the context of projects
 By default, all of those commands are bound under =C-x p=, which is a touch awkward. Good thing I defined [[*Making keyboard buttons do things][that leader key thingy]] earlier - I can make some much more convenient bindings with that.
 
 #+begin_src emacs-lisp
-  (srxl/def-leader-key "b" #'project-switch-to-buffer "Switch buffer")
-  (srxl/def-leader-key "f" #'project-find-file "Open file in project")
-  (srxl/def-leader-key "d" #'project-dired "Open project directory")
+  (srxl/leader-def "b" '("Switch buffer" . project-switch-to-buffer))
+  (srxl/leader-def "f" '("Open file in project" . project-find-file))
+  (srxl/leader-def "d" '("Open project directory" . project-dired))
 #+end_src
 
 project.el also has commands to grep projects, but I have [[https://github.com/BurntSushi/ripgrep][ripgrep]] installed on my system, which is a much faster grep replacement. Unfortunately, there's no way to make it use ripgrep, but [[https://github.com/dajva/rg.el][rg.el]] has project searching included, so I can use that instead.
@@ -1015,7 +993,7 @@ project.el also has commands to grep projects, but I have [[https://github.com/B
 #+begin_src emacs-lisp
   (use-package rg
     :config
-    (srxl/def-leader-key "/" #'rg-project "Grep project"))
+    (srxl/leader-def "/" '("Grep project" . rg-project)))
 #+end_src
 
 And while I'm on the topic of project management - [[https://direnv.net/][Direnv]] is a tool I use pretty often for configuring project environments. Sure, most of the time it's just =use flake=, but hey, it loads my Nix shells as soon as I cd into a project. Indispensable, honestly. Emacs should know about the environment I define there, too. Especially for Eglot - I don't usually install language servers globally, and prefer to include them in Nix shells, so Emacs needs to be aware of the Nix shell definition to be able to use them. [[https://github.com/wbolster/emacs-direnv][emacs-direnv]] handles this quite nicely, automatically loading =.envrc= files every time a buffer is opened.
@@ -1058,8 +1036,8 @@ And while I'm on the topic of project management - [[https://direnv.net/][Direnv
 #+end_src
 
 #+begin_src emacs-lisp
-  (srxl/def-leader-key "s" #'srxl/switch-or-open-project "Open project")
-  (srxl/def-leader-key "x" #'srxl/close-project "Close project")
+  (srxl/leader-def "s" '("Open project" . srxl/switch-or-open-project))
+  (srxl/leader-def "x" '("Close project" . srxl/close-project))
 #+end_src
 
 ** Working with Git
@@ -1068,7 +1046,7 @@ Like any person with half a brain in the current year 2024, I use Git to version
 #+begin_src emacs-lisp
   (use-package magit
     :config
-    (srxl/def-leader-key "v" #'magit-status "Git"))
+    (srxl/leader-def "v" '("Git" . magit-status)))
 #+end_src
 
 ** Language bits
