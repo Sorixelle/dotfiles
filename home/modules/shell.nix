@@ -33,9 +33,6 @@
       l = "ll";
       vim = "nvim";
 
-      sys-rebuild = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
-      sys-test = "sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos test &| nom --json";
-      sys-upgrade = "nix flake update --flake ~/nixos && sudo nixos-rebuild --show-trace --log-format internal-json -v --flake ~/nixos switch &| nom --json";
       nix-clean = "sudo nix-collect-garbage -d && nix store optimise";
       nix-search = "nix search nixpkgs";
     };
