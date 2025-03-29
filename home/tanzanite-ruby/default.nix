@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/desktop-theme.nix
     ../modules/dunst.nix
     ../modules/kitty.nix
     ../modules/rofi.nix
@@ -36,26 +37,6 @@
     xfce.xfconf
     zulip
   ];
-
-  gtk = with pkgs; {
-    enable = true;
-    cursorTheme = {
-      name = "catppuccin-frappe-mauve-cursors";
-      package = pkgs.catppuccin-cursors.frappeMauve;
-    };
-    iconTheme = {
-      name = "Arc";
-      package = arc-icon-theme;
-    };
-    theme = {
-      name = "catppuccin-frappe-mauve-standard+rimless";
-      package = pkgs.catppuccin-gtk.override {
-        variant = "frappe";
-        tweaks = [ "rimless" ];
-        accents = [ "mauve" ];
-      };
-    };
-  };
 
   manual.html.enable = true;
 
@@ -114,11 +95,6 @@
     };
 
     tealdeer.enable = true;
-  };
-
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk";
   };
 
   services = {

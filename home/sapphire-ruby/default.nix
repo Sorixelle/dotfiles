@@ -3,6 +3,7 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/desktop-theme.nix
     ../modules/dunst.nix
     ../modules/kitty.nix
     ../modules/xdg.nix
@@ -51,26 +52,6 @@
     xsane
     zulip
   ];
-
-  gtk = {
-    enable = true;
-    cursorTheme = {
-      name = "catppuccin-macchiato-teal-cursors";
-      package = pkgs.catppuccin-cursors.macchiatoTeal;
-    };
-    iconTheme = {
-      name = "Arc";
-      package = pkgs.arc-icon-theme;
-    };
-    theme = {
-      name = "catppuccin-macchiato-teal-standard+rimless";
-      package = pkgs.catppuccin-gtk.override {
-        variant = "macchiato";
-        tweaks = [ "rimless" ];
-        accents = [ "teal" ];
-      };
-    };
-  };
 
   manual.html.enable = true;
 
@@ -144,11 +125,6 @@
     };
 
     tealdeer.enable = true;
-  };
-
-  qt = {
-    enable = true;
-    style.name = "kvantum";
   };
 
   services = {
