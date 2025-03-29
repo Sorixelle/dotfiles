@@ -6,9 +6,9 @@
     ../modules/dunst.nix
     ../modules/kitty.nix
     ../modules/xdg.nix
+    ../modules/rofi.nix
     ../modules/zen-browser.nix
 
-    ./rofi.nix
     ./sway.nix
   ];
 

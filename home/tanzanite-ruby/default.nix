@@ -5,11 +5,11 @@
     ../modules/common.nix
     ../modules/dunst.nix
     ../modules/kitty.nix
+    ../modules/rofi.nix
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 
     ./locking.nix
-    ./rofi.nix
     ./sway.nix
   ];
 
