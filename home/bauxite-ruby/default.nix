@@ -12,9 +12,7 @@
   home.packages = with pkgs; [
     cinny-desktop
     discord
-    git-diffie
     iterm2
-    jump
     nix-prefetch-scripts
 
     # TODO: not on darwin??

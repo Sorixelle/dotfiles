@@ -3,12 +3,12 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/shell.nix
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 
     ./dunst.nix
     ./firefox.nix
-    ./fish.nix
     ./kitty.nix
     ./locking.nix
     ./rofi.nix
@@ -29,8 +29,6 @@
     cinny-desktop
     discord
     gimp
-    git-diffie
-    jump
     nix-prefetch-scripts
     pavucontrol
     plexamp

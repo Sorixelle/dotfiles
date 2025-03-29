@@ -3,12 +3,12 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/shell.nix
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 
     ./dunst.nix
     ./firefox.nix
-    ./fish.nix
     ./kitty.nix
     ./rofi.nix
     ./starship.nix
@@ -32,8 +32,6 @@
     ffmpeg-full
     figma-linux
     gimp
-    git-diffie
-    jump
     nix-prefetch-scripts
     osu-lazer-bin
     parsec-bin

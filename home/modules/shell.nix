@@ -79,8 +79,15 @@
     '';
   };
 
+  # Enable `fuck` for correcting commands
   programs.thefuck = {
     enable = true;
     enableFishIntegration = true;
   };
+
+  # Add some extra shell hook packages
+  home.packages = with pkgs; [
+    git-diffie
+    jump
+  ];
 }
