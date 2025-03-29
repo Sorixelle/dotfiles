@@ -5,13 +5,13 @@
 
     settings = {
       format = ''
-        [┌](bold fg:cyan)[ $username@$hostname ](bg:black)[ $directory](bg:bright-black)[ $nix_shell](bg:blue)$fill$status$cmd_duration$git_branch$elixir
+        [┌](bold fg:cyan)[ $username@$hostname ](bg:black)[ $directory](bg:bright-black)[$nix_shell](bg:blue)$fill$status$cmd_duration$git_branch$elixir$rust$scala
         [└─](bold fg:cyan)$character
       '';
 
       fill.symbol = " ";
 
-      cmd_duration.format = "[took $duration ](italic fg:bright-white)";
+      cmd_duration.format = "[ took $duration](italic fg:bright-white)";
 
       directory = {
         fish_style_pwd_dir_length = 1;
@@ -21,13 +21,13 @@
       };
 
       elixir = {
-        format = "[$symbol](fg:purple)[ $version (\\(OTP $otp_version\\))]($style)";
-        symbol = "";
+        format = "[ $symbol](fg:purple)[$version (\\(OTP $otp_version\\))]($style)";
+        symbol = " ";
         style = "fg:bright-white";
       };
 
       git_branch = {
-        format = "[$symbol](fg:green)[$branch(:$remote_branch) ]($style)";
+        format = "[ $symbol](fg:green)[$branch(:$remote_branch)]($style)";
         style = "fg:bright-white";
       };
 
@@ -37,14 +37,32 @@
       };
 
       nix_shell = {
-        format = "[$symbol ]($style)";
+        format = "[ $symbol ]($style)";
         style = "fg:white bg:blue";
         symbol = " ";
       };
 
+      rust = {
+        format = "[ $symbol](fg:red)[$version]($style)";
+        symbol = " ";
+        style = "fg:bright-white";
+      };
+
+      scala = {
+        detect_files = [
+          ".sbtenv"
+          ".scalaenv"
+          "build.sbt"
+          "build.sc"
+        ];
+        format = "[ $symbol](fg:red)[$version]($style)";
+        symbol = " ";
+        style = "fg:bright-white";
+      };
+
       status = {
         disabled = false;
-        symbol = " ";
+        symbol = "";
       };
 
       username = {
