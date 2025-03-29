@@ -333,9 +333,19 @@ Maybe I can pinch another concept from Vim - the leader key. Essentially, you ju
 
 I'm going to borrow the same pattern you see in [[https://www.spacemacs.org/][Spacemacs]] and [[https://github.com/doomemacs/doomemacs][Doom Emacs]], that being =SPC= as a leader key. It's an easy key to access, nothing really maps anything to it - a perfect candidate for jumping into command execution mode. I want it usable in Evil's normal, insert, motion, and emacs states. Normal is fine - =SPC= isn't bound to anything there so that's no issue at all. The other three might be an issue, though. Motion binds =SPC= to =evil-forward-char= for... some reason. Don't know why since it's still on =l= like usual but that just means I can overwrite it with no issues. In insert and emacs states though... yeah, I need to be able to type spaces. That's kinda important. +=M-SPC= seems to bound to =cycle-spacing= by default, and I honestly can't think of a situation where I'd use that (at least, not right now), so I think it'll do there.+ Actually... [[*Autocomplete!][Corfu]] (a package I'll be setting up later) uses =M-SPC= for typing spaces without cancelling completions, which is important for using [[*A more complete completions interface][Orderless]]. Hmm. Might need to come back to the drawing board on that one. I'll leave it out of there for now - not like it's super hard to get out of insert (=ESC=) or emacs (=C-z=) states, anyway.
 
-First off - I need a keymap to put all of the leader key bindings onto. Easy peasy.
+Sometimes, I want keybindings to appear based on what file I'm in. For example, I only want a keybinding to open up a rendered preview of a Markdown file when I'm editing a Markdown file - wouldn't make sense to run that anywhere else. Unfortunately, the builtin Emacs utilities for keybindings make it a little tricky to do conditional binds like that. It's possible, sure - but it's a little unwieldy. [[https://github.com/noctuid/general.el][General]] makes it a lot easier - it's a keybinding power tool that makes all manner of shortcut trickery really easy. It also comes loaded with Evil integration, which means I just need to worry about one interface for all my keybinding needs. Perfect!
 
 #+begin_src emacs-lisp
+  (use-package general)
+#+end_src
+
+Ok, with that out of the way - time to make keybindings. Since I want all my leader key stuff on =SPC=, a shortcut for adding keys there would be nice. General has the concept of "key definers", which create a wrapper around the base keybinding function with some extra defaults - exactly what I need.
+
+#+begin_src emacs-lisp
+  (general-create-definer srxl/leader-def
+    :prefix "SPC"
+    :states '(normal motion))
+
   (defvar srxl/leader-keymap (make-sparse-keymap)
     "The keymap for leader key bindings.")
 #+end_src
@@ -1439,10 +1449,18 @@ Most of the time, if I'm writing Markdown it's either going to be for some docum
 
 #+begin_src emacs-lisp
   (use-package grip-mode
+    :general
+    <<grip-mode-keys>>
     :config
     (setq grip-command 'go-grip))
 #+end_src
 
+I'll bind =SPC p= to opening the preview, making sure that the binding is only available in the Markdown mode map. No point generating previews (and taking up a precious key!) for files that aren't Markdown.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref grip-mode-keys
+  (srxl/leader-def gfm-mode-map
+    "p" '("Preview file" . grip-mode))
+#+end_src
 
 *** JSON and YAML
 Two pretty popular data interchange formats. Why YAML is popular, I'll never know, but I get JSON at least. Built-in modes for both, so setup is pretty easy.
