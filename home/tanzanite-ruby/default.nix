@@ -8,7 +8,6 @@
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 
-    ./firefox.nix
     ./locking.nix
     ./rofi.nix
     ./sway.nix
