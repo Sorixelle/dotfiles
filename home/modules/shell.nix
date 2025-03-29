@@ -86,6 +86,12 @@
     ];
   };
 
+  # Enable nix-your-shell to ensure nix-shell calls start a fish shell
+  programs.nix-your-shell = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
   # Enable `fuck` for correcting commands
   programs.thefuck = {
     enable = true;
