@@ -28,17 +28,12 @@
     bitwarden
     cinny-desktop
     discord
-    ffmpeg-full
     gimp
     git-diffie
-    ijq
     jump
-    jq
-    libreoffice-fresh
     nix-prefetch-scripts
     pavucontrol
     plexamp
-    python3
     solaar
     wineWowPackages.staging
     winetricks

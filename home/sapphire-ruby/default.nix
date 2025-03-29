@@ -16,7 +16,6 @@
   ];
 
   home.packages = with pkgs; [
-    audacity
     (aspellWithDicts (
       dicts: with dicts; [
         en
@@ -26,8 +25,6 @@
     ))
     betterdiscordctl
     bitwarden
-    # TODO: https://github.com/NixOS/nixpkgs/issues/380227
-    # bitwarden-cli
     calibre
     cinny-desktop
     darktable
@@ -36,25 +33,16 @@
     figma-linux
     gimp
     git-diffie
-    ijq
-    inetutils
     jump
-    jq
-    libreoffice-fresh
     nix-prefetch-scripts
-    nodePackages.typescript-language-server
-    nodePackages.vscode-langservers-extracted
     osu-lazer-bin
     parsec-bin
     pavucontrol
     picard
     plexamp
     prismlauncher
-    python3
     qbittorrent
-    rink
     roon-launcher
-    rs-git-fsmonitor
     scr
     signal-desktop
     solaar
@@ -63,11 +51,9 @@
     winbox
     wineWowPackages.staging
     winetricks
-    wireshark
     xfce.thunar
     xfce.xfconf
     xsane
-    zeal
     zulip
   ];
 
@@ -100,6 +86,9 @@
       accent = "Teal";
     };
   };
+
+  # Override default in modules/xdg.nix - point at music library on fluorite's media share
+  xdg.userDirs.music = lib.mkForce "$HOME/media/Library/Music";
 
   programs = {
     bash.enable = true;

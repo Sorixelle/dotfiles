@@ -79,10 +79,13 @@ in
     file
     fzf
     htop
+    ijq
+    jq
     ncdu
     neovim
     nix-output-monitor
     psmisc
+    rink
     ripgrep
     wget
     zip
