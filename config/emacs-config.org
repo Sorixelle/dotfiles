@@ -362,22 +362,20 @@ Sweet! Now defining leader keybindings is as simple as a call to =srxl/leader-de
 Alright, time to address the elephant in the room. Emacs, by default, is /uuuuu-guhhh-leeee/. The light colour scheme is super mid, the fonts are all wrong, everything is all cramped up against the edges... It's about time I made this house feel like a home.
 
 *** Colours
-First of all: colour themes. There's a lot of good colour themes out there. I tend to have a whole system consistency thing going on most of the time, where I try to match all system UI, apps, everything to the same colours. Visual consistency is neat, y'know? But there's a caveat here - Emacs' colour scheme needs to be determined by the system, not this config. But that's fine - [[*Load NixOS configuration values][I already have a setup for that]]. That file will tell this config what theme to use, and this config will go and load it. Easy, right? Before I can do that though, I'm just gonna make sure the packages that provide most of the themes I like to use are around. Sure, it's not the most efficient way to do this, and maybe it slows down startup a little bit. But conditionally loading packages based on the theme in that file is not something I really have a good solution to right now.
+First of all: colour themes. There's a lot of good colour themes out there. I tend to have a whole system consistency thing going on most of the time, where I try to match all system UI, apps, everything to the same colours. Visual consistency is neat, y'know? I'm a big fan of the [[https://catppuccin.com/][Catppuccin]] colour scheme. so I'll get that loaded in. The Emacs theme lets you specify what flavour you want to use, but my home-manager config does that for me. Don't need to worry about it here.
 
 #+begin_src emacs-lisp
-  (use-package doom-themes)
-  (use-package modus-themes)
   (use-package catppuccin-theme)
 #+end_src
 
-Cool, now I can load the theme. I've noticed that some themes don't quite get loaded correctly if it's set before there's a frame open (looking at you, Catppuccin). To fix that, I'll add it to =server-after-make-frame-hook= to ensure it's only run once a frame exists if Emacs is in daemon mode. That theme shouldn't get loaded multiple times though, so I'll remove it from the hook right after it runs once. And if I'm not in daemon mode - just run it right away, since there's already a frame.
+Cool, now I can load the theme. I've noticed that it doesn't quite get loaded correctly if it's set before there's a frame open. To fix that, I'll add it to =server-after-make-frame-hook= to ensure it's only run once a frame exists if Emacs is in daemon mode. The theme shouldn't get loaded multiple times though, so I'll remove it from the hook right after it runs once. And if I'm not in daemon mode - just run it right away, since there's already a frame.
 
 I'll also leave a little spot in this function, to do some theme overrides later. That way, I can make sure they run after the theme is loaded, so the theme doesn't try to override any changes I make.
 
 #+begin_src emacs-lisp
   (defun srxl/load-theme ()
     "Load theme specified in NixOS config."
-    (load-theme srxl/theme-name t)
+    (load-theme 'catppuccin t)
     <<post-load-theme>>
     (remove-hook 'server-after-make-frame-hook #'srxl/load-theme))
   (add-hook 'server-after-make-frame-hook #'srxl/load-theme)

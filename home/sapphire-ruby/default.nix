@@ -75,13 +75,12 @@
 
   manual.html.enable = true;
 
-  srxl = {
-    zen-browser.catppuccin = {
-      enable = true;
-      variant = "Macchiato";
-      accent = "Teal";
-    };
+  catppuccin = {
+    flavor = "macchiato";
+    accent = "teal";
   };
+
+  srxl.zen-browser.catppuccin.enable = true;
 
   # Override default in modules/xdg.nix - point at music library on fluorite's media share
   xdg.userDirs.music = lib.mkForce "$HOME/media/Library/Music";
@@ -183,10 +182,6 @@
       enable = true;
       server.enable = true;
       package = pkgs.emacs-unstable-pgtk;
-      theme = "catppuccin";
-      extraConfig = ''
-        (setq catppuccin-flavor 'macchiato)
-      '';
     };
 
     email = {

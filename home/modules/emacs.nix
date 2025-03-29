@@ -15,18 +15,12 @@ with lib;
   options.srxl.emacs = with types; {
     enable = mkEnableOption "Emacs with my configuration.";
 
-    server.enable = mkEnableOption "Emacs daemon on systes startup.";
+    server.enable = mkEnableOption "Emacs daemon on system startup.";
 
     package = mkOption {
       type = package;
       default = pkgs.emacs-unstable;
       description = "The Emacs package to install.";
-    };
-
-    theme = mkOption {
-      type = str;
-      default = "";
-      description = "The name of the Emacs theme to use.";
     };
 
     emailAddress = mkOption {
@@ -100,9 +94,9 @@ with lib;
                srxl/font-size-monospace "${toString config.srxl.fonts.monospace.size}"
                srxl/font-family-ui "${config.srxl.fonts.ui.name}"
                srxl/font-size-ui ${toString (config.srxl.fonts.ui.size * 10)}
-               srxl/theme-name '${conf.theme}
                srxl/use-mu4e ${toBool config.srxl.email.enable}
-               srxl/email "${conf.emailAddress}")
+               srxl/email "${conf.emailAddress}"
+               catppuccin-flavor '${config.catppuccin.flavor})
 
               ${conf.extraConfig}
             '';

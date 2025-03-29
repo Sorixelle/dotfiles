@@ -73,6 +73,9 @@
     '';
   };
 
+  # Enable Catppuccin theming
+  catppuccin.fish.enable = true;
+
   # Enable eza for a much nicer ls
   programs.eza = {
     enable = true;

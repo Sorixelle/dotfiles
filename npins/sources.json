@@ -1,5 +1,18 @@
 {
   "pins": {
+    "catppuccin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "catppuccin",
+        "repo": "nix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "c41c89f69fcdc8bd78bbc95123eef280575f1df8",
+      "url": "https://github.com/catppuccin/nix/archive/c41c89f69fcdc8bd78bbc95123eef280575f1df8.tar.gz",
+      "hash": "0hlm2s5ldvvih0srkllqf35ilm0kcd9bghf2rxq4gzhlblz3zm2b"
+    },
     "emacs-overlay": {
       "type": "Git",
       "repository": {

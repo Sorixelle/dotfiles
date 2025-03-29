@@ -9,11 +9,31 @@
   # Install some programs for viewing various files
   home.packages = with pkgs; [
     file-roller
-    imv
-    mpv
     vlc
-    zathura
   ];
+
+  # Enable home-manager configuration for some other programs
+  programs = {
+    imv.enable = true;
+    mpv.enable = true;
+    zathura = {
+      enable = true;
+      extraConfig = ''
+        # Catppuccin's theme tries to recolour the PDF, which messes up colours - force it off
+        set recolor "false"
+
+        # Silence startup warning
+        set database "sqlite"
+      '';
+    };
+  };
+
+  # Enable Catppuccin theming for those tools
+  catppuccin = {
+    imv.enable = true;
+    mpv.enable = true;
+    zathura.enable = true;
+  };
 
   xdg = {
     desktopEntries =

@@ -1,5 +1,5 @@
 let
-  sources = import ../npins;
+  pins = import ../npins;
 
   pkgs = import ../nixpkgs;
 
@@ -19,11 +19,12 @@ in
 {
   # Import NixOS modules from npins
   imports = [
-    (import "${sources.home-manager}/nixos")
-    (import "${sources.lix-module}/module.nix" {
-      lix = import sources.lix;
+    (import "${pins.catppuccin}/modules/nixos")
+    (import "${pins.home-manager}/nixos")
+    (import "${pins.lix-module}/module.nix" {
+      lix = import pins.lix;
       # Include short hash of Lix commit in the version
-      versionSuffix = "-${builtins.substring 0 7 sources.lix.revision}";
+      versionSuffix = "-${builtins.substring 0 7 pins.lix.revision}";
     })
 
     ./modules/rebuild.nix
@@ -37,7 +38,7 @@ in
   # Pin nixpkgs in the flake registry to our nixpkgs checkout in npins
   nix.registry.nixpkgs.to = {
     type = "path";
-    path = sources.nixpkgs;
+    path = pins.nixpkgs;
   };
   nix.nixPath = [
     # Include it in the nix path too, for compatibility with older CLI tools and <nixpkgs> references
@@ -106,10 +107,18 @@ in
   # Use nixos-rebuild-ng in place of nixos-rebuild
   system.rebuild.enableNg = true;
 
+  # Configure Catppuccin module cache
+  catppuccin.cache.enable = true;
+
   home-manager = {
     # Install home-manager packages to /etc/profiles
     useUserPackages = true;
     # Use globally configured Nixpkgs set
     useGlobalPkgs = true;
+
+    # Add modules from pins
+    sharedModules = [
+      (import "${pins.catppuccin}/modules/home-manager")
+    ];
   };
 }

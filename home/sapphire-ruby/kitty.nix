@@ -4,7 +4,6 @@ _:
   programs.kitty = {
     enable = true;
 
-    themeFile = "Catppuccin-Macchiato";
     font = {
       name = "Iosevka Term";
       size = 12;
@@ -18,4 +17,6 @@ _:
       tab_bar_margin_height = "8 0";
     };
   };
+
+  catppuccin.kitty.enable = true;
 }

@@ -16,7 +16,8 @@ let
     hash = "sha256-SoaJV83rOgsQpLKO6PtpTyKFGj75FssdWfTITU7psXM=";
   };
 
-  conf = config.srxl.zen-browser;
+  capitalize =
+    str: (lib.toUpper (lib.substring 0 1 str)) + (lib.substring 1 (lib.stringLength str) str);
 in
 {
   imports = [
@@ -38,50 +39,9 @@ in
     })
   ];
 
-  options.srxl.zen-browser =
-    let
-      inherit (lib) mkEnableOption mkOption types;
-    in
-    {
-      catppuccin = {
-        enable = mkEnableOption "catppuccin theming for zen-browser";
-
-        accent = mkOption {
-          type = types.enum [
-            "Blue"
-            "Flamingo"
-            "Green"
-            "Lavender"
-            "Maroon"
-            "Mauve"
-            "Peach"
-            "Pink"
-            "Red"
-            "Rosewater"
-            "Sapphire"
-            "Sky"
-            "Teal"
-            "Yellow"
-          ];
-          example = "Teal";
-          description = ''
-            Name of the catppuccin accent colour to use.
-          '';
-        };
-        variant = mkOption {
-          type = types.enum [
-            "Frappe"
-            "Latte"
-            "Macchiato"
-            "Mocha"
-          ];
-          example = "Frappe";
-          description = ''
-            Name of the catppuccin variant to use.
-          '';
-        };
-      };
-    };
+  options.srxl.zen-browser = {
+    catppuccin.enable = lib.mkEnableOption "catppuccin theming for zen-browser";
+  };
 
   config = {
     programs.zen-browser = {
@@ -109,11 +69,11 @@ in
         ];
 
         # Install the Catppuccin themes if configured
-        userChrome = lib.mkIf conf.catppuccin.enable (
-          builtins.readFile "${catppuccinThemes}/themes/${conf.catppuccin.variant}/${conf.catppuccin.accent}/userChrome.css"
+        userChrome = lib.mkIf config.srxl.zen-browser.catppuccin.enable (
+          builtins.readFile "${catppuccinThemes}/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}/userChrome.css"
         );
-        userContent = lib.mkIf conf.catppuccin.enable (
-          builtins.readFile "${catppuccinThemes}/themes/${conf.catppuccin.variant}/${conf.catppuccin.accent}/userContent.css"
+        userContent = lib.mkIf config.srxl.zen-browser.catppuccin.enable (
+          builtins.readFile "${catppuccinThemes}/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}/userContent.css"
         );
       };
     };
@@ -128,15 +88,10 @@ in
     };
 
     # Add the icon from the Catppuccin theme if configured
-    home.file.zenBrowserThemeIcon = lib.mkIf conf.catppuccin.enable (
-      let
-        variant = lib.toLower conf.catppuccin.variant;
-      in
-      {
-        target = ".mozilla/zen/default/chrome/zen-logo-${variant}.svg";
-        source = "${catppuccinThemes}/themes/${conf.catppuccin.variant}/${conf.catppuccin.accent}/zen-logo-${variant}.svg";
-      }
-    );
+    home.file.zenBrowserThemeIcon = lib.mkIf config.catppuccin.enable {
+      target = ".mozilla/zen/default/chrome/zen-logo-${config.catppuccin.flavor}.svg";
+      source = "${catppuccinThemes}/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}/zen-logo-${config.catppuccin.flavor}.svg";
+    };
 
     # Need to override this, because Zen requires a ZenAvatarPath in a profile and home-manager has no way to set that
     home.file.".mozilla/zen/profiles.ini" = lib.mkForce {

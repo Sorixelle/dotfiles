@@ -83,10 +83,6 @@
       enable = true;
       server.enable = true;
       package = pkgs.emacs-pgtk;
-      theme = "catppuccin";
-      extraConfig = ''
-        (setq catppuccin-flavor 'mocha)
-      '';
     };
 
     fonts = {

@@ -60,13 +60,12 @@
 
   manual.html.enable = true;
 
-  srxl = {
-    zen-browser.catppuccin = {
-      enable = true;
-      variant = "Frappe";
-      accent = "Lavender";
-    };
+  catppuccin = {
+    flavor = "frappe";
+    accent = "lavender";
   };
+
+  srxl.zen-browser.catppuccin.enable = true;
 
   programs = {
     bash.enable = true;
@@ -150,10 +149,6 @@
       enable = true;
       server.enable = true;
       package = pkgs.emacs-unstable-pgtk;
-      theme = "catppuccin";
-      extraConfig = ''
-        (setq catppuccin-flavor 'frappe)
-      '';
     };
 
     email = {
