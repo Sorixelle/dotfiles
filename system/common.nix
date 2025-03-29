@@ -2,6 +2,16 @@ let
   sources = import ../npins;
 
   pkgs = import ../nixpkgs;
+
+  # Copy all overlay-related files into the Nix store
+  overlaySource = pkgs.lib.fileset.toSource {
+    root = ../.;
+    fileset = pkgs.lib.fileset.unions [
+      ../nixpkgs/overlays.nix
+      ../nixpkgs/packages
+      ../npins
+    ];
+  };
 in
 
 { ... }:
@@ -29,8 +39,12 @@ in
     type = "path";
     path = sources.nixpkgs;
   };
-  # Include it in the nix path too, for compatibility with older CLI tools and <nixpkgs> references
-  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
+  nix.nixPath = [
+    # Include it in the nix path too, for compatibility with older CLI tools and <nixpkgs> references
+    "nixpkgs=flake:nixpkgs"
+    # Add the config's overlay to the global path, for use with tools like `nix-shell`
+    "nixpkgs-overlays=${overlaySource}/nixpkgs/overlays.nix"
+  ];
 
   # Enable nix-command and flakes
   nix.extraOptions = ''

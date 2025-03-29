@@ -7,9 +7,6 @@
     ./fonts.nix
   ];
 
-  config.home.file.nixpkgs = {
-    source = ../../nixpkgs;
-    target = ".config/nixpkgs";
-    recursive = true;
-  };
+  # Place the repo's nixpkgs config in the globally-accessible location
+  xdg.configFile."nixpkgs/config.nix".source = ../../nixpkgs/config.nix;
 }

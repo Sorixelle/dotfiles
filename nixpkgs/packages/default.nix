@@ -1,4 +1,4 @@
-final: prev:
+pins: final: prev:
 
 {
   _3dsconv = prev.callPackage ./3dsconv { };
@@ -20,6 +20,9 @@ final: prev:
     hash = "sha256-/FTE/lDICJnXr4JbxaA+9mwM0sSF5++/XaYR+S2pFdA=";
   }) { pkgs = final; };
 
+  # NUR doesn't expose an overlay by default, but it's trivial to add it to one
+  nur = import pins.nur { pkgs = final; };
+
   pyftfeatfreeze = prev.callPackage ./pyftfeatfreeze.nix { };
 
   rebuild = prev.callPackage ./rebuild { };
@@ -31,6 +34,15 @@ final: prev:
   scr = prev.callPackage ./scr.nix { };
 
   tinfoil-nut = prev.callPackage ./tinfoil-nut.nix { };
+
+  # tree-sitter-astro doesn't provide an overlay outside of the flake, so we'll reconstruct it here
+  tree-sitter = prev.tree-sitter.override {
+    extraGrammars.tree-sitter-astro = prev.tree-sitter.buildGrammar {
+      language = "astro";
+      version = builtins.substring 0 7 pins.tree-sitter-astro.revision;
+      src = pins.tree-sitter-astro.outPath;
+    };
+  };
 
   vlc = prev.vlc.override {
     libbluray = prev.libbluray.override {
