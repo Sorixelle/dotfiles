@@ -1,5 +1,3 @@
-_:
-
 {
   programs.kitty = {
     enable = true;
@@ -13,7 +11,7 @@ _:
       background_opacity = "0.9";
       scrollback_pager_history_size = 32;
       repaint_delay = 5;
-      window_padding_width = 8;
+      window_padding_width = 16;
       tab_bar_margin_height = "8 0";
     };
   };

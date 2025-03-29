@@ -3,12 +3,12 @@
 {
   imports = [
     ../modules/common.nix
+    ../modules/kitty.nix
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 
     ./dunst.nix
     ./firefox.nix
-    ./kitty.nix
     ./rofi.nix
     ./sway.nix
   ];
