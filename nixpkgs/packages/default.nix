@@ -11,6 +11,9 @@ pins: final: prev:
 
   go-grip = prev.callPackage ./go-grip.nix { };
 
+  # Version 2.0.0-rc1, not in nixpkgs
+  hyfetch = prev.callPackage ./hyfetch.nix { };
+
   inter-patched = prev.callPackage ./inter-patched.nix { };
 
   makerom = prev.callPackage ./makerom.nix { };

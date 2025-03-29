@@ -79,6 +79,7 @@ in
     file
     fzf
     htop
+    hyfetch
     ijq
     jq
     ncdu
