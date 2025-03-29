@@ -15,6 +15,7 @@
   # Enable Catppuccin theming for common tools
   catppuccin = {
     bat.enable = true;
+    glamour.enable = true;
     nvim.enable = true;
   };
 
