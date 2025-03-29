@@ -3,7 +3,6 @@
 {
   imports = [
     ../modules/common.nix
-    ../modules/shell.nix
     ../modules/xdg.nix
     ../modules/zen-browser.nix
 

@@ -5,7 +5,6 @@
     ../modules/common.nix
 
     ./firefox.nix
-    ./fish.nix
     ./starship.nix
   ];
 
@@ -43,6 +42,10 @@
       enable = true;
       nix-direnv.enable = true;
     };
+
+    fish.shellInit = ''
+      /opt/homebrew/bin/brew shellenv | source
+    '';
 
     git = {
       enable = true;
