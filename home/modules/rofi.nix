@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   programs.rofi = {
@@ -6,7 +11,7 @@
     package = pkgs.rofi-wayland;
 
     location = "center";
-    terminal = "${config.programs.kitty.package}/bin/kitty";
+    terminal = lib.getExe config.programs.ghostty.package;
 
     extraConfig = {
       display-drun = "Launch:";

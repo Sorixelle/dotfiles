@@ -42,7 +42,7 @@
         # Only thing I'm aware of that does this is EVE-NG: https://www.eve-ng.net/
         script = pkgs.writeShellScript "telnet-url-handler" ''
           IFS=":" read -ra host <<< $(${pkgs.coreutils}/bin/basename $@)
-          ${lib.getExe config.programs.kitty.package} --class=kitty-telnet-handler "${pkgs.inetutils}/bin/telnet ''${host[0]} ''${host[1]}"
+          ${lib.getExe config.programs.ghostty.package} --class=ghostty.telnethandler "${pkgs.inetutils}/bin/telnet ''${host[0]} ''${host[1]}"
         '';
       in
       {

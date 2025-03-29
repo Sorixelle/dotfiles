@@ -73,17 +73,17 @@ in
           mod = config.wayland.windowManager.sway.config.modifier;
         in
         lib.mkOptionDefault {
-          "${mod}+Return" = "exec ${config.programs.kitty.package}/bin/kitty";
-          "${mod}+space" = "exec ${config.programs.rofi.package}/bin/rofi -show drun";
+          "${mod}+Return" = "exec ${lib.getExe config.programs.ghostty.package}";
+          "${mod}+space" = "exec ${lib.getExe config.programs.rofi.package} -show drun";
 
           "${mod}+q" = "kill";
           "${mod}+Shift+q" = "exit"; # TODO: swaynag
           "${mod}+Escape" = "exec ${lib.getExe config.programs.hyprlock.package}";
 
           # Screenshots
-          "${mod}+s" = "exec ${pkgs.scr}/bin/scr -Mode Active -Clipboard";
-          "${mod}+Shift+s" = "exec ${pkgs.scr}/bin/scr -Mode Selection -Clipboard";
-          "${mod}+Mod1+s" = "exec ${pkgs.scr}/bin/scr -Mode Screen -Clipboard";
+          "${mod}+s" = "exec ${lib.getExe pkgs.scr} -Mode Active -Clipboard";
+          "${mod}+Shift+s" = "exec ${lib.getExe pkgs.scr} -Mode Selection -Clipboard";
+          "${mod}+Mod1+s" = "exec ${lib.getExe pkgs.scr} -Mode Screen -Clipboard";
 
           "${mod}+1" = "workspace 1:web";
           "${mod}+2" = "workspace 2:chat";
@@ -91,7 +91,7 @@ in
 
           # Try to open scratchpad terminal - if none exists, open a new one
           "${mod}+grave" =
-            "exec (swaymsg \"[app_id=scratchpad_term] scratchpad show\") || ${lib.getExe config.programs.kitty.package} --app-id scratchpad_term";
+            "exec (swaymsg \"[app_id=scratchpad.term] scratchpad show\") || ${lib.getExe config.programs.ghostty.package} --app-id scratchpad.term";
 
           # Volume control
           XF86AudioLowerVolume = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_SINK@ 3%-";
@@ -99,13 +99,13 @@ in
           XF86AudioMute = "exec ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_SINK@ toggle";
 
           # Media control
-          XF86AudioPrev = "exec ${pkgs.playerctl}/bin/playerctl previous";
-          XF86AudioNext = "exec ${pkgs.playerctl}/bin/playerctl next";
-          XF86AudioPlay = "exec ${pkgs.playerctl}/bin/playerctl play-pause";
+          XF86AudioPrev = "exec ${lib.getExe pkgs.playerctl} previous";
+          XF86AudioNext = "exec ${lib.getExe pkgs.playerctl} next";
+          XF86AudioPlay = "exec ${lib.getExe pkgs.playerctl} play-pause";
 
           # Brightness control
-          XF86MonBrightnessUp = "exec ${pkgs.brightnessctl}/bin/brightnessctl s 5%+";
-          XF86MonBrightnessDown = "exec ${pkgs.brightnessctl}/bin/brightnessctl s 5%-";
+          XF86MonBrightnessUp = "exec ${lib.getExe pkgs.brightnessctl} s 5%+";
+          XF86MonBrightnessDown = "exec ${lib.getExe pkgs.brightnessctl} s 5%-";
         };
 
       startup = [
@@ -116,14 +116,14 @@ in
         }
 
         # Other startup apps
-        { command = "${lib.getExe config.programs.firefox.package}"; }
+        { command = "${lib.getExe config.programs.zen-browser.package}"; }
         { command = "discord"; }
         { command = "nheko"; }
         { command = "zulip"; }
       ];
 
       assigns = {
-        "1:web" = [ { app_id = "firefox"; } ];
+        "1:web" = [ { app_id = "zen"; } ];
         "2:chat" = [
           { app_id = "discord"; }
           { app_id = "nheko"; }
@@ -188,11 +188,11 @@ in
 
     extraConfig = ''
       # Lock screen when lid closed
-      bindswitch lid:on exec ${config.programs.hyprlock.package}/bin/hyprlock
+      bindswitch lid:on exec ${lib.getExe config.programs.hyprlock.package}
 
       for_window {
         # Scratchpad
-        [app_id=scratchpad_term] floating enable; resize set 1600 850; move position center; move to scratchpad; scratchpad show
+        [app_id=scratchpad.term] floating enable; resize set 1600 850; move position center; move to scratchpad; scratchpad show
 
         [app_id=discord] layout tabbed
       }

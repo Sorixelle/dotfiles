@@ -74,16 +74,16 @@ in
           mod = config.wayland.windowManager.sway.config.modifier;
         in
         lib.mkOptionDefault {
-          "${mod}+Return" = "exec ${config.programs.kitty.package}/bin/kitty";
-          "${mod}+space" = "exec ${config.programs.rofi.package}/bin/rofi -show drun";
+          "${mod}+Return" = "exec ${lib.getExe config.programs.ghostty.package}";
+          "${mod}+space" = "exec ${lib.getExe config.programs.rofi.package} -show drun";
 
           "${mod}+q" = "kill";
           "${mod}+Shift+q" = "exit"; # TODO: swaynag
 
           # Screenshots
-          "${mod}+s" = "exec ${pkgs.scr}/bin/scr -Mode Active -Clipboard";
-          "${mod}+Shift+s" = "exec ${pkgs.scr}/bin/scr -Mode Selection -Clipboard";
-          "${mod}+Mod1+s" = "exec ${pkgs.scr}/bin/scr -Mode Screen -Clipboard";
+          "${mod}+s" = "exec ${lib.getExe pkgs.scr} -Mode Active -Clipboard";
+          "${mod}+Shift+s" = "exec ${lib.getExe pkgs.scr} -Mode Selection -Clipboard";
+          "${mod}+Mod1+s" = "exec ${lib.getExe pkgs.scr} -Mode Screen -Clipboard";
 
           # Workspaces
           "${mod}+1" = "workspace 1:web";
@@ -99,7 +99,7 @@ in
 
           # Try to open scratchpad terminal - if none exists, open a new one
           "${mod}+grave" =
-            "exec (swaymsg \"[app_id=scratchpad_term] scratchpad show\") || ${lib.getExe config.programs.kitty.package} --app-id scratchpad_term";
+            "exec (swaymsg \"[app_id=scratchpad.term] scratchpad show\") || ${lib.getExe config.programs.ghostty.package} --class=scratchpad.term";
         };
 
       workspaceAutoBackAndForth = true;
@@ -213,7 +213,7 @@ in
     extraConfig = ''
       for_window {
         # Scratchpad
-        [app_id=scratchpad_term] floating enable; resize set 1600 850; move position center; move to scratchpad; scratchpad show
+        [app_id=scratchpad.term] floating enable; resize set 1600 850; move position center; move to scratchpad; scratchpad show
         [app_id=discord] layout tabbed
       }
     '';

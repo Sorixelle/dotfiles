@@ -5,7 +5,7 @@
     ../modules/common.nix
     ../modules/desktop-theme.nix
     ../modules/dunst.nix
-    ../modules/kitty.nix
+    ../modules/ghostty.nix
     ../modules/xdg.nix
     ../modules/rofi.nix
     ../modules/zen-browser.nix
