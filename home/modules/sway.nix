@@ -258,8 +258,10 @@ in
               block = "battery";
               device = "BAT1";
               format = " bat: $percentage.eng(w:1) |";
+              full_format = " bat: 100% |";
               charging_format = " bat: $percentage.eng(w:1) \(charging\) |";
-              theme_overrides.idle_bg = palette.surface1.hex;
+              theme_overrides.idle_bg = palette.green.hex;
+              theme_overrides.idle_fg = palette.base.hex;
             })
             ++ [
               {
