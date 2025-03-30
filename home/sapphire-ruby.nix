@@ -9,6 +9,7 @@
   imports = [
     ./modules/common.nix
     ./modules/desktop-theme.nix
+    ./modules/discord.nix
     ./modules/dunst.nix
     ./modules/ghostty.nix
     ./modules/xdg.nix
@@ -25,12 +26,10 @@
         en-science
       ]
     ))
-    betterdiscordctl
     bitwarden
     calibre
     cinny-desktop
     darktable
-    discord
     ffmpeg-full
     figma-linux
     gimp

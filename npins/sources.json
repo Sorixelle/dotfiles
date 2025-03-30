@@ -13,6 +13,19 @@
       "url": "https://github.com/catppuccin/nix/archive/c41c89f69fcdc8bd78bbc95123eef280575f1df8.tar.gz",
       "hash": "0hlm2s5ldvvih0srkllqf35ilm0kcd9bghf2rxq4gzhlblz3zm2b"
     },
+    "catppuccin-discord": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "catppuccin",
+        "repo": "discord"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "d444b821a0e0aca725b4a402937acea40646196e",
+      "url": "https://github.com/catppuccin/discord/archive/d444b821a0e0aca725b4a402937acea40646196e.tar.gz",
+      "hash": "0xyrqmhp65daq06cym0mj10l0qxyjsscyfjacq97rz2jzjnind79"
+    },
     "emacs-overlay": {
       "type": "Git",
       "repository": {

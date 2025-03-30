@@ -9,6 +9,7 @@
   imports = [
     ./modules/common.nix
     ./modules/desktop-theme.nix
+    ./modules/discord.nix
     ./modules/dunst.nix
     ./modules/ghostty.nix
     ./modules/rofi.nix
@@ -25,10 +26,8 @@
         en-science
       ]
     ))
-    betterdiscordctl
     bitwarden
     cinny-desktop
-    discord
     gimp
     nix-prefetch-scripts
     pavucontrol
