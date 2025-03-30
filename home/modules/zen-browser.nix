@@ -88,7 +88,7 @@ in
     services.dunst.settings.global.browser = lib.getExe config.programs.zen-browser.package;
 
     # Add the icon from the Catppuccin theme if configured
-    home.file.zenBrowserThemeIcon = lib.mkIf config.catppuccin.enable {
+    home.file.zenBrowserThemeIcon = lib.mkIf config.srxl.zen-browser.catppuccin.enable {
       target = ".mozilla/zen/default/chrome/zen-logo-${config.catppuccin.flavor}.svg";
       source = "${catppuccinThemePath}/zen-logo-${config.catppuccin.flavor}.svg";
     };
