@@ -38,7 +38,7 @@
 
       nix_shell = {
         format = "[ $symbol ]($style)";
-        style = "fg:white bg:blue";
+        style = "fg:none bg:blue";
         symbol = " ";
       };
 
