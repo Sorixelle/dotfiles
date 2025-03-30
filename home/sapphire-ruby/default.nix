@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -8,9 +13,8 @@
     ../modules/ghostty.nix
     ../modules/xdg.nix
     ../modules/rofi.nix
+    ../modules/sway.nix
     ../modules/zen-browser.nix
-
-    ./sway.nix
   ];
 
   home.packages = with pkgs; [
@@ -59,6 +63,43 @@
   };
 
   srxl.zen-browser.catppuccin.enable = true;
+
+  srxl.sway = {
+    extraKeybinds =
+      let
+        mod = config.wayland.windowManager.sway.config.modifier;
+      in
+      {
+        "${mod}+bracketleft" = "move workspace output left";
+        "${mod}+bracketright" = "move workspace output right";
+      };
+    extraBarConfig = ''
+      output HDMI-A-1
+      output DP-1
+    '';
+  };
+  wayland.windowManager.sway.config = {
+    output = {
+      DP-1 = {
+        mode = "2560x1440@164.958Hz";
+        render_bit_depth = "10";
+      };
+    };
+    workspaceOutputAssign = [
+      {
+        workspace = "1:web";
+        output = "DP-1";
+      }
+      {
+        workspace = "2:chat";
+        output = "HDMI-A-1";
+      }
+      {
+        workspace = "3:dev";
+        output = "DP-1";
+      }
+    ];
+  };
 
   # Override default in modules/xdg.nix - point at music library on fluorite's media share
   xdg.userDirs.music = lib.mkForce "$HOME/media/Library/Music";
