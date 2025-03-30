@@ -55,6 +55,9 @@
   srxl.sway = {
     battery = true;
     extraKeybinds = {
+      # Lock screen
+      "Mod4+Escape" = "exec ${lib.getExe config.programs.hyprlock.package}";
+
       # Volume control
       XF86AudioLowerVolume = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_SINK@ 3%-";
       XF86AudioRaiseVolume = "exec ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_SINK@ 3%+";
