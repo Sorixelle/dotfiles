@@ -1,5 +1,10 @@
 { config, ... }:
 
+let
+  palette =
+    (builtins.fromJSON (builtins.readFile "${config.catppuccin.sources.palette}/palette.json"))
+    .${config.catppuccin.flavor}.colors;
+in
 {
   services.dunst = {
     enable = true;
@@ -34,6 +39,19 @@
       urgency_critical.timeout = 0;
     };
   };
+
+  # Override parts of Catppuccin's theming that I don't like
+  xdg.configFile."dunst/dunstrc.d/10-theme-override.conf".text = ''
+    [global]
+    frame_color = "${palette.${config.catppuccin.accent}.hex}"
+    highlight = "${palette.${config.catppuccin.accent}.hex}"
+
+    [urgency_low]
+    frame_color = "${palette.surface1.hex}"
+
+    [urgency_critical]
+    frame_color = "${palette.red.hex}"
+  '';
 
   catppuccin.dunst.enable = true;
 }
