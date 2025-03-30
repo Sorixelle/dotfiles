@@ -9,10 +9,14 @@
 let
   mkFirefoxModule = import "${modulesPath}/programs/firefox/mkFirefoxModule.nix";
 
-  catppuccinThemes = (import ../../npins).catppuccin-zen-browser;
-
-  capitalize =
-    str: (lib.toUpper (lib.substring 0 1 str)) + (lib.substring 1 (lib.stringLength str) str);
+  catppuccinThemePath =
+    let
+      themes = (import ../../npins).catppuccin-zen-browser;
+      capitalize =
+        str: (lib.toUpper (lib.substring 0 1 str)) + (lib.substring 1 (lib.stringLength str) str);
+      inherit (config.catppuccin) accent flavor;
+    in
+    "${themes}/themes/${capitalize flavor}/${capitalize accent}";
 in
 {
   imports = [
@@ -65,10 +69,10 @@ in
 
         # Install the Catppuccin themes if configured
         userChrome = lib.mkIf config.srxl.zen-browser.catppuccin.enable (
-          builtins.readFile "${catppuccinThemes}/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}/userChrome.css"
+          builtins.readFile "${catppuccinThemePath}/userChrome.css"
         );
         userContent = lib.mkIf config.srxl.zen-browser.catppuccin.enable (
-          builtins.readFile "${catppuccinThemes}/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}/userContent.css"
+          builtins.readFile "${catppuccinThemePath}/userContent.css"
         );
       };
     };
@@ -86,7 +90,7 @@ in
     # Add the icon from the Catppuccin theme if configured
     home.file.zenBrowserThemeIcon = lib.mkIf config.catppuccin.enable {
       target = ".mozilla/zen/default/chrome/zen-logo-${config.catppuccin.flavor}.svg";
-      source = "${catppuccinThemes}/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}/zen-logo-${config.catppuccin.flavor}.svg";
+      source = "${catppuccinThemePath}/zen-logo-${config.catppuccin.flavor}.svg";
     };
 
     # Need to override this, because Zen requires a ZenAvatarPath in a profile and home-manager has no way to set that
