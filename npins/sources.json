@@ -26,6 +26,19 @@
       "url": "https://github.com/catppuccin/discord/archive/d444b821a0e0aca725b4a402937acea40646196e.tar.gz",
       "hash": "0xyrqmhp65daq06cym0mj10l0qxyjsscyfjacq97rz2jzjnind79"
     },
+    "catppuccin-zen-browser": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "catppuccin",
+        "repo": "zen-browser"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "b048e8bd54f784d004812036fb83e725a7454ab4",
+      "url": "https://github.com/catppuccin/zen-browser/archive/b048e8bd54f784d004812036fb83e725a7454ab4.tar.gz",
+      "hash": "0wxix574vj7lb4fwn5pr7qd8a8jgd7xyi3mjlh80nfpbrmbqk1ja"
+    },
     "emacs-overlay": {
       "type": "Git",
       "repository": {

@@ -9,12 +9,7 @@
 let
   mkFirefoxModule = import "${modulesPath}/programs/firefox/mkFirefoxModule.nix";
 
-  catppuccinThemes = pkgs.fetchFromGitHub {
-    owner = "catppuccin";
-    repo = "zen-browser";
-    rev = "b048e8bd54f784d004812036fb83e725a7454ab4";
-    hash = "sha256-SoaJV83rOgsQpLKO6PtpTyKFGj75FssdWfTITU7psXM=";
-  };
+  catppuccinThemes = (import ../../npins).catppuccin-zen-browser;
 
   capitalize =
     str: (lib.toUpper (lib.substring 0 1 str)) + (lib.substring 1 (lib.stringLength str) str);
