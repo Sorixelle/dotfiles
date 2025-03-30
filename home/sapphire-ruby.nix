@@ -7,14 +7,14 @@
 
 {
   imports = [
-    ../modules/common.nix
-    ../modules/desktop-theme.nix
-    ../modules/dunst.nix
-    ../modules/ghostty.nix
-    ../modules/xdg.nix
-    ../modules/rofi.nix
-    ../modules/sway.nix
-    ../modules/zen-browser.nix
+    ./modules/common.nix
+    ./modules/desktop-theme.nix
+    ./modules/dunst.nix
+    ./modules/ghostty.nix
+    ./modules/xdg.nix
+    ./modules/rofi.nix
+    ./modules/sway.nix
+    ./modules/zen-browser.nix
   ];
 
   home.packages = with pkgs; [

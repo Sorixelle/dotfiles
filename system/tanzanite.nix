@@ -249,7 +249,7 @@ in
     '';
   };
 
-  home-manager.users.ruby = import ../home/tanzanite-ruby;
+  home-manager.users.ruby = import ../home/tanzanite-ruby.nix;
 
   system.stateVersion = "23.11";
 }

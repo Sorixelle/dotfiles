@@ -416,7 +416,7 @@
     };
   };
 
-  home-manager.users.ruby = import ../home/sapphire-ruby;
+  home-manager.users.ruby = import ../home/sapphire-ruby.nix;
 
   system.stateVersion = "21.05";
 }
