@@ -89,6 +89,19 @@
     ];
   };
 
+  # Enable hyfetch for fancy termial systeminfo
+  programs.hyfetch = {
+    enable = true;
+    settings = {
+      preset = "lesbian";
+      mode = "rgb";
+      light_dark = "dark";
+      color_align.mode = "horizontal";
+      backend = "fastfetch";
+      pride_month_disable = false;
+    };
+  };
+
   # Enable nix-your-shell to ensure nix-shell calls start a fish shell
   programs.nix-your-shell = {
     enable = true;
