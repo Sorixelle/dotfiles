@@ -73,4 +73,9 @@ switch (uname)
             -I "nixpkgs=$pinned_nixpkgs" \
             # Pass any extra arguments given to the rebuild, and show progress with nix-output-monitor
             $argv &| nom --json
+
+        # Delete the result symlink that nixos-rebuild creates, unless we were building a VM
+        if not contains build-vm $argv
+            rm result
+        end
 end
