@@ -98,8 +98,8 @@ in
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
 
-  # Disable command not found handler since it's broken with flakes
-  programs.command-not-found.enable = false;
+  # Point command-not-found at the programs database in the Nixpkgs pin
+  programs.command-not-found.dbPath = "${pins.nixpkgs}/programs.sqlite";
 
   # Clean /tmp on startup
   boot.tmp.cleanOnBoot = true;
