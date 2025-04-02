@@ -18,11 +18,6 @@ pins: final: prev:
 
   makerom = prev.callPackage ./makerom.nix { };
 
-  npins = import (prev.fetchzip {
-    url = "https://github.com/andir/npins/archive/refs/heads/master.tar.gz";
-    hash = "sha256-/FTE/lDICJnXr4JbxaA+9mwM0sSF5++/XaYR+S2pFdA=";
-  }) { pkgs = final; };
-
   # NUR doesn't expose an overlay by default, but it's trivial to add it to one
   nur = import pins.nur { pkgs = final; };
 
