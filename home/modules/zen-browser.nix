@@ -32,8 +32,8 @@ in
       visible = true;
 
       platforms.linux = {
-        configPath = ".mozilla/zen";
-        vendorPath = ".mozilla";
+        configPath = ".zen";
+        vendorPath = ".zen";
       };
     })
   ];
@@ -89,12 +89,12 @@ in
 
     # Add the icon from the Catppuccin theme if configured
     home.file.zenBrowserThemeIcon = lib.mkIf config.srxl.zen-browser.catppuccin.enable {
-      target = ".mozilla/zen/default/chrome/zen-logo-${config.catppuccin.flavor}.svg";
+      target = ".zen/default/chrome/zen-logo-${config.catppuccin.flavor}.svg";
       source = "${catppuccinThemePath}/zen-logo-${config.catppuccin.flavor}.svg";
     };
 
     # Need to override this, because Zen requires a ZenAvatarPath in a profile and home-manager has no way to set that
-    home.file.".mozilla/zen/profiles.ini" = lib.mkForce {
+    home.file.".zen/profiles.ini" = lib.mkForce {
       text = ''
         [General]
         StartWithLastProfile=1
