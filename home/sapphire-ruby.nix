@@ -33,6 +33,7 @@
     ffmpeg-full
     figma-linux
     gimp
+    nix-index
     nix-prefetch-scripts
     osu-lazer-bin
     parsec-bin
