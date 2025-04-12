@@ -258,5 +258,12 @@
     };
   };
 
+  # pnpm global configuration
+  # Cloning seems to sometimes fail on ZFS - use hardlinks from pnpm store to install packages instead
+  # https://github.com/pnpm/pnpm/issues/5803#issuecomment-1782951790
+  home.file.".npmrc".text = ''
+    package-import-method = hardlink
+  '';
+
   home.stateVersion = "21.05";
 }
