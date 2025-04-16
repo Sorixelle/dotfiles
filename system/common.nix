@@ -80,6 +80,7 @@ in
     file
     fzf
     htop
+    httpie
     hyfetch
     ijq
     jq
