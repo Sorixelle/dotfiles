@@ -1392,6 +1392,13 @@ Sometimes you just gotta write 'em. It sucks, but what can you do. There's a cou
     :interpreter ("pwsh" . powershell-mode))
 #+end_src
 
+*** Justfiles
+Kinda like Makefiles, but [[https://just.systems/][just]] a little bit better for running simple scripts. I like to keep one around in my projects, as shortcuts for common commands.
+
+#+begin_src emacs-lisp
+  (use-package just-ts-mode)
+#+end_src
+
 *** OpenTofu
 [[https://opentofu.org/][OpenTofu]] is a infrastructure-as-code tool that I use to manage my homelab infra - VMs, cloud resources, that sorta thing. It takes declarations specified in a language called HCL, which stands for... something Configuration Language? Not sure what the H is. Also, the major mode for it is called [[https://github.com/hcl-emacs/terraform-mode][terraform-mode]], which is strange to me. What's "terraform" got to do with it? A mystery for the ages, I guess.
 
