@@ -1238,6 +1238,46 @@ Smartparens fix.
   (srxl/fix-brace-indentation 'astro-ts-mode "{" "(" "[")
 #+end_src
 
+*** ESLint
+[[https://eslint.org/][ESLint]] is a pretty popular linter for web projects - helps catch common errors and keeps your code nice and clean. [[https://github.com/orzechowskid/flymake-eslint][flymake-eslint]] brings ESLint's diagnostics into Emacs. I'll configure it for all of my web development modes (ie. anything that ESLint can lint), and configure a few bits to make sure it works.
+
+#+begin_src emacs-lisp
+  (use-package flymake-eslint
+    :config
+    <<flymake-eslint-config>>)
+#+end_src
+
+[[https://github.com/mantoni/eslint_d.js][eslint_d]] is a wrapper around ESLint to run it regularly in the background, giving it a massive speed boost. I usually prefer to use that in my projects, so I'll use it here too.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref flymake-eslint-config
+  (setopt flymake-eslint-executable-name "eslint_d")
+#+end_src
+
+The binary might not get added to ~exec-path~ until direnv has done it's work, so I'll defer the binary check to make sure it doesn't happen until then.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref flymake-eslint-config
+  (setopt flymake-eslint-defer-binary-check t)
+#+end_src
+
+Use the JSON output mode to get more accurate error reporting.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref flymake-eslint-config
+  (setopt flymake-eslint-prefer-json-diagnostics t)
+#+end_src
+
+Eglot unfortunately likes to blow out all of the existing Flymake backends when it rocks up, so I need to make sure the ESLint backend gets enabled after Eglot is setup. ~eglot-managed-mode-hook~ is the point to do that, so in there, I'll add a function that enables ESLint checks if it's one of the modes it makes sense for.
+
+#+begin_src emacs-lisp
+  (add-hook
+   'eglot-managed-mode-hook
+   (lambda () (when (memq major-mode '( js-ts-mode
+                                        typescript-ts-mode
+                                        tsx-ts-mode
+                                        svelte-mode
+                                        astro-ts-mode))
+                (flymake-eslint-enable))))
+#+end_src
+
 *** Scala
 Ahhh, [[https://scala-lang.org/][Scala]]. If she didn't live on the JVM, I'd marry her. Alas, I shall have to learn with my #1 favourite programming language being tied to the legacy of crusty old Java. Such is life, I guess.
 
