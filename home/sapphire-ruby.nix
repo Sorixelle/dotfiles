@@ -33,14 +33,15 @@
     ffmpeg-full
     figma-linux
     gimp
+    helvum
     nix-index
     nix-prefetch-scripts
     osu-lazer-bin
     parsec-bin
-    pavucontrol
     picard
     plexamp
     prismlauncher
+    pwvucontrol
     qbittorrent
     roon-launcher
     scr
