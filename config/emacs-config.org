@@ -103,7 +103,8 @@ I'm using =setq-default= here instead of =setq= since this variable is a buffer-
 Sorry, Python fans.
 
 #+begin_src emacs-lisp
-  (setq-default tab-width 2)
+  (setq-default tab-width 2
+                standard-indent 2)
 #+end_src
 
 ** Max line width of 120
