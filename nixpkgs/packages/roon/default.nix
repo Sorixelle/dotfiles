@@ -1,5 +1,4 @@
 {
-  lib,
   makeDesktopItem,
   wineWowPackages,
   writeShellScript,
@@ -20,6 +19,6 @@ makeDesktopItem {
   startupWMClass = "roon.exe";
 
   exec = writeShellScript "roon" ''
-    env WINEPREFIX=${wineprefix} WINEDLLOVERRIDES="windows.media.mediacontrol=" ${lib.getExe wineWowPackages.staging} ${wineprefix}/drive_c/users/ruby/AppData/Local/Roon/Application/Roon.exe -scalefactor=1.0
+    env WINEPREFIX=${wineprefix} WINEDLLOVERRIDES="windows.media.mediacontrol=" ${wineWowPackages.staging}/bin/wine ${wineprefix}/drive_c/users/ruby/AppData/Local/Roon/Application/Roon.exe -scalefactor=1.0
   '';
 }
