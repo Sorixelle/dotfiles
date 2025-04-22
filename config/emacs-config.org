@@ -1366,7 +1366,6 @@ I'll make sure Apheleia uses ~mix format~ to format HEEx files too - otherwise, 
   (add-to-list 'apheleia-mode-alist '(heex-mode . mix-format))
 #+end_src
 
-
 For some ungodly reason, Elixir's default language server binary is called =language-server.sh=, which is... kinda fucking bizarre??? What sort of name is that??? Luckily, the Nixpkgs team recognise this as a batshit decision, and opt to rename it to a much more reasonable =elixir-ls=. That does mean I need to inform Eglot of that, though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
@@ -1392,6 +1391,11 @@ HEEx templates have syntax for embedding Elixir expressions between ~<% %>~ tags
    :post-handlers '(("| " "SPC") (" | " "=") (" | " "%") ("-- | --" "!")))
 #+end_src
 
+The =~H= sigil in Phoenix is a common way to create a HEEx template inline in Elixir code from a multi-line string, so I'll define a pair to insert those quickly as well.
+
+#+begin_src emacs-lisp
+  (sp-local-pair 'elixir-ts-mode "~H" "\"\"\"" :post-handlers '("\"\"\"\n||\n[i]"))
+#+end_src
 
 *** Rust
 All the girlthings love Rust. Putting on their fuckin. Striped socks and cat ears and shit like that. Unfortunately, the cat ears won't fit over my fox ears, so hopefully that'll be okay with them.
