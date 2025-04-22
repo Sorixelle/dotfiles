@@ -1360,6 +1360,13 @@ HEEx is a templating language used by popular web app frameworks like [[https://
   (add-hook 'heex-mode-hook 'eglot-ensure)
 #+end_src
 
+I'll make sure Apheleia uses ~mix format~ to format HEEx files too - otherwise, it'll try to use the default for ~web-mode~ (ie. Prettier) and that won't end well.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref apheleia-config
+  (add-to-list 'apheleia-mode-alist '(heex-mode . mix-format))
+#+end_src
+
+
 For some ungodly reason, Elixir's default language server binary is called =language-server.sh=, which is... kinda fucking bizarre??? What sort of name is that??? Luckily, the Nixpkgs team recognise this as a batshit decision, and opt to rename it to a much more reasonable =elixir-ls=. That does mean I need to inform Eglot of that, though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
