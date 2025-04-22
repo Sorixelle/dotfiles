@@ -1351,18 +1351,19 @@ Mix, the build tool for Elixir, generates lockfiles that are actually Elixir sou
   (add-to-list 'auto-mode-alist '("mix\\.lock\\'" . elixir-ts-mode))
 #+end_src
 
-HEEx is a templating language used by popular web app frameworks like [[https://www.phoenixframework.org/][Phoenix]], and there's also a mode for that.
+HEEx is a templating language used by popular web app frameworks like [[https://www.phoenixframework.org/][Phoenix]]. While there is ~heex-ts-mode~ built into Emacs, it's a bit shit. Indenting is not great, highlighting is kinda crap. ~web-mode~ from earlier has much better support for HEEx templates, so I'll do the same thing I did with [[*Svelte][Svelte]] and make a derived mode.
 
-#+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-ts-mode))
-  (add-hook 'heex-ts-mode-hook 'eglot-ensure)
+#+begin_src emacs-lisp :tangle no :noweb-ref web-mode-config
+  (define-derived-mode heex-mode web-mode "HEEx")
+  (add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-mode))
+  (add-hook 'heex-mode-hook 'eglot-ensure)
 #+end_src
 
 For some ungodly reason, Elixir's default language server binary is called =language-server.sh=, which is... kinda fucking bizarre??? What sort of name is that??? Luckily, the Nixpkgs team recognise this as a batshit decision, and opt to rename it to a much more reasonable =elixir-ls=. That does mean I need to inform Eglot of that, though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
   (add-to-list 'eglot-server-programs '(elixir-ts-mode "elixir-ls"))
-  (add-to-list 'eglot-server-programs '(heex-ts-mode "elixir-ls"))
+  (add-to-list 'eglot-server-programs '(heex-mode "elixir-ls"))
 #+end_src
 
 elixir-ls has a thing where if you have an unterminated =do= block and you insert a newline after it, it'll helpfully add an =end= if it's not there. Very helpful! Unfortunately, Smartparens already does this for me, so those two end up stepping on each others' toes and making a mess of my function definitions. I'll turn that off on the elixir-ls side, and leave Smartparens to handle my "brace" insertion instead.
@@ -1373,6 +1374,16 @@ elixir-ls has a thing where if you have an unterminated =do= block and you inser
                         eglot-ignored-server-capabilities
                         '(:documentOnTypeFormattingProvider))))
 #+end_src
+
+HEEx templates have syntax for embedding Elixir expressions between ~<% %>~ tags, along with [[https://hexdocs.pm/eex/EEx.html#module-tags][some other variants]]. I wouldn't mind being able to autocomplete them with Smartparens like most other pairs of braces, so I'll define a pair for HEEx files, with some post handlers to ensure nicely formatted whitespace when entering them (and proper completion at the end for comments).
+
+#+begin_src emacs-lisp
+  (sp-local-pair
+   'heex-mode
+   "<%" "%>"
+   :post-handlers '(("| " "SPC") (" | " "=") (" | " "%") ("-- | --" "!")))
+#+end_src
+
 
 *** Rust
 All the girlthings love Rust. Putting on their fuckin. Striped socks and cat ears and shit like that. Unfortunately, the cat ears won't fit over my fox ears, so hopefully that'll be okay with them.
