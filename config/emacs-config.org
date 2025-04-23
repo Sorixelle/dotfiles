@@ -1354,7 +1354,10 @@ Mix, the build tool for Elixir, generates lockfiles that are actually Elixir sou
 
 HEEx is a templating language used by popular web app frameworks like [[https://www.phoenixframework.org/][Phoenix]]. While there is ~heex-ts-mode~ built into Emacs, it's a bit shit. Indenting is not great, highlighting is kinda crap. ~web-mode~ from earlier has much better support for HEEx templates, so I'll do the same thing I did with [[*Svelte][Svelte]] and make a derived mode.
 
+The ~require~ might look a bit strange here, but it's needed because ~elixir-ts-mode~ requires ~heex-ts-mode~, which adds an entry to ~auto-mode-alist~ for ~.heex~ files for it's own mode, overriding the assignment here. Annoying, but it's needed to make sure HEEx files use my ~heex-mode~.
+
 #+begin_src emacs-lisp :tangle no :noweb-ref web-mode-config
+  (require 'heex-ts-mode)
   (define-derived-mode heex-mode web-mode "HEEx")
   (add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-mode))
   (add-hook 'heex-mode-hook 'eglot-ensure)
