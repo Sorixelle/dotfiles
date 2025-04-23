@@ -476,6 +476,76 @@ TODO: write some shit lamo
   (set-face-attribute 'tab-bar nil :family srxl/font-family-ui)
 #+end_src
 
+** Sifting through files
+Everyone has files on their computer. Everyone needs a file browser to go find those files. And of course, Emacs has you sorted there, with Dired. It's a directory editor, hence the name. And it's a pretty powerful one too - there's very few things you can't do with it. Bulk copy/cut/paste, set file permissions, make a hardlink - you name it, Dired can do it.
+
+But, by default, it's not very pretty. It's basically just a glorified ~ls~ output, which like... you could do worse. You could also do better though, and [[https://github.com/alexluigit/dirvish][Dirvish]] does just that. Instead of reimplementing a whole new file browser, it just piggybacks off of Dired, giving it a much nicer coat of paint. If you've ever used [[https://github.com/ranger/ranger][Ranger]], it's very much inspired by it.
+
+#+begin_src emacs-lisp
+  (use-package dirvish
+    :init
+    (dirvish-override-dired-mode)
+    :config
+    <<dirvish-config>>)
+#+end_src
+
+The stock config isn't super usable in my experience, so I'm gonna have to do a bit of configuration to get it just right. First, I'll set the right ~ls~ flags for getting a directory listing. Human-readable sizes, and sort the folders first.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
+  (setq dired-listing-switches "-lhG --group-directories-first")
+#+end_src
+
+Next, the attributes. Dirvish can display other useful information in the file listing, like version control status and file format icons. I'll turn those on, along with an indicator for expanded folders (another neat Dirvish feature!), the last Git commit message that touched the file (if I'm in a Git repo), and file permissions and size.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
+  (setq dirvish-attributes '(vc-state subtree-state nerd-icons git-msg file-modes file-size))
+#+end_src
+
+The icons require the ~nerd-icons~ package to be installed, so I'll make sure I've got that.
+
+#+begin_src emacs-lisp
+  (use-package nerd-icons)
+#+end_src
+
+I'll also want my keybindings, so I can get to Dirvish and do what I need in there.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
+  (srxl/leader-def "d" '("Browse files" . dirvish))
+  (general-def 'normal dirvish-mode-map
+    "q" '("Quit" . dirvish-quit)
+
+    "TAB" '("Toggle expand folder" . dirvish-toggle-subtree)
+    "F" '("Create file" . dired-create-empty-file)
+    "D" '("Create folder" . dired-create-directory)
+    "h" '("Open parent directory" . dired-up-directory)
+    "l" '("Enter selected entry" . dired-find-file)
+    "r" '("Rename" . dired-do-rename)
+    "x" '("Delete" . dired-do-delete)
+
+    ";" '("Switch layout" . dirvish-layout-switch)
+    ":" '("Fullscreen" . dirvish-layout-toggle))
+#+end_src
+
+I'd like to be able to toggle hidden dotfiles, so I can jump into them when I need them, and keep the clutter out when I don't. Doing that is just a matter of adding ~-A~ to the ~ls~ flags, and ~dired-sort-other~ is just the trick for updating those flags. I'll write a function that toggles it's addition on and off, and bind a key to call that function.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
+  (defun srxl/dired-toggle-hidden-files ()
+    "Toggles the visibility of hidden files in the current Dired buffer."
+    (interactive)
+    (dired-sort-other (if (string-match-p "-A" (or dired-actual-switches ""))
+                          dired-listing-switches
+                        (concat dired-listing-switches " -A"))))
+  (general-def 'normal dirvish-mode-map
+    "." '("Toggle hidden files" . srxl/dired-toggle-hidden-files))
+#+end_src
+
+Dirvish also comes with a ~dirvish-side~ view, which is great for working in my code projects - think like your usual IDE file listing sidebar. I'll bind that to another key, and remove most of the noisy attributes in there so it doesn't get inevitably cut off.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
+  (srxl/leader-def "." '("Show files sidebar" . dirvish-side))
+  (setq dirvish-side-attributes '(vc-state subtree-state nerd-icons))
+#+end_src
+
 * Emacs, my favourite word processor
 #+begin_src emacs-lisp
   <<org-pre>>
@@ -984,7 +1054,6 @@ By default, all of those commands are bound under =C-x p=, which is a touch awkw
 #+begin_src emacs-lisp
   (srxl/leader-def "b" '("Switch buffer" . project-switch-to-buffer))
   (srxl/leader-def "f" '("Open file in project" . project-find-file))
-  (srxl/leader-def "d" '("Open project directory" . project-dired))
 #+end_src
 
 project.el also has commands to grep projects, but I have [[https://github.com/BurntSushi/ripgrep][ripgrep]] installed on my system, which is a much faster grep replacement. Unfortunately, there's no way to make it use ripgrep, but [[https://github.com/dajva/rg.el][rg.el]] has project searching included, so I can use that instead.
