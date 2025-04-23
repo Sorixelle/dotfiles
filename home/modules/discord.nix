@@ -21,8 +21,8 @@
         "${catppuccin-theme}/themes/${themeFlavor}.theme.css";
 
       "BetterDiscord/plugins/Pluralchum.plugin.js".source = pkgs.fetchurl {
-        url = "https://github.com/estroBiologist/pluralchum/releases/download/2.6.0/Pluralchum.plugin.js";
-        hash = "sha256-R9OaVKXp0diyCVgk2hLLJYP3gb3VbN7zUVHpiIBCmyw=";
+        url = "https://github.com/estroBiologist/pluralchum/releases/download/2.7.0/Pluralchum.plugin.js";
+        hash = "sha256-Qi+38P2RhTLbS7RnskwTtgVxOhx0R3QW59X3Ib7f9hQ=";
       };
     };
 }
