@@ -515,6 +515,7 @@ I'll also want my keybindings, so I can get to Dirvish and do what I need in the
     "q" '("Quit" . dirvish-quit)
 
     "TAB" '("Toggle expand folder" . dirvish-toggle-subtree)
+    "RET" '("Open file" . dired-find-alternate-file)
     "F" '("Create file" . dired-create-empty-file)
     "D" '("Create folder" . dired-create-directory)
     "h" '("Open parent directory" . dired-up-directory)
@@ -539,11 +540,24 @@ I'd like to be able to toggle hidden dotfiles, so I can jump into them when I ne
     "." '("Toggle hidden files" . srxl/dired-toggle-hidden-files))
 #+end_src
 
-Dirvish also comes with a ~dirvish-side~ view, which is great for working in my code projects - think like your usual IDE file listing sidebar. I'll bind that to another key, and remove most of the noisy attributes in there so it doesn't get inevitably cut off.
+Dirvish also comes with a ~dirvish-side~ view, which is great for working in my code projects - think like your usual IDE file listing sidebar. By default, it's supposed to open at the root of the current project if there is one (I'll get to [[*Project management][projects]] in a moment), but it doesn't seem to work if the file isn't tracked by version control, making it fall back to the current buffer's directory instead. To work around that, I'll write a simple wrapper that calls ~dirvish-side~ with the project's root path, or just leave it to default if I'm not in a project. That'll get bound into the leader keymap. I'll also remove most of the noisy attributes in there so it doesn't get inevitably cut off.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
-  (srxl/leader-def "." '("Show files sidebar" . dirvish-side))
+  (defun srxl/dirvish-side ()
+    "Open Dirvish's side panel in the current project's root, or buffer directory if there is no current project."
+    (interactive)
+    (dirvish-side (if-let* ((project (project-current)))
+                      (project-root project)
+                    nil)))
+
+  (srxl/leader-def "." '("Show files sidebar" . srxl/dirvish-side))
   (setq dirvish-side-attributes '(vc-state subtree-state nerd-icons))
+#+end_src
+
+Earlier, I rebound =RET= to ~dired-find-alternate-file~, so it closes the side panel when I open a file. That prints a warning because closing the current buffer is apparently confusing behaviour or something? I'll shut that up.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref dirvish-config
+  (put 'dired-find-alternate-file 'disabled nil)
 #+end_src
 
 * Emacs, my favourite word processor
