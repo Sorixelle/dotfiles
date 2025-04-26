@@ -183,7 +183,40 @@
       monospace = {
         name = "Iosevka";
         size = 12;
-        package = pkgs.iosevka-bin;
+        package = pkgs.iosevka.override {
+          set = "";
+          privateBuildPlan = {
+            family = "Iosevka";
+            spacing = "normal";
+            serifs = "sans";
+            noCvSs = true;
+            exportGlyphNames = false;
+
+            variants = {
+              inherits = "ss15";
+              design = {
+                three = "flat-top-serifless";
+                four = "semi-open-serifless";
+                five = "upright-arched-serifless";
+                six = "straight-bar";
+                seven = "straight-serifless";
+                nine = "straight-bar";
+                zero = "tall-slashed";
+                capital-q = "crossing";
+                g = "single-storey-serifless";
+                asterisk = "hex-high";
+                brace = "straight";
+                number-sign = "slanted";
+                ampersand = "closed";
+                percent = "rings-continuous-slash";
+                lig-ltgteq = "slanted";
+                lig-neq = "more-slanted";
+                lig-equal-chain = "without-notch";
+                lig-hyphen-chain = "without-notch";
+              };
+            };
+          };
+        };
       };
       ui = {
         name = "Intur";
