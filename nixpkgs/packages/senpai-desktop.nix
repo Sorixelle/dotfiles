@@ -18,5 +18,5 @@ makeDesktopItem {
     "ConsoleOnly"
   ];
   startupNotify = true;
-  exec = "${lib.getExe ghostty} -e ${lib.getExe senpai}";
+  exec = "${lib.getExe ghostty} --class=app.senpai -e ${lib.getExe senpai}";
 }

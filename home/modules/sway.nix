@@ -133,16 +133,17 @@ in
 
           # Other startup apps
           { command = "${lib.getExe config.programs.zen-browser.package}"; }
+          { command = "${pkgs.gtk3}/bin/gtk-launch senpai.desktop"; }
           { command = "discord"; }
           { command = "cinny"; }
-          { command = "zulip"; }
         ];
 
         assigns = {
           "1:web" = [ { app_id = "zen"; } ];
           "2:chat" = [
-            { app_id = "discord"; }
+            { app_id = "app.senpai"; }
             { app_id = "cinny"; }
+            { app_id = "discord"; }
             { app_id = "Zulip"; }
           ];
           "3:dev" = [ { app_id = "emacs"; } ];
