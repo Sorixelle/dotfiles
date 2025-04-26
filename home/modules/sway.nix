@@ -144,6 +144,7 @@ in
             { app_id = "app.senpai"; }
             { app_id = "cinny"; }
             { app_id = "discord"; }
+            { app_id = "signal"; }
             { app_id = "Zulip"; }
           ];
           "3:dev" = [ { app_id = "emacs"; } ];
