@@ -45,6 +45,7 @@
     qbittorrent
     roon-launcher
     scr
+    senpai-desktop
     signal-desktop
     solaar
     steam
@@ -124,6 +125,22 @@
         obs-pipewire-audio-capture
         wlrobs
       ];
+    };
+
+    senpai = {
+      enable = true;
+      config = {
+        address = "ircs://irc.isincredibly.gay";
+        password-cmd = [
+          "${pkgs.libsecret}/bin/secret-tool"
+          "lookup"
+          "irc"
+          "srxl"
+        ];
+        nickname = "srxl";
+        realname = "ruby";
+        typings = false;
+      };
     };
   };
 

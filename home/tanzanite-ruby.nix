@@ -32,6 +32,7 @@
     nix-prefetch-scripts
     pavucontrol
     plexamp
+    senpai-desktop
     solaar
     wineWowPackages.staging
     winetricks
@@ -143,6 +144,22 @@
             halign = "right";
           }
         ];
+      };
+    };
+
+    senpai = {
+      enable = true;
+      config = {
+        address = "ircs://irc.isincredibly.gay";
+        password-cmd = [
+          "${pkgs.libsecret}/bin/secret-tool"
+          "lookup"
+          "irc"
+          "srxl"
+        ];
+        nickname = "srxl";
+        realname = "ruby";
+        typings = false;
       };
     };
   };

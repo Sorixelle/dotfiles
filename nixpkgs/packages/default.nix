@@ -31,6 +31,8 @@ pins: final: prev:
 
   scr = prev.callPackage ./scr.nix { };
 
+  senpai-desktop = prev.callPackage ./senpai-desktop.nix { };
+
   tinfoil-nut = prev.callPackage ./tinfoil-nut.nix { };
 
   # tree-sitter-astro doesn't provide an overlay outside of the flake, so we'll reconstruct it here
