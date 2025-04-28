@@ -1204,6 +1204,18 @@ CSS also needs a couple tweaks:
   (srxl/fix-brace-indentation 'css-ts-mode "{")
 #+end_src
 
+[[https://docs.emmet.io/][Emmet]] defines some handy shortcuts for writing HTML and CSS. [[https://github.com/smihica/emmet-mode][emmet-mode]] implements them in Emacs.
+
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :hook ((sgml-mode . emmet-mode)
+           (js-ts-mode . emmet-mode)
+           (tsx-ts-mode . emmet-mode)
+           (css-ts-mode . emmet-mode))
+    :config
+    <<emmet-mode-config>>)
+#+end_src
+
 *** Javascript and Typescript
 Hah, you thought I was done with the web stuff. Nuh uh. It's Javascript time babey. Very similar setup as before again - there's built in Tree-sitter modes for both. And of course, we need Eglot in these. God, I'd be so lost without it in JS.
 
@@ -1238,11 +1250,19 @@ On the docs front, I'll want to lookup both JS and TS docs, so both go in there.
   (srxl/set-default-docs 'tsx-ts-mode-hook '("typescript" "react" "javascript"))
 #+end_src
 
+I gotta tell ~emmet-mode~ that these treesit-based modes should be subject to JSX changes, like using ~className~ instead of ~class~. The treesit modes aren't in there for some reason.
+
+#+begin_src emacs-lisp :tangle no :noweb-ref emmet-mode-config
+  (add-to-list 'emmet-jsx-major-modes 'js-ts-mode)
+  (add-to-list 'emmet-jsx-major-modes 'tsx-ts-mode)
+#+end_src
+
 *** Svelte
 Nope, still not done with web stuff! [[https://svelte.dev/][Svelte]] is probably my framework of choice for dynamic JS. It's really quite nice to work with. It does come with it's own templating language though, so I'm going to need something to support it. [[https://web-mode.org/][web-mode]] provides support for countless web templating languages, and Svelte is one of them, so it sounds like a no brainer pick to me.
 
 #+begin_src emacs-lisp
   (use-package web-mode
+    :hook (web-mode . emmet-mode)
     :config
     <<web-mode-config>>)
 #+end_src
