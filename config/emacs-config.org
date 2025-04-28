@@ -1474,9 +1474,10 @@ Now, that solves the problem for HEEx templates in their own file, but I'm still
     :innermodes '(poly-elixir-heex-innermode))
 #+end_src
 
-Cool. Now I can use that ~poly-elixir-mode~ to handle Elixir files.
+Cool. Now I can use that ~poly-elixir-mode~ to handle Elixir files. The ~require~ is there for the same reason as before.
 
 #+begin_src emacs-lisp
+  (require 'elixir-ts-mode)
   (add-to-list 'auto-mode-alist '("\\.exs?\\'" . poly-elixir-mode))
   (add-hook 'poly-elixir-mode-hook 'eglot-ensure)
   (srxl/set-default-docs 'poly-elixir-mode-hook '("elixir~1.18"))
@@ -1497,7 +1498,7 @@ I'll make sure Apheleia uses ~mix format~ to format HEEx files too - otherwise, 
 For some ungodly reason, Elixir's default language server binary is called =language-server.sh=, which is... kinda fucking bizarre??? What sort of name is that??? Luckily, the Nixpkgs team recognise this as a batshit decision, and opt to rename it to a much more reasonable =elixir-ls=. That does mean I need to inform Eglot of that, though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
-  (add-to-list 'eglot-server-programs '(poly-elixir-mode "elixir-ls"))
+  (add-to-list 'eglot-server-programs '(elixir-ts-mode "elixir-ls"))
   (add-to-list 'eglot-server-programs '(heex-mode "elixir-ls"))
 #+end_src
 
@@ -1522,7 +1523,7 @@ HEEx templates have syntax for embedding Elixir expressions between ~<% %>~ tags
 The =~H= sigil in Phoenix is a common way to create a HEEx template inline in Elixir code from a multi-line string, so I'll define a pair to insert those quickly as well.
 
 #+begin_src emacs-lisp
-  (sp-local-pair 'poly-elixir-mode "~H" "\"\"\"" :post-handlers '("\"\"\"\n||\n[i]"))
+  (sp-local-pair 'elixir-ts-mode "~H" "\"\"\"" :post-handlers '("\"\"\"\n||\n[i]"))
 #+end_src
 
 *** Rust
