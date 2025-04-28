@@ -1421,29 +1421,51 @@ And the Smartparens fix, of course.
 #+end_src
 
 *** Elixir
-[[https://elixir-lang.org/][Elixir]] is a pretty niche thingy, but oooooh boy I like it. It's a Erlang/BEAM based language, which is really funky - don't see a lot of those very often. The BEAM model is absolutely fascinating to me, and I think it lends itself incredibly well to building reliable, self-healing apps that fail often, fail fast, and recover quickly. Definitely a lot of fun for backend apps. There's a built-in Tree-sitter mode for it, so I'll use that.
+[[https://elixir-lang.org/][Elixir]] is a pretty niche thingy, but oooooh boy I like it. It's a Erlang/BEAM based language, which is really funky - don't see a lot of those very often. The BEAM model is absolutely fascinating to me, and I think it lends itself incredibly well to building reliable, self-healing apps that fail often, fail fast, and recover quickly. Definitely a lot of fun for backend apps. There's a built-in Tree-sitter mode for it, so I'll use that - at least partially.
+
+I'd use ~elixir-ts-mode~, but it's support for HEEx template highlighting, as well as ~heex-ts-mode~'s, are both not very good. It's a shame, because sometimes I'm writing [[https://www.phoenixframework.org/][Phoenix]] apps, which make heavy use of them for generating HTML. ~web-mode~ does a much better job of highlighting HEEx, and since I pulled it in earlier for [[*Svelte][Svelte]], it'll be no issue using it here as well.
+
+The ~require~ might look a bit strange here, but it's needed because ~elixir-ts-mode~ requires ~heex-ts-mode~, which adds an entry to ~auto-mode-alist~ for ~.heex~ files for it's own mode, overriding the assignment here. Annoying, but it's needed to make sure HEEx files use my ~heex-mode~.
 
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.exs?\\'" . elixir-ts-mode))
-  (add-hook 'elixir-ts-mode-hook 'eglot-ensure)
-  (srxl/set-default-docs 'elixir-ts-mode-hook '("elixir~1.18"))
+  (require 'heex-ts-mode)
+  (define-derived-mode heex-mode web-mode "HEEx")
+  (add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-mode))
+  (add-hook 'heex-mode-hook 'eglot-ensure)
+#+end_src
+
+Now, that solves the problem for HEEx templates in their own file, but I'm still stuck with a pretty shitty situation for inline templates in Elixir files. Not to worry though - using [[https://polymode.github.io/][Polymode]], I can define a variant of ~elixir-ts-mode~ that uses the ~heex-mode~ I just defined earlier to manage those inline sections. Polymode's pretty handy when you're dealing with languages embedded in other ones, and need to have different major modes handling different parts of a buffer.
+
+#+begin_src emacs-lisp
+  (use-package polymode)
+
+  (define-hostmode poly-elixir-hostmode
+    :mode 'elixir-ts-mode)
+
+  (define-innermode poly-elixir-heex-innermode
+    :mode 'heex-mode
+    :head-matcher "~H\"\"\""
+    :tail-matcher "\"\"\""
+    :head-mode 'host
+    :tail-mode 'host)
+
+  (define-polymode poly-elixir-mode
+    :hostmode 'poly-elixir-hostmode
+    :innermodes '(poly-elixir-heex-innermode))
+#+end_src
+
+Cool. Now I can use that ~poly-elixir-mode~ to handle Elixir files.
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.exs?\\'" . poly-elixir-mode))
+  (add-hook 'poly-elixir-mode-hook 'eglot-ensure)
+  (srxl/set-default-docs 'poly-elixir-mode-hook '("elixir~1.18"))
 #+end_src
 
 Mix, the build tool for Elixir, generates lockfiles that are actually Elixir source files, so I should make sure the mode activates on those, too.
 
 #+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("mix\\.lock\\'" . elixir-ts-mode))
-#+end_src
-
-HEEx is a templating language used by popular web app frameworks like [[https://www.phoenixframework.org/][Phoenix]]. While there is ~heex-ts-mode~ built into Emacs, it's a bit shit. Indenting is not great, highlighting is kinda crap. ~web-mode~ from earlier has much better support for HEEx templates, so I'll do the same thing I did with [[*Svelte][Svelte]] and make a derived mode.
-
-The ~require~ might look a bit strange here, but it's needed because ~elixir-ts-mode~ requires ~heex-ts-mode~, which adds an entry to ~auto-mode-alist~ for ~.heex~ files for it's own mode, overriding the assignment here. Annoying, but it's needed to make sure HEEx files use my ~heex-mode~.
-
-#+begin_src emacs-lisp :tangle no :noweb-ref web-mode-config
-  (require 'heex-ts-mode)
-  (define-derived-mode heex-mode web-mode "HEEx")
-  (add-to-list 'auto-mode-alist '("\\.heex\\'" . heex-mode))
-  (add-hook 'heex-mode-hook 'eglot-ensure)
+  (add-to-list 'auto-mode-alist '("mix\\.lock\\'" . poly-elixir-mode))
 #+end_src
 
 I'll make sure Apheleia uses ~mix format~ to format HEEx files too - otherwise, it'll try to use the default for ~web-mode~ (ie. Prettier) and that won't end well.
@@ -1455,14 +1477,14 @@ I'll make sure Apheleia uses ~mix format~ to format HEEx files too - otherwise, 
 For some ungodly reason, Elixir's default language server binary is called =language-server.sh=, which is... kinda fucking bizarre??? What sort of name is that??? Luckily, the Nixpkgs team recognise this as a batshit decision, and opt to rename it to a much more reasonable =elixir-ls=. That does mean I need to inform Eglot of that, though.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref eglot-config
-  (add-to-list 'eglot-server-programs '(elixir-ts-mode "elixir-ls"))
+  (add-to-list 'eglot-server-programs '(poly-elixir-mode "elixir-ls"))
   (add-to-list 'eglot-server-programs '(heex-mode "elixir-ls"))
 #+end_src
 
 elixir-ls has a thing where if you have an unterminated =do= block and you insert a newline after it, it'll helpfully add an =end= if it's not there. Very helpful! Unfortunately, Smartparens already does this for me, so those two end up stepping on each others' toes and making a mess of my function definitions. I'll turn that off on the elixir-ls side, and leave Smartparens to handle my "brace" insertion instead.
 
 #+begin_src emacs-lisp
-  (add-hook 'elixir-ts-mode-hook
+  (add-hook 'poly-elixir-mode-hook
             (lambda () (setq-local
                         eglot-ignored-server-capabilities
                         '(:documentOnTypeFormattingProvider))))
@@ -1480,7 +1502,7 @@ HEEx templates have syntax for embedding Elixir expressions between ~<% %>~ tags
 The =~H= sigil in Phoenix is a common way to create a HEEx template inline in Elixir code from a multi-line string, so I'll define a pair to insert those quickly as well.
 
 #+begin_src emacs-lisp
-  (sp-local-pair 'elixir-ts-mode "~H" "\"\"\"" :post-handlers '("\"\"\"\n||\n[i]"))
+  (sp-local-pair 'poly-elixir-mode "~H" "\"\"\"" :post-handlers '("\"\"\"\n||\n[i]"))
 #+end_src
 
 *** Rust
