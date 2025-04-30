@@ -149,6 +149,11 @@
       enable = true;
       preset = "DT880";
     };
+
+    kdeconnect = {
+      enable = true;
+      indicator = true;
+    };
   };
 
   srxl = {

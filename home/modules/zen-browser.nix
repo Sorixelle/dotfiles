@@ -45,6 +45,10 @@ in
   config = {
     programs.zen-browser = {
       enable = true;
+      nativeMessagingHosts = [
+        pkgs.kdePackages.plasma-browser-integration
+        pkgs.tridactyl-native
+      ];
       profiles.Default = {
         id = 0;
         isDefault = true;
@@ -55,6 +59,7 @@ in
           decentraleyes
           multi-account-containers
           kagi-search
+          plasma-integration
           react-devtools
           reddit-enhancement-suite
           redirector
