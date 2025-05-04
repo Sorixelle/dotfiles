@@ -12,12 +12,12 @@
 }:
 
 let
-  zenVersion = "1.11.5b";
-  firefoxVersion = "137.0.2";
+  zenVersion = "1.12b";
+  firefoxVersion = "138.0.1";
 
   firefoxSrc = fetchurl {
     url = "https://archive.mozilla.org/pub/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.xz";
-    hash = "sha256-Bvw6uqgiFIv6Xue3WUKNdAUkk4dsBTwFN5w/bDArzQc=";
+    hash = "sha256-mJS5YgOHb4R2N68g+WHNRJT/Hy2F5MCWp/NY9U2eyys=";
   };
 
   patchedSrc = buildNpmPackage {
@@ -28,7 +28,7 @@ let
       owner = "zen-browser";
       repo = "desktop";
       rev = zenVersion;
-      hash = "sha256-JnJ3/HfhvveHTJ6qhykzO5gduF8thrklNpUUA7ag0oQ=";
+      hash = "sha256-naYPkElnyztCpzQfFgaZ9FSsSvMCY1i04E9K1jqf13k=";
       fetchSubmodules = true;
     };
     postUnpack = ''
@@ -36,7 +36,7 @@ let
       mv firefox-${firefoxVersion} source/engine
     '';
 
-    npmDepsHash = "sha256-xmWrQfYTATL2x3LFN+OLyRvCDeEvSwz+kzIp3+zzFlQ=";
+    npmDepsHash = "sha256-U7KkBY3IiWtjRZyjlCyIu0BaAQYrY3aTlskWZ3gm/dg=";
     makeCacheWritable = true;
 
     nativeBuildInputs = [
@@ -69,34 +69,42 @@ let
     dontFixup = true;
   };
 in
-(buildMozillaMach {
-  pname = "zen-browser";
-  packageVersion = zenVersion;
-  version = firefoxVersion;
-  applicationName = "Zen Browser";
-  binaryName = "zen";
-  branding = "browser/branding/release";
-  requireSigning = false;
-  allowAddonSideload = true;
+(
+  (buildMozillaMach {
+    pname = "zen-browser";
+    packageVersion = zenVersion;
+    version = firefoxVersion;
+    applicationName = "Zen Browser";
+    binaryName = "zen";
+    branding = "browser/branding/release";
+    requireSigning = false;
+    allowAddonSideload = true;
 
-  src = patchedSrc;
+    src = patchedSrc;
 
-  extraConfigureFlags = [
-    "--with-app-basename=Zen"
-  ];
+    extraConfigureFlags = [
+      "--with-app-basename=Zen"
+    ];
 
-  meta = {
-    description = "Privacy-focused browser that blocks trackers, ads, and other unwanted content while offering the best browsing experience";
-    homepage = "https://zen-browser.app/";
-    downloadPage = "https://zen-browser.app/download/";
-    changelog = "https://zen-browser.app/release-notes/#${zenVersion}";
-    license = lib.licenses.mpl20;
-    platforms = lib.platforms.unix;
-    mainProgram = "zen";
-  };
-}).override
+    meta = {
+      description = "Privacy-focused browser that blocks trackers, ads, and other unwanted content while offering the best browsing experience";
+      homepage = "https://zen-browser.app/";
+      downloadPage = "https://zen-browser.app/download/";
+      changelog = "https://zen-browser.app/release-notes/#${zenVersion}";
+      license = lib.licenses.mpl20;
+      platforms = lib.platforms.unix;
+      mainProgram = "zen";
+    };
+  }).override
   {
     pgoSupport = false;
     crashreporterSupport = false;
     enableOfficialBranding = false;
   }
+).overrideAttrs
+  (prev: {
+    # Remove patch in nixpkgs already applied upstream
+    patches = builtins.filter (
+      p: !(lib.hasInfix "firefox-mac-missing-vector-header.patch" p)
+    ) prev.patches;
+  })
