@@ -9,7 +9,13 @@
   # Install some programs for viewing various files
   home.packages = with pkgs; [
     file-roller
-    vlc
+    (vlc.override {
+      # Enable Blu-Ray playback support
+      libbluray = libbluray.override {
+        withAACS = true;
+        withBDplus = true;
+      };
+    })
   ];
 
   # Enable home-manager configuration for some other programs

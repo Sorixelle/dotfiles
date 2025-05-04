@@ -44,13 +44,6 @@ pins: final: prev:
     };
   };
 
-  vlc = prev.vlc.override {
-    libbluray = prev.libbluray.override {
-      withAACS = true;
-      withBDplus = true;
-    };
-  };
-
   yubikey-touch-alert = prev.callPackage ./yubikey-touch-alert.nix { };
 
   zen-browser-unwrapped = prev.callPackage ./zen-browser.nix { };
