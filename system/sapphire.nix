@@ -29,17 +29,17 @@
       kernelModules = [ "kvm-amd" ];
 
       luks.devices = {
-        Encrypt-Key.device = "/dev/disk/by-uuid/5bc957cf-200a-4921-a624-04e147d8942a";
+        Encrypt-Key.device = "/dev/disk/by-uuid/998353a6-3a34-47df-b874-5d19ee6e58cc";
 
         Encrypted-Swap = {
-          device = "/dev/disk/by-uuid/40a0f85c-380b-416b-8889-0e461441b564";
+          device = "/dev/disk/by-uuid/f673a403-5eac-408d-977e-f302168d8dd1";
           keyFile = "/dev/mapper/Encrypt-Key";
           keyFileSize = 8192;
           bypassWorkqueues = true;
         };
 
         Encrypted-Root = {
-          device = "/dev/disk/by-uuid/c3a5eb7c-f67f-4d97-89d7-5261b1931977";
+          device = "/dev/disk/by-uuid/c145e267-b830-40bb-b301-a64043482423";
           keyFile = "/dev/mapper/Encrypt-Key";
           keyFileSize = 8192;
           bypassWorkqueues = true;
@@ -72,24 +72,24 @@
 
   fileSystems = {
     "/" = {
-      device = "Sapphire/System/Root";
+      device = "tank/root";
       fsType = "zfs";
     };
     "/nix" = {
-      device = "Sapphire/Nix-Store";
+      device = "tank/nix";
       fsType = "zfs";
     };
     "/var" = {
-      device = "Sapphire/System/var";
+      device = "tank/var";
       fsType = "zfs";
     };
     "/home/ruby" = {
-      device = "Sapphire/Ruby/Home";
+      device = "tank/home";
       fsType = "zfs";
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/29D4-5A41";
+      device = "/dev/disk/by-uuid/C552-EC3C";
       fsType = "vfat";
     };
 
@@ -338,7 +338,7 @@
 
     sanoid = {
       enable = true;
-      datasets."Sapphire/Ruby/Home" = {
+      datasets."tank/home" = {
         autosnap = true;
         autoprune = true;
         hourly = 3;
@@ -371,8 +371,7 @@
       enable = true;
       sshKey = "/etc/backup_key";
       commonArgs = [ "--no-privilege-elevation" ];
-      commands."Sapphire/Ruby/Home".target =
-        "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
+      commands."tank/home".target = "ruby@10.0.2.20:Fluorite-HDD/Machine-Backups/Sapphire/Ruby/Home";
     };
 
     tailscale.enable = true;
