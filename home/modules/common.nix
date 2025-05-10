@@ -77,7 +77,7 @@
     # Setup gpg-agent for pinentry whenever my Yubikey GPG password is needed
     gpg-agent = {
       enable = true;
-      pinentryPackage = pkgs.pinentry-gnome3;
+      pinentry.package = pkgs.pinentry-gnome3;
     };
 
     # Setup udiskie for removable disk management
