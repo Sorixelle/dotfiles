@@ -255,7 +255,17 @@
 
     dconf.enable = true;
 
+    gamescope.enable = true;
+
     gphoto2.enable = true;
+
+    steam = {
+      enable = true;
+      protontricks.enable = true;
+      extraPackages = [
+        pkgs.gamescope
+      ];
+    };
 
     sway.enable = true;
   };

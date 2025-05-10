@@ -48,7 +48,6 @@
     senpai-desktop
     signal-desktop
     solaar
-    steam
     virt-manager
     winbox
     wineWowPackages.staging
