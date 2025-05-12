@@ -9,9 +9,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "a5db9e41a4dccfa5ffe38e6f1841a5f9ad5c5c04",
-      "url": "https://github.com/catppuccin/nix/archive/a5db9e41a4dccfa5ffe38e6f1841a5f9ad5c5c04.tar.gz",
-      "hash": "1k5lsnx6shjx6189cj2pny79whm72wpjj67aq2hs6hl3a2gxq27z"
+      "revision": "f746600f15b69df05c84e3037749a3be5b1276d1",
+      "url": "https://github.com/catppuccin/nix/archive/f746600f15b69df05c84e3037749a3be5b1276d1.tar.gz",
+      "hash": "054qpg2plb2dz64db01wnh9pgllw7k6kfq3vqcq7yj4waa9p3sp3"
     },
     "catppuccin-discord": {
       "type": "Git",
@@ -48,9 +48,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "192136152f96590b07a495ab992cdc255208300f",
-      "url": "https://github.com/nix-community/emacs-overlay/archive/192136152f96590b07a495ab992cdc255208300f.tar.gz",
-      "hash": "0236csk73qxybcbwcv34q23kkc7409y82fjqliz504i8gk0hlgfc"
+      "revision": "8ae925057bad39c6a72f55dd2ff0b281e2cea714",
+      "url": "https://github.com/nix-community/emacs-overlay/archive/8ae925057bad39c6a72f55dd2ff0b281e2cea714.tar.gz",
+      "hash": "1vlab607fmi4rvp5gyxv5hax3w6jns9a8cw9m4mxp4ax8apv9m40"
     },
     "git-diffie": {
       "type": "Git",
@@ -74,9 +74,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "dcf5072734cb576d2b0c59b2ac44f5050b5eac82",
-      "url": "https://github.com/cachix/git-hooks.nix/archive/dcf5072734cb576d2b0c59b2ac44f5050b5eac82.tar.gz",
-      "hash": "1jmdxmx29xghjiaks6f5amnxld8w3kmxb2zv8lk2yzpgp6kr60qg"
+      "revision": "fa466640195d38ec97cf0493d6d6882bc4d14969",
+      "url": "https://github.com/cachix/git-hooks.nix/archive/fa466640195d38ec97cf0493d6d6882bc4d14969.tar.gz",
+      "hash": "0sh9x3llna3nmq051j2f8hn4miz90gm2ryrq149jmc4f5iwv3gar"
     },
     "home-manager": {
       "type": "Git",
@@ -87,9 +87,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "621986fed37c5d0cb8df010ed8369694dc47c09b",
-      "url": "https://github.com/nix-community/home-manager/archive/621986fed37c5d0cb8df010ed8369694dc47c09b.tar.gz",
-      "hash": "0x8v1kr3r9glzq4bqlazxn3hqknl4j7qyk997lb42787vrcphdpy"
+      "revision": "e95a7c5b6fa93304cd2fd78cf676c4f6d23c422c",
+      "url": "https://github.com/nix-community/home-manager/archive/e95a7c5b6fa93304cd2fd78cf676c4f6d23c422c.tar.gz",
+      "hash": "0w6ydyqb950mdvyb4zygzbcdnpmmmkllmn1flp3xa7s463zg65vb"
     },
     "hyprlock": {
       "type": "Git",
@@ -100,9 +100,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "6c64630df81b52208b210f02476f55e4db56e6cf",
-      "url": "https://github.com/hyprwm/hyprlock/archive/6c64630df81b52208b210f02476f55e4db56e6cf.tar.gz",
-      "hash": "1wrndp1bkyfp741mgvjflkbq4pvdlccrh6xaz41y1f9967j8magm"
+      "revision": "f7f0c9c6b0b930905eddd61ead4a5f12bf534815",
+      "url": "https://github.com/hyprwm/hyprlock/archive/f7f0c9c6b0b930905eddd61ead4a5f12bf534815.tar.gz",
+      "hash": "1n2f6h3rcbvbqnxpaxi1ac593zm88bh4rc39x3crg7bvp2sgxg2q"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -130,9 +130,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "ca8d738df4e68a5d95efb1aa10b89d9644d5fdd9",
-      "url": "https://git.lix.systems/lix-project/lix/archive/ca8d738df4e68a5d95efb1aa10b89d9644d5fdd9.tar.gz",
-      "hash": "11rggaaj19n1kn7g5pnkmk78r4hy0d0smahl9p0pdws02aapma29"
+      "revision": "e4b48ca3f097813aeb2eefe4a78d19c151e61bb1",
+      "url": "https://git.lix.systems/lix-project/lix/archive/e4b48ca3f097813aeb2eefe4a78d19c151e61bb1.tar.gz",
+      "hash": "0zld48nzng42786bygsb0yjq1m0xmjn9j4civ5dv7lngaz7vql31"
     },
     "lix-module": {
       "type": "Git",
@@ -144,9 +144,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "fa69ae26cc32dda178117b46487c2165c0e08316",
-      "url": "https://git.lix.systems/lix-project/nixos-module/archive/fa69ae26cc32dda178117b46487c2165c0e08316.tar.gz",
-      "hash": "13x2dca4s049m8fa2y4b45kgqnpk3cf26j0j0yascah32zzxn7rh"
+      "revision": "58baedd53f9da81fd728a4f3b08c378e5ba9ae58",
+      "url": "https://git.lix.systems/lix-project/nixos-module/archive/58baedd53f9da81fd728a4f3b08c378e5ba9ae58.tar.gz",
+      "hash": "0w7n1i403j1pkdx44y4pfhbvq711x3nsnq4zwgiqfqpwd7qj4755"
     },
     "nix-darwin": {
       "type": "Git",
@@ -157,9 +157,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "760a11c87009155afa0140d55c40e7c336d62d7a",
-      "url": "https://github.com/LnL7/nix-darwin/archive/760a11c87009155afa0140d55c40e7c336d62d7a.tar.gz",
-      "hash": "00dm2fl9ld06fhgd23rapd4557sgbhbc7z6m4j9mzskiwh1bckk3"
+      "revision": "6cb36e8327421c61e5a3bbd08ed63491b616364a",
+      "url": "https://github.com/LnL7/nix-darwin/archive/6cb36e8327421c61e5a3bbd08ed63491b616364a.tar.gz",
+      "hash": "06rx2r19ipg7ja0n1852kc13zzl49sbrzv0mij0ay7xr1gvbvq0r"
     },
     "nixos-hardware": {
       "type": "Git",
@@ -170,15 +170,15 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "72081c9fbbef63765ae82bff9727ea79cc86bd5b",
-      "url": "https://github.com/nixos/nixos-hardware/archive/72081c9fbbef63765ae82bff9727ea79cc86bd5b.tar.gz",
-      "hash": "16ipk0wlj0a5p7vlhp8qcmia1npjswsjg9q9vc2ycdshz2h7crcs"
+      "revision": "3c5e12673265dfb0de3d9121420c0c2153bf21e0",
+      "url": "https://github.com/nixos/nixos-hardware/archive/3c5e12673265dfb0de3d9121420c0c2153bf21e0.tar.gz",
+      "hash": "06fadvksf8hzr9sx86d00d88p3ilz6crkhiipfb01h3k48habzc5"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05pre793418.7a2622e2c0db/nixexprs.tar.xz",
-      "hash": "1159gzccj27zzy552pqhm0j8ans8dp9clr0na02aq8v8i4s465bw"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05pre796699.dda3dcd3fe03/nixexprs.tar.xz",
+      "hash": "0kjwrrv2i2s3grxr3hxs02cmifzzgnwhhsxrfcb46ivln0ak5s5l"
     },
     "nur": {
       "type": "Git",
@@ -189,9 +189,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "3120f2d37fead03b656e5c5ba5bf0a6889652ae6",
-      "url": "https://github.com/nix-community/nur/archive/3120f2d37fead03b656e5c5ba5bf0a6889652ae6.tar.gz",
-      "hash": "16kz0ic51bbk194zrqkj8bxnjzfahg5wkv6p2mfrf8avplbivlfd"
+      "revision": "dad9e8b8e2e4f15a8686eb11f6a4ee416b9c3291",
+      "url": "https://github.com/nix-community/nur/archive/dad9e8b8e2e4f15a8686eb11f6a4ee416b9c3291.tar.gz",
+      "hash": "1npka6a9fj8737ybhd6bzzbal9rphcwf40pz27bjl35303jgf1bz"
     },
     "tree-sitter-astro": {
       "type": "Git",
