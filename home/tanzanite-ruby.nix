@@ -28,7 +28,7 @@
     ))
     bitwarden
     cinny-desktop
-    gimp
+    gimp3
     nix-prefetch-scripts
     pavucontrol
     plexamp

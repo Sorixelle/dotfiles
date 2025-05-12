@@ -32,7 +32,7 @@
     darktable
     ffmpeg-full
     figma-linux
-    gimp
+    gimp3
     helvum
     nix-index
     nix-prefetch-scripts
