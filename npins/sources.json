@@ -1,5 +1,18 @@
 {
   "pins": {
+    "adw-catppuccin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "claymorwan",
+        "repo": "adw-catppuccin"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "4089f11b487a9121fd11b3bfb2afcf957bedab8f",
+      "url": "https://github.com/claymorwan/adw-catppuccin/archive/4089f11b487a9121fd11b3bfb2afcf957bedab8f.tar.gz",
+      "hash": "0c7djf4c7354dhzgmfmhvg5i094zzv1i6bnqq5hl75kjvfwr2m9k"
+    },
     "catppuccin": {
       "type": "Git",
       "repository": {
